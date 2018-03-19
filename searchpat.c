@@ -1,6 +1,6 @@
 /*
   Copyright by Stefan Kurtz (C) 1999-2003
-  =====================================                                   
+  =====================================
   You may use, copy and distribute this file freely as long as you
    - do not change the file,
    - leave this copyright notice in the file,
@@ -79,8 +79,8 @@ static void showpatternstat(Uint *patternstat)
 #endif
 
 void searchpatterngeneric(
-       BOOL(*reallyoccurs)(void *,Uchar *,Uint,Uchar *,Uchar *),
-       BOOL(*occurs)(void *,Uchar *,Uint,Uchar *,Uchar *),
+       BOOL (*reallyoccurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
+       BOOL (*occurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
        /*@unused@*/ char *argv[],
        /*@unused@*/ Argctype argc,
        void *occursinfo,
@@ -135,8 +135,8 @@ void searchpatterngeneric(
       patternlen = minpatternlen;
     } else
     {
-      patternlen = (Uint) (minpatternlen + 
-                           (drand48() * 
+      patternlen = (Uint) (minpatternlen +
+                           (drand48() *
                             (double) (maxpatternlen-minpatternlen+1)));
     }
     patternstat[patternlen]++;
@@ -147,7 +147,7 @@ void searchpatterngeneric(
       exit(EXIT_FAILURE);
     }
     special = False;
-    for(j=0; j<patternlen; j++)
+    for(j=0; j< patternlen; j++)
     {
       pattern[j] = text[start+j];
       if(ISSPECIAL(pattern[j]))
@@ -165,8 +165,8 @@ void searchpatterngeneric(
       patternoccurs = occurs(occursinfo,text,textlen,pattern,
                              pattern+patternlen-1);
 #ifdef DEBUG
-      patternreallyoccurs 
-        = reallyoccurs(occursinfo,text,textlen,pattern,pattern+patternlen-1);
+      patternreallyoccurs =
+          reallyoccurs(occursinfo,text,textlen,pattern,pattern+patternlen-1);
       if(patternoccurs != patternreallyoccurs)
       {
         showargs(argv,argc);
@@ -180,17 +180,22 @@ void searchpatterngeneric(
     }
   }
   DEBUGCODE(1,showpatternstat(&patternstat[0]));
-  DEBUG1(1,"%lu pattern processed as expected\n",(Showuint) trials); 
+  DEBUG1(1,"%lu pattern processed as expected\n",(Showuint) trials);
 }
 
-void searchpattern(BOOL(*occurs)(void *,Uchar *,Uint,Uchar *,Uchar *),
-                   char *argv[],Argctype argc,
-                   void *occursinfo,Uchar *text,Uint textlen,
-                   float trialpercentage,
-                   Uint minpatternlen,
-                   Uint maxpatternlen,
-                   void (*showpattern)(void *,Uchar *,Uint),
-                   void *showpatterninfo)
+void searchpattern(
+        BOOL(*occurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
+        char *argv[],
+        Argctype argc,
+        void *occursinfo,
+        Uchar *text,
+        Uint textlen,
+        float trialpercentage,
+        Uint minpatternlen,
+        Uint maxpatternlen,
+        void (*showpattern) (void *,Uchar *,Uint),
+        void *showpatterninfo
+    )
 {
 #ifdef DEBUG
   searchpatterngeneric(bmhsearch,
@@ -239,7 +244,7 @@ void searchpatternapprox(void(*apm)(void *,Uint,Uchar *,Uint,Uchar *,Uint),
   srand48(42349421);
   for(i=0; i<trials; i++)
   {
-    patternlen = minpatternlen + 
+    patternlen = minpatternlen +
                  (Uint) (drand48() * (double) (maxpatternlen-minpatternlen+1));
     threshold = (Uint) (errorrate * patternlen);
     DEBUG2(3,"m=%lu, k=%lu\n",(Showuint) patternlen,(Showuint) threshold);
@@ -260,5 +265,5 @@ void searchpatternapprox(void(*apm)(void *,Uint,Uchar *,Uint,Uchar *,Uint),
     apm(occursinfo,threshold,pattern,patternlen,text,textlen);
   }
   DEBUG1(1,"%lu pattern processed as expected\n",
-                  (Showuint) trials); 
+                  (Showuint) trials);
 }

@@ -1,6 +1,6 @@
 /*
   Copyright by Stefan Kurtz (C) 2000-2003
-  =====================================                                   
+  =====================================
   You may use, copy and distribute this file freely as long as you
    - do not change the file,
    - leave this copyright notice in the file,
@@ -28,7 +28,7 @@
   separator symbol in multiple seq
 */
 
-#define SEPARATOR       UCHAR_MAX         
+#define SEPARATOR       UCHAR_MAX
 
 /*
   wildcard symbol in multiple seq
@@ -40,7 +40,7 @@
   undefined character in multiple seq
 */
 
-#define UNDEFCHAR       (SEPARATOR-2)     
+#define UNDEFCHAR       (SEPARATOR-2)
 
 /*
   either WILDCARD or SEPARATOR

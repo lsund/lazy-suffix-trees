@@ -12,69 +12,9 @@
 #include "arraydef.h"
 #include "fhandledef.h"
 #include "protodef.h"
+#include "include/preprocdef.h"
+#include "include/globalvar.h"
 
-#define BRANCHWIDTH             UintConst(2)
-
-#define NODEINDEX(N)        ((Uint) ((N) - streetab))
-
-#define LEAFBIT             FIRSTBIT // leaf at this address
-#define RIGHTMOSTCHILDBIT   SECONDBIT // right most child of succ list
-#define UNEVALUATEDBIT      FIRSTBIT // unevaluated branching node
-
-#define MAXTEXTLEN          UintConst(715827882)
-
-
-#define ISLEAF(P)           ((*(P)) & LEAFBIT)
-#define ISRIGHTMOSTCHILD(P) ((*(P)) & RIGHTMOSTCHILDBIT)
-#define ISUNEVALUATED(P)    ((*((P)+1)) & UNEVALUATEDBIT)
-
-
-#define GETLP(P)            ((*(P)) & ~(LEAFBIT | RIGHTMOSTCHILDBIT))
-#define GETFIRSTCHILD(P)    (*((P)+1))
-#define SETLP(P,LP)         *(P) = (*(P) & RIGHTMOSTCHILDBIT) | (LP)
-#define SETFIRSTCHILD(P,C)  *((P)+1) = C
-#define SETLEAF(P,L)        *(P) = (L) | LEAFBIT
-
-
-#define UNDEFREFERENCE        (UINT_MAX)      // undefined reference
-
-#define SUFFIXNUMBER(L)        ((Uint) (*(L) - text))  // startposition of suffix
-
-#define STOREBOUNDARIES(P,L,R) *(P) = (Uint) ((L) - suffixbase);\
-                               *((P)+1) = ((R) - suffixbase) | UNEVALUATEDBIT
-#define GETLEFTBOUNDARY(P)     (suffixbase + *(P))
-#define GETRIGHTBOUNDARY(P)    (suffixbase + ((*((P)+1)) & ~UNEVALUATEDBIT))
-
-#define GETLPUNEVAL(N) SUFFIXNUMBER(GETLEFTBOUNDARY(N))
-
-Uchar *text,                   // points to input string \(t\) of length \(n\)
-      *sentinel,               // points to \(t[n]\) which is undefined
-      characters[UCHAR_MAX+1], // characters in \(t\) in alphabetical order
-      **suffixes,              // array of pointers to suffixes of \(t\)
-      **suffixbase,            // pointers into suffixes are w.r.t.\ this var
-      **sbuffer,               // buffer to sort suffixes in \texttt{sortByChar}
-      **sbufferspace = NULL,   // space to be used by \texttt{sbuffer}
-      **bound[UCHAR_MAX+1];    // pointers into \texttt{sbuffer} while sorting
-
-Uint  textlen,                 // length of \(t\)
-      alphasize,               // size of alphabet \(\Sigma\)
-      alphaindex[UCHAR_MAX+1], // index of characters in \(\Sigma\)
-      occurrence[UCHAR_MAX+1], // number of occurrences of character
-      *streetab = NULL,        // table to hold suffix tree representation
-      streetabsize,            // number of integers in \texttt{streetab} allocated
-      *nextfreeentry,          // pointer to next unused element in \texttt{streetab}
-      sbufferwidth,            // number of elements in \texttt{sbufferspace}
-      maxsbufferwidth,         // maximal number of elements in \texttt{sbufferspace}
-      suffixessize,            // number of unprocessed suffixes (for eager)
-      maxunusedsuffixes,       // when reached, then move and halve space for suffixes
-      rootchildtab[UCHAR_MAX+1]; // constant time access to successors of \emph{root}
-
-
-#define UNDEFINEDSUCC  (UINT_MAX)    // undefined successor
-
-BOOL  rootevaluated;   // flag indicating that the root has been evaluated
-
-#ifdef DEBUG
 Uint lastrootchild, maxstacksize, maxwidth, branchcount, leafcount;
 
 void showstring(Uchar *left,Uchar *right)
@@ -91,8 +31,6 @@ void showstring(Uchar *left,Uchar *right)
     }
   }
 }
-#endif
-
 
 
 static Uchar **getsbufferspaceeager(Uchar **left,Uchar **right)
@@ -547,8 +485,13 @@ static Uint firstchildlp(Uint *nodeptr)
 
 #ifndef ONLYCOUNT
 
-static BOOL occurslazy(void * state, Uchar *text,Uint textlen,
-                       Uchar *leftpattern,Uchar *rightpattern)
+static BOOL occurslazy(
+                void *state,
+                Uchar *text,
+                Uint textlen,
+                Uchar *leftpattern,
+                Uchar *rightpattern
+            )
 {
   Uint leftpointer, node, *nodeptr, edgelen, prefixlen;
   Uchar *lefttext, *lpatt = leftpattern, firstchar, edgechar;
@@ -558,19 +501,23 @@ static BOOL occurslazy(void * state, Uchar *text,Uint textlen,
     return True;
   }
   firstchar = *lpatt;
+
   if(!rootevaluated)
   {
     sortByChar0();
     (void) evalrootsuccedges(suffixes,suffixes+textlen-1);
     rootevaluated = True;
   }
+
   CHECKROOTCHILD;
+
   if(ISUNEVALUATED(nodeptr))
   {
     node = NODEINDEX(nodeptr);
     evaluatenodelazy(node);
     nodeptr = streetab + node;
   }
+
   leftpointer = GETLP(nodeptr);
   lefttext = text + GETLP(nodeptr);
   edgelen = firstchildlp(nodeptr) - leftpointer;
@@ -582,8 +529,10 @@ static BOOL occurslazy(void * state, Uchar *text,Uint textlen,
     {
       return True;
     }
+
     firstchar = *lpatt;
     nodeptr = streetab + GETFIRSTCHILD(nodeptr);
+
     while(True)
     {
       if(ISLEAF(nodeptr))
@@ -1017,10 +966,19 @@ static void wotd(BOOL evaleager,char *argv[],int argc,float rho,
   INITARRAY(&resultpos,Uint);
   if(maxpat > 0 && maxpat <= textlen && rho != 0.0)
   {
-    searchpattern(evaleager ? occurseager
-                            : occurslazy,argv,argc,
-                  (void *) &resultpos,text,textlen,rho,minpat,maxpat,
-                  showpattern,NULL);
+    searchpattern(
+        evaleager ? occurseager : occurslazy,
+        argv,
+        argc,
+        (void *) &resultpos,
+        text,
+        textlen,
+        rho,
+        minpat,
+        maxpat,
+        showpattern,
+        NULL
+    );
   }
   FREEARRAY(&resultpos,Uint);
   DEBUG3(2,"#maxstack=%lu %lu %lu ",
