@@ -1,8 +1,8 @@
-/* 
-  This file is generated. Do not edit. 
+/*
+  This file is generated. Do not edit.
 
   Copyright by Stefan Kurtz (C) 2003
-  =====================================                                   
+  =====================================
   You may use, copy and distribute this file freely as long as you
    - do not change the file,
    - leave this copyright notice in the file,
@@ -64,7 +64,7 @@ void searchpatterngeneric(
        Uchar *text,Uint textlen,float trialpercentage,
        Uint minpatternlen,
        Uint maxpatternlen,
-       void (*showpattern)(void *,Uchar *,Uint),
+       void (*showpattern)(Uchar *,Uint),
        void *showpatterninfo);
 
 void searchpattern(BOOL(*occurs)(void *,Uchar *,Uint,Uchar *,Uchar *),
@@ -73,7 +73,7 @@ void searchpattern(BOOL(*occurs)(void *,Uchar *,Uint,Uchar *,Uchar *),
                    float trialpercentage,
                    Uint minpatternlen,
                    Uint maxpatternlen,
-                   void (*showpattern)(void *,Uchar *,Uint),
+                   void (*showpattern)(Uchar *,Uint),
                    void *showpatterninfo);
 
 void searchpatternapprox(void(*apm)(void *,Uint,Uchar *,Uint,Uchar *,Uint),

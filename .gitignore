@@ -1,2 +1,6 @@
 *.o
 *.x
+*.aux
+*.pdf
+*.log
+*.out

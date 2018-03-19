@@ -1,19 +1,3 @@
-//\documentclass[11pt]{article}
-//\usepackage{alltt,dina4,default,command,environment}
-//\newcommand{\Define}[1]{}
-//\newcommand{\Cfunction}[1]{}
-//\title{\textbf{Implementation of Lazy Suffix Trees:}\\\textbf{Documentation of the Source Code}}
-//\author{\emph{Stefan Kurtz}}
-//\begin{document}
-//\maketitle
-//\Ignore{
-
-/*
-  Copyright (c) 1999-2003 by Stefan Kurtz
-  This is OSI Certified Open Source Software.
-  Please see the file LICENSE for licensing information.
-*/
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -29,84 +13,21 @@
 #include "fhandledef.h"
 #include "protodef.h"
 
-//}
-
-//\section{Some Basic Preprocessor Definitions}
-
-/*
-  We need four space blocks. Their names remind of the pointers, by which
-  the blocks are referred to. The \texttt{stack}-block is only used for
-  eager evaluation.
-*/
-
-/*
-  Each branching node requires 2 unsigned integers.
-  Hence the following macro. If additional information has to be stored
-  for a branching node, then \texttt{BRANCHWIDTH} must be redefined
-  accordingly.
-*/
-
 #define BRANCHWIDTH             UintConst(2)
 
-/*
-  The suffix tree is stored in a table \texttt{streetab}, called \(T\) in
-  the paper.
-  Given a pointer into \texttt{streetab}, we can determine the index the
-  node is stored at.
-*/
-
 #define NODEINDEX(N)        ((Uint) ((N) - streetab))
-
-/*
-  The most significant bits in the entries of table \texttt{streetab}
-  are used as marking bits. For each branching node we need 3 marking bits, and
-  for each leaf we need 2 marking bits. For each leaf and each
-  branching node we store 2 marking bits in their first integer: The
-  \emph{leaf-bit} and the \emph{rightmost-child} bit. For
-  each branching node we store 1 marking bit in the second integer,
-  the \emph{unevaluated} bit.
-*/
 
 #define LEAFBIT             FIRSTBIT // leaf at this address
 #define RIGHTMOSTCHILDBIT   SECONDBIT // right most child of succ list
 #define UNEVALUATEDBIT      FIRSTBIT // unevaluated branching node
 
-/*
-  As a consequence, we have 30 bits to store
-  \(\mathit{left}(\overline{u})\) or \(\mathit{lp}(\overline{u})\)
-  for a branching node or leaf \(\overline{u}\).
-  Moreover, we have 31 bits to store \(\mathit{right}(\overline{u})\) or
-  \(\mathit{firstchild}(\overline{u})\) for a branching node \(\overline{u}\).
-  \(\mathit{left}(\overline{u})\),
-  \(\mathit{right}(\overline{u})\), and
-  \(\mathit{lp}(\overline{u})\) are in the range \([0,n]\).
-  \(\mathit{firstchild}(\overline{u})\) is in the range \([0,3n]\). Hence
-  \(3n\leq 2^{31}-1\) must be satisfied, i.e.\
-  the maximal length of the input string is \(715{,}827{,}882\).
-*/
-
 #define MAXTEXTLEN          UintConst(715827882)
 
-/*
-  The following macros test whether the corresponding bits are set.
-  The argument is the pointer to the \emph{first} integer of the corresponding
-  record.
-*/
 
 #define ISLEAF(P)           ((*(P)) & LEAFBIT)
 #define ISRIGHTMOSTCHILD(P) ((*(P)) & RIGHTMOSTCHILDBIT)
 #define ISUNEVALUATED(P)    ((*((P)+1)) & UNEVALUATEDBIT)
 
-/*
-  Given a pointer to the first index of a branching or leaf record, we obtain
-  the \emph{lp}-value and the \emph{firstchild}-value by the following
-  macros. There are two corresponding macros to set these values.
-  Note that in \texttt{GETFIRSTCHILD} we do not have to strip the
-  \emph{unevaluated}-bit, since this is not set for an unevaluated node.
-  In contrast, in \texttt{SETLP} we have to take care that
-  the rightmost child is maintained. For a leaf we set the \emph{lp}-value and
-  the leaf bit.
-*/
 
 #define GETLP(P)            ((*(P)) & ~(LEAFBIT | RIGHTMOSTCHILDBIT))
 #define GETFIRSTCHILD(P)    (*((P)+1))
@@ -114,42 +35,17 @@
 #define SETFIRSTCHILD(P,C)  *((P)+1) = C
 #define SETLEAF(P,L)        *(P) = (L) | LEAFBIT
 
-/*
-  References are unsigned integers. An undefined reference is the following
-  constant.
-*/
 
 #define UNDEFREFERENCE        (UINT_MAX)      // undefined reference
 
-/*
-  We store suffix pointers in an array \texttt{suffixes}. For each suffix
-  pointer, we determine the corresponding suffix number as follows:
-*/
-
 #define SUFFIXNUMBER(L)        ((Uint) (*(L) - text))  // startposition of suffix
-
-/*
-  An unevaluated branching node \(\overline{u}\) is represented by a record
-  of two integers which store two pointers \(\mathit{left}(\overline{u})\) and
-  \(\mathit{right}(\overline{u})\). These pointers are relative to a pointer
-  \texttt{suffixbase}. The next three macros are used for storing and
-  retrieving these pointers.
-*/
 
 #define STOREBOUNDARIES(P,L,R) *(P) = (Uint) ((L) - suffixbase);\
                                *((P)+1) = ((R) - suffixbase) | UNEVALUATEDBIT
 #define GETLEFTBOUNDARY(P)     (suffixbase + *(P))
 #define GETRIGHTBOUNDARY(P)    (suffixbase + ((*((P)+1)) & ~UNEVALUATEDBIT))
 
-/*
-  To retrieve the \emph{lp}-value of an unevaluated node, we first retrieve
-  the left boundary. This gives a pointer into the array \texttt{suffixes}.
-  From the pointer we can retrieve the corresponding \emph{lp}-value.
-*/
-
 #define GETLPUNEVAL(N) SUFFIXNUMBER(GETLEFTBOUNDARY(N))
-
-//\section{Declaration of Global Variables}
 
 Uchar *text,                   // points to input string \(t\) of length \(n\)
       *sentinel,               // points to \(t[n]\) which is undefined
@@ -173,28 +69,10 @@ Uint  textlen,                 // length of \(t\)
       maxunusedsuffixes,       // when reached, then move and halve space for suffixes
       rootchildtab[UCHAR_MAX+1]; // constant time access to successors of \emph{root}
 
-/*
-  \texttt{rootchildtab} is initialized in \texttt{evalrootsuccedges}.
-  For each ASCII-character \(a\) the following holds:
-  \begin{itemize}
-  \item
-  If there is no \(a\)-successor, then
-  \(rootchildtab[a]=\texttt{UNDEFINEDSUCC}\), where the latter constant is
-  defined below.
-  \item
-  If the \(a\)-successor leads to the leaf stored at index \(i\), then
-  \(rootchildtab[a]=i\texttt{ | LEAFBIT}\).
-  \item
-  If the \(a\)-successor leads to the branching node stored at index \(i\),
-  then \(rootchildtab[a]=i\).
-  \end{itemize}
-*/
 
 #define UNDEFINEDSUCC  (UINT_MAX)    // undefined successor
 
 BOOL  rootevaluated;   // flag indicating that the root has been evaluated
-
-//\Ignore{
 
 #ifdef DEBUG
 Uint lastrootchild, maxstacksize, maxwidth, branchcount, leafcount;
@@ -215,22 +93,7 @@ void showstring(Uchar *left,Uchar *right)
 }
 #endif
 
-//}
 
-//\section{Space Management}
-
-/*
-  The following function does the space management for the array
-  \texttt{sbuffer} in the case of eager evaluation. We always know that
-  all suffixes stored between \texttt{suffixes[0]} and
-  \texttt{suffixes[q-1]}, where \(q=\texttt{left-suffixes}\), are already
-  processed. If this range is
-  large enough to hold all suffixes between \texttt{left} and \texttt{right},
-  then we can use the space to the left of \texttt{left} as space for
-  \texttt{sbuffer}. If this range is not large enough, we test if the
-  number of elements in \texttt{sbufferspace} is large enough. If not, then
-  we enlarge it accordingly, and return \texttt{sbufferspace}.
-*/
 
 static Uchar **getsbufferspaceeager(Uchar **left,Uchar **right)
 {
@@ -250,13 +113,6 @@ static Uchar **getsbufferspaceeager(Uchar **left,Uchar **right)
   return left - width;
 }
 
-/*
-  The following function does the space management for the array
-  \texttt{sbuffer} in the case of lazy evaluation. If the width of the
-  \texttt{sbufferspace} becomes smaller than some maximal width, then
-  we reduce the size of this array. If the array is too small, then
-  we enlarge it accordingly.
-*/
 
 static Uchar **getsbufferspacelazy(Uchar **left,Uchar **right)
 {
@@ -277,18 +133,6 @@ static Uchar **getsbufferspacelazy(Uchar **left,Uchar **right)
   return sbufferspace;
 }
 
-/*
-  Since we have a virtual sentinel character which is different from
-  all possible 256 characters of the ASCII-alphabet, a branching node
-  can have \texttt{UCHAR\_MAX+2=257} successor nodes. The sentinel edge
-  leads to a leaf, but each of the other edges can lead to a branching
-  node. Hence, to evaluate a branching node, we have to enlarge
-  the size of \texttt{streetab} by at least \texttt{MAXSUCCSPACE}
-  integers. This is done by the function \texttt{allocstreetab},
-  when \texttt{nextfreeentry} reaches the end of the block currently
-  allocated for \texttt{streetab}.
-*/
-
 #define MAXSUCCSPACE            (BRANCHWIDTH * (UCHAR_MAX+1) + 1)
 
 static void allocstreetab(void)
@@ -302,23 +146,6 @@ static void allocstreetab(void)
     nextfreeentry = streetab + tmpindex;
   }
 }
-
-//\section{Sorting and Grouping Suffixes}
-
-/*
-  To sort the suffixes of one group according to their first character,
-  we use the function \texttt{sortByChar} which implements a counting sort
-  algorithm. It takes as arguments the left and right bound \texttt{left} and
-  \texttt{right} of the subarray representing the group to be sorted, and
-  a commong prefix of all suffixes which has not been dropped from the
-  beginning of the suffix. In the first loop, this prefix is dropped
-  from each of the suffixes. Note that a bucket contains the suffixes
-  in the order of their length. This stability is achieved by inserting
-  them from right to left. Note that there is no loop over all the
-  characters in the alphabet. Instead to determine the boundaries
-  of the subgroups, one loops over all suffixes of the group. For small
-  groups this is faster.
-*/
 
 static void sortByChar(Uchar **left,Uchar **right,Uint prefixlen)
 {
@@ -356,16 +183,6 @@ static void sortByChar(Uchar **left,Uchar **right,Uint prefixlen)
   }
 }
 
-/*
-  We could also call \texttt{sortByChar} to determine
-  the groups for all suffixes of the input string. This would however
-  require \texttt{sbuffer} to be of size \texttt{textlen}. To save this space
-  and to speed up the sorting, we have a special version of
-  \texttt{sortByChar}. It scans all suffixes from left to right,
-  determines the size of each group, and then directly sorts all suffixes
-  into the array \texttt{suffixes}.
-*/
-
 static void sortByChar0(void)
 {
   Uchar *cptr, **nextFree = suffixes;
@@ -389,19 +206,6 @@ static void sortByChar0(void)
   suffixes[textlen] = sentinel;  // suffix \$ is the largest suffix
 }
 
-/*
-  To determine the length of the longest common prefix of some
-  suffixes, we implement the function \texttt{grouplcp}. It loops
-  over all \(j=1,2,\ldots\), and tests for all suffixes if the
-  \(j\)th characters are all identical. As soon as a character
-  is found which is not identical, \texttt{grouplcp} returns the
-  length \(j\) of the longest common prefix. Note that we already known
-  that the first character of all suffixes in the group are identical,
-  so it is correct to start with \(j=1\). As soon as the \(j\)th character
-  of the smallest suffix of the group is the sentinel character,
-  the procedure stops and has found the longest prefix.
-*/
-
 static Uint grouplcp(Uchar **left,Uchar **right)
 {
   Uchar cmpchar, **i;
@@ -424,19 +228,6 @@ static Uint grouplcp(Uchar **left,Uchar **right)
   }
 }
 
-//\section{The Evaluation Process}
-
-/*
-  The following function evaluates all edges outgoing from an unevaluated
-  node \(\overline{u}\). The suffixes in the subtree below \(\overline{u}\)
-  are found between the pointers \(\mathit{left}=\mathit{left}(\overline{u})\)
-  and \(\mathit{right}=\mathit{right}(\overline{u})\).
-  \texttt{evalsuccedges} returns a reference to the first unevaluated
-  branching node, if such a node exists. Otherwise it returns
-  \texttt{UNDEFREFERENCE}. \texttt{previousnode} always refers to the left
-  brother of the current node, if such a node exist.
-*/
-
 static Uint evalsuccedges(Uchar **left,Uchar **right)
 {
   Uchar firstchar, **r, **l;
@@ -456,7 +247,8 @@ static Uint evalsuccedges(Uchar **left,Uchar **right)
       /* nothing */ ;
     }
     previousnode = nextfreeentry;
-    if(r > l) // create branching node
+    // create branching node
+    if(r > l)
     {
       if(firstbranch == UNDEFREFERENCE)
       {
@@ -485,15 +277,6 @@ static Uint evalsuccedges(Uchar **left,Uchar **right)
   *previousnode |= RIGHTMOSTCHILDBIT;
   return firstbranch;
 }
-
-/*
-  The function \texttt{evalrootsuccedges} evaluates all edges outgoing from the
-  \(root\).  It is a specialization of the previous function, and it
-  additionally initializes the array \texttt{rootchildtab} appropriately.
-  We do not show the code here.
-*/
-
-//\Ignore{
 
 static Uint evalrootsuccedges(Uchar **left,Uchar **right)
 {
@@ -537,35 +320,6 @@ static Uint evalrootsuccedges(Uchar **left,Uchar **right)
   return firstbranch;
 }
 
-//}
-
-/*
-  The following function \texttt{evaluatenodeeager} evaluates the node
-  referenced by \texttt{node}. It is used for eager evaluation.
-  \texttt{evaluatenodeeager} extracts the left and right boundaries of the group
-  of suffixes which end in the corresponding subtree. Then the \emph{lp}-value
-  and \emph{firstchild}-value of that node are set.
-  Subsequently the longest common prefix of the suffixes
-  of that group is determined, and the group is divided into subgroups by
-  sorting these according to the first character of the remaining suffixes.
-  Then the edges outgoing from \texttt{node} are constructed.
-
-  The middle part of the function deals with the space management:
-  In eager evaluation, the suffix pointers in the array \texttt{suffixes}
-  are processed from left to right.
-  In other words, if we have processed the suffixes up to the suffix stored
-  at, say \texttt{suffixes[q]}, then we do not need the entries at indices
-  \(0...q\). Hence, if \(q\) reaches a certain threshold, we move all
-  suffix pointers at positions larger than \(q\) exactly \(q\) positions
-  to the left, and reduce the size of the array \texttt{suffixes} to the
-  number of the remaining suffixes. More precisely, we approximately
-  halve the size of the array \texttt{suffixes}.
-  To have valid pointers into the array \texttt{suffixes}, we let all
-  suffix pointers be relative to the pointer \texttt{suffixbase}. This is
-  decremented by \(q\) as well. \texttt{evaluatenodeeager} returns a reference
-  to the next node to be processed in eager evaluation.
-*/
-
 static Uint evaluatenodeeager(Uint node)
 {
   Uint prefixlen, *nodeptr, unusedsuffixes;
@@ -604,21 +358,7 @@ static Uint evaluatenodeeager(Uint node)
   return evalsuccedges(left,right);
 }
 
-/*
-  The following function is identical to \texttt{evaluatenodeeager}, except
-  that it does not halve the size of the table suffixes. This is not
-  possible for lazy evaluation, since the suffixes are not processed
-  from left to right, but in an order determined by the traversal of
-  the unevaluated suffix tree. Unlike \texttt{evaluatenodeeager}, the
-  function does not return anything. \texttt{evaluatenodelazy} is
-  used for lazy evaluation.
-*/
-
-//\Ignore{
-
 #ifndef ONLYCOUNT
-
-//}
 
 static void evaluatenodelazy(Uint node)
 {
@@ -639,13 +379,6 @@ static void evaluatenodelazy(Uint node)
 }
 
 #endif
-
-/*
-  Given a reference to a branching node, the following function
-  returns a reference to the next branching node to the right.
-  If there is no such branching node, then \texttt{getnextbranch} returns
-  \texttt{UNDEFREFERENCE}.
-*/
 
 static Uint getnextbranch(Uint previousbranch)
 {
@@ -672,14 +405,6 @@ static Uint getnextbranch(Uint previousbranch)
   }
 }
 
-/*
-  For the eager evaluation of the suffix tree, we evaluate the nodes in
-  depth first and left to right order. To do so, we facilitate a stack,
-  which stores references to the branching nodes still to be evaluated.
-  The stack is implemented by an array, which is enlarged in units
-  of 100 elements, if necessary.
-*/
-
 #define NOTSTACKEMPTY         (stacktop > 0)
 #define PUSHNODE(N)\
         if(stacktop >= stackalloc)\
@@ -693,17 +418,6 @@ static Uint getnextbranch(Uint previousbranch)
 
 #define POPNODE(N)\
         N = stack[--stacktop]
-
-/*
-  The following function evaluates all nodes of the suffix tree in
-  a depth first left to right strategy. This is achieved by using a
-  stack (rather than recursively, which would use much more memory):
-  In the outer loop the elements are popped from the stack.
-  In the inner loop we always test if the current node has
-  a right brother which is branching. If so, the right brother is pushed, and
-  we proceed with the first child of the current node which is branching.
-  This is of course unevaluated.
-*/
 
 static void evaluateeager(void)
 {
@@ -729,15 +443,6 @@ static void evaluateeager(void)
     FREESPACE(stack);
   }
 }
-
-//\section{Initializing the Data Structures}
-
-/*
-  The following function allocates and initializes the data structures.
-  In particular it inserts the root with depth 0, and the appropriate
-  boundaries. The latter are however not necessary, since if the
-  depth is 0, we know them anyway.
-*/
 
 static void inittree(void)
 {
@@ -766,14 +471,6 @@ static void inittree(void)
   }
 }
 
-//\section{Searching for Patterns}
-
-/*
-  The following function computes the length of the longest common prefix
-  of two strings given by pairs of pointers to the first and last
-  characters.
-*/
-
 static Uint lcp(Uchar *start1,Uchar *end1,Uchar *start2,Uchar *end2)
 {
   Uchar *ptr1 = start1, *ptr2 = start2;
@@ -785,20 +482,6 @@ static Uint lcp(Uchar *start1,Uchar *end1,Uchar *start2,Uchar *end2)
   }
   return (Uint) (ptr1-start1);
 }
-
-/*
-  We have two different functions to test whether some string occurs
-  in the suffix tree or not. One handles the case that the suffix tree
-  is evaluated lazily, the other handles the case that the suffix tree
-  has been completely evaluated before starting the pattern search.
-  We only give the code for the former. Both functions share a large
-  amount of code. We therefore use three macros:
-  \texttt{CHECKROOTCHILD} tests for the given character \texttt{firstchar},
-  whether there is a \texttt{firstchar}-edge outgoing from the root.
-  If this edge leads to a leaf, we test if the remaining pattern suffix
-  is a prefix of the label of the leaf edge. If the edge leads to
-  a branching node, then we continue with this.
-*/
 
 #define CHECKROOTCHILD\
         {\
@@ -819,10 +502,6 @@ static Uint lcp(Uchar *start1,Uchar *end1,Uchar *start2,Uchar *end2)
           nodeptr = streetab + rootchild;\
         }
 
-/*
-  The following macro tests whether the remaining suffix of the pattern
-  is a prefix of the label of the current leaf edge.
-*/
 
 #define CHECKLEAFEDGE\
         if(lefttext == sentinel)\
@@ -839,11 +518,6 @@ static Uint lcp(Uchar *start1,Uchar *end1,Uchar *start2,Uchar *end2)
           return False;\
         }
 
-/*
-  The following macro tests whether the remaining suffix of the pattern
-  is a prefix of the label of the current edge to a branching node.
-*/
-
 #define CHECKBRANCHEDGE\
         prefixlen = UintConst(1)+lcp(lpatt+1,rightpattern,lefttext+1,lefttext+edgelen-1);\
         if(prefixlen == edgelen)\
@@ -858,15 +532,6 @@ static Uint lcp(Uchar *start1,Uchar *end1,Uchar *start2,Uchar *end2)
           return False;\
         }
 
-/*
-  The following function retrieves the \emph{lp}-value of the first child
-  for a given branching node. In case the firstchild is an unevaluated
-  branching node, the returned value is delivered by the macro
-  \texttt{GETLPUNEVAL}. In case the firstchild is a leaf or
-  an evaluated node, the returned value can directly be retrieved,
-  given the reference to the first child.
-*/
-
 static Uint firstchildlp(Uint *nodeptr)
 {
   Uint *firstchildptr = streetab + GETFIRSTCHILD(nodeptr);
@@ -880,29 +545,9 @@ static Uint firstchildlp(Uint *nodeptr)
   }
 }
 
-/*
-  The function \texttt{occurslazy} takes a void pointer,
-  as well as a pointer to the input string and its length as an argument.
-  These three parameters are not used here, but we keep them since
-  the function is passed to the function \texttt{searchpattern} (defined
-  in the library module \texttt{searchpat}).
-  The last two arguments are of interest. They refer to the first and the last
-  character of the pattern to be searched. The function works in
-  two loops. The outer loop scans down the suffix tree, and
-  the inner loop scans the list of successors of a given node.
-  For the root there is no inner loop, since we access
-  table \texttt{rootchildtab}. Note that before following an edge
-  to a branching node, we first evaluate that node, if it is not
-  already evaluated.
-*/
-
-//\Ignore{
-
 #ifndef ONLYCOUNT
 
-//}
-
-static BOOL occurslazy(/*@unused@*/ void *state,Uchar *text,Uint textlen,
+static BOOL occurslazy(void * state, Uchar *text,Uint textlen,
                        Uchar *leftpattern,Uchar *rightpattern)
 {
   Uint leftpointer, node, *nodeptr, edgelen, prefixlen;
@@ -983,16 +628,6 @@ static BOOL occurslazy(/*@unused@*/ void *state,Uchar *text,Uint textlen,
     CHECKBRANCHEDGE;
   }
 }
-
-/*
-  The function \texttt{occurseager} has the same interface as
-  \texttt{occurslazy}.
-  It is slightly simpler, due to the fact that it assumes that the
-  suffix tree has been completely evaluated. We do not show the code
-  here.
-*/
-
-//\Ignore{
 
 static BOOL occurseager(/*@unused@*/ void *state,Uchar *text,
                         /*@unused@*/ Uint textlen,
@@ -1359,26 +994,9 @@ static void showtree(void)
 
 #endif
 
-//}
-
-//\section{Putting it all together}
-
-/*
-  \texttt{wotd} implements the \emph{wotd}-algorithm and calls the functions
-  to search for patterns. If the first argument
-  is true, then the suffix tree is evaluated with the eager strategy.
-  Otherwise, the suffix tree is evaluated with the lazy strategy.
-  Note that in this case the evaluation of nodes is done in the function
-  \texttt{occurslazy}.
-*/
-
-//\Ignore{
-
 #ifndef ONLYCOUNT
 
-//}
-
-static void showpattern(/*@unused@*/ void *info,Uchar *w,Uint wlen)
+static void showpattern(Uchar *w, Uint wlen)
 {
   (void) fwrite(w,sizeof(Uchar),(size_t) wlen,stderr);
 }
@@ -1418,13 +1036,8 @@ static void wotd(BOOL evaleager,char *argv[],int argc,float rho,
              (double) (4*(branchcount*BRANCHWIDTH+ leafcount))/textlen);
 }
 
-//\Ignore{
-
 #endif
 
-//}
-
-//\end{document}
 
 #ifdef ONLYCOUNT
 Uint wotdtreesize(Uchar *textarg,Uint textlenarg,Uchar *alphabet,

@@ -1,6 +1,6 @@
 /*
   Copyright by Stefan Kurtz (C) 1999-2003
-  =====================================                                   
+  =====================================
   You may use, copy and distribute this file freely as long as you
    - do not change the file,
    - leave this copyright notice in the file,
@@ -23,8 +23,8 @@
 //}
 
 /*
-  This file defines macros to conveniently declare and 
-  manipulate dynamic arrays whose size grow on demand. Each dynamic 
+  This file defines macros to conveniently declare and
+  manipulate dynamic arrays whose size grow on demand. Each dynamic
   array over some type \texttt{T}
   is implemented by a structure consisting of three components:
   \begin{enumerate}
@@ -32,14 +32,14 @@
   \texttt{space\#\#T} is a pointer to the space block of type \texttt{T}
   allocated for the array.
   \item
-  \texttt{allocated\#\#T} is an \texttt{Uint} storing the number 
+  \texttt{allocated\#\#T} is an \texttt{Uint} storing the number
   of entries in the array currently allocated.
   \item
-  \texttt{nextfree\#\#T} holds the smallest index of the array where no 
+  \texttt{nextfree\#\#T} holds the smallest index of the array where no
   value is stored.
   \end{enumerate}
   Here \texttt{\#\#} is the concatenation operator of the C-preprocessor.
-  The following macro expands to a corresponding type definition over 
+  The following macro expands to a corresponding type definition over
   some given \texttt{TYPE}.
 */
 
@@ -67,8 +67,8 @@
 
 /*
   \texttt{CHECKARRAYSPACE} checks if the integer \texttt{nextfree\#\#T}
-  points to an index for which the space is not allocated yet. If this is 
-  the case, the number of cells allocated is incremented by \texttt{L}. The 
+  points to an index for which the space is not allocated yet. If this is
+  the case, the number of cells allocated is incremented by \texttt{L}. The
   contents of the previously filled array elements is of course maintained.
 */
 
@@ -97,7 +97,7 @@
 #endif
 
 /*
-  The next macro is a variation of \texttt{CHECKARRAYSPACE}, 
+  The next macro is a variation of \texttt{CHECKARRAYSPACE},
   which checks if the next
   \texttt{L} cells have been allocated. If not, then this is done.
 */
@@ -127,7 +127,7 @@
 #endif
 
 /*
-  This macro checks the space and delivers a pointer \texttt{P} 
+  This macro checks the space and delivers a pointer \texttt{P}
   to the next free element in the array.
 */
 
@@ -136,7 +136,7 @@
         P = (A)->space##TYPE + (A)->nextfree##TYPE++;
 
 /*
-  This macro checks the space and stores \texttt{V} in the 
+  This macro checks the space and stores \texttt{V} in the
   \texttt{nextfree}-component of the array. \texttt{nextfree}
   is incremented.
 */
@@ -155,7 +155,7 @@
           FREESPACE((A)->space##TYPE);\
         }
 
-/* 
+/*
   Some declarations for the most common array types.
 */
 
@@ -176,9 +176,9 @@ typedef ArrayUint  ArrayPosition;       // \Typedef{ArrayPosition}
 typedef ArrayUchar ArrayCharacters;     // \Typedef{ArrayCharacters}
 
 /*
-  The following array type has some extra components. However, it can be 
+  The following array type has some extra components. However, it can be
   manipulated by the macros above since the record-components
-  \texttt{spaceStrings}, \texttt{nextfreeStrings}, and 
+  \texttt{spaceStrings}, \texttt{nextfreeStrings}, and
   \texttt{allocatedStrings} is declared appropriately.
 */
 

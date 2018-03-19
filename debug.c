@@ -1,6 +1,6 @@
 /*
   Copyright by Stefan Kurtz (C) 1997-2003
-  =====================================                                   
+  =====================================
   You may use, copy and distribute this file freely as long as you
    - do not change the file,
    - leave this copyright notice in the file,
@@ -37,7 +37,7 @@
 /*EE
   This module defines functions for handling debug levels and
   other information related to producing debugging messages.
-  The debug mechanism is only available if the \texttt{DEBUG} compiler 
+  The debug mechanism is only available if the \texttt{DEBUG} compiler
   flag is used.
 */
 
@@ -45,7 +45,7 @@
 
 static Sint debuglevel = 0;        // the value of \texttt{DEBUGLEVEL}
 static BOOL debugwhere = False;    // the value of \texttt{DEBUGWHERE}
-/*@null@*/ static FILE 
+/*@null@*/ static FILE
            *debugfileptr = NULL;  // the file pointer to show the debug info
 
 /*EE
@@ -67,8 +67,8 @@ BOOL getdebugwhere(void)
 }
 
 /*EE
-  The following function sets the debug level by looking up the 
-  environment variable \texttt{DEBUGLEVEL}. Moreover, the environment 
+  The following function sets the debug level by looking up the
+  environment variable \texttt{DEBUGLEVEL}. Moreover, the environment
   variable \texttt{DEBUGWHERE} is read and \texttt{debugwhere} is set
   accordingly.
 */
@@ -81,7 +81,7 @@ void setdebuglevel(void)
   debugfileptr = stdout;
   if((envstring = getenv("DEBUGLEVEL")) != NULL)
   {
-    if(!(strlen(envstring) == (size_t) 1 && 
+    if(!(strlen(envstring) == (size_t) 1 &&
        isdigit((Ctypeargumenttype) *envstring)))
     {
       fprintf(stderr,"environment variable DEBUGLEVEL=%s, ",envstring);
@@ -124,8 +124,8 @@ void setdebuglevel(void)
 }
 
 /*EE
-  The following function opens the given filename for writing the debug 
-  messages  to. It also sets the debug level. 
+  The following function opens the given filename for writing the debug
+  messages  to. It also sets the debug level.
   This function is called only very rarely. If only \texttt{setdebuglevel}
   is called, then the output goes to standard output.
 */
@@ -142,7 +142,7 @@ void setdebuglevelfilename(char *filename)
 }
 
 /*EE
-  The following function looks up the output pointer. 
+  The following function looks up the output pointer.
 */
 
 FILE *getdbgfp(void)
@@ -156,7 +156,7 @@ FILE *getdbgfp(void)
 }
 
 /*EE
-  The following function closes the debug output pointer, if it is not 
+  The following function closes the debug output pointer, if it is not
   standard out.
 */
 
