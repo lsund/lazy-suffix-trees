@@ -1,6 +1,6 @@
 /*
   Copyright by Stefan Kurtz (C) 1998-2003
-  =====================================                                   
+  =====================================
   You may use, copy and distribute this file freely as long as you
    - do not change the file,
    - leave this copyright notice in the file,
@@ -18,7 +18,7 @@
 #include "compl.h"
 #include "types.h"
 
-void reverseinplace(Uchar *s,Uint len)
+void reverse(Uchar *s,Uint len)
 {
   Uchar *front, *back, tmp;
 
@@ -56,8 +56,8 @@ void reversestring(char *s, Uint m, char *sreverse)
 {
   char *sp;
 
-  for(sreverse += m-1, *(sreverse+1) = '\0', sp = s; 
-      *sp != '\0'; 
+  for(sreverse += m-1, *(sreverse+1) = '\0', sp = s;
+      *sp != '\0';
       *sreverse-- = *sp++)
     /*NOTHING*/;
   sreverse++;

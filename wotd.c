@@ -486,96 +486,96 @@ static Uint firstchildlp(Uint *nodeptr)
 #ifndef ONLYCOUNT
 
 static BOOL occurslazy(
-                void *state,
-                Uchar *text,
-                Uint textlen,
-                Uchar *leftpattern,
-                Uchar *rightpattern
-            )
+        void *state,
+        Uchar *text,
+        Uint textlen,
+        Uchar *leftpattern,
+        Uchar *rightpattern
+        )
 {
-  Uint leftpointer, node, *nodeptr, edgelen, prefixlen;
-  Uchar *lefttext, *lpatt = leftpattern, firstchar, edgechar;
+    Uint leftpointer, node, *nodeptr, edgelen, prefixlen;
+    Uchar *lefttext, *lpatt = leftpattern, firstchar, edgechar;
 
-  if(lpatt > rightpattern)   // check for empty word
-  {
-    return True;
-  }
-  firstchar = *lpatt;
-
-  if(!rootevaluated)
-  {
-    sortByChar0();
-    (void) evalrootsuccedges(suffixes,suffixes+textlen-1);
-    rootevaluated = True;
-  }
-
-  CHECKROOTCHILD;
-
-  if(ISUNEVALUATED(nodeptr))
-  {
-    node = NODEINDEX(nodeptr);
-    evaluatenodelazy(node);
-    nodeptr = streetab + node;
-  }
-
-  leftpointer = GETLP(nodeptr);
-  lefttext = text + GETLP(nodeptr);
-  edgelen = firstchildlp(nodeptr) - leftpointer;
-  CHECKBRANCHEDGE;
-
-  while(True)
-  {
     if(lpatt > rightpattern)   // check for empty word
     {
-      return True;
+        return True;
+    }
+    firstchar = *lpatt;
+
+    if(!rootevaluated)
+    {
+        sortByChar0();
+        (void) evalrootsuccedges(suffixes,suffixes+textlen-1);
+        rootevaluated = True;
     }
 
-    firstchar = *lpatt;
-    nodeptr = streetab + GETFIRSTCHILD(nodeptr);
+    CHECKROOTCHILD;
+
+    if(ISUNEVALUATED(nodeptr))
+    {
+        node = NODEINDEX(nodeptr);
+        evaluatenodelazy(node);
+        nodeptr = streetab + node;
+    }
+
+    leftpointer = GETLP(nodeptr);
+    lefttext = text + GETLP(nodeptr);
+    edgelen = firstchildlp(nodeptr) - leftpointer;
+    CHECKBRANCHEDGE;
 
     while(True)
     {
-      if(ISLEAF(nodeptr))
-      {
-        leftpointer = GETLP(nodeptr);
-        lefttext = text + leftpointer;
-        CHECKLEAFEDGE;
-        if(ISRIGHTMOSTCHILD(nodeptr))
+        if(lpatt > rightpattern)   // check for empty word
         {
-          return False;
+            return True;
         }
-        nodeptr++;
-      } else
-      {
+
+        firstchar = *lpatt;
+        nodeptr = streetab + GETFIRSTCHILD(nodeptr);
+
+        while(True)
+        {
+            if(ISLEAF(nodeptr))
+            {
+                leftpointer = GETLP(nodeptr);
+                lefttext = text + leftpointer;
+                CHECKLEAFEDGE;
+                if(ISRIGHTMOSTCHILD(nodeptr))
+                {
+                    return False;
+                }
+                nodeptr++;
+            } else
+            {
+                if(ISUNEVALUATED(nodeptr))
+                {
+                    leftpointer = GETLPUNEVAL(nodeptr);
+                } else
+                {
+                    leftpointer = GETLP(nodeptr);
+                }
+                lefttext = text + leftpointer;
+                edgechar = *lefttext;
+                if(edgechar == firstchar)
+                {
+                    break;
+                }
+                if(ISRIGHTMOSTCHILD(nodeptr))
+                {
+                    return False;
+                }
+                nodeptr += BRANCHWIDTH;
+            }
+        }
         if(ISUNEVALUATED(nodeptr))
         {
-          leftpointer = GETLPUNEVAL(nodeptr);
-        } else
-        {
-          leftpointer = GETLP(nodeptr);
+            node = NODEINDEX(nodeptr);
+            evaluatenodelazy(node);
+            nodeptr = streetab + node;
         }
-        lefttext = text + leftpointer;
-        edgechar = *lefttext;
-        if(edgechar == firstchar)
-        {
-          break;
-        }
-        if(ISRIGHTMOSTCHILD(nodeptr))
-        {
-          return False;
-        }
-        nodeptr += BRANCHWIDTH;
-      }
+        edgelen = firstchildlp(nodeptr) - leftpointer;
+        CHECKBRANCHEDGE;
     }
-    if(ISUNEVALUATED(nodeptr))
-    {
-      node = NODEINDEX(nodeptr);
-      evaluatenodelazy(node);
-      nodeptr = streetab + node;
-    }
-    edgelen = firstchildlp(nodeptr) - leftpointer;
-    CHECKBRANCHEDGE;
-  }
 }
 
 static BOOL occurseager(/*@unused@*/ void *state,Uchar *text,
@@ -950,48 +950,54 @@ static void showpattern(Uchar *w, Uint wlen)
   (void) fwrite(w,sizeof(Uchar),(size_t) wlen,stderr);
 }
 
-static void wotd(BOOL evaleager,char *argv[],int argc,float rho,
-                 Uint minpat,Uint maxpat)
+static void wotd(
+                BOOL evaleager,
+                char *argv[],
+                int argc,
+                float rho,
+                Uint minpat,
+                Uint maxpat
+            )
 {
-  ArrayUint resultpos;
-  inittree();
-  if(evaleager)
-  {
-    initclock();
-    evaluateeager();
-    DEBUGCODE(3,showstreetab());
-    DEBUGCODE(3,showtree());
-    FREESPACE(suffixes);
-  }
-  INITARRAY(&resultpos,Uint);
-  if(maxpat > 0 && maxpat <= textlen && rho != 0.0)
-  {
-    searchpattern(
-        evaleager ? occurseager : occurslazy,
-        argv,
-        argc,
-        (void *) &resultpos,
-        text,
-        textlen,
-        rho,
-        minpat,
-        maxpat,
-        showpattern,
-        NULL
-    );
-  }
-  FREEARRAY(&resultpos,Uint);
-  DEBUG3(2,"#maxstack=%lu %lu %lu ",
+    ArrayUint resultpos;
+    inittree();
+    if(evaleager)
+    {
+        initclock();
+        evaluateeager();
+        DEBUGCODE(3,showstreetab());
+        DEBUGCODE(3,showtree());
+        FREESPACE(suffixes);
+    }
+    INITARRAY(&resultpos,Uint);
+    if(maxpat > 0 && maxpat <= textlen && rho != 0.0)
+    {
+        searchpattern(
+                evaleager ? occurseager : occurslazy,
+                argv,
+                argc,
+                (void *) &resultpos,
+                text,
+                textlen,
+                rho,
+                minpat,
+                maxpat,
+                showpattern,
+                NULL
+                );
+    }
+    FREEARRAY(&resultpos,Uint);
+    DEBUG3(2,"#maxstack=%lu %lu %lu ",
             (Showuint) maxstacksize,
             (Showuint) textlen,
             (Showuint) NODEINDEX(nextfreeentry));
-  DEBUG2(2,"%lu %.2f ",(Showuint) maxwidth,(double) maxwidth/textlen);
-  DEBUG2(2,"%lu %.2f\n",(Showuint) sbufferwidth,(double) sbufferwidth/textlen);
-  DEBUG4(2,"#q=%lu l=%lu %lu %.2f\n",
-             (Showuint) branchcount,
-             (Showuint) leafcount,
-             (Showuint) (branchcount*BRANCHWIDTH+leafcount),
-             (double) (4*(branchcount*BRANCHWIDTH+ leafcount))/textlen);
+    DEBUG2(2,"%lu %.2f ",(Showuint) maxwidth,(double) maxwidth/textlen);
+    DEBUG2(2,"%lu %.2f\n",(Showuint) sbufferwidth,(double) sbufferwidth/textlen);
+    DEBUG4(2,"#q=%lu l=%lu %lu %.2f\n",
+            (Showuint) branchcount,
+            (Showuint) leafcount,
+            (Showuint) (branchcount*BRANCHWIDTH+leafcount),
+            (double) (4*(branchcount*BRANCHWIDTH+ leafcount))/textlen);
 }
 
 #endif

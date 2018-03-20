@@ -38,9 +38,13 @@ static void showargs(char *argv[],Argctype argc)
   (void) putc('\n',stderr);
 }
 
-static BOOL bmhsearch(/*@unused@*/ void *info,Uchar *text,
-                      Uint textlen,Uchar *pattern,
-                      Uchar *patternright)
+static BOOL bmhsearch(
+                void *info,
+                Uchar *text,
+                Uint textlen,
+                Uchar *pattern,
+                Uchar *patternright
+            )
 {
   Uint m, i, j, rmostocc[UCHAR_MAX+1] = {0};
   Sint k;
@@ -79,108 +83,123 @@ static void showpatternstat(Uint *patternstat)
 #endif
 
 void searchpatterngeneric(
-       BOOL (*reallyoccurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
-       BOOL (*occurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
-       /*@unused@*/ char *argv[],
-       /*@unused@*/ Argctype argc,
-       void *occursinfo,
-       Uchar *text,Uint textlen,float trialpercentage,
-       Uint minpatternlen,
-       Uint maxpatternlen,
-       void (*showpattern)(void *,Uchar *,Uint),
-       void *showpatterninfo)
+        BOOL (*reallyoccurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
+        BOOL (*occurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
+        char *argv[],
+        Argctype argc,
+        void *occursinfo,
+        Uchar *text,Uint textlen,
+        float trialpercentage,
+        Uint minpatternlen,
+        Uint maxpatternlen,
+        void (*showpattern)(void *,Uchar *,Uint),
+        void *showpatterninfo
+        )
 {
-  Uint pcount, j, trials, start, patternlen, patternstat[MAXPATTERNLEN+1] = {0};
-  BOOL special, patternoccurs;
-  Uchar pattern[MAXPATTERNLEN+1];
+    Uint pcount, j, trials, start, patternlen, patternstat[MAXPATTERNLEN+1] = {0};
+    BOOL special, patternoccurs;
+    Uchar pattern[MAXPATTERNLEN+1];
 #ifdef DEBUG
-  BOOL patternreallyoccurs;
+    BOOL patternreallyoccurs;
 #endif
 
-  if(maxpatternlen > (Uint) MAXPATTERNLEN)
-  {
-    fprintf(stderr,"maxpatternlen=%lu > %lu\n",
-            (Showuint) maxpatternlen,(Showuint) MAXPATTERNLEN);
-    exit(EXIT_FAILURE);
-  }
-  if(maxpatternlen < minpatternlen)
-  {
-    fprintf(stderr,"maxpatternlen=%lu < %lu\n",(Showuint) maxpatternlen,
-                                               (Showuint) minpatternlen);
-    exit(EXIT_FAILURE);
-  }
-  if(textlen <= maxpatternlen)
-  {
-    fprintf(stderr,"textlen=%lu <= maxpatternlen = %lu\n",
-                    (Showuint) textlen,
-                    (Showuint) maxpatternlen);
-    exit(EXIT_FAILURE);
-  }
-  if(trialpercentage >= 0.0)
-  {
-    trials = (Uint) (trialpercentage * textlen);
-  } else
-  {
-    trials = (Uint) -trialpercentage;
-  }
-  printf("# trials %lu minpat %lu maxpat %lu\n",
-             (Showuint) trials,
-             (Showuint) minpatternlen,
-             (Showuint) maxpatternlen);
-  srand48(42349421);
-  for(pcount=0; pcount<trials; pcount++)
-  {
-    if(minpatternlen == maxpatternlen)
+    if(maxpatternlen > (Uint) MAXPATTERNLEN)
     {
-      patternlen = minpatternlen;
-    } else
-    {
-      patternlen = (Uint) (minpatternlen +
-                           (drand48() *
-                            (double) (maxpatternlen-minpatternlen+1)));
-    }
-    patternstat[patternlen]++;
-    start = (Uint) (drand48() * (double) (textlen-patternlen));
-    if(start > textlen - patternlen)
-    {
-      fprintf(stderr,"Not enough characters left\n");
-      exit(EXIT_FAILURE);
-    }
-    special = False;
-    for(j=0; j< patternlen; j++)
-    {
-      pattern[j] = text[start+j];
-      if(ISSPECIAL(pattern[j]))
-      {
-        special = True;
-        break;
-      }
-    }
-    if(!special)
-    {
-      if(pcount & 1)
-      {
-        reverseinplace(pattern,patternlen);
-      }
-      patternoccurs = occurs(occursinfo,text,textlen,pattern,
-                             pattern+patternlen-1);
-#ifdef DEBUG
-      patternreallyoccurs =
-          reallyoccurs(occursinfo,text,textlen,pattern,pattern+patternlen-1);
-      if(patternoccurs != patternreallyoccurs)
-      {
-        showargs(argv,argc);
-        fprintf(stderr,"pattern %lu: \"",(Showuint) pcount);\
-        showpattern(showpatterninfo,pattern,patternlen);
-        fprintf(stderr,"\" %s found, this is not supposed to happen\n",
-                   patternreallyoccurs ? "not" : "");
+        fprintf(stderr,"maxpatternlen=%lu > %lu\n",
+                (Showuint) maxpatternlen,(Showuint) MAXPATTERNLEN);
         exit(EXIT_FAILURE);
-      }
-#endif
     }
-  }
-  DEBUGCODE(1,showpatternstat(&patternstat[0]));
-  DEBUG1(1,"%lu pattern processed as expected\n",(Showuint) trials);
+    if(maxpatternlen < minpatternlen)
+    {
+        fprintf(stderr,"maxpatternlen=%lu < %lu\n",(Showuint) maxpatternlen,
+                (Showuint) minpatternlen);
+        exit(EXIT_FAILURE);
+    }
+    if(textlen <= maxpatternlen)
+    {
+        fprintf(stderr,"textlen=%lu <= maxpatternlen = %lu\n",
+                (Showuint) textlen,
+                (Showuint) maxpatternlen);
+        exit(EXIT_FAILURE);
+    }
+
+    if(trialpercentage >= 0.0) {
+        trials = (Uint) (trialpercentage * textlen);
+    } else {
+        fprintf(stderr,"trialpercentage negative %f", trialpercentage);
+        exit(EXIT_FAILURE);
+    }
+
+    printf("# trials %lu minpat %lu maxpat %lu\n",
+            (Showuint) trials,
+            (Showuint) minpatternlen,
+            (Showuint) maxpatternlen);
+
+    srand48(42349421);
+
+    for(pcount=0; pcount < trials; pcount++)
+    {
+        if(minpatternlen == maxpatternlen) {
+            patternlen = minpatternlen;
+        } else {
+            patternlen = (Uint) (minpatternlen +
+                    (drand48() *
+                     (double) (maxpatternlen-minpatternlen+1)));
+        }
+        patternstat[patternlen]++;
+
+        start = (Uint) (drand48() * (double) (textlen-patternlen));
+
+        if(start > textlen - patternlen) {
+            fprintf(stderr,"Not enough characters left\n");
+            exit(EXIT_FAILURE);
+        }
+
+        special = False;
+
+        // Make patttern
+        for(j = 0; j < patternlen; j++) {
+
+            pattern[j] = text[start+j];
+
+            if(ISSPECIAL(pattern[j])) {
+                special = True;
+                break;
+            }
+        }
+
+        if(!special)
+        {
+            // Every second pattern
+            if(pcount & 1)
+            {
+                reverse(pattern, patternlen); // Reverse every second string
+            }
+
+            patternoccurs =
+                occurs(occursinfo, text, textlen, pattern, pattern+patternlen-1);
+
+
+#ifdef DEBUG
+            patternreallyoccurs =
+                reallyoccurs(occursinfo,text,textlen,pattern,pattern+patternlen-1);
+
+            if(patternoccurs != patternreallyoccurs)
+            {
+                showargs(argv,argc);
+                fprintf(stderr,"pattern %lu: \"",(Showuint) pcount);\
+                    showpattern(showpatterninfo,pattern,patternlen);
+                fprintf(stderr,"\" %s found, this is not supposed to happen\n",
+                        patternreallyoccurs ? "not" : "");
+                exit(EXIT_FAILURE);
+            }
+#endif
+        }
+    }
+
+    DEBUGCODE(1,showpatternstat(&patternstat[0]));
+
+    DEBUG1(1,"%lu pattern processed as expected\n",(Showuint) trials);
 }
 
 void searchpattern(
@@ -207,14 +226,16 @@ void searchpattern(
                        showpattern,showpatterninfo);
 }
 
-void searchpatternapprox(void(*apm)(void *,Uint,Uchar *,Uint,Uchar *,Uint),
-                         /*@unused@*/ char *argv[],
-                         /*@unused@*/ Argctype argc,
-                         void *occursinfo,
-                         float errorrate,
-                         Uchar *text,Uint textlen,float trialpercentage,
-                         Uint minpatternlen,
-                         Uint maxpatternlen)
+void searchpatternapprox(
+        void(*apm)(void *,Uint,Uchar *,Uint,Uchar *,Uint),
+        char *argv[],
+        Argctype argc,
+        void *occursinfo,
+        float errorrate,
+        Uchar *text,Uint textlen,float trialpercentage,
+        Uint minpatternlen,
+        Uint maxpatternlen
+    )
 {
   Uint i, trials, start, patternlen, threshold;
   Uchar pattern[MAXPATTERNLEN+1];
@@ -242,7 +263,8 @@ void searchpatternapprox(void(*apm)(void *,Uint,Uchar *,Uint,Uchar *,Uint),
   DEBUG2(2,"#trials %lu maxpat %lu\n",(Showuint) trials,
                                       (Showuint) maxpatternlen);
   srand48(42349421);
-  for(i=0; i<trials; i++)
+
+  for(i=0; i < trials; i++)
   {
     patternlen = minpatternlen +
                  (Uint) (drand48() * (double) (maxpatternlen-minpatternlen+1));
@@ -260,7 +282,7 @@ void searchpatternapprox(void(*apm)(void *,Uint,Uchar *,Uint,Uchar *,Uint),
     pattern[patternlen] = (Uchar) '\0';
     if(i & 1)
     {
-      reverseinplace(pattern,patternlen);
+      reverse(pattern,patternlen);
     }
     apm(occursinfo,threshold,pattern,patternlen,text,textlen);
   }
