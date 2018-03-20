@@ -22,6 +22,8 @@
 #include "types.h"
 #include "debugdef.h"
 #include "chardef.h"
+#include "boyermoore.h"
+#include "debug.c"
 
 #include "reverse.h"
 
@@ -128,7 +130,6 @@ void searchpatterngeneric(
 #ifdef DEBUG
             patternreallyoccurs =
                 reallyoccurs(occursinfo,text,textlen,pattern,pattern+patternlen-1);
-
             if(patternoccurs != patternreallyoccurs)
             {
                 showargs(argv,argc);

@@ -12,8 +12,8 @@
 #include "arraydef.h"
 #include "fhandledef.h"
 #include "protodef.h"
-#include "include/preprocdef.h"
-#include "include/globalvar.h"
+#include "preprocdef.h"
+#include "globalvar.h"
 
 Uint lastrootchild, maxstacksize, maxwidth, branchcount, leafcount;
 

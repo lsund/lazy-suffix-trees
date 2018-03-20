@@ -13,18 +13,11 @@
 
 CC=gcc
 LD=${CC}
-
-# use the following line if you want to compile the source for 64 bit
-# architectures
+INCLUDE=-I'include'
 
 mode=64bit
 
-# use the following line if you want to compile the source for 32 bits
-# architectures
-
-# mode=32bit
-
- CFLAGS+=-m64 -DSIXTYFOURBITS
+ CFLAGS+=-m64 -DSIXTYFOURBITS $(INCLUDE)
  LDFLAGS+=-m64
 
 # CFLAGS+=-O3 -Wall -Werror -DNOSPACEBOOKKEEPING
@@ -33,7 +26,8 @@ CFLAGS+=-O3 -Wall -DNOSPACEBOOKKEEPING
 # SPLINTFLAGS=-DDEBUG -f Splintoptions
 SPLINTFLAGS=-DDEBUG
 
-OBJ=wotd.o\
+OBJ= boyermoore.o\
+	wotd.o\
     reverse.o\
     readfile.o\
     searchpat.o\
@@ -41,6 +35,7 @@ OBJ=wotd.o\
     filehandle.o\
     seterror.o\
     getAlpha.o
+
 
 OBJDBG=wotd.dbg.o\
        reverse.dbg.o\
@@ -55,13 +50,13 @@ OBJDBG=wotd.dbg.o\
 all:wotd.splint wotd.x wotd.dbg.x
 
 wotd.x:${OBJ}
-	${LD} ${LDFLAGS} ${OBJ} -o $@
+	${LD} ${LDFLAGS} ${OBJ} -o bin/$@
 
 wotd.dbg.x:${OBJDBG}
 	${LD} ${LDFLAGS} ${OBJDBG} -o $@
 
 clean:
-	rm -f *.[ox] wotd.splint wotd.tex wotd.log wotd.pdf wotd.aux
+	rm -f obj/*.o *.[ox] wotd.splint wotd.tex wotd.log wotd.pdf wotd.aux
 
 cleansrc:
 	rm -f *.h `ls *.c | grep -v wotd.c`
@@ -75,6 +70,5 @@ wotd.pdf:wotd.c
 	pdflatex wotd.tex
 	pdflatex wotd.tex
 
-%.dbg.o:%.c
-	$(CC) $(CFLAGS) -DDEBUG -c $*.c -o $@
-
+%.o:src/%.c
+	$(CC) $(CFLAGS) -c src/$*.c -o $@

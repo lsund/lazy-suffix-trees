@@ -1,6 +1,6 @@
 /*
   Copyright by Stefan Kurtz (C) 2003
-  =====================================                                   
+  =====================================
   You may use, copy and distribute this file freely as long as you
    - do not change the file,
    - leave this copyright notice in the file,
@@ -12,7 +12,7 @@
 */
 
 //\Ignore{
-  
+
 #ifdef HAVE_CONFIG_H
 #include <config.h>
 #endif /* HAVE_CONFIG_H */
@@ -26,12 +26,13 @@
 #include "errordef.h"
 #include "debugdef.h"
 #include "failures.h"
+#include "protodef.h"
 
 //}
 
 /*EE
   This file contains functions to store file handles for
-  user opened files. A file handle consists of 
+  user opened files. A file handle consists of
   \begin{itemize}
   \item
   the filepointer
@@ -42,11 +43,11 @@
   the line number and the program file call the the open
   function was done.
   \end{itemize}
-  The arguments \texttt{file} and \texttt{line} 
-  (if they occur) are always the filename and the linenumber, the 
-  function is called from. To supply the arguments, we recommend to 
-  call the corresponding functions via some useful macros, as defined in the 
-  file \texttt{fhandledef.h}. 
+  The arguments \texttt{file} and \texttt{line}
+  (if they occur) are always the filename and the linenumber, the
+  function is called from. To supply the arguments, we recommend to
+  call the corresponding functions via some useful macros, as defined in the
+  file \texttt{fhandledef.h}.
   \begin{enumerate}
   \item
   The function \texttt{createfilehandle} should be called
@@ -73,7 +74,7 @@ typedef struct
 } Filehandle;
 
 /*
-  The following variable is a references to the table 
+  The following variable is a references to the table
   of Filehandles.
 */
 
@@ -205,7 +206,7 @@ static void assignfilehandleinformation(char *file,
 }
 
 /*EE
-  The following functions opens a file named \texttt{path}. 
+  The following functions opens a file named \texttt{path}.
   The mode of the file is given by \texttt{mode}. The file
   pointer for the file is returned, or \texttt{NULL}, if the
   file could not be opened. Moreover, with each file created,
@@ -340,7 +341,7 @@ Sint deletefilehandle(char *file,
 
 /*EE
   The following function writes \texttt{nmemb} elements each
-  of \texttt{size} bytes and referenced by \texttt{ptr} to 
+  of \texttt{size} bytes and referenced by \texttt{ptr} to
   an output \texttt{stream}.
   The return code is 0, if everything is
   okay. Otherwise, a negative error code is returned.
@@ -367,7 +368,7 @@ Sint writetofilehandle(char *file,
 
 /*EE
   The following function reads \texttt{nmemb} elements each
-  of \texttt{size} bytes and referenced by \texttt{ptr} from 
+  of \texttt{size} bytes and referenced by \texttt{ptr} from
   an input \texttt{stream}.
   The return code is 0, if everything is
   okay. Otherwise, a negative error code is returned.
@@ -379,9 +380,9 @@ Sint readfromfilehandle(char *file,
                        Uint size,
                        Uint nmemb,
                        FILE *stream)
-{   
+{
   FUNCTIONCALL;
-    
+
   if(fread(ptr, (size_t) size, (size_t) nmemb,stream) != (size_t) nmemb)
   {
     ERROR6("%s %lu: cannot read %lu items of size %lu to %s: %s",\
@@ -394,7 +395,7 @@ Sint readfromfilehandle(char *file,
 
 /*EE
   The following function checks if all file created have
-  been closed. If not, then an error message is thrown and 
+  been closed. If not, then an error message is thrown and
   the function exits.
 */
 

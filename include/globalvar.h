@@ -1,4 +1,4 @@
-#include "../types.h"
+#include "types.h"
 
 Uchar *text,                   // points to input string \(t\) of length \(n\)
       *sentinel,               // points to \(t[n]\) which is undefined
