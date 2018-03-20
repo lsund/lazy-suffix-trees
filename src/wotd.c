@@ -14,6 +14,7 @@
 #include "protodef.h"
 #include "preprocdef.h"
 #include "globalvar.h"
+#include <string.h>
 
 Uint lastrootchild, maxstacksize, maxwidth, branchcount, leafcount;
 
@@ -971,14 +972,14 @@ static void wotd(
     }
     INITARRAY(&resultpos,Uint);
 
-    char *test = "Test";
+    char *patt = "Test";
     search_one_pattern(
             evaleager ? occurseager : occurslazy,
             (void *) &resultpos,
             text,
             textlen,
-            4,
-            test
+            strlen(patt),
+            patt
         );
 
     /* if(maxpat > 0 && maxpat <= textlen && rho != 0.0) */
@@ -997,6 +998,7 @@ static void wotd(
     /*             NULL */
     /*             ); */
     /* } */
+
     FREEARRAY(&resultpos,Uint);
     DEBUG3(2,"#maxstack=%lu %lu %lu ",
             (Showuint) maxstacksize,
