@@ -32,6 +32,8 @@
 
 #include "filehandle.pr"
 
+#define MAXPATTERNLEN 1024
+
 //}
 
 /*EE
@@ -174,4 +176,28 @@ void debugclosefile(void)
   }
 }
 
-#endif  /* DEBUG */
+static void showargs(char *argv[], Argctype argc)
+{
+    Argctype argnum;
+    for(argnum = 0; argnum < argc; argnum++)
+    {
+        fprintf(stderr,"%s ",argv[argnum]);
+    }
+    (void) putc('\n',stderr);
+}
+
+static void showpatternstat(Uint *patternstat)
+{
+    Uint i;
+
+    for(i=0; i<= (Uint) MAXPATTERNLEN; i++)
+    {
+        if(patternstat[i] > 0)
+        {
+            printf("%lu patterns of length %lu\n",(Showuint) patternstat[i],
+                    (Showuint) i);
+        }
+    }
+}
+
+#endif

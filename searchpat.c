@@ -23,64 +23,9 @@
 #include "debugdef.h"
 #include "chardef.h"
 
-#include "reverse.pr"
+#include "reverse.h"
 
 #define MAXPATTERNLEN 1024
-
-#ifdef DEBUG
-static void showargs(char *argv[],Argctype argc)
-{
-  Argctype argnum;
-  for(argnum=0; argnum<argc; argnum++)
-  {
-    fprintf(stderr,"%s ",argv[argnum]);
-  }
-  (void) putc('\n',stderr);
-}
-
-static BOOL bmhsearch(
-                void *info,
-                Uchar *text,
-                Uint textlen,
-                Uchar *pattern,
-                Uchar *patternright
-            )
-{
-  Uint m, i, j, rmostocc[UCHAR_MAX+1] = {0};
-  Sint k;
-
-  m = (Uint) (patternright - pattern + 1);
-  for (i=0; i<m-1; i++)
-  {
-    rmostocc[(Uint) pattern[i]] = i+1;
-  }
-  for(j = 0; j <= textlen-m; j += m-rmostocc[(Uint) text[j+m-1]])
-  {
-    for(k=(Sint) (m-1); k>=0 && pattern[k] == text[j+k]; k--)
-      /* nothing */ ;
-    if (k < 0)
-    {
-      return True;
-      // pattern at position j+m
-    }
-  }
-  return False;
-}
-
-static void showpatternstat(Uint *patternstat)
-{
-  Uint i;
-
-  for(i=0; i<= (Uint) MAXPATTERNLEN; i++)
-  {
-    if(patternstat[i] > 0)
-    {
-      printf("%lu patterns of length %lu\n",(Showuint) patternstat[i],
-                                            (Showuint) i);
-    }
-  }
-}
-#endif
 
 void searchpatterngeneric(
         BOOL (*reallyoccurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
