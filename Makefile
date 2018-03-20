@@ -26,49 +26,34 @@ CFLAGS+=-O3 -Wall -DNOSPACEBOOKKEEPING
 # SPLINTFLAGS=-DDEBUG -f Splintoptions
 SPLINTFLAGS=-DDEBUG
 
-OBJ= boyermoore.o\
-	wotd.o\
-    reverse.o\
-    readfile.o\
-    searchpat.o\
-    clock.o\
-    filehandle.o\
-    seterror.o\
-    getAlpha.o
-
-
-OBJDBG=wotd.dbg.o\
-       reverse.dbg.o\
-       readfile.dbg.o\
-       searchpat.dbg.o\
-       clock.dbg.o\
-       filehandle.dbg.o\
-       seterror.dbg.o\
-       getAlpha.dbg.o\
-       debug.dbg.o
+OBJ= obj/boyermoore.o\
+	obj/wotd.o\
+    obj/reverse.o\
+    obj/readfile.o\
+    obj/searchpat.o\
+    obj/clock.o\
+    obj/filehandle.o\
+    obj/seterror.o\
+    obj/getAlpha.o
 
 all:wotd.splint wotd.x wotd.dbg.x
 
-wotd.x:${OBJ}
-	${LD} ${LDFLAGS} ${OBJ} -o bin/$@
+dirs:
+	mkdir -p obj bin
+
+wotd.x:dirs ${OBJ}
+	${CC} ${LDFLAGS} ${OBJ} -o bin/$@
 
 wotd.dbg.x:${OBJDBG}
-	${LD} ${LDFLAGS} ${OBJDBG} -o $@
+	${CC} ${LDFLAGS} ${OBJDBG} -o $@
 
 clean:
-	rm -f obj/*.o *.[ox] wotd.splint wotd.tex wotd.log wotd.pdf wotd.aux
-
-cleansrc:
-	rm -f *.h `ls *.c | grep -v wotd.c`
+	rm -f obj/*.o bin/*.x
+	rmdir obj bin
 
 wotd.splint:wotd.c
 	splint ${SPLINTFLAGS} wotd.c
 	touch wotd.splint
 
-wotd.pdf:wotd.c
-	c2lit.x wotd.c | lit2alt.x -C > wotd.tex
-	pdflatex wotd.tex
-	pdflatex wotd.tex
-
-%.o:src/%.c
+obj/%.o:src/%.c
 	$(CC) $(CFLAGS) -c src/$*.c -o $@
