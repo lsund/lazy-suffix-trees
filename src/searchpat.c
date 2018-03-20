@@ -29,7 +29,7 @@
 
 #define MAXPATTERNLEN 1024
 
-void searchpatterngeneric(
+void searchpattern_benchmark(
         BOOL (*reallyoccurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
         BOOL (*occurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
         char *argv[],
@@ -40,7 +40,8 @@ void searchpatterngeneric(
         Uint minpatternlen,
         Uint maxpatternlen,
         void (*showpattern)(void *,Uchar *,Uint),
-        void *showpatterninfo
+        void *showpatterninfo,
+        Uchar *mypattern
         )
 {
     Uint pcount, j, trials, start, patternlen, patternstat[MAXPATTERNLEN+1] = {0};
@@ -148,6 +149,55 @@ void searchpatterngeneric(
     DEBUG1(1,"%lu pattern processed as expected\n",(Showuint) trials);
 }
 
+    void search_one_pattern(
+        BOOL (*occurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
+        void *occursinfo,
+        Uchar *text,
+        Uint textlen,
+        Uint patternlen,
+        char *mypattern
+    )
+{
+    Uint j;
+    BOOL special, patternoccurs;
+    Uchar pattern[MAXPATTERNLEN+1];
+
+    if(patternlen > (Uint) MAXPATTERNLEN)
+    {
+        fprintf(stderr,"maxpatternlen=%lu > %lu\n",
+                (Showuint) patternlen,(Showuint) MAXPATTERNLEN);
+        exit(EXIT_FAILURE);
+    }
+    if(textlen <= patternlen)
+    {
+        fprintf(stderr,"textlen=%lu <= maxpatternlen = %lu\n",
+                (Showuint) textlen,
+                (Showuint) patternlen);
+        exit(EXIT_FAILURE);
+    }
+
+    special = False;
+
+    // Make patttern
+    for(j = 0; j < patternlen; j++) {
+
+        pattern[j] = mypattern[j];
+
+        if(ISSPECIAL(pattern[j])) {
+            special = True;
+            break;
+        }
+    }
+
+    if(!special) {
+
+        patternoccurs =
+            occurs(occursinfo, text, textlen, pattern, pattern+patternlen-1);
+        printf("%d\n", patternoccurs);
+
+    }
+}
+
 void searchpattern(
         BOOL(*occurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
         char *argv[],
@@ -163,13 +213,22 @@ void searchpattern(
     )
 {
 #ifdef DEBUG
-  searchpatterngeneric(bmhsearch,
+  searchpattern_benchmark(bmhsearch,
 #else
-  searchpatterngeneric(NULL,
+  searchpattern_benchmark(NULL,
 #endif
-                       occurs,argv,argc,occursinfo,text,textlen,
-                       trialpercentage,minpatternlen,maxpatternlen,
-                       showpattern,showpatterninfo);
+                       occurs,
+                       argv,
+                       argc,
+                       occursinfo,
+                       text,
+                       textlen,
+                       trialpercentage,
+                       minpatternlen,
+                       maxpatternlen,
+                       showpattern,
+                       showpatterninfo,
+                       NULL);
 }
 
 void searchpatternapprox(

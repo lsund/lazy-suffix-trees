@@ -65,7 +65,8 @@ void searchpatterngeneric(
        Uint minpatternlen,
        Uint maxpatternlen,
        void (*showpattern)(Uchar *,Uint),
-       void *showpatterninfo);
+       void *showpatterninfo,
+       Uchar *pattern);
 
 void searchpattern(BOOL(*occurs)(void *,Uchar *,Uint,Uchar *,Uchar *),
                    char *argv[],Argctype argc,
@@ -84,6 +85,15 @@ void searchpatternapprox(void(*apm)(void *,Uint,Uchar *,Uint,Uchar *,Uint),
                          Uchar *text,Uint textlen,float trialpercentage,
                          Uint minpatternlen,
                          Uint maxpatternlen);
+
+void search_one_pattern(
+    BOOL (*occurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
+    void *occursinfo,
+    Uchar *text,
+    Uint textlen,
+    Uint patternlen,
+    char *mypattern
+);
 
 void initclock(void);
 

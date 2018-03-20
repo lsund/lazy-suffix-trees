@@ -970,22 +970,33 @@ static void wotd(
         FREESPACE(suffixes);
     }
     INITARRAY(&resultpos,Uint);
-    if(maxpat > 0 && maxpat <= textlen && rho != 0.0)
-    {
-        searchpattern(
-                evaleager ? occurseager : occurslazy,
-                argv,
-                argc,
-                (void *) &resultpos,
-                text,
-                textlen,
-                rho,
-                minpat,
-                maxpat,
-                showpattern,
-                NULL
-                );
-    }
+
+    char *test = "Test";
+    search_one_pattern(
+            evaleager ? occurseager : occurslazy,
+            (void *) &resultpos,
+            text,
+            textlen,
+            4,
+            test
+        );
+
+    /* if(maxpat > 0 && maxpat <= textlen && rho != 0.0) */
+    /* { */
+    /*     searchpattern( */
+    /*             evaleager ? occurseager : occurslazy, */
+    /*             argv, */
+    /*             argc, */
+    /*             (void *) &resultpos, */
+    /*             text, */
+    /*             textlen, */
+    /*             rho, */
+    /*             minpat, */
+    /*             maxpat, */
+    /*             showpattern, */
+    /*             NULL */
+    /*             ); */
+    /* } */
     FREEARRAY(&resultpos,Uint);
     DEBUG3(2,"#maxstack=%lu %lu %lu ",
             (Showuint) maxstacksize,
