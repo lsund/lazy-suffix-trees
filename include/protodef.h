@@ -43,6 +43,8 @@ void freetextspace(Uchar *text, Uint textlen);
 
 /*@null@*/ caddr_t file2String(char *name, Uint *textlen);
 
+int file2Array(char *name, Uint *textlen, char ***words);
+
 Sint getdebuglevel(void);
 
 BOOL getdebugwhere(void);

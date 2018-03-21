@@ -1043,68 +1043,80 @@ static void wotd(BOOL evaleager)
 
 int main(int argc,char *argv[])
 {
-  float rho, readfloat;
-  Uint minpat, maxpat;
-  char *filename, *patternfile;
-  BOOL evaleager;
-  Scaninteger readint;
+    float rho, readfloat;
+    Uint minpat, maxpat;
+    char *filename, *patternfile;
+    BOOL evaleager;
+    Scaninteger readint;
 
-  CHECKARGNUM(7,"(-lazy|-eager) rho minpat maxpat filename patternfile");
-  DEBUGLEVELSET;
-  if(strcmp(argv[1],"-lazy") != 0 && strcmp(argv[1],"-eager") != 0)
-  {
-    fprintf(stderr,"Illegal option \"%s\"\n",argv[1]);
-    exit(EXIT_FAILURE);
-  }
-  if(strcmp(argv[1],"-eager") == 0)
-  {
-    evaleager = True;
-  } else
-  {
-    evaleager = False;
-  }
+    CHECKARGNUM(7,"(-lazy|-eager) rho minpat maxpat filename patternfile");
+    DEBUGLEVELSET;
+    if(strcmp(argv[1],"-lazy") != 0 && strcmp(argv[1],"-eager") != 0)
+    {
+        fprintf(stderr,"Illegal option \"%s\"\n",argv[1]);
+        exit(EXIT_FAILURE);
+    }
+    if(strcmp(argv[1],"-eager") == 0)
+    {
+        evaleager = True;
+    } else
+    {
+        evaleager = False;
+    }
 
-  PARSEFLOATARG(argv[2]);
-  rho = readfloat;
-  PARSEINTARG(argv[3]);
-  minpat = (Uint) readint;
-  PARSEINTARG(argv[4]);
-  maxpat = (Uint) readint;
-  filename = argv[5];
-  text = (Uchar *) file2String(filename, &textlen);
-  if(text == NULL)
-  {
-    fprintf(stderr, "%s: Cannot open file %s\n", argv[0], filename);
-    exit(EXIT_FAILURE);
-  }
-  patternfile = argv[6];
-  patterns = (Uchar *) file2String(patternfile, &patternslen);
-  if(patterns == NULL)
-  {
-    fprintf(stderr, "%s: Cannot open file %s\n", argv[0], patterns);
-    exit(EXIT_FAILURE);
-  }
-  if(textlen > MAXTEXTLEN)
-  {
-    fprintf(stderr,"Textlen = %lu > maximal textlen = %lu\n",
-                   (Showuint) textlen,(Showuint) MAXTEXTLEN);
-    exit(EXIT_FAILURE);
-  }
+    PARSEFLOATARG(argv[2]);
+    rho = readfloat;
+    PARSEINTARG(argv[3]);
+    minpat = (Uint) readint;
+    PARSEINTARG(argv[4]);
+    maxpat = (Uint) readint;
+    filename = argv[5];
+    text = (Uchar *) file2String(filename, &textlen);
 
-  /* wotd_benchmark(evaleager,argv,argc,rho, minpat, maxpat); */
+    if(text == NULL) {
+        fprintf(stderr, "%s: Cannot open file %s\n", argv[0], filename);
+        exit(EXIT_FAILURE);
+    }
 
-  wotd(evaleager);
+    patternfile = argv[6];
+    int lines_allocated = 128;
+    char **words = (char **)malloc(sizeof(char*)*lines_allocated);
+    int i = file2Array(patternfile, &patternslen, &words);
+    int j;
+    for(j = 0; j < i; j++)
+        printf("%s\n", words[j]);
 
-  freetextspace(text,textlen);
+    /* Good practice to free memory */
+    for (;i>=0;i--)
+        free(words[i]);
+    free(words);
 
-  if(evaleager)
-  {
-    SHOWTIME("wotdeager");
-    SHOWSPACE("wotdeager");
-  } else
-  {
-    SHOWTIME("wotdlazy");
-    SHOWSPACE("wotdlazy");
-  }
-  return EXIT_SUCCESS;
+    if(patterns == NULL) {
+        fprintf(stderr, "%s: Cannot open file %s\n", argv[0], patterns);
+        exit(EXIT_FAILURE);
+    }
+
+    if(textlen > MAXTEXTLEN) {
+        fprintf(stderr,"Textlen = %lu > maximal textlen = %lu\n",
+                (Showuint) textlen,(Showuint) MAXTEXTLEN);
+
+        exit(EXIT_FAILURE);
+    }
+
+    /* wotd_benchmark(evaleager,argv,argc,rho, minpat, maxpat); */
+
+    wotd(evaleager);
+
+    freetextspace(text,textlen);
+
+    if(evaleager)
+    {
+        SHOWTIME("wotdeager");
+        SHOWSPACE("wotdeager");
+    } else
+    {
+        SHOWTIME("wotdlazy");
+        SHOWSPACE("wotdlazy");
+    }
+    return EXIT_SUCCESS;
 }

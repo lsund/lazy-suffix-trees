@@ -18,6 +18,7 @@
 #include <sys/mman.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <string.h>
 #include "types.h"
 #include "debugdef.h"
 #include "errordef.h"
@@ -35,21 +36,21 @@
 
 int fileOpen(char *name, Uint *textlen, BOOL writefile)
 {
-  int fd;
-  struct stat buf;
+    int fd;
+    struct stat buf;
 
-  if((fd = open(name,(writefile) ? O_RDWR : O_RDONLY)) == -1)
-  {
-     ERROR1("fileOpen: Cannot open \"%s\"",name);
-     return -1;
-  }
-  if(fstat(fd,&buf) == -1)
-  {
-     ERROR2("file \"%s\": fstat(fd = %d) failed",name,fd);
-     return -2;
-  }
-  *textlen = (Uint) buf.st_size;
-  return fd;
+    if((fd = open(name,(writefile) ? O_RDWR : O_RDONLY)) == -1)
+    {
+        ERROR1("fileOpen: Cannot open \"%s\"",name);
+        return -1;
+    }
+    if(fstat(fd,&buf) == -1)
+    {
+        ERROR2("file \"%s\": fstat(fd = %d) failed",name,fd);
+        return -2;
+    }
+    *textlen = (Uint) buf.st_size;
+    return fd;
 }
 
 /*
@@ -59,7 +60,7 @@ int fileOpen(char *name, Uint *textlen, BOOL writefile)
   The offset must be a multiple of the page size.
 */
 
-/*@null@*/ caddr_t fileParts(int fd,Uint offset,Uint len,BOOL writemap)
+/*@null@*/ caddr_t fileParts(int fd, Uint offset, Uint len, BOOL writemap)
 {
   caddr_t addr;
 
@@ -109,12 +110,11 @@ void freetextspace(Uchar *text, Uint textlen)
 {
   int fd;
 
-  fd = fileOpen(name,textlen,writefile);
-  if(fd < 0)
-  {
+  fd = fileOpen(name, textlen, writefile);
+  if(fd < 0) {
     return NULL;
   }
-  return fileParts(fd,0,*textlen,writemap);
+  return fileParts(fd, 0, *textlen, writemap);
 }
 
 /*
@@ -124,4 +124,72 @@ void freetextspace(Uchar *text, Uint textlen)
 /*@null@*/ caddr_t file2String(char *name, Uint *textlen)
 {
   return genfile2String(name,textlen,False,False);
+}
+
+int file2Array(char *name, Uint *textlen, char ***wordsp)
+{
+    char **words = *wordsp;
+    int fd = fileOpen(name, textlen, False);
+    if (fd < 0) {
+        return -1;
+    }
+    int max_line_len = 100;
+
+    /* Allocate lines of text */
+    if (words==NULL)
+    {
+        fprintf(stderr,"Out of memory (1).\n");
+        exit(1);
+    }
+
+    FILE *fp = fopen(name, "r");
+    if (fp == NULL)
+    {
+        fprintf(stderr,"Error opening file.\n");
+        exit(EXIT_FAILURE);
+    }
+
+    int lines_allocated = 128;
+    int i;
+    for (i = 0; 1; i++)
+    {
+        int j;
+
+        /* Have we gone over our line allocation? */
+        if (i >= lines_allocated)
+        {
+            int new_size;
+
+            /* Double our allocation and re-allocate */
+            new_size = lines_allocated*2;
+            words = (char **)realloc(words,sizeof(char*) * new_size);
+            if (!words)
+            {
+                fprintf(stderr,"Out of memory.\n");
+                exit(3);
+            }
+            lines_allocated = new_size;
+        }
+
+        /* Allocate space for the next line */
+        words[i] = malloc(max_line_len);
+
+        if (words[i]==NULL)
+        {
+            fprintf(stderr,"Out of memory (3).\n");
+            exit(4);
+        }
+
+        if (fgets(words[i],max_line_len-1,fp)==NULL)
+            break;
+
+        /* Get rid of CR or LF at end of line */
+        for (j=strlen(words[i])-1;j>=0 && (words[i][j]=='\n' || words[i][j]=='\r');j--)
+            ;
+        words[i][j+1]='\0';
+    }
+    /* Close file */
+    fclose(fp);
+
+    return i;
 }
