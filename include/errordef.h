@@ -1,6 +1,6 @@
 /*
   Copyright by Stefan Kurtz (C) 1999-2003
-  =====================================                                   
+  =====================================
   You may use, copy and distribute this file freely as long as you
    - do not change the file,
    - leave this copyright notice in the file,
@@ -34,14 +34,14 @@ Sint maxerrormsg(void);
 
 /*
   This file contains some macros to write error messages into a
-  buffer returned by the function \texttt{messagespace}. 
+  buffer returned by the function \texttt{messagespace}.
 */
 
 /*
   There is a generic macro \texttt{GENERROR} (definition
-  not given) that checks if the 
-  result of the computation \texttt{C} exceed the value returned 
-  by the function \texttt{maxerrormessage}. If so, then a 
+  not given) that checks if the
+  result of the computation \texttt{C} exceed the value returned
+  by the function \texttt{maxerrormessage}. If so, then a
   corresponding error message is written to stderr.
 */
 

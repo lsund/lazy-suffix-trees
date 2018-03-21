@@ -1,6 +1,6 @@
 /*
   Copyright by Stefan Kurtz (C) 2003
-  =====================================                                   
+  =====================================
   You may use, copy and distribute this file freely as long as you
    - do not change the file,
    - leave this copyright notice in the file,
@@ -38,17 +38,17 @@ typedef struct
 
 /*
   This file defines macros to simplify the calls to the
-  functions 
+  functions
   \begin{itemize}
   \item
-  \texttt{createfilehandle}, 
+  \texttt{createfilehandle},
   \item
   \texttt{maketmpfile},
   \item
   \texttt{deletefilehandle},
   \item
   \texttt{writetofilehandle},
-  \item 
+  \item
   and \texttt{readfromfilehandle}.
   \end{itemize}
 */

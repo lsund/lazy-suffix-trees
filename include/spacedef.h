@@ -1,6 +1,6 @@
 /*
   Copyright by Stefan Kurtz (C) 2000-2003
-  =====================================                                   
+  =====================================
   You may use, copy and distribute this file freely as long as you
    - do not change the file,
    - leave this copyright notice in the file,
@@ -64,18 +64,18 @@ Sint setlocalpagesize(void);
 
 /*
   This file defines macros to simplify the calls to the
-  functions 
+  functions
   \begin{itemize}
   \item
-  \texttt{allocandusespaceviaptr}, 
+  \texttt{allocandusespaceviaptr},
   \item
   \texttt{freespaceviaptr},
   \item
-  \texttt{dynamicstrdup}, 
+  \texttt{dynamicstrdup},
   \item
-  \texttt{creatememorymapforfiledesc}, 
+  \texttt{creatememorymapforfiledesc},
   \item
-  \texttt{creatememorymap}, 
+  \texttt{creatememorymap},
   \item
   \texttt{delete\-memorymap}.
   \end{itemize}
@@ -84,12 +84,12 @@ Sint setlocalpagesize(void);
   \item
     The first parameter to \texttt{ALLOCSPACE} is \texttt{NULL}
     or a pointer to a previously
-    allocated space block. 
+    allocated space block.
   \item
   The second argument of the macro is the type of the space block
   to be allocated.
   \item
-  The third argument is the number of elements of that type to be 
+  The third argument is the number of elements of that type to be
   allocated space for.
   \end{enumerate}
 */
@@ -129,7 +129,7 @@ Sint setlocalpagesize(void);
 
 /*
   The macro \texttt{FREESPACE} frees the space pointed to by \texttt{P},
-  if this is not \texttt{NULL}. It also sets the 
+  if this is not \texttt{NULL}. It also sets the
   pointer to \texttt{NULL}.
 */
 
@@ -142,7 +142,7 @@ Sint setlocalpagesize(void);
 
 /*
   The remaining macros call the corresponding function with
-  the filename and the line number where the function call 
+  the filename and the line number where the function call
   appears.
 */
 

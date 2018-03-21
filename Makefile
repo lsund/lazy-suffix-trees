@@ -48,7 +48,7 @@ dirs:
 	mkdir -p obj bin
 
 wotd.x:dirs ${OBJ}
-	${CC} ${LDFLAGS} ${OBJ} -o bin/$@
+	${CC} ${LDFLAGS} main.c ${OBJ} -o bin/$@
 
 wotd.dbg.x:${OBJDBG}
 	${CC} ${LDFLAGS} ${OBJDBG} -o $@

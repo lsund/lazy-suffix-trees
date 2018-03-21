@@ -1,6 +1,6 @@
 /*
   Copyright by Stefan Kurtz (C) 1998-2003
-  =====================================                                   
+  =====================================
   You may use, copy and distribute this file freely as long as you
    - do not change the file,
    - leave this copyright notice in the file,
@@ -108,13 +108,13 @@ typedef int Fgetcreturntype;        // \Typedef{Fgetcreturntype}
   Type of first argument of \texttt{putc}.
 */
 
-typedef int Fputcfirstargtype;      // \Typedef{Fputcfirstargtype}  
+typedef int Fputcfirstargtype;      // \Typedef{Fputcfirstargtype}
 
 /*
   Returntype of \texttt{putc}.
 */
 
-typedef int Fputcreturntype;      // \Typedef{Fputcreturntype}  
+typedef int Fputcreturntype;      // \Typedef{Fputcreturntype}
 
 /*
   Return type of \texttt{strcmp}.
@@ -138,7 +138,7 @@ typedef int Qsortcomparereturntype; // \Typedef{Qsortcomparefunction}
   Return type of \texttt{sprintf} function.
 */
 
-typedef int Sprintfreturntype;     // \Typedef{Sprintfreturntype} 
+typedef int Sprintfreturntype;     // \Typedef{Sprintfreturntype}
 
 /*
   Type of fieldwidth in \texttt{printf} format string.
@@ -239,7 +239,7 @@ typedef int Sysconfargtype;         // \Typedef{Sysconfargtype}
         }
 
 /*
-  The following function checks some type constraints 
+  The following function checks some type constraints
 */
 
 #define CHECKALLTYPESIZES\
@@ -269,7 +269,7 @@ int mkstemp(char *);
 //}
 
 /*
-  A type for boolean values defined as a constant to allow 
+  A type for boolean values defined as a constant to allow
   checking if it has been defined previously.
 */
 
@@ -296,17 +296,17 @@ int mkstemp(char *);
   Pairs, triples, and quadruples of unsigned integers.
 */
 
-typedef struct 
+typedef struct
 {
   Uint uint0, uint1;
 } PairUint;                // \Typedef{PairUint}
 
-typedef struct 
+typedef struct
 {
   Uint uint0, uint1, uint2;
 } ThreeUint;               // \Typedef{ThreeUint}
 
-typedef struct 
+typedef struct
 {
   Uint uint0, uint1, uint2, uint3;
 } FourUint;                // \Typedef{FourUint}
@@ -314,11 +314,11 @@ typedef struct
 //\IgnoreLatex{
 
 /*
-  A list is stored with its start position in some space block 
+  A list is stored with its start position in some space block
   and its length.
 */
 
-typedef struct 
+typedef struct
 {
   Uint start, length;
 } Listtype;                // \Typedef{Listtype}
@@ -403,7 +403,7 @@ typedef int (*Qsortcomparefunction)(const void *,const void *);
   verbose mode.
 */
 
-typedef void (*Showverbose)(char *); 
+typedef void (*Showverbose)(char *);
 
 
 //\IgnoreLatex{

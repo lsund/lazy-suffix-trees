@@ -1,6 +1,6 @@
 /*
   Copyright by Stefan Kurtz (C) 1999-2003
-  =====================================                                   
+  =====================================
   You may use, copy and distribute this file freely as long as you
    - do not change the file,
    - leave this copyright notice in the file,
@@ -38,7 +38,7 @@
         exit(EXIT_FAILURE)
 
 /*
-  The following macro checks a ptr. If it is \texttt{NULL}, then the 
+  The following macro checks a ptr. If it is \texttt{NULL}, then the
   program terminates with an error.
 */
 

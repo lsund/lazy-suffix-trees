@@ -1,6 +1,6 @@
 /*
   Copyright by Stefan Kurtz (C) 1999-2003
-  =====================================                                   
+  =====================================
   You may use, copy and distribute this file freely as long as you
    - do not change the file,
    - leave this copyright notice in the file,
@@ -20,8 +20,8 @@
 
 //}
 
-/* 
-  The following macro defines a switch statement assigning to the 
+/*
+  The following macro defines a switch statement assigning to the
   variable \texttt{VL} the complement of \texttt{VR}.
 */
 

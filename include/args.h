@@ -1,6 +1,6 @@
 /*
   Copyright by Stefan Kurtz (C) 1994-2003
-  =====================================                                   
+  =====================================
   You may use, copy and distribute this file freely as long as you
    - do not change the file,
    - leave this copyright notice in the file,
@@ -50,7 +50,7 @@
         }
 
 /*
-  The following scans a floating point value \texttt{readfloat} from a 
+  The following scans a floating point value \texttt{readfloat} from a
   string.
 */
 

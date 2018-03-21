@@ -1,3 +1,7 @@
+
+#ifndef GLOBALVAR_H
+#define GLOBALVAR_H
+
 #include "types.h"
 
 Uchar *text,                   // points to input string \(t\) of length \(n\)
@@ -29,3 +33,4 @@ Uint  textlen,                 // length of \(t\)
 
 BOOL  rootevaluated;   // flag indicating that the root has been evaluated
 
+#endif

@@ -1,4 +1,7 @@
 
+#ifndef BOYERMOORE_H
+#define BOYERMOORE_H
+
 #include "types.h"
 
 BOOL bmhsearch(
@@ -8,3 +11,5 @@ BOOL bmhsearch(
         Uchar *pattern,
         Uchar *patternright
     );
+
+#endif

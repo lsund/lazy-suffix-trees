@@ -1,6 +1,6 @@
 /*
   Copyright by Stefan Kurtz (C) 1997-2003
-  =====================================                                   
+  =====================================
   You may use, copy and distribute this file freely as long as you
    - do not change the file,
    - leave this copyright notice in the file,
@@ -35,7 +35,7 @@
 #define ISBITSET(S,I)\
         (((S) << (I)) & FIRSTBIT)         // is \(i\)th bit set?
 #define ITHBIT(I)\
-        (FIRSTBIT >> (I))                 // \(0^{i}10^{w-i-1}\) 
+        (FIRSTBIT >> (I))                 // \(0^{i}10^{w-i-1}\)
 #define SECONDBIT\
         (FIRSTBIT >> 1)                   // \(010^{w-2}\)
 #define THIRDBIT\
@@ -110,21 +110,21 @@
 
 
 /*
-  \texttt{SETIBIT(TAB,I)} sets the \texttt{I}-th bit in bitarray 
+  \texttt{SETIBIT(TAB,I)} sets the \texttt{I}-th bit in bitarray
   \texttt{TAB} to 1.
 */
 
 #define SETIBIT(TAB,I)    (TAB)[DIVWORDSIZE(I)] |= ITHBIT(MODWORDSIZE(I))
 
 /*
-  \texttt{UNSSETIBIT(TAB,I)} sets the \texttt{I}-th bit in bitarray 
+  \texttt{UNSSETIBIT(TAB,I)} sets the \texttt{I}-th bit in bitarray
   \texttt{TAB} to 0.
 */
 
 #define UNSETIBIT(TAB,I)  (TAB)[DIVWORDSIZE(I)] &= ~(ITHBIT(MODWORDSIZE(I)))
 
 /*
-  \texttt{ISIBITSET(TAB,I)} checks if the \texttt{I}-th bit in bitarray 
+  \texttt{ISIBITSET(TAB,I)} checks if the \texttt{I}-th bit in bitarray
   \texttt{TAB} is 1.
 */
 
@@ -135,7 +135,7 @@
 #ifdef __cplusplus
   extern "C" {
 #endif
-  
+
 char *intbits2string(Uint bs);
 
 #ifdef __cplusplus

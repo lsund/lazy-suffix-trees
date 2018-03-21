@@ -1,6 +1,6 @@
 /*
   Copyright by Stefan Kurtz (C) 1998-2003
-  =====================================                                   
+  =====================================
   You may use, copy and distribute this file freely as long as you
    - do not change the file,
    - leave this copyright notice in the file,
