@@ -160,8 +160,8 @@ int file2Array(char *name, Uint *textlen, int size, char ***wordsp)
             int new_size;
 
             /* Double our allocation and re-allocate */
-            new_size = size*2;
-            words = (char **)realloc(words,sizeof(char*) * new_size);
+            new_size = size * 2;
+            words = (char **) realloc(words,sizeof(char*) * new_size);
             if (!words)
             {
                 fprintf(stderr,"Out of memory.\n");
@@ -173,20 +173,24 @@ int file2Array(char *name, Uint *textlen, int size, char ***wordsp)
         /* Allocate space for the next line */
         words[i] = malloc(max_line_len);
 
-        if (words[i]==NULL)
+        if (words[i] == NULL)
         {
             fprintf(stderr,"Out of memory (3).\n");
             exit(4);
         }
 
-        if (fgets(words[i],max_line_len-1,fp)==NULL)
+        if (!fgets(words[i], max_line_len-1, fp)) {
             break;
+        }
 
         /* Get rid of CR or LF at end of line */
-        for (j=strlen(words[i])-1;j>=0 && (words[i][j]=='\n' || words[i][j]=='\r');j--)
+        for (j=strlen(words[i])-1;j>=0 && (words[i][j]=='\n' || words[i][j]=='\r');j--) {
             ;
+        }
         words[i][j + 1]='\0';
     }
+
+    *wordsp = words;
 
     fclose(fp);
 

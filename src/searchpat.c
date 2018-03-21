@@ -177,6 +177,7 @@ void searchpattern_benchmark(
     }
 
     special = False;
+    char c;
 
     // Make patttern
     for(j = 0; j < patternlen; j++) {
@@ -185,6 +186,7 @@ void searchpattern_benchmark(
 
         if(ISSPECIAL(pattern[j])) {
             special = True;
+            c = pattern[j];
             break;
         }
     }
@@ -195,6 +197,9 @@ void searchpattern_benchmark(
             occurs(occursinfo, text, textlen, pattern, pattern+patternlen-1);
         printf("%d\n", patternoccurs);
 
+    } else {
+        fprintf(stderr, "Special character: %c", c);
+        exit(EXIT_FAILURE);
     }
 }
 
