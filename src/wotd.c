@@ -16,7 +16,7 @@
 #include "globalvar.h"
 #include <string.h>
 
-Uint lastrootchild, maxstacksize, maxwidth, branchcount, leafcount;
+Uint lastrootchild, maxwidth, branchcount, leafcount;
 
 void showstring(Uchar *left,Uchar *right)
 {
@@ -80,7 +80,7 @@ static void allocstreetab(void)
   if(tmpindex >= streetabsize)
   {
     streetabsize += (textlen/10);
-    ALLOCASSIGNSPACE(streetab,streetab,Uint,streetabsize + MAXSUCCSPACE);
+    ALLOCASSIGNSPACE(streetab, streetab, Uint, streetabsize + MAXSUCCSPACE);
     // update necessary, since streetab may have been moved.
     nextfreeentry = streetab + tmpindex;
   }
@@ -297,8 +297,6 @@ static Uint evaluatenodeeager(Uint node)
   return evalsuccedges(left,right);
 }
 
-#ifndef ONLYCOUNT
-
 static void evaluatenodelazy(Uint node)
 {
   Uint prefixlen, *nodeptr;
@@ -316,8 +314,6 @@ static void evaluatenodelazy(Uint node)
   sortByChar(left,right,prefixlen);
   (void) evalsuccedges(left,right);
 }
-
-#endif
 
 static Uint getnextbranch(Uint previousbranch)
 {
@@ -358,7 +354,7 @@ static Uint getnextbranch(Uint previousbranch)
 #define POPNODE(N)\
         N = stack[--stacktop]
 
-static void evaluateeager(void)
+void evaluateeager(void)
 {
   Uint firstbranch, nextbranch, node, stacktop=0, stackalloc=0, *stack = NULL;
 
@@ -383,7 +379,7 @@ static void evaluateeager(void)
   }
 }
 
-static void inittree(void)
+void inittree(void)
 {
   Uint i;
 
@@ -483,8 +479,6 @@ static Uint firstchildlp(Uint *nodeptr)
     return GETLP(firstchildptr);
   }
 }
-
-#ifndef ONLYCOUNT
 
 static BOOL occurslazy(
         void *state,
@@ -777,8 +771,6 @@ BOOL occurrenceseager(void *state,Uchar *text,/*@unused@*/ Uint textlen,
   }
 }
 
-#endif
-
 #ifdef DEBUG
 
 static void showrootchildtab(void)
@@ -944,14 +936,12 @@ static void showtree(void)
 
 #endif
 
-#ifndef ONLYCOUNT
-
 static void showpattern(Uchar *w, Uint wlen)
 {
   (void) fwrite(w,sizeof(Uchar),(size_t) wlen,stderr);
 }
 
-static void wotd(
+static void wotd_benchmark(
                 BOOL evaleager,
                 char *argv[],
                 int argc,
@@ -972,32 +962,22 @@ static void wotd(
     }
     INITARRAY(&resultpos,Uint);
 
-    char *patt = "Test";
-    search_one_pattern(
-            evaleager ? occurseager : occurslazy,
-            (void *) &resultpos,
-            text,
-            textlen,
-            strlen(patt),
-            patt
-        );
-
-    /* if(maxpat > 0 && maxpat <= textlen && rho != 0.0) */
-    /* { */
-    /*     searchpattern( */
-    /*             evaleager ? occurseager : occurslazy, */
-    /*             argv, */
-    /*             argc, */
-    /*             (void *) &resultpos, */
-    /*             text, */
-    /*             textlen, */
-    /*             rho, */
-    /*             minpat, */
-    /*             maxpat, */
-    /*             showpattern, */
-    /*             NULL */
-    /*             ); */
-    /* } */
+    if(maxpat > 0 && maxpat <= textlen && rho != 0.0)
+    {
+        searchpattern(
+                evaleager ? occurseager : occurslazy,
+                argv,
+                argc,
+                (void *) &resultpos,
+                text,
+                textlen,
+                rho,
+                minpat,
+                maxpat,
+                showpattern,
+                NULL
+                );
+    }
 
     FREEARRAY(&resultpos,Uint);
     DEBUG3(2,"#maxstack=%lu %lu %lu ",
@@ -1013,38 +993,63 @@ static void wotd(
             (double) (4*(branchcount*BRANCHWIDTH+ leafcount))/textlen);
 }
 
-#endif
-
-
-#ifdef ONLYCOUNT
-Uint wotdtreesize(Uchar *textarg,Uint textlenarg,Uchar *alphabet,
-                  Uint alphasizearg)
+static void wotd(BOOL evaleager)
 {
-  text = textarg;
-  textlen = textlenarg;
-  alphasize = alphasizearg;
-  memcpy(characters,alphabet,sizeof(Uchar) * alphasize);
-  inittree();
-  evaluateeager();
-  DEBUGCODE(3,showstreetab());
-  DEBUGCODE(3,showtree());
-  FREESPACE(suffixes);
+    ArrayUint resultpos;
 
-#ifndef NOSPACEBOOKKEEPING
-  checkspaceleak();
-#endif
-  return maxstacksize;
+    if(!evaleager) {
+
+        initclock();
+        inittree();
+
+    } else {
+
+        inittree();
+        initclock();
+        evaluateeager();
+        DEBUGCODE(3,showstreetab());
+        DEBUGCODE(3,showtree());
+        FREESPACE(suffixes);
+    }
+
+    INITARRAY(&resultpos,Uint);
+
+    char *patt = "Test";
+
+    printf("%s\n", patterns);
+
+    search_one_pattern(
+            evaleager ? occurseager : occurslazy,
+            (void *) &resultpos,
+            text,
+            textlen,
+            strlen(patt),
+            patt
+        );
+
+    FREEARRAY(&resultpos,Uint);
+    DEBUG3(2,"#maxstack=%lu %lu %lu ",
+            (Showuint) maxstacksize,
+            (Showuint) textlen,
+            (Showuint) NODEINDEX(nextfreeentry));
+    DEBUG2(2,"%lu %.2f ",(Showuint) maxwidth,(double) maxwidth/textlen);
+    DEBUG2(2,"%lu %.2f\n",(Showuint) sbufferwidth,(double) sbufferwidth/textlen);
+    DEBUG4(2,"#q=%lu l=%lu %lu %.2f\n",
+            (Showuint) branchcount,
+            (Showuint) leafcount,
+            (Showuint) (branchcount*BRANCHWIDTH+leafcount),
+            (double) (4*(branchcount*BRANCHWIDTH+ leafcount))/textlen);
 }
-#else
+
 int main(int argc,char *argv[])
 {
   float rho, readfloat;
   Uint minpat, maxpat;
-  char *filename;
+  char *filename, *patternfile;
   BOOL evaleager;
   Scaninteger readint;
 
-  CHECKARGNUM(6,"(-lazy|-eager) rho minpat maxpat filename");
+  CHECKARGNUM(7,"(-lazy|-eager) rho minpat maxpat filename patternfile");
   DEBUGLEVELSET;
   if(strcmp(argv[1],"-lazy") != 0 && strcmp(argv[1],"-eager") != 0)
   {
@@ -1066,24 +1071,32 @@ int main(int argc,char *argv[])
   PARSEINTARG(argv[4]);
   maxpat = (Uint) readint;
   filename = argv[5];
-  text = (Uchar *) file2String(filename,&textlen);
+  text = (Uchar *) file2String(filename, &textlen);
   if(text == NULL)
   {
-    fprintf(stderr,"%s: Cannot open file %s\n",argv[0],filename);
+    fprintf(stderr, "%s: Cannot open file %s\n", argv[0], filename);
+    exit(EXIT_FAILURE);
+  }
+  patternfile = argv[6];
+  patterns = (Uchar *) file2String(patternfile, &patternslen);
+  if(patterns == NULL)
+  {
+    fprintf(stderr, "%s: Cannot open file %s\n", argv[0], patterns);
     exit(EXIT_FAILURE);
   }
   if(textlen > MAXTEXTLEN)
   {
-    fprintf(stderr,"Sorry, textlen = %lu is larger than maximal textlen = %lu\n",
+    fprintf(stderr,"Textlen = %lu > maximal textlen = %lu\n",
                    (Showuint) textlen,(Showuint) MAXTEXTLEN);
     exit(EXIT_FAILURE);
   }
-  if(!evaleager)
-  {
-    initclock();
-  }
-  wotd(evaleager,argv,argc,rho,minpat,maxpat);
+
+  /* wotd_benchmark(evaleager,argv,argc,rho, minpat, maxpat); */
+
+  wotd(evaleager);
+
   freetextspace(text,textlen);
+
   if(evaleager)
   {
     SHOWTIME("wotdeager");
@@ -1093,9 +1106,5 @@ int main(int argc,char *argv[])
     SHOWTIME("wotdlazy");
     SHOWSPACE("wotdlazy");
   }
-#ifndef NOSPACEBOOKKEEPING
-  checkspaceleak();
-#endif
   return EXIT_SUCCESS;
 }
-#endif

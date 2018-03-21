@@ -1,6 +1,7 @@
 #include "types.h"
 
 Uchar *text,                   // points to input string \(t\) of length \(n\)
+      *patterns,
       *sentinel,               // points to \(t[n]\) which is undefined
       characters[UCHAR_MAX+1], // characters in \(t\) in alphabetical order
       **suffixes,              // array of pointers to suffixes of \(t\)
@@ -10,6 +11,8 @@ Uchar *text,                   // points to input string \(t\) of length \(n\)
       **bound[UCHAR_MAX+1];    // pointers into \texttt{sbuffer} while sorting
 
 Uint  textlen,                 // length of \(t\)
+      patternslen,
+      maxstacksize,
       alphasize,               // size of alphabet \(\Sigma\)
       alphaindex[UCHAR_MAX+1], // index of characters in \(\Sigma\)
       occurrence[UCHAR_MAX+1], // number of occurrences of character

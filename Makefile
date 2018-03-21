@@ -17,11 +17,14 @@ INCLUDE=-I'include'
 
 mode=64bit
 
-CFLAGS+=-m64 -DSIXTYFOURBITS $(INCLUDE) -DDEBUG
+CFLAGS+=-m64 -DSIXTYFOURBITS $(INCLUDE)
 LDFLAGS+=-m64
 
 # CFLAGS+=-O3 -Wall -Werror -DNOSPACEBOOKKEEPING
 CFLAGS+=-O3 -Wall -DNOSPACEBOOKKEEPING
+
+# CFLAGS+=-DDEBUG
+CFLAGS+=-g
 
 # SPLINTFLAGS=-DDEBUG -f Splintoptions
 SPLINTFLAGS=-DDEBUG
@@ -35,6 +38,9 @@ OBJ= obj/boyermoore.o\
     obj/filehandle.o\
     obj/seterror.o\
     obj/getAlpha.o
+
+
+OBJ2 = obj/treesize.o
 
 all:wotd.splint wotd.x wotd.dbg.x
 
