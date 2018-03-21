@@ -1,6 +1,7 @@
 
 #include "util.h"
 
+// Print a string to stdout
 void showstring(Uchar *left, Uchar *right)
 {
   Uchar *ptr;

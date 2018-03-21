@@ -31,42 +31,42 @@ BOOL  rootevaluated;   // flag indicating that the root has been evaluated
 
 #define MAXSUCCSPACE            (BRANCHWIDTH * (UCHAR_MAX+1) + 1)
 
-static Uchar **getsbufferspaceeager(Uchar **left,Uchar **right)
+static Uchar **getsbufferspaceeager(Uchar **left, Uchar **right)
 {
-  Uint width = (Uint) (right-left+1);
+    /* printf("Hello\n"); */
+    Uint width = (Uint) (right - left + 1);
 
-  if(width > (Uint) (left-suffixes))
-  {
-    DEBUG2(3,"#bucket: left=%lu width=%lu\n",(Showuint) (left-suffixes),
-                                             (Showuint) width);
-    if(width > sbufferwidth)
+    if(width > (Uint) (left-suffixes))
     {
-      sbufferwidth = width;
-      ALLOCASSIGNSPACE(sbufferspace,sbufferspace,Uchar *,sbufferwidth);
+        DEBUG2(3,"#bucket: left=%lu width=%lu\n",(Showuint) (left-suffixes),
+                (Showuint) width);
+        if(width > sbufferwidth) {
+            sbufferwidth = width;
+            ALLOCASSIGNSPACE(sbufferspace, sbufferspace, Uchar *, sbufferwidth);
+        }
+        return sbufferspace;
     }
-    return sbufferspace;
-  }
-  return left - width;
+
+    return left - width;
 }
 
-
-static Uchar **getsbufferspacelazy(Uchar **left,Uchar **right)
+static Uchar **getsbufferspacelazy(Uchar **left, Uchar **right)
 {
-  Uint width = (Uint) (right-left+1);
+    Uint width = (Uint) (right - left + 1);
 
-  if(sbufferwidth > maxsbufferwidth && maxsbufferwidth > width)
-  {
-    sbufferwidth = maxsbufferwidth;
-    ALLOCASSIGNSPACE(sbufferspace,sbufferspace,Uchar *,sbufferwidth);
-  } else
-  {
-    if(width > sbufferwidth)
+    if(sbufferwidth > maxsbufferwidth && maxsbufferwidth > width)
     {
-      sbufferwidth = width;
-      ALLOCASSIGNSPACE(sbufferspace,sbufferspace,Uchar *,sbufferwidth);
+        sbufferwidth = maxsbufferwidth;
+        ALLOCASSIGNSPACE(sbufferspace,sbufferspace,Uchar *,sbufferwidth);
+    } else
+    {
+        if(width > sbufferwidth)
+        {
+            sbufferwidth = width;
+            ALLOCASSIGNSPACE(sbufferspace,sbufferspace,Uchar *,sbufferwidth);
+        }
     }
-  }
-  return sbufferspace;
+    return sbufferspace;
 }
 
 static void allocstreetab(void)

@@ -44,22 +44,26 @@ OBJ= obj/boyermoore.o\
 
 OBJ2 = obj/treesize.o
 
-# all:wotd.splint wotd.x wotd.dbg.x
-all:dirs wotd.x
+# all:wotd.splint wotd wotd.dbg.x
+all:dirs wotd
 
 dirs:
 	mkdir -p obj bin
 
-wotd.x: ${OBJ}
+wotd: ${OBJ}
 	${CC} ${LDFLAGS} ${OBJ} -o bin/$@
 
-clean:
-	rm -f obj/*.o bin/*.x
-	rmdir obj bin
+remake: clean all
+	./bin/wotd -lazy data/data.xml data/10000.txt
 
-wotd.splint:wotd.c
-	splint ${SPLINTFLAGS} wotd.c
-	touch wotd.splint
+clean:
+	rm -rf obj bin
 
 obj/%.o:src/%.c
 	$(CC) $(CFLAGS) -c src/$*.c -o $@
+
+
+# wotd.splint:wotd.c
+# 	splint ${SPLINTFLAGS} wotd.c
+# 	touch wotd.splint
+

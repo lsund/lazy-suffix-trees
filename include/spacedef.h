@@ -19,17 +19,7 @@
 #include "types.h"
 #include "errordef.h"
 
-#ifdef __cplusplus
-  extern "C" {
-#endif
-
 Sint checkenvvaronoff(char *varname);
-/*@notnull@*/ void *allocandusespaceviaptr(char *file,
-                                           Uint linenum,
-                                           /*@null@*/ void *ptr,
-                                           Uint size,Uint number);
-/*@notnull@*/ char *dynamicstrdup(char *file,Uint linenum,char *source);
-void freespaceviaptr(char *file,Uint linenum,void *ptr);
 void spaceblockinfo(char *file,Uint linenum,void *ptr);
 void activeblocks(void);
 void checkspaceleak(void);
@@ -67,12 +57,6 @@ Sint setlocalpagesize(void);
   functions
   \begin{itemize}
   \item
-  \texttt{allocandusespaceviaptr},
-  \item
-  \texttt{freespaceviaptr},
-  \item
-  \texttt{dynamicstrdup},
-  \item
   \texttt{creatememorymapforfiledesc},
   \item
   \texttt{creatememorymap},
@@ -94,7 +78,6 @@ Sint setlocalpagesize(void);
   \end{enumerate}
 */
 
-#ifdef NOSPACEBOOKKEEPING
 #define ALLOCSPACE(S,T,N)\
         (T *) realloc(S,sizeof(T) * (size_t) (N))
 
@@ -118,38 +101,6 @@ Sint setlocalpagesize(void);
 
 #define DYNAMICSTRDUP(S)\
         strdup(S)
-
-#else
-#define ALLOCSPACE(S,T,N)\
-        (T *) allocandusespaceviaptr(__FILE__,(Uint) __LINE__,\
-                                     S,(Uint) sizeof(T),N)
-
-#define ALLOCASSIGNSPACE(V,S,T,N)\
-        V = ALLOCSPACE(S,T,N)
-
-/*
-  The macro \texttt{FREESPACE} frees the space pointed to by \texttt{P},
-  if this is not \texttt{NULL}. It also sets the
-  pointer to \texttt{NULL}.
-*/
-
-#define FREESPACE(P)\
-        if((P) != NULL)\
-        {\
-          freespaceviaptr(__FILE__,(Uint) __LINE__,P);\
-          P = NULL;\
-        }
-
-/*
-  The remaining macros call the corresponding function with
-  the filename and the line number where the function call
-  appears.
-*/
-
-#define DYNAMICSTRDUP(S)\
-        dynamicstrdup(__FILE__,(Uint) __LINE__,S)
-
-#endif
 
 #define CREATEMEMORYMAP(F,WM,NB)\
         creatememorymap(__FILE__,(Uint) __LINE__,F,WM,NB)

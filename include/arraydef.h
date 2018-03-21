@@ -72,7 +72,6 @@
   contents of the previously filled array elements is of course maintained.
 */
 
-#ifdef NOSPACEBOOKKEEPING
 #define CHECKARRAYSPACE(A,TYPE,L)\
         if((A)->nextfree##TYPE >= (A)->allocated##TYPE)\
         {\
@@ -82,19 +81,6 @@
                                 (size_t) (sizeof(TYPE)*(A)->allocated##TYPE));\
         }\
         NOTSUPPOSEDTOBENULL((A)->space##TYPE)
-#else
-#define CHECKARRAYSPACE(A,TYPE,L)\
-        if((A)->nextfree##TYPE >= (A)->allocated##TYPE)\
-        {\
-          (A)->allocated##TYPE += L;\
-          (A)->space##TYPE\
-             = (TYPE *) allocandusespaceviaptr(__FILE__,(Uint) __LINE__,\
-                                               (A)->space##TYPE,\
-                                               (Uint) sizeof(TYPE),\
-                                               (A)->allocated##TYPE);\
-        }\
-        NOTSUPPOSEDTOBENULL((A)->space##TYPE)
-#endif
 
 /*
   The next macro is a variation of \texttt{CHECKARRAYSPACE},
