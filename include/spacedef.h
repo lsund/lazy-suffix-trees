@@ -50,6 +50,8 @@ Sint setlocalpagesize(void);
 }
 #endif
 
+#define MAXSUCCSPACE            (BRANCHWIDTH * (UCHAR_MAX+1) + 1)
+
 //}
 
 /*

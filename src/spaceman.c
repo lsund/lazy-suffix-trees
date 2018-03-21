@@ -38,3 +38,16 @@ Uchar **getsbufferspacelazy(Uchar **left, Uchar **right)
     return sbufferspace;
 }
 
+
+void allocstreetab(void)
+{
+    Uint tmpindex = NODEINDEX(nextfreeentry);
+    if(tmpindex >= streetabsize)
+    {
+        streetabsize += (textlen / 10);
+        ALLOC(streetab, streetab, Uint, streetabsize + MAXSUCCSPACE);
+        // update necessary, since streetab may have been moved.
+        nextfreeentry = streetab + tmpindex;
+    }
+}
+

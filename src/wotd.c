@@ -29,132 +29,96 @@ Uint  textlen,                 // length of \(t\)
 
 BOOL  rootevaluated;   // flag indicating that the root has been evaluated
 
-#define MAXSUCCSPACE            (BRANCHWIDTH * (UCHAR_MAX+1) + 1)
-
-static void allocstreetab(void)
-{
-  Uint tmpindex = NODEINDEX(nextfreeentry);
-  if(tmpindex >= streetabsize)
-  {
-    streetabsize += (textlen/10);
-    ALLOC(streetab, streetab, Uint, streetabsize + MAXSUCCSPACE);
-    // update necessary, since streetab may have been moved.
-    nextfreeentry = streetab + tmpindex;
-  }
-}
-
-static Uint grouplcp(Uchar **left,Uchar **right)
-{
-  Uchar cmpchar, **i;
-  Uint j;
-
-  for(j=UintConst(1); /* nothing */; j++)
-  {
-    if(*right+j == sentinel)
-    {
-      return j;
-    }
-    cmpchar = *(*left+j);
-    for(i=left+1; i<=right; i++)
-    {
-      if(*(*i+j) != cmpchar)
-      {
-        return j;
-      }
-    }
-  }
-}
-
 static Uint evalsuccedges(Uchar **left,Uchar **right)
 {
-  Uchar firstchar, **r, **l;
-  Uint leafnum, firstbranch = UNDEFREFERENCE, *previousnode = NULL;
-  BOOL sentineledge = False;
+    Uchar firstchar, **r, **l;
+    Uint leafnum, firstbranch = UNDEFREFERENCE, *previousnode = NULL;
+    BOOL sentineledge = False;
 
-  allocstreetab();
-  if(*right == sentinel)
-  {
-    right--;  // skip the smallest suffix
-    sentineledge = True;
-  }
-  for(l=left; l<=right; l=r+1)
-  {
-    for(firstchar=**l,r=l; r<right && **(r+1)==firstchar; r++)
+    allocstreetab();
+    if(*right == sentinel)
     {
-      /* nothing */ ;
+        right--;  // skip the smallest suffix
+        sentineledge = True;
     }
-    previousnode = nextfreeentry;
-    // create branching node
-    if(r > l)
+    for(l=left; l<=right; l=r+1)
     {
-      if(firstbranch == UNDEFREFERENCE)
-      {
-        firstbranch = NODEINDEX(nextfreeentry);
-      }
-      STOREBOUNDARIES(nextfreeentry,l,r);
-      // store l and r. resume later with this unevaluated node
-      nextfreeentry += BRANCHWIDTH;
-      DEBUGCODE(1,branchcount++);
-    } else // create leaf
-    {
-      leafnum = SUFFIXNUMBER(l);
-      SETLEAF(nextfreeentry,leafnum);
-      nextfreeentry++;
-      DEBUGCODE(1,leafcount++);
+        for(firstchar=**l,r=l; r<right && **(r+1)==firstchar; r++)
+        {
+            /* nothing */ ;
+        }
+        previousnode = nextfreeentry;
+        // create branching node
+        if(r > l)
+        {
+            if(firstbranch == UNDEFREFERENCE)
+            {
+                firstbranch = NODEINDEX(nextfreeentry);
+            }
+            STOREBOUNDARIES(nextfreeentry,l,r);
+            // store l and r. resume later with this unevaluated node
+            nextfreeentry += BRANCHWIDTH;
+            DEBUGCODE(1,branchcount++);
+        } else // create leaf
+        {
+            leafnum = SUFFIXNUMBER(l);
+            SETLEAF(nextfreeentry,leafnum);
+            nextfreeentry++;
+            DEBUGCODE(1,leafcount++);
+        }
     }
-  }
-  if(sentineledge)
-  {
-    leafnum = SUFFIXNUMBER(right+1);
-    SETLEAF(nextfreeentry,leafnum);
-    previousnode = nextfreeentry++;
-    DEBUGCODE(1,leafcount++);
-  }
-  NOTSUPPOSEDTOBENULL(previousnode);
-  *previousnode |= RIGHTMOSTCHILDBIT;
-  return firstbranch;
+    if(sentineledge)
+    {
+        leafnum = SUFFIXNUMBER(right+1);
+        SETLEAF(nextfreeentry,leafnum);
+        previousnode = nextfreeentry++;
+        DEBUGCODE(1,leafcount++);
+    }
+    NOTSUPPOSEDTOBENULL(previousnode);
+    *previousnode |= RIGHTMOSTCHILDBIT;
+    return firstbranch;
 }
 
 static Uint evalrootsuccedges(Uchar **left,Uchar **right)
 {
-  Uchar firstchar, **r, **l;
-  Uint *rptr, leafnum, firstbranch = UNDEFREFERENCE;
+    Uchar firstchar, **r, **l;
+    Uint *rptr, leafnum, firstbranch = UNDEFREFERENCE;
 
-  for(rptr = rootchildtab; rptr <= rootchildtab + UCHAR_MAX; rptr++)
-  {
-    *rptr = UNDEFINEDSUCC;
-  }
-  for(l=left; l<=right; l=r+1) // first phase
-  {
-    for(firstchar=**l,r=l; r<right && **(r+1)==firstchar; r++)
+    for(rptr = rootchildtab; rptr <= rootchildtab + UCHAR_MAX; rptr++)
     {
-      /* nothing */ ;
+        *rptr = UNDEFINEDSUCC;
     }
-    if(r > l) // create branching node
+    for(l=left; l<=right; l=r+1) // first phase
     {
-      if(firstbranch == UNDEFREFERENCE)
-      {
-        firstbranch = NODEINDEX(nextfreeentry);
-      }
-      STOREBOUNDARIES(nextfreeentry,l,r);
-      // store l and r. resume later with this unevaluated branch node
-      rootchildtab[firstchar] = NODEINDEX(nextfreeentry);
-      DEBUGCODE(1,lastrootchild = NODEINDEX(nextfreeentry));
-      nextfreeentry += BRANCHWIDTH;
-      DEBUGCODE(1,branchcount++);
-    } else // create leaf
-    {
-      leafnum = SUFFIXNUMBER(l);
-      SETLEAF(nextfreeentry,leafnum);
-      rootchildtab[firstchar] = leafnum | LEAFBIT;
-      nextfreeentry++;
-      DEBUGCODE(1,leafcount++);
+        for(firstchar=**l,r=l; r<right && **(r+1)==firstchar; r++)
+        {
+            /* nothing */ ;
+        }
+        if(r > l) // create branching node
+        {
+            if(firstbranch == UNDEFREFERENCE)
+            {
+                firstbranch = NODEINDEX(nextfreeentry);
+            }
+            STOREBOUNDARIES(nextfreeentry,l,r);
+            // store l and r. resume later with this unevaluated branch node
+            rootchildtab[firstchar] = NODEINDEX(nextfreeentry);
+            DEBUGCODE(1,lastrootchild = NODEINDEX(nextfreeentry));
+            nextfreeentry += BRANCHWIDTH;
+            DEBUGCODE(1,branchcount++);
+        } else // create leaf
+        {
+            leafnum = SUFFIXNUMBER(l);
+            SETLEAF(nextfreeentry,leafnum);
+            rootchildtab[firstchar] = leafnum | LEAFBIT;
+            nextfreeentry++;
+            DEBUGCODE(1,leafcount++);
+        }
     }
-  }
-  SETLEAF(nextfreeentry,textlen | RIGHTMOSTCHILDBIT);
-  nextfreeentry++;
-  DEBUGCODE(1,leafcount++);
-  return firstbranch;
+    SETLEAF(nextfreeentry,textlen | RIGHTMOSTCHILDBIT);
+    nextfreeentry++;
+    DEBUGCODE(1,leafcount++);
+    return firstbranch;
 }
 
 static Uint evaluatenodeeager(Uint node)
@@ -238,20 +202,6 @@ static Uint getnextbranch(Uint previousbranch)
   }
 }
 
-#define NOTSTACKEMPTY         (stacktop > 0)
-#define PUSHNODE(N)\
-        if(stacktop >= stackalloc)\
-        {\
-          stackalloc += 100;\
-          ALLOC(stack,stack,Uint,stackalloc);\
-        }\
-        DEBUGCODE(1,if(stacktop > maxstacksize) { maxstacksize = stacktop;});\
-        NOTSUPPOSEDTOBENULL(stack);\
-        stack[stacktop++] = N
-
-#define POPNODE(N)\
-        N = stack[--stacktop]
-
 void evaluateeager(void)
 {
   Uint firstbranch, nextbranch, node, stacktop=0, stackalloc=0, *stack = NULL;
@@ -302,18 +252,6 @@ void inittree(void)
   {
     occurrence[i] = 0;
   }
-}
-
-static Uint lcp(Uchar *start1,Uchar *end1,Uchar *start2,Uchar *end2)
-{
-  Uchar *ptr1 = start1, *ptr2 = start2;
-
-  while(ptr1 <= end1 && ptr2 <= end2 && *ptr1 == *ptr2)
-  {
-    ptr1++;
-    ptr2++;
-  }
-  return (Uint) (ptr1-start1);
 }
 
 #define CHECKROOTCHILD\
