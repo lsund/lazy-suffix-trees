@@ -1,6 +1,6 @@
-This directory contains the documented C-code of the
-write only top down suffix tree construction,
-reported about in the following paper:
+This repository is bade on the implementation by Stefan Kurz according to the article below.
+
+All credit to Stefan Kurtz for commit fd3d0c8769696459a0957dc62604ab974f097866 "Initial Commit"
 
 @ARTICLE{GIE:KUR:STO:2003,
 author =        "Giegerich, R. and Kurtz, S. and Stoye, J.",
@@ -11,26 +11,3 @@ number =        {{11}},
 pages =         {{1035-1049}},
 year =          2003
 }
-
-The directory contains the following list of files:
-
-C-source code:
-
-clock.c		routines for measuring running time
-getAlpha.c	routines for obtaining an alphabet
-reverse.c	routines for reversing strings
-searchpat.c	routines for generating pattern from the text
-space.c		routines for space management
-debug.c		routines for debugging
-readfile.c	routines for reading in large files via memory map
-seterror.c	routines for buffering error messages
-wotd.c		the implementation of the wotd algorithm (lazy and eager)
-
-C-headers:
-
-args.h      chardef.h   errordef.h  fopen.h      protodef.h  types.h
-arraydef.h  debugdef.h  experim.h   megabytes.h  spacedef.h
-
-For questions, please contact
-
-Stefan Kurtz
