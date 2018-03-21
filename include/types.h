@@ -20,10 +20,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifdef MSWINDOWS
-typedef void * caddr_t;
-#endif
-
 /*
   Some rules about types:
   - do not use Ulong, these are not portable.

@@ -6,6 +6,7 @@
 #include <limits.h>
 #include <string.h>
 #include <sys/types.h>
+#include <string.h>
 #include "types.h"
 #include "debugdef.h"
 #include "spacedef.h"
@@ -16,7 +17,8 @@
 #include "fhandledef.h"
 #include "protodef.h"
 #include "preprocdef.h"
-#include <string.h>
+#include "counting_sort.h"
+#include "util.h"
 
 void inittree(void);
 

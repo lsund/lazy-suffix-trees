@@ -6,13 +6,11 @@ Uchar *text,                   // points to input string \(t\) of length \(n\)
       **suffixes,              // array of pointers to suffixes of \(t\)
       **suffixbase,            // pointers into suffixes are w.r.t.\ this var
       **sbuffer,               // buffer to sort suffixes in \texttt{sortByChar}
-      **sbufferspace = NULL,   // space to be used by \texttt{sbuffer}
-      **bound[UCHAR_MAX + 1];    // pointers into \texttt{sbuffer} while sorting
+      **sbufferspace = NULL;  // space to be used by \texttt{sbuffer}
 
 Uint lastrootchild, maxwidth, branchcount, leafcount;
 
 Uint  textlen,                 // length of \(t\)
-      patternslen,
       maxstacksize,
       alphasize,               // size of alphabet \(\Sigma\)
       alphaindex[UCHAR_MAX + 1], // index of characters in \(\Sigma\)
@@ -31,21 +29,7 @@ Uint  textlen,                 // length of \(t\)
 
 BOOL  rootevaluated;   // flag indicating that the root has been evaluated
 
-void showstring(Uchar *left,Uchar *right)
-{
-  Uchar *ptr;
-  for(ptr = left; ptr <= right; ptr++)
-  {
-    if(ptr == sentinel)
-    {
-      (void) putchar('~');
-    } else
-    {
-      (void) putchar((Fputcfirstargtype) *ptr);
-    }
-  }
-}
-
+#define MAXSUCCSPACE            (BRANCHWIDTH * (UCHAR_MAX+1) + 1)
 
 static Uchar **getsbufferspaceeager(Uchar **left,Uchar **right)
 {
@@ -85,8 +69,6 @@ static Uchar **getsbufferspacelazy(Uchar **left,Uchar **right)
   return sbufferspace;
 }
 
-#define MAXSUCCSPACE            (BRANCHWIDTH * (UCHAR_MAX+1) + 1)
-
 static void allocstreetab(void)
 {
   Uint tmpindex = NODEINDEX(nextfreeentry);
@@ -97,65 +79,6 @@ static void allocstreetab(void)
     // update necessary, since streetab may have been moved.
     nextfreeentry = streetab + tmpindex;
   }
-}
-
-static void sortByChar(Uchar **left,Uchar **right,Uint prefixlen)
-{
-  Uchar **i, **j, **nextFree = sbuffer;
-  Uint a;
-
-  DEBUGCODE(1,if((Uint) (right-left+1) > maxwidth) { maxwidth = (Uint) (right-left+1);});
-  if(*right + prefixlen == sentinel)  // shortest suffix is sentinel: skip
-  {
-    *right += prefixlen;
-    right--;
-  }
-  for(i=left; i<=right; i++) // determine size for each group
-  {
-    *i += prefixlen;         // drop the common prefix
-    occurrence[(Uint) **i]++;
-  }
-  for(i=left; i<=right; i++) // determine right bound for each group
-  {
-    a = (Uint) **i;
-    if(occurrence[a] > 0)
-    {
-      bound[a] = nextFree+occurrence[a]-1;
-      nextFree = bound[a]+1;
-      occurrence[a] = 0;
-    }
-  }
-  for(i=right; i>=left; i--) // insert suffixes into buffer
-  {
-    *(bound[(Uint) **i]--) = *i;
-  }
-  for(i=left,j=sbuffer; i<=right; i++,j++) // copy grouped suffixes back
-  {
-    *i = *j;
-  }
-}
-
-static void sortByChar0(void)
-{
-  Uchar *cptr, **nextFree = suffixes;
-  Uint a;
-
-  for(cptr=text; cptr < text+textlen; cptr++) // determine size for each group
-  {
-    occurrence[(Uint) *cptr]++;
-  }
-  for(cptr=characters; cptr < characters+alphasize; cptr++)
-  {
-    a = (Uint) *cptr;
-    bound[a] = nextFree+occurrence[a]-1;
-    nextFree = bound[a]+1;
-    occurrence[a] = 0;
-  }
-  for(cptr=text+textlen-1; cptr>=text; cptr--) // insert suffixes into array
-  {
-   *(bound[(Uint) *cptr]--) = cptr;
-  }
-  suffixes[textlen] = sentinel;  // suffix \$ is the largest suffix
 }
 
 static Uint grouplcp(Uchar **left,Uchar **right)
@@ -397,7 +320,7 @@ void inittree(void)
   Uint i;
 
   DEBUGCODE(1,maxstacksize=maxwidth=branchcount=leafcount=0);
-  getUchars(text,textlen,characters,&alphasize);
+  getUchars(text, textlen, characters, &alphasize);
   sentinel = text+textlen;
   streetabsize = BRANCHWIDTH;
   ALLOCASSIGNSPACE(streetab,streetab,Uint,streetabsize + MAXSUCCSPACE);
@@ -874,7 +797,7 @@ static void scanedgelist(Uint firstchar,Uint *firstsucc,int indent)
         if(firstchar == *lefttext)
         {
           printf("%*s",indent,"");
-          showstring(lefttext,sentinel);
+          showstring(lefttext, sentinel);
           (void) putchar('\n');
         }
       }
