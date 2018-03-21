@@ -1,11 +1,5 @@
 
-#include "types.h"
-#include "globalvar.h"
-#include <stdlib.h>
-#include <string.h>
 #include "wotd.h"
-#include "debugdef.h"
-#include "spacedef.h"
 
 Uint wotdtreesize(Uchar *textarg,Uint textlenarg,Uchar *alphabet,
                   Uint alphasizearg)

@@ -1,6 +1,6 @@
 /*
   Copyright by Stefan Kurtz (C) 1999-2003
-  =====================================                                   
+  =====================================
   You may use, copy and distribute this file freely as long as you
    - do not change the file,
    - leave this copyright notice in the file,
@@ -24,7 +24,7 @@
 
 /*EE
   This module implements a simple mechanism to write error messages
-  into a global buffer, and to output this buffer when required. 
+  into a global buffer, and to output this buffer when required.
   We also maintain a global error code.
 */
 

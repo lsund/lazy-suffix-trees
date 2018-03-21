@@ -30,28 +30,27 @@ CFLAGS+=-g
 SPLINTFLAGS=-DDEBUG
 
 OBJ= obj/boyermoore.o\
-	obj/wotd.o\
     obj/reverse.o\
     obj/readfile.o\
     obj/searchpat.o\
     obj/clock.o\
     obj/filehandle.o\
     obj/seterror.o\
-    obj/getAlpha.o
+    obj/getAlpha.o \
+	obj/wotd.o\
+	obj/main.o
 
 
 OBJ2 = obj/treesize.o
 
-all:wotd.splint wotd.x wotd.dbg.x
+# all:wotd.splint wotd.x wotd.dbg.x
+all:dirs wotd.x
 
 dirs:
 	mkdir -p obj bin
 
-wotd.x:dirs ${OBJ}
-	${CC} ${LDFLAGS} main.c ${OBJ} -o bin/$@
-
-wotd.dbg.x:${OBJDBG}
-	${CC} ${LDFLAGS} ${OBJDBG} -o $@
+wotd.x: ${OBJ}
+	${CC} ${LDFLAGS} ${OBJ} -o bin/$@
 
 clean:
 	rm -f obj/*.o bin/*.x

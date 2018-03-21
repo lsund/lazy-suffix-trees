@@ -1,6 +1,6 @@
 /*
   Copyright by Stefan Kurtz (C) 1995-2003
-  =====================================                                   
+  =====================================
   You may use, copy and distribute this file freely as long as you
    - do not change the file,
    - leave this copyright notice in the file,
@@ -29,11 +29,11 @@
 */
 
 /*
-  The following values store the the clockticks at start time 
+  The following values store the the clockticks at start time
   and stop time of the clock.
 */
 
-static clock_t startclock, 
+static clock_t startclock,
                stopclock;
 
 /*EE
@@ -41,12 +41,12 @@ static clock_t startclock,
 */
 
 void initclock(void)
-{ 
-  startclock = clock(); 
+{
+  startclock = clock();
 }
 
 /*EE
-  The following function delivers the time since the 
+  The following function delivers the time since the
   clock was initialized. The time is reported in seconds
   as a floating point value.
 */
@@ -58,7 +58,7 @@ double getruntime(void)
 }
 
 /*EE
-  The following function delivers the clock ticks betwenn 
+  The following function delivers the clock ticks betwenn
   \texttt{startclock} to \texttt{stopclock}.
 */
 

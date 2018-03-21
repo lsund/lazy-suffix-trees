@@ -23,7 +23,6 @@
 #include "debugdef.h"
 #include "chardef.h"
 #include "boyermoore.h"
-#include "debug.c"
 
 #include "reverse.h"
 
