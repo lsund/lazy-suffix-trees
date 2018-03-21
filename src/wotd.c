@@ -993,8 +993,10 @@ static void wotd_benchmark(
             (double) (4*(branchcount*BRANCHWIDTH+ leafcount))/textlen);
 }
 
-static void wotd(BOOL evaleager)
+static void wotd(BOOL evaleager, char ***patterns_p, int npatterns)
 {
+
+    char **patterns = *patterns_p;
     ArrayUint resultpos;
 
     if(!evaleager) {
@@ -1014,18 +1016,18 @@ static void wotd(BOOL evaleager)
 
     INITARRAY(&resultpos,Uint);
 
-    char *patt = "Test";
-
-    printf("%s\n", patterns);
-
-    search_one_pattern(
-            evaleager ? occurseager : occurslazy,
-            (void *) &resultpos,
-            text,
-            textlen,
-            strlen(patt),
-            patt
-        );
+    int j;
+    for(j = 0; j < npatterns; j++) {
+        printf("%s\n", patterns[j]);
+        search_one_pattern(
+                evaleager ? occurseager : occurslazy,
+                (void *) &resultpos,
+                text,
+                textlen,
+                strlen(patterns[j]),
+                patterns[j]
+            );
+    }
 
     FREEARRAY(&resultpos,Uint);
     DEBUG3(2,"#maxstack=%lu %lu %lu ",
@@ -1079,22 +1081,9 @@ int main(int argc,char *argv[])
     }
 
     patternfile = argv[6];
-    int lines_allocated = 128;
-    char **words = (char **)malloc(sizeof(char*)*lines_allocated);
-    int i = file2Array(patternfile, &patternslen, &words);
-    int j;
-    for(j = 0; j < i; j++)
-        printf("%s\n", words[j]);
-
-    /* Good practice to free memory */
-    for (;i>=0;i--)
-        free(words[i]);
-    free(words);
-
-    if(patterns == NULL) {
-        fprintf(stderr, "%s: Cannot open file %s\n", argv[0], patterns);
-        exit(EXIT_FAILURE);
-    }
+    int size = 128;
+    char **patterns = (char **) malloc(sizeof(char *) * size);
+    int i = file2Array(patternfile, &patternslen, size, &patterns);
 
     if(textlen > MAXTEXTLEN) {
         fprintf(stderr,"Textlen = %lu > maximal textlen = %lu\n",
@@ -1105,9 +1094,14 @@ int main(int argc,char *argv[])
 
     /* wotd_benchmark(evaleager,argv,argc,rho, minpat, maxpat); */
 
-    wotd(evaleager);
+    wotd(evaleager, &patterns, i);
 
     freetextspace(text,textlen);
+
+    for (;i>=0;i--) {
+        free(patterns[i]);
+    }
+    free(patterns);
 
     if(evaleager)
     {

@@ -126,7 +126,7 @@ void freetextspace(Uchar *text, Uint textlen)
   return genfile2String(name,textlen,False,False);
 }
 
-int file2Array(char *name, Uint *textlen, char ***wordsp)
+int file2Array(char *name, Uint *textlen, int size, char ***wordsp)
 {
     char **words = *wordsp;
     int fd = fileOpen(name, textlen, False);
@@ -149,26 +149,25 @@ int file2Array(char *name, Uint *textlen, char ***wordsp)
         exit(EXIT_FAILURE);
     }
 
-    int lines_allocated = 128;
     int i;
     for (i = 0; 1; i++)
     {
         int j;
 
         /* Have we gone over our line allocation? */
-        if (i >= lines_allocated)
+        if (i >= size)
         {
             int new_size;
 
             /* Double our allocation and re-allocate */
-            new_size = lines_allocated*2;
+            new_size = size*2;
             words = (char **)realloc(words,sizeof(char*) * new_size);
             if (!words)
             {
                 fprintf(stderr,"Out of memory.\n");
                 exit(3);
             }
-            lines_allocated = new_size;
+            size = new_size;
         }
 
         /* Allocate space for the next line */
@@ -186,9 +185,9 @@ int file2Array(char *name, Uint *textlen, char ***wordsp)
         /* Get rid of CR or LF at end of line */
         for (j=strlen(words[i])-1;j>=0 && (words[i][j]=='\n' || words[i][j]=='\r');j--)
             ;
-        words[i][j+1]='\0';
+        words[i][j + 1]='\0';
     }
-    /* Close file */
+
     fclose(fp);
 
     return i;

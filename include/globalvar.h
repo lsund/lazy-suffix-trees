@@ -1,7 +1,6 @@
 #include "types.h"
 
 Uchar *text,                   // points to input string \(t\) of length \(n\)
-      *patterns,
       *sentinel,               // points to \(t[n]\) which is undefined
       characters[UCHAR_MAX+1], // characters in \(t\) in alphabetical order
       **suffixes,              // array of pointers to suffixes of \(t\)
