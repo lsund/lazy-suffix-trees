@@ -85,7 +85,7 @@
 #define INITBITTABGENERIC(TAB,OLDTAB,NUMOFBITS)\
         {\
           Uint *tabptr, tabsize = NUMOFINTSFORBITS(NUMOFBITS);\
-          ALLOCASSIGNSPACE(TAB,OLDTAB,Uint,tabsize);\
+          ALLOC(TAB,OLDTAB,Uint,tabsize);\
           for(tabptr = TAB; tabptr < (TAB) + tabsize; tabptr++)\
           {\
             *tabptr = 0;\

@@ -78,11 +78,11 @@ Sint setlocalpagesize(void);
   \end{enumerate}
 */
 
-#define ALLOCSPACE(S,T,N)\
-        (T *) realloc(S,sizeof(T) * (size_t) (N))
+#define ALLOCSPACE(S, T, N)\
+        (T *) realloc(S, sizeof(T) * (size_t) (N))
 
 
-#define ALLOCASSIGNSPACE(V,S,T,N)\
+#define ALLOC(V,S,T,N)\
         V = ALLOCSPACE(S,T,N);\
         if((V) == NULL)\
         {\

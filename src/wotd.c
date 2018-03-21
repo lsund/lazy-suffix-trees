@@ -31,51 +31,13 @@ BOOL  rootevaluated;   // flag indicating that the root has been evaluated
 
 #define MAXSUCCSPACE            (BRANCHWIDTH * (UCHAR_MAX+1) + 1)
 
-static Uchar **getsbufferspaceeager(Uchar **left, Uchar **right)
-{
-    /* printf("Hello\n"); */
-    Uint width = (Uint) (right - left + 1);
-
-    if(width > (Uint) (left-suffixes))
-    {
-        DEBUG2(3,"#bucket: left=%lu width=%lu\n",(Showuint) (left-suffixes),
-                (Showuint) width);
-        if(width > sbufferwidth) {
-            sbufferwidth = width;
-            ALLOCASSIGNSPACE(sbufferspace, sbufferspace, Uchar *, sbufferwidth);
-        }
-        return sbufferspace;
-    }
-
-    return left - width;
-}
-
-static Uchar **getsbufferspacelazy(Uchar **left, Uchar **right)
-{
-    Uint width = (Uint) (right - left + 1);
-
-    if(sbufferwidth > maxsbufferwidth && maxsbufferwidth > width)
-    {
-        sbufferwidth = maxsbufferwidth;
-        ALLOCASSIGNSPACE(sbufferspace,sbufferspace,Uchar *,sbufferwidth);
-    } else
-    {
-        if(width > sbufferwidth)
-        {
-            sbufferwidth = width;
-            ALLOCASSIGNSPACE(sbufferspace,sbufferspace,Uchar *,sbufferwidth);
-        }
-    }
-    return sbufferspace;
-}
-
 static void allocstreetab(void)
 {
   Uint tmpindex = NODEINDEX(nextfreeentry);
   if(tmpindex >= streetabsize)
   {
     streetabsize += (textlen/10);
-    ALLOCASSIGNSPACE(streetab, streetab, Uint, streetabsize + MAXSUCCSPACE);
+    ALLOC(streetab, streetab, Uint, streetabsize + MAXSUCCSPACE);
     // update necessary, since streetab may have been moved.
     nextfreeentry = streetab + tmpindex;
   }
@@ -222,12 +184,12 @@ static Uint evaluatenodeeager(Uint node)
     DEBUG2(2,"#move[%lu,%lu] ",(Showuint) (left-suffixes),
                                (Showuint) (left-suffixes+suffixessize));
     DEBUG1(2,"[0,%lu]\n",(Showuint) suffixessize);
-    ALLOCASSIGNSPACE(suffixes,suffixes,Uchar *,suffixessize);
+    ALLOC(suffixes,suffixes,Uchar *,suffixessize);
     suffixbase = suffixes - (tmpdiff + unusedsuffixes);
     left = suffixes;
     right = suffixes + width - 1;
   }
-  sbuffer = getsbufferspaceeager(left,right);
+  sbuffer = getsbufferspaceeager(left, right);
   prefixlen = grouplcp(left,right);
   sortByChar(left,right,prefixlen);
   return evalsuccedges(left,right);
@@ -281,7 +243,7 @@ static Uint getnextbranch(Uint previousbranch)
         if(stacktop >= stackalloc)\
         {\
           stackalloc += 100;\
-          ALLOCASSIGNSPACE(stack,stack,Uint,stackalloc);\
+          ALLOC(stack,stack,Uint,stackalloc);\
         }\
         DEBUGCODE(1,if(stacktop > maxstacksize) { maxstacksize = stacktop;});\
         NOTSUPPOSEDTOBENULL(stack);\
@@ -323,11 +285,11 @@ void inittree(void)
   getUchars(text, textlen, characters, &alphasize);
   sentinel = text+textlen;
   streetabsize = BRANCHWIDTH;
-  ALLOCASSIGNSPACE(streetab,streetab,Uint,streetabsize + MAXSUCCSPACE);
+  ALLOC(streetab,streetab,Uint,streetabsize + MAXSUCCSPACE);
   nextfreeentry = streetab;
   suffixessize = textlen+1;
   maxunusedsuffixes = suffixessize >> 1;
-  ALLOCASSIGNSPACE(suffixes,NULL,Uchar *,suffixessize);
+  ALLOC(suffixes,NULL,Uchar *,suffixessize);
   suffixbase = suffixes;
   sbufferwidth = 0;
   maxsbufferwidth = textlen >> 8;

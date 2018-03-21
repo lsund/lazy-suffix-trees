@@ -165,7 +165,7 @@ static void assignfilehandleinformation(char *file,
   {
     Uint i;
 
-    ALLOCASSIGNSPACE(filehandle,
+    ALLOC(filehandle,
                      filehandle,
                      Filehandle,
                      allocatedFilehandle+INCFILEHANDLES);
@@ -263,7 +263,7 @@ Sint maketmpfile(char *file,
   tmpfilenamelength = (Uint) (strlen(usedfileprefix) + NUMBEROFX + 1);
   if(tmpfiledesc->tmpfilenamelength < tmpfilenamelength)
   {
-    ALLOCASSIGNSPACE(tmpfiledesc->tmpfilenamebuffer,
+    ALLOC(tmpfiledesc->tmpfilenamebuffer,
                      tmpfiledesc->tmpfilenamebuffer,
                      char,tmpfilenamelength);
     tmpfiledesc->tmpfilenamelength = tmpfilenamelength;

@@ -19,6 +19,7 @@
 #include "preprocdef.h"
 #include "counting_sort.h"
 #include "util.h"
+#include "spaceman.h"
 
 void inittree(void);
 
