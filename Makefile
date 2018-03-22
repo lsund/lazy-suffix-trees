@@ -41,6 +41,7 @@ OBJ= obj/boyermoore.o\
     obj/counting_sort.o\
     obj/lcp.o\
     obj/wotd.o\
+	obj/eval.o\
     obj/main.o
 
 

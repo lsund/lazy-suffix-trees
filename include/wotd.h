@@ -20,25 +20,8 @@
 #include "counting_sort.h"
 #include "util.h"
 #include "spaceman.h"
-
-
-///////////////////////////////////////////////////////////////////////////////
-// Macros
-
-
-#define NOTSTACKEMPTY         (stacktop > 0)
-#define PUSHNODE(N)\
-        if(stacktop >= stackalloc)\
-        {\
-          stackalloc += 100;\
-          ALLOC(stack,stack,Uint,stackalloc);\
-        }\
-        DEBUGCODE(1,if(stacktop > maxstacksize) { maxstacksize = stacktop;});\
-        NOTSUPPOSEDTOBENULL(stack);\
-        stack[stacktop++] = N
-
-#define POPNODE(N)\
-        N = stack[--stacktop]
+#include "lcp.h"
+#include "eval.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
