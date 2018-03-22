@@ -11,10 +11,6 @@
   Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
 */
 
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif
-
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -29,26 +25,17 @@
 #define MAXPATTERNLEN 1024
 
 void searchpattern_benchmark(
-        BOOL (*reallyoccurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
         BOOL (*occurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
-        char *argv[],
-        Argctype argc,
         void *occursinfo,
         Uchar *text,Uint textlen,
         float trialpercentage,
         Uint minpatternlen,
-        Uint maxpatternlen,
-        void (*showpattern)(void *,Uchar *,Uint),
-        void *showpatterninfo,
-        Uchar *mypattern
+        Uint maxpatternlen
         )
 {
     Uint pcount, j, trials, start, patternlen, patternstat[MAXPATTERNLEN+1] = {0};
     BOOL special, patternoccurs;
     Uchar pattern[MAXPATTERNLEN+1];
-#ifdef DEBUG
-    BOOL patternreallyoccurs;
-#endif
 
     if(maxpatternlen > (Uint) MAXPATTERNLEN)
     {
@@ -125,21 +112,6 @@ void searchpattern_benchmark(
 
             patternoccurs =
                 occurs(occursinfo, text, textlen, pattern, pattern+patternlen-1);
-
-
-#ifdef DEBUG
-            patternreallyoccurs =
-                reallyoccurs(occursinfo,text,textlen,pattern,pattern+patternlen-1);
-            if(patternoccurs != patternreallyoccurs)
-            {
-                showargs(argv,argc);
-                fprintf(stderr,"pattern %lu: \"",(Showuint) pcount);\
-                    showpattern(showpatterninfo,pattern,patternlen);
-                fprintf(stderr,"\" %s found, this is not supposed to happen\n",
-                        patternreallyoccurs ? "not" : "");
-                exit(EXIT_FAILURE);
-            }
-#endif
         }
     }
 
@@ -148,7 +120,7 @@ void searchpattern_benchmark(
     DEBUG1(1,"%lu pattern processed as expected\n",(Showuint) trials);
 }
 
-    void search_one_pattern(
+void search_one_pattern(
         BOOL (*occurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
         void *occursinfo,
         Uchar *text,
@@ -204,41 +176,27 @@ void searchpattern_benchmark(
 
 void searchpattern(
         BOOL(*occurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
-        char *argv[],
-        Argctype argc,
         void *occursinfo,
         Uchar *text,
         Uint textlen,
         float trialpercentage,
         Uint minpatternlen,
-        Uint maxpatternlen,
-        void (*showpattern) (void *,Uchar *,Uint),
-        void *showpatterninfo
+        Uint maxpatternlen
     )
 {
-#ifdef DEBUG
-  searchpattern_benchmark(bmhsearch,
-#else
-  searchpattern_benchmark(NULL,
-#endif
-                       occurs,
-                       argv,
-                       argc,
-                       occursinfo,
-                       text,
-                       textlen,
-                       trialpercentage,
-                       minpatternlen,
-                       maxpatternlen,
-                       showpattern,
-                       showpatterninfo,
-                       NULL);
+    searchpattern_benchmark(
+        occurs,
+        occursinfo,
+        text,
+        textlen,
+        trialpercentage,
+        minpatternlen,
+        maxpatternlen
+    );
 }
 
 void searchpatternapprox(
         void(*apm)(void *,Uint,Uchar *,Uint,Uchar *,Uint),
-        char *argv[],
-        Argctype argc,
         void *occursinfo,
         float errorrate,
         Uchar *text,Uint textlen,float trialpercentage,
