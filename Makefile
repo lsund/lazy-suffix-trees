@@ -42,6 +42,7 @@ OBJ= obj/boyermoore.o\
     obj/lcp.o\
     obj/wotd.o\
 	obj/eval.o\
+	obj/occurs.o\
     obj/main.o
 
 

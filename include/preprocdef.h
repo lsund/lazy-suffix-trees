@@ -35,4 +35,6 @@
 
 #define GETLPUNEVAL(N) SUFFIXNUMBER(GETLEFTBOUNDARY(N))
 
+#define UNDEFINEDSUCC  (UINT_MAX)    // undefined successor
+
 #endif

@@ -29,8 +29,6 @@
         N = stack[--stacktop]
 
 
-#define UNDEFINEDSUCC  (UINT_MAX)    // undefined successor
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // Functions
