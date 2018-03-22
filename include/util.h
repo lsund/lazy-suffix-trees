@@ -5,4 +5,6 @@
 
 extern Uchar *sentinel;
 
+void showstring(Uchar *left, Uchar *right);
+
 #endif

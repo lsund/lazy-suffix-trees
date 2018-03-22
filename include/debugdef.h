@@ -18,6 +18,14 @@
 #include <stdio.h>
 #include "preprocdef.h"
 #include "intbits.h"
+#include "util.h"
+
+extern Uchar *text, *sentinel, characters[UCHAR_MAX + 1];
+extern Uint     rootchildtab[UCHAR_MAX + 1],
+                textlen,
+                *streetab,
+                *nextfreeentry,
+                alphasize;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Functions
