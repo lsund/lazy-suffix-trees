@@ -11,114 +11,11 @@
   Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
 */
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-#include <limits.h>
-#include "types.h"
-#include "debugdef.h"
-#include "chardef.h"
-#include "boyermoore.h"
+/*
+ * Modified by Ludvig Sundström 2018
+ */
 
-#include "reverse.h"
-
-#define MAXPATTERNLEN 1024
-
-void searchpattern_benchmark(
-        BOOL (*occurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
-        void *occursinfo,
-        Uchar *text,Uint textlen,
-        float trialpercentage,
-        Uint minpatternlen,
-        Uint maxpatternlen
-        )
-{
-    Uint pcount, j, trials, start, patternlen, patternstat[MAXPATTERNLEN+1] = {0};
-    BOOL special, patternoccurs;
-    Uchar pattern[MAXPATTERNLEN+1];
-
-    if(maxpatternlen > (Uint) MAXPATTERNLEN)
-    {
-        fprintf(stderr,"maxpatternlen=%lu > %lu\n",
-                (Showuint) maxpatternlen,(Showuint) MAXPATTERNLEN);
-        exit(EXIT_FAILURE);
-    }
-    if(maxpatternlen < minpatternlen)
-    {
-        fprintf(stderr,"maxpatternlen=%lu < %lu\n",(Showuint) maxpatternlen,
-                (Showuint) minpatternlen);
-        exit(EXIT_FAILURE);
-    }
-    if(textlen <= maxpatternlen)
-    {
-        fprintf(stderr,"textlen=%lu <= maxpatternlen = %lu\n",
-                (Showuint) textlen,
-                (Showuint) maxpatternlen);
-        exit(EXIT_FAILURE);
-    }
-
-    if(trialpercentage >= 0.0) {
-        trials = (Uint) (trialpercentage * textlen);
-    } else {
-        fprintf(stderr,"trialpercentage negative %f", trialpercentage);
-        exit(EXIT_FAILURE);
-    }
-
-    printf("# trials %lu minpat %lu maxpat %lu\n",
-            (Showuint) trials,
-            (Showuint) minpatternlen,
-            (Showuint) maxpatternlen);
-
-    srand48(42349421);
-
-    for(pcount=0; pcount < trials; pcount++)
-    {
-        if(minpatternlen == maxpatternlen) {
-            patternlen = minpatternlen;
-        } else {
-            patternlen = (Uint) (minpatternlen +
-                    (drand48() *
-                     (double) (maxpatternlen-minpatternlen+1)));
-        }
-        patternstat[patternlen]++;
-
-        start = (Uint) (drand48() * (double) (textlen-patternlen));
-
-        if(start > textlen - patternlen) {
-            fprintf(stderr,"Not enough characters left\n");
-            exit(EXIT_FAILURE);
-        }
-
-        special = False;
-
-        // Make patttern
-        for(j = 0; j < patternlen; j++) {
-
-            pattern[j] = text[start+j];
-
-            if(ISSPECIAL(pattern[j])) {
-                special = True;
-                break;
-            }
-        }
-
-        if(!special)
-        {
-            // Every second pattern
-            if(pcount & 1)
-            {
-                reverse(pattern, patternlen); // Reverse every second string
-            }
-
-            patternoccurs =
-                occurs(occursinfo, text, textlen, pattern, pattern+patternlen-1);
-        }
-    }
-
-    DEBUGCODE(1,showpatternstat(&patternstat[0]));
-
-    DEBUG1(1,"%lu pattern processed as expected\n",(Showuint) trials);
-}
+#include "searchpat.h"
 
 void search_one_pattern(
         BOOL (*occurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
@@ -256,3 +153,100 @@ void searchpatternapprox(
   DEBUG1(1,"%lu pattern processed as expected\n",
                   (Showuint) trials);
 }
+void searchpattern_benchmark(
+        BOOL (*occurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
+        void *occursinfo,
+        Uchar *text,Uint textlen,
+        float trialpercentage,
+        Uint minpatternlen,
+        Uint maxpatternlen
+    )
+{
+    Uint pcount, j, trials, start, patternlen, patternstat[MAXPATTERNLEN+1] = {0};
+    BOOL special, patternoccurs;
+    Uchar pattern[MAXPATTERNLEN+1];
+
+    if(maxpatternlen > (Uint) MAXPATTERNLEN)
+    {
+        fprintf(stderr,"maxpatternlen=%lu > %lu\n",
+                (Showuint) maxpatternlen,(Showuint) MAXPATTERNLEN);
+        exit(EXIT_FAILURE);
+    }
+    if(maxpatternlen < minpatternlen)
+    {
+        fprintf(stderr,"maxpatternlen=%lu < %lu\n",(Showuint) maxpatternlen,
+                (Showuint) minpatternlen);
+        exit(EXIT_FAILURE);
+    }
+    if(textlen <= maxpatternlen)
+    {
+        fprintf(stderr,"textlen=%lu <= maxpatternlen = %lu\n",
+                (Showuint) textlen,
+                (Showuint) maxpatternlen);
+        exit(EXIT_FAILURE);
+    }
+
+    if(trialpercentage >= 0.0) {
+        trials = (Uint) (trialpercentage * textlen);
+    } else {
+        fprintf(stderr,"trialpercentage negative %f", trialpercentage);
+        exit(EXIT_FAILURE);
+    }
+
+    printf("# trials %lu minpat %lu maxpat %lu\n",
+            (Showuint) trials,
+            (Showuint) minpatternlen,
+            (Showuint) maxpatternlen);
+
+    srand48(42349421);
+
+    for(pcount=0; pcount < trials; pcount++)
+    {
+        if(minpatternlen == maxpatternlen) {
+            patternlen = minpatternlen;
+        } else {
+            patternlen = (Uint) (minpatternlen +
+                    (drand48() *
+                     (double) (maxpatternlen-minpatternlen+1)));
+        }
+        patternstat[patternlen]++;
+
+        start = (Uint) (drand48() * (double) (textlen-patternlen));
+
+        if(start > textlen - patternlen) {
+            fprintf(stderr,"Not enough characters left\n");
+            exit(EXIT_FAILURE);
+        }
+
+        special = False;
+
+        // Make patttern
+        for(j = 0; j < patternlen; j++) {
+
+            pattern[j] = text[start+j];
+
+            if(ISSPECIAL(pattern[j])) {
+                special = True;
+                break;
+            }
+        }
+
+        if(!special)
+        {
+            // Every second pattern
+            if(pcount & 1)
+            {
+                reverse(pattern, patternlen); // Reverse every second string
+            }
+
+            patternoccurs =
+                occurs(occursinfo, text, textlen, pattern, pattern+patternlen-1);
+        }
+    }
+
+    DEBUGCODE(1,showpatternstat(&patternstat[0]));
+
+    DEBUG1(1,"%lu pattern processed as expected\n",(Showuint) trials);
+}
+
+
