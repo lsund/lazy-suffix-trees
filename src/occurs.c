@@ -22,6 +22,28 @@
         }
 
 
+#define CHECKROOTCHILDWITHPOS\
+        {\
+          Uint rootchild;\
+          if((rootchild = rootchildtab[firstchar]) == UNDEFINEDSUCC)\
+          {\
+            return False;\
+          }\
+          if(rootchild & LEAFBIT)\
+          {\
+            lefttext = text + (rootchild & ~LEAFBIT);\
+            if((Uint) (rightpattern-lpatt) ==\
+                    lcp(lpatt+1,rightpattern,lefttext+1,sentinel-1))\
+            {\
+              STOREINARRAY(resultpos,Uint,256,rootchild & ~LEAFBIT);\
+              return True;\
+            }\
+            return False;\
+          }\
+          nodeptr = streetab + rootchild;\
+        }
+
+
 // Tries to match the remainder of the pattern with the current leaf edge
 #define CHECKLEAFEDGE\
         if(lefttext == sentinel)\
@@ -34,6 +56,24 @@
           if((Uint) (rightpattern - lpatt) ==\
                      lcp(lpatt+1,rightpattern,lefttext+1,sentinel-1))\
           {\
+            return True;\
+          }\
+          return False;\
+        }
+
+
+#define CHECKLEAFEDGEWITHPOS\
+        if(lefttext == sentinel)\
+        {\
+          return False;\
+        }\
+        edgechar = *lefttext;\
+        if(edgechar == firstchar)\
+        {\
+          if((Uint) (rightpattern - lpatt) ==\
+                  lcp(lpatt+1,rightpattern,lefttext+1,sentinel-1))\
+          {\
+            STOREINARRAY(resultpos,Uint,256,(Uint) (lefttext - text));\
             return True;\
           }\
           return False;\
@@ -55,6 +95,50 @@
           return False;\
         }
 
+
+#define CHECKBRANCHEDGEWITHPOS\
+        prefixlen =\
+            UintConst(1)+\
+            lcp(lpatt+1,rightpattern,lefttext+1,lefttext+edgelen-1);\
+        if(prefixlen == edgelen)\
+        {\
+          lpatt += edgelen;\
+        } else\
+        {\
+          if(prefixlen == (Uint) (rightpattern - lpatt + 1))\
+          {\
+            collectpositions(resultpos,nodeptr);\
+            return True;\
+          }\
+          return False;\
+        }
+
+static void collectpositions(ArrayUint *resultpos,Uint *firstsucc)
+{
+    Uint leftpointer, *nodeptr = firstsucc;
+
+    while(True)
+    {
+        if(ISLEAF(nodeptr))
+        {
+            leftpointer = GETLP(nodeptr);
+            STOREINARRAY(resultpos,Uint,256,leftpointer);
+            if(ISRIGHTMOSTCHILD(nodeptr))
+            {
+                break;
+            }
+            nodeptr++;
+        } else
+        {
+            collectpositions(resultpos,nodeptr);
+            if(ISRIGHTMOSTCHILD(nodeptr))
+            {
+                break;
+            }
+            nodeptr += BRANCHWIDTH;
+        }
+    }
+}
 
 static Uint firstchildlp(Uint *nodeptr)
 {
@@ -162,9 +246,12 @@ BOOL occurslazy(
     }
 }
 
-BOOL occurseager(/*@unused@*/ void *state,Uchar *text,
-                        /*@unused@*/ Uint textlen,
-                        Uchar *leftpattern,Uchar *rightpattern)
+BOOL occurseager(
+        /*@unused@*/ void *state,
+        Uchar *text,
+        /*@unused@*/ Uint textlen,
+        Uchar *leftpattern,
+        Uchar *rightpattern)
 {
   Uint *nodeptr, edgelen, newleftpointer, leftpointer, prefixlen;
   Uchar *lefttext, *lpatt = leftpattern, firstchar, edgechar;
@@ -219,5 +306,71 @@ BOOL occurseager(/*@unused@*/ void *state,Uchar *text,
     edgelen = newleftpointer - leftpointer;
     CHECKBRANCHEDGE;
   }
+}
+
+
+BOOL occurrenceseager(
+        void *state,
+        Uchar *text,
+        /*@unused@*/ Uint textlen,
+        Uchar *leftpattern,
+        Uchar *rightpattern)
+{
+    Uint *nodeptr, edgelen, newleftpointer, leftpointer, prefixlen;
+    Uchar *lefttext, *lpatt = leftpattern, firstchar, edgechar;
+    ArrayUint *resultpos = (ArrayUint *) state;
+
+    resultpos->nextfreeUint = 0;
+    if(lpatt > rightpattern)   // check for empty word
+    {
+        return True;
+    }
+    firstchar = *lpatt;
+    CHECKROOTCHILDWITHPOS;
+    leftpointer = GETLP(nodeptr);
+    lefttext = text + leftpointer;
+    nodeptr = streetab + GETFIRSTCHILD(nodeptr);
+    newleftpointer = GETLP(nodeptr);
+    edgelen = newleftpointer - leftpointer;
+    CHECKBRANCHEDGEWITHPOS;
+    while(True)
+    {
+        if(lpatt > rightpattern)   // check for empty word
+        {
+            STOREINARRAY(resultpos,Uint,256,newleftpointer);
+            return True;
+        }
+        firstchar = *lpatt;
+        while(True)
+        {
+            leftpointer = GETLP(nodeptr);
+            lefttext = text + leftpointer;
+            if(ISLEAF(nodeptr))
+            {
+                CHECKLEAFEDGEWITHPOS;
+                if(ISRIGHTMOSTCHILD(nodeptr))
+                {
+                    return False;
+                }
+                nodeptr++;
+            } else
+            {
+                edgechar = *lefttext;
+                if(edgechar == firstchar)
+                {
+                    break;
+                }
+                if(ISRIGHTMOSTCHILD(nodeptr))
+                {
+                    return False;
+                }
+                nodeptr += BRANCHWIDTH;
+            }
+        }
+        nodeptr = streetab + GETFIRSTCHILD(nodeptr);
+        newleftpointer = GETLP(nodeptr);
+        edgelen = newleftpointer - leftpointer;
+        CHECKBRANCHEDGEWITHPOS;
+    }
 }
 

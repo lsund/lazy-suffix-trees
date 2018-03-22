@@ -6,6 +6,7 @@
 #include "intbits.h"
 #include "counting_sort.h"
 #include "eval.h"
+#include "arraydef.h"
 
 extern Uchar *text, **suffixbase, *sentinel;
 
