@@ -26,33 +26,6 @@ Uint  textlen,                 // length of \(t\)
 
 BOOL  rootevaluated;   // flag indicating that the root has been evaluated
 
-void inittree(void)
-{
-  Uint i;
-
-  DEBUGCODE(1,maxstacksize=maxwidth=branchcount=leafcount=0);
-  getUchars(text, textlen, characters, &alphasize);
-  sentinel = text+textlen;
-  streetabsize = BRANCHWIDTH;
-  ALLOC(streetab,streetab,Uint,streetabsize + MAXSUCCSPACE);
-  nextfreeentry = streetab;
-  suffixessize = textlen+1;
-  maxunusedsuffixes = suffixessize >> 1;
-  ALLOC(suffixes,NULL,Uchar *,suffixessize);
-  suffixbase = suffixes;
-  sbufferwidth = 0;
-  maxsbufferwidth = textlen >> 8;
-  rootevaluated = False;
-  for(i=0; i<alphasize; i++)
-  {
-    alphaindex[(Uint) characters[i]] = i;
-  }
-  for(i=0; i<=UCHAR_MAX; i++)
-  {
-    occurrence[i] = 0;
-  }
-}
-
 #define CHECKROOTCHILDWITHPOS\
         {\
           Uint rootchild;\
@@ -63,7 +36,8 @@ void inittree(void)
           if(rootchild & LEAFBIT)\
           {\
             lefttext = text + (rootchild & ~LEAFBIT);\
-            if((Uint) (rightpattern-lpatt) == lcp(lpatt+1,rightpattern,lefttext+1,sentinel-1))\
+            if((Uint) (rightpattern-lpatt) ==\
+                    lcp(lpatt+1,rightpattern,lefttext+1,sentinel-1))\
             {\
               STOREINARRAY(resultpos,Uint,256,rootchild & ~LEAFBIT);\
               return True;\
@@ -81,7 +55,8 @@ void inittree(void)
         edgechar = *lefttext;\
         if(edgechar == firstchar)\
         {\
-          if((Uint) (rightpattern - lpatt) == lcp(lpatt+1,rightpattern,lefttext+1,sentinel-1))\
+          if((Uint) (rightpattern - lpatt) ==\
+                  lcp(lpatt+1,rightpattern,lefttext+1,sentinel-1))\
           {\
             STOREINARRAY(resultpos,Uint,256,(Uint) (lefttext - text));\
             return True;\
@@ -117,7 +92,9 @@ static void collectpositions(ArrayUint *resultpos,Uint *firstsucc)
 }
 
 #define CHECKBRANCHEDGEWITHPOS\
-        prefixlen = UintConst(1)+lcp(lpatt+1,rightpattern,lefttext+1,lefttext+edgelen-1);\
+        prefixlen =\
+            UintConst(1)+\
+            lcp(lpatt+1,rightpattern,lefttext+1,lefttext+edgelen-1);\
         if(prefixlen == edgelen)\
         {\
           lpatt += edgelen;\
@@ -131,94 +108,72 @@ static void collectpositions(ArrayUint *resultpos,Uint *firstsucc)
           return False;\
         }
 
-BOOL occurrenceseager(void *state,Uchar *text,/*@unused@*/ Uint textlen,
-                      Uchar *leftpattern,Uchar *rightpattern)
+BOOL occurrenceseager(
+        void *state,
+        Uchar *text,
+        /*@unused@*/ Uint textlen,
+        Uchar *leftpattern,
+        Uchar *rightpattern)
 {
-  Uint *nodeptr, edgelen, newleftpointer, leftpointer, prefixlen;
-  Uchar *lefttext, *lpatt = leftpattern, firstchar, edgechar;
-  ArrayUint *resultpos = (ArrayUint *) state;
+    Uint *nodeptr, edgelen, newleftpointer, leftpointer, prefixlen;
+    Uchar *lefttext, *lpatt = leftpattern, firstchar, edgechar;
+    ArrayUint *resultpos = (ArrayUint *) state;
 
-  resultpos->nextfreeUint = 0;
-  if(lpatt > rightpattern)   // check for empty word
-  {
-    return True;
-  }
-  firstchar = *lpatt;
-  CHECKROOTCHILDWITHPOS;
-  leftpointer = GETLP(nodeptr);
-  lefttext = text + leftpointer;
-  nodeptr = streetab + GETFIRSTCHILD(nodeptr);
-  newleftpointer = GETLP(nodeptr);
-  edgelen = newleftpointer - leftpointer;
-  CHECKBRANCHEDGEWITHPOS;
-  while(True)
-  {
+    resultpos->nextfreeUint = 0;
     if(lpatt > rightpattern)   // check for empty word
     {
-      STOREINARRAY(resultpos,Uint,256,newleftpointer);
-      return True;
+        return True;
     }
     firstchar = *lpatt;
-    while(True)
-    {
-      leftpointer = GETLP(nodeptr);
-      lefttext = text + leftpointer;
-      if(ISLEAF(nodeptr))
-      {
-        CHECKLEAFEDGEWITHPOS;
-        if(ISRIGHTMOSTCHILD(nodeptr))
-        {
-          return False;
-        }
-        nodeptr++;
-      } else
-      {
-        edgechar = *lefttext;
-        if(edgechar == firstchar)
-        {
-          break;
-        }
-        if(ISRIGHTMOSTCHILD(nodeptr))
-        {
-          return False;
-        }
-        nodeptr += BRANCHWIDTH;
-      }
-    }
+    CHECKROOTCHILDWITHPOS;
+    leftpointer = GETLP(nodeptr);
+    lefttext = text + leftpointer;
     nodeptr = streetab + GETFIRSTCHILD(nodeptr);
     newleftpointer = GETLP(nodeptr);
     edgelen = newleftpointer - leftpointer;
     CHECKBRANCHEDGEWITHPOS;
-  }
+    while(True)
+    {
+        if(lpatt > rightpattern)   // check for empty word
+        {
+            STOREINARRAY(resultpos,Uint,256,newleftpointer);
+            return True;
+        }
+        firstchar = *lpatt;
+        while(True)
+        {
+            leftpointer = GETLP(nodeptr);
+            lefttext = text + leftpointer;
+            if(ISLEAF(nodeptr))
+            {
+                CHECKLEAFEDGEWITHPOS;
+                if(ISRIGHTMOSTCHILD(nodeptr))
+                {
+                    return False;
+                }
+                nodeptr++;
+            } else
+            {
+                edgechar = *lefttext;
+                if(edgechar == firstchar)
+                {
+                    break;
+                }
+                if(ISRIGHTMOSTCHILD(nodeptr))
+                {
+                    return False;
+                }
+                nodeptr += BRANCHWIDTH;
+            }
+        }
+        nodeptr = streetab + GETFIRSTCHILD(nodeptr);
+        newleftpointer = GETLP(nodeptr);
+        edgelen = newleftpointer - leftpointer;
+        CHECKBRANCHEDGEWITHPOS;
+    }
 }
 
 #ifdef DEBUG
-
-static void showrootchildtab(void)
-{
-  Uint i;
-
-  for(i=0; i<=UCHAR_MAX; i++)
-  {
-    if(rootchildtab[i] != UNDEFINEDSUCC)
-    {
-      if(rootchildtab[i] & LEAFBIT)
-      {
-        printf("#(%lu)%c-successor of root is leaf %lu\n",
-               (Showuint) i,
-               (char) i,
-               (Showuint) (rootchildtab[i] & ~LEAFBIT));
-      } else
-      {
-        printf("#(%lu)%c-successor of root is branch %ld\n",
-                (Showuint) i,
-                (char) i,
-                (Showsint) rootchildtab[i]);
-      }
-    }
-  }
-  printf("#~-successor of root is leaf %lu\n",(Showuint) textlen);
-}
 
 static void showstreetab(void)
 {

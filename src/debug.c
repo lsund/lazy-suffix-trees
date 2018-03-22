@@ -200,4 +200,33 @@ static void showpatternstat(Uint *patternstat)
     }
 }
 
+
+extern Uint *rootchildtab, textlen;
+
+void showrootchildtab(void)
+{
+    Uint i;
+
+    for(i=0; i<=UCHAR_MAX; i++)
+    {
+        if(rootchildtab[i] != UNDEFINEDSUCC)
+        {
+            if(rootchildtab[i] & LEAFBIT)
+            {
+                printf("#(%lu)%c-successor of root is leaf %lu\n",
+                        (Showuint) i,
+                        (char) i,
+                        (Showuint) (rootchildtab[i] & ~LEAFBIT));
+            } else
+            {
+                printf("#(%lu)%c-successor of root is branch %ld\n",
+                        (Showuint) i,
+                        (char) i,
+                        (Showsint) rootchildtab[i]);
+            }
+        }
+    }
+    printf("#~-successor of root is leaf %lu\n",(Showuint) textlen);
+}
+
 #endif

@@ -235,12 +235,6 @@ static void assignfilehandleinformation(char *file,
   return fp;
 }
 
-void inittmpfiledesc(Tmpfiledesc *tmpfiledesc)
-{
-  tmpfiledesc->tmpfilenamebuffer = NULL;
-  tmpfiledesc->tmpfilenamelength = 0;
-}
-
 /*EE
   The following function creates a temporary file. The file pointer
   to this file as well as the name of the temporary file is stored

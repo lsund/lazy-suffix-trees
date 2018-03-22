@@ -11,14 +11,18 @@
   Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
 */
 
-//\IgnoreLatex{
-
 #ifndef DEBUGDEF_H
 #define DEBUGDEF_H
+
 #include <stdlib.h>
 #include <stdio.h>
+#include "preprocdef.h"
+#include "intbits.h"
 
-//}
+///////////////////////////////////////////////////////////////////////////////
+// Functions
+
+void showrootchildtab(void);
 
 /*
   This file defines macros for producing debugging messages. Except for

@@ -6,8 +6,6 @@ extern "C" {
                                   const char *path,
                                   const char *mode);
 
-void inittmpfiledesc(Tmpfiledesc *tmpfiledesc);
-
 Sint maketmpfile(char *file,
                  Uint line,
                  Tmpfiledesc *tmpfiledesc,

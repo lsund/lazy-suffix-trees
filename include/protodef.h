@@ -21,6 +21,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "types.h"
+#include "fhandledef.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -107,8 +109,6 @@ Uint getclockticks(void);
                                   const Uint line,
                                   const char *path,
                                   const char *mode);
-
-void inittmpfiledesc(Tmpfiledesc *tmpfiledesc);
 
 Sint maketmpfile(char *file,
                  Uint line,
