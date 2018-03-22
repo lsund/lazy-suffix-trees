@@ -26,11 +26,6 @@ Uint  textlen,                 // length of \(t\)
 
 BOOL  rootevaluated;   // flag indicating that the root has been evaluated
 
-static void showpattern(Uchar *w, Uint wlen)
-{
-  (void) fwrite(w,sizeof(Uchar),(size_t) wlen,stderr);
-}
-
 static void wotd_benchmark(
                 BOOL evaleager,
                 char *argv[],

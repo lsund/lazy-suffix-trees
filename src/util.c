@@ -18,3 +18,8 @@ void showstring(Uchar *left, Uchar *right)
 }
 
 
+void showpattern(Uchar *w, Uint wlen)
+{
+  (void) fwrite(w,sizeof(Uchar),(size_t) wlen,stderr);
+}
+

@@ -7,4 +7,6 @@ extern Uchar *sentinel;
 
 void showstring(Uchar *left, Uchar *right);
 
+void showpattern(Uchar *w, Uint wlen);
+
 #endif
