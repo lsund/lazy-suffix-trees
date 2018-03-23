@@ -131,11 +131,6 @@ Sint geterror(void);
 
 void reseterror(void);
 
-void getAlpha (char *s, char *alpha, Uint *alphaSize);
-
-void getUchars(Uchar *text, Uint textlen, Uchar *alpha, Uint *alphasize);
-
-void printAlpha (char *s);
 
 #ifdef __cplusplus
 }

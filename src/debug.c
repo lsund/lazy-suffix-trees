@@ -362,4 +362,31 @@ static void showtree(void)
   printf("~\n");
 }
 
+void printAlpha (char *s)
+{
+  Uint i, j, occ[UCHAR_MAX+1] = {0};
+  char *scopy;
+
+  for (scopy = s; *scopy != '\0'; scopy++)
+  {
+    occ[(int) *scopy]++;
+  }
+  printf("alpha=(");
+  for (j=0, i=0; i<=(Uint) UCHAR_MAX; i++)
+  {
+    if (occ[i] > 0)
+    {
+      (void) putchar((char) i);
+      j++;
+    }
+  }
+  printf(")\nalphasize=%lu\n",(Showuint) j);
+  for(i=0; i<=(Uint) UCHAR_MAX; i++)
+  {
+    if(occ[i] > 0)
+    {
+      printf("'%c':%lu\n",(char) i,(Showuint) occ[i]);
+    }
+  }
+}
 #endif

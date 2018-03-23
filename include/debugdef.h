@@ -220,6 +220,8 @@ void setdebuglevelfilename(char *filename);
 FILE *getdbgfp(void);
 void debugclosefile(void);
 
+void printAlpha (char *s);
+
 //\IgnoreLatex{
 
 #ifdef __cplusplus
