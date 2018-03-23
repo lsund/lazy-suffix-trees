@@ -18,7 +18,9 @@
  *
  */
 
+
 #include "search.h"
+
 
 static void checkargs(const Uint n, const Uint m)
 {
