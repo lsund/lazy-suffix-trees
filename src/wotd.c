@@ -154,14 +154,13 @@ void wotd(BOOL evaleager, int npatterns, char ***o_patterns)
 }
 
 
-static void wotd_benchmark(
-                BOOL evaleager,
-                float rho,
-                Uint minpat,
-                Uint maxpat
-            )
+void wotd_benchmark(
+        BOOL evaleager,
+        float rho,
+        Uint minpat,
+        Uint maxpat
+    )
 {
-    ArrayUint resultpos;
     inittree();
     if(evaleager)
     {
@@ -171,13 +170,11 @@ static void wotd_benchmark(
         DEBUGCODE(3,showtree());
         FREESPACE(suffixes);
     }
-    INITARRAY(&resultpos,Uint);
 
     if(maxpat > 0 && maxpat <= textlen && rho != 0.0)
     {
         searchpattern_benchmark(
                 evaleager ? occurseager : occurslazy,
-                (void *) &resultpos,
                 text,
                 textlen,
                 rho,
@@ -185,7 +182,6 @@ static void wotd_benchmark(
                 maxpat);
     }
 
-    FREEARRAY(&resultpos,Uint);
     DEBUG3(2,"#maxstack=%lu %lu %lu ",
             (Showuint) maxstacksize,
             (Showuint) textlen,

@@ -29,7 +29,6 @@ BOOL search_one_pattern(
 
 void searchpattern_benchmark(
         BOOL (*occurs) (Uchar *,Uint,Uchar *,Uchar *),
-        void *occursinfo,
         Uchar *text,
         Uint textlen,
         float trialpercentage,

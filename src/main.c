@@ -45,10 +45,10 @@ int main(int argc,char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    /* float rho = 0.5; */
+    /* float rho = 1.0; */
     /* int minpat = 10; */
     /* int maxpat = 100; */
-    /* wotd_benchmark(evaleager,argv,argc,rho, minpat, maxpat); */
+    /* wotd_benchmark(evaleager, rho, minpat, maxpat); */
 
     wotd(evaleager, i, &patterns);
 

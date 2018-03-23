@@ -23,7 +23,7 @@
 #include "lcp.h"
 #include "eval.h"
 #include "occurs.h"
-#include "searchpat.h"
+#include "search.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -36,5 +36,11 @@ void evaluateeager(void);
 
 void wotd(BOOL evaleager, int npatterns, char ***o_patterns);
 
+void wotd_benchmark(
+        BOOL evaleager,
+        float rho,
+        Uint minpat,
+        Uint maxpat
+    );
 
 #endif
