@@ -25,11 +25,11 @@ Each branching node requires 2 unsigned integers. Hence the macro
 \texttt{BRANCHWIDTH}. If additional information has to be stored for a
 branching node, then \texttt{BRANCHWIDTH} must be redefined accordingly.\\
 
-The suffix tree is stored in a table \texttt{streetab}, called \(T\) in the
-paper. Given a pointer into \texttt{streetab}, we can determine the index the
+The suffix tree is stored in a table \texttt{stree}, called \(T\) in the
+paper. Given a pointer into \texttt{stree}, we can determine the index the
 node is stored at with \texttt{NODEINDEX}\\
 
-The most significant bits in the entries of table \texttt{streetab} are used as
+The most significant bits in the entries of table \texttt{stree} are used as
 marking bits. For each branching node we need 3 marking bits, and for each leaf
 we need 2 marking bits. For each leaf and each branching node we store 2
 marking bits in their first integer: The \emph{leaf-bit} and the
@@ -120,10 +120,10 @@ Since we have a virtual sentinel character which is different from all possible
 256 characters of the ASCII-alphabet, a branching node can have
 \texttt{UCHAR\_MAX+2=257} successor nodes. The sentinel edge leads to a leaf,
 but each of the other edges can lead to a branching node. Hence, to evaluate a
-branching node, we have to enlarge the size of \texttt{streetab} by at least
+branching node, we have to enlarge the size of \texttt{stree} by at least
 \texttt{MAXSUCCSPACE} integers. This is done by the function
-\texttt{allocstreetab}, when \texttt{nextfreeentry} reaches the end of the
-block currently allocated for \texttt{streetab}.
+\texttt{allocstree}, when \texttt{nextfreeentry} reaches the end of the
+block currently allocated for \texttt{stree}.
 
 
 \section{Sorting and Grouping Suffixes}

@@ -19,7 +19,7 @@ extern Uchar    *text,
 
 extern Uint     textlen,
                 alphasize,
-                streetabsize,
+                streesize,
                 suffixessize,
                 maxunusedsuffixes,
                 alphaindex[UCHAR_MAX + 1],

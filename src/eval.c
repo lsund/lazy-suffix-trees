@@ -8,7 +8,7 @@ static Uint evalsuccedges(Uchar **left,Uchar **right)
     Uint leafnum, firstbranch = UNDEFREFERENCE, *previousnode = NULL;
     BOOL sentineledge = False;
 
-    allocstreetab();
+    allocstree();
     if(*right == sentinel)
     {
         right--;  // skip the smallest suffix
@@ -100,7 +100,7 @@ static Uint evaluatenodeeager(Uint node)
     Uchar **left, **right;
 
     DEBUG1(3,"#evaluatenodeeager(%lu)\n",(Showuint) node);
-    nodeptr = streetab + node;
+    nodeptr = stree + node;
     left = GETLEFTBOUNDARY(nodeptr);
     right = GETRIGHTBOUNDARY(nodeptr);
     SETLP(nodeptr,SUFFIXNUMBER(left));
@@ -138,7 +138,7 @@ void evaluatenodelazy(Uint node)
     Uchar **left, **right;
 
     DEBUG1(3,"#evaluatenodelazy(%lu)\n",(Showuint) node);
-    nodeptr = streetab + node;
+    nodeptr = stree + node;
     left = GETLEFTBOUNDARY(nodeptr);
     right = GETRIGHTBOUNDARY(nodeptr);
     SETLP(nodeptr,SUFFIXNUMBER(left));
@@ -152,7 +152,7 @@ void evaluatenodelazy(Uint node)
 
 static Uint getnextbranch(Uint previousbranch)
 {
-    Uint *nodeptr = streetab + previousbranch;
+    Uint *nodeptr = stree + previousbranch;
 
     if(ISRIGHTMOSTCHILD(nodeptr))
     {

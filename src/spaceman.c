@@ -39,15 +39,15 @@ Uchar **getsbufferspacelazy(Uchar **left, Uchar **right)
 }
 
 
-void allocstreetab(void)
+void allocstree(void)
 {
     Uint tmpindex = NODEINDEX(nextfreeentry);
-    if(tmpindex >= streetabsize)
+    if(tmpindex >= streesize)
     {
-        streetabsize += (textlen / 10);
-        ALLOC(streetab, streetab, Uint, streetabsize + MAXSUCCSPACE);
-        // update necessary, since streetab may have been moved.
-        nextfreeentry = streetab + tmpindex;
+        streesize += (textlen / 10);
+        ALLOC(stree, stree, Uint, streesize + MAXSUCCSPACE);
+        // update necessary, since stree may have been moved.
+        nextfreeentry = stree + tmpindex;
     }
 }
 

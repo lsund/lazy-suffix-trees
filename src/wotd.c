@@ -68,12 +68,12 @@ Uint alphaindex[UCHAR_MAX + 1];
 Uint occurrence[UCHAR_MAX + 1];
 
 // table to hold suffix tree representation
-Uint *streetab = NULL;
+Uint *stree = NULL;
 
-// number of integers in `streetab` allocated
-Uint streetabsize;
+// number of integers in `stree` allocated
+Uint streesize;
 
-// pointer to next unused element in `streetab`
+// pointer to next unused element in `stree`
 Uint *nextfreeentry;
 
 // number of elements in `sbufferspace`
@@ -109,7 +109,7 @@ void wotd(BOOL evaleager, int npatterns, char ***o_patterns)
         inittree();
         initclock();
         evaluateeager();
-        DEBUGCODE(3,showstreetab());
+        DEBUGCODE(3,showstree());
         DEBUGCODE(3,showtree());
         FREESPACE(suffixes);
 
@@ -166,7 +166,7 @@ void wotd_benchmark(
     {
         initclock();
         evaluateeager();
-        DEBUGCODE(3,showstreetab());
+        DEBUGCODE(3,showstree());
         DEBUGCODE(3,showtree());
         FREESPACE(suffixes);
     }

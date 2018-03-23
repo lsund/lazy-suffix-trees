@@ -227,9 +227,9 @@ void showrootchildtab(void)
     printf("#~-successor of root is leaf %lu\n",(Showuint) textlen);
 }
 
-static void showstreetab(void)
+static void showstree(void)
 {
-  Uint leftpointer, *nodeptr = streetab;
+  Uint leftpointer, *nodeptr = stree;
 
   showrootchildtab();
   while(nodeptr < nextfreeentry)
@@ -262,7 +262,7 @@ static void showstreetab(void)
 
 static Uint getedgelen(Uint *nodeptr)
 {
-  return GETLP(streetab + GETFIRSTCHILD(nodeptr)) - GETLP(nodeptr);
+  return GETLP(stree + GETFIRSTCHILD(nodeptr)) - GETLP(nodeptr);
 }
 
 static void showsubtree(Uint *father,int indent);
@@ -325,7 +325,7 @@ static void showsubtree(Uint *father,int indent)
   Uchar *cptr;
 
   DEBUG1(5,"showsubtree(%lu)\n",(Showuint) NODEINDEX(father));
-  nodeptr = streetab + GETFIRSTCHILD(father);
+  nodeptr = stree + GETFIRSTCHILD(father);
   for(cptr = characters; cptr < characters+alphasize; cptr++)
   {
     scanedgelist((Uint) *cptr,nodeptr,indent);
@@ -350,7 +350,7 @@ static void showtree(void)
         (void) putchar('\n');
       } else
       {
-        nodeptr = streetab + *rcptr;
+        nodeptr = stree + *rcptr;
         lefttext = text + GETLP(nodeptr);
         edgelen = getedgelen(nodeptr);
         showstring(lefttext,lefttext + edgelen - 1);

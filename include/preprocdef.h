@@ -3,7 +3,7 @@
 
 #define BRANCHWIDTH             UintConst(2)
 
-#define NODEINDEX(N)        ((Uint) ((N) - streetab))
+#define NODEINDEX(N)        ((Uint) ((N) - stree))
 
 #define LEAFBIT             FIRSTBIT // leaf at this address
 #define RIGHTMOSTCHILDBIT   SECONDBIT // right most child of succ list

@@ -16,8 +16,8 @@ extern Uint
     sbufferwidth,
     maxsbufferwidth,
     *nextfreeentry,
-    *streetab,
-    streetabsize,
+    *stree,
+    streesize,
     textlen;
 
 
@@ -28,6 +28,6 @@ Uchar **getsbufferspacelazy(Uchar **left, Uchar **right);
 
 Uchar **getsbufferspaceeager(Uchar **left, Uchar **right);
 
-void allocstreetab(void);
+void allocstree(void);
 
 #endif

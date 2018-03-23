@@ -8,10 +8,10 @@ void inittree(void)
     DEBUGCODE(1,maxstacksize=maxwidth=branchcount=leafcount=0);
     getUchars(text, textlen, characters, &alphasize);
     sentinel = text+textlen;
-    streetabsize = BRANCHWIDTH;
+    streesize = BRANCHWIDTH;
 
-    ALLOC(streetab,streetab,Uint,streetabsize + MAXSUCCSPACE);
-    nextfreeentry = streetab;
+    ALLOC(stree,stree,Uint,streesize + MAXSUCCSPACE);
+    nextfreeentry = stree;
     suffixessize = textlen+1;
     maxunusedsuffixes = suffixessize >> 1;
 
