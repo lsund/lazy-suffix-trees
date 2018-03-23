@@ -35,7 +35,7 @@
             if((Uint) (rightpattern-lpatt) ==\
                     lcp(lpatt+1,rightpattern,lefttext+1,sentinel-1))\
             {\
-              STOREINARRAY(resultpos,Uint,256,rootchild & ~LEAFBIT);\
+              STOREINARRAY(resultpos, Uint,256, rootchild & ~LEAFBIT);\
               return True;\
             }\
             return False;\
@@ -154,12 +154,11 @@ static Uint firstchildlp(Uint *nodeptr)
 }
 
 BOOL occurslazy(
-        void *state,
         Uchar *text,
         Uint textlen,
         Uchar *leftpattern,
         Uchar *rightpattern
-        )
+    )
 {
     Uint leftpointer, node, *nodeptr, edgelen, prefixlen;
     Uchar *lefttext, *lpatt = leftpattern, firstchar, edgechar;
@@ -173,7 +172,7 @@ BOOL occurslazy(
     if(!rootevaluated)
     {
         sortByChar0();
-        (void) evalrootsuccedges(suffixes,suffixes+textlen-1);
+        (void) evalrootsuccedges(suffixes, suffixes + textlen - 1);
         rootevaluated = True;
     }
 
@@ -199,27 +198,25 @@ BOOL occurslazy(
         }
 
         firstchar = *lpatt;
-        nodeptr = streetab + GETFIRSTCHILD(nodeptr);
+        nodeptr   = streetab + GETFIRSTCHILD(nodeptr);
 
         while(True)
         {
-            if(ISLEAF(nodeptr))
-            {
+            if(ISLEAF(nodeptr)) {
+
                 leftpointer = GETLP(nodeptr);
                 lefttext = text + leftpointer;
                 CHECKLEAFEDGE;
-                if(ISRIGHTMOSTCHILD(nodeptr))
-                {
+
+                if(ISRIGHTMOSTCHILD(nodeptr)) {
                     return False;
                 }
                 nodeptr++;
-            } else
-            {
-                if(ISUNEVALUATED(nodeptr))
-                {
+            } else {
+
+                if(ISUNEVALUATED(nodeptr)) {
                     leftpointer = GETLPUNEVAL(nodeptr);
-                } else
-                {
+                } else {
                     leftpointer = GETLP(nodeptr);
                 }
                 lefttext = text + leftpointer;
@@ -235,8 +232,7 @@ BOOL occurslazy(
                 nodeptr += BRANCHWIDTH;
             }
         }
-        if(ISUNEVALUATED(nodeptr))
-        {
+        if(ISUNEVALUATED(nodeptr)) {
             node = NODEINDEX(nodeptr);
             evaluatenodelazy(node);
             nodeptr = streetab + node;
@@ -247,7 +243,6 @@ BOOL occurslazy(
 }
 
 BOOL occurseager(
-        /*@unused@*/ void *state,
         Uchar *text,
         /*@unused@*/ Uint textlen,
         Uchar *leftpattern,

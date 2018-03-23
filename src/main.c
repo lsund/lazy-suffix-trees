@@ -50,7 +50,7 @@ int main(int argc,char *argv[])
     /* int maxpat = 100; */
     /* wotd_benchmark(evaleager,argv,argc,rho, minpat, maxpat); */
 
-    wotd(evaleager, &patterns, i);
+    wotd(evaleager, i, &patterns);
 
     freetextspace(text,textlen);
 

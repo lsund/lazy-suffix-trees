@@ -19,15 +19,14 @@ extern BOOL rootevaluated;
 // Functions
 
 BOOL occurslazy(
-        void *state,
         Uchar *text,
         Uint textlen,
         Uchar *leftpattern,
         Uchar *rightpattern
-        );
+    );
 
 
-BOOL occurseager(/*@unused@*/ void *state,Uchar *text,
+BOOL occurseager(Uchar *text,
                         /*@unused@*/ Uint textlen,
                         Uchar *leftpattern,Uchar *rightpattern);
 #endif

@@ -12,14 +12,14 @@
 */
 
 /*
- * Modified by Ludvig Sundström 2018
+ * Modified by Ludvig Sundström 2018 with permission from Stefan Kurtz
+ * For full source control tree, see https://github.com/lsund/wotd
  */
 
 #include "searchpat.h"
 
-void search_one_pattern(
-        BOOL (*occurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
-        void *occursinfo,
+BOOL search_one_pattern(
+        BOOL (*occurs) (Uchar *,Uint,Uchar *,Uchar *),
         Uchar *text,
         Uint textlen,
         Uint patternlen,
@@ -61,18 +61,23 @@ void search_one_pattern(
 
     if(!special) {
 
-        patternoccurs =
-            occurs(occursinfo, text, textlen, pattern, pattern+patternlen-1);
-        printf("%d\n", patternoccurs);
+        patternoccurs = occurs(
+                            text,
+                            textlen,
+                            pattern,
+                            pattern+ patternlen - 1
+                        );
 
     } else {
         fprintf(stderr, "Special character: %c", c);
         exit(EXIT_FAILURE);
     }
+
+    return patternoccurs;
 }
 
 void searchpattern(
-        BOOL(*occurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
+        BOOL(*occurs) (Uchar *,Uint,Uchar *,Uchar *),
         void *occursinfo,
         Uchar *text,
         Uint textlen,
@@ -154,7 +159,7 @@ void searchpatternapprox(
                   (Showuint) trials);
 }
 void searchpattern_benchmark(
-        BOOL (*occurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
+        BOOL (*occurs) (Uchar *,Uint,Uchar *,Uchar *),
         void *occursinfo,
         Uchar *text,Uint textlen,
         float trialpercentage,
@@ -240,7 +245,7 @@ void searchpattern_benchmark(
             }
 
             patternoccurs =
-                occurs(occursinfo, text, textlen, pattern, pattern+patternlen-1);
+                occurs(text, textlen, pattern, pattern+patternlen-1);
         }
     }
 

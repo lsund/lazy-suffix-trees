@@ -23,6 +23,7 @@
 #include "lcp.h"
 #include "eval.h"
 #include "occurs.h"
+#include "searchpat.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -33,7 +34,7 @@ void inittree(void);
 
 void evaluateeager(void);
 
-void wotd(BOOL evaleager, char ***patterns_p, int npatterns);
+void wotd(BOOL evaleager, int npatterns, char ***o_patterns);
 
 
 #endif

@@ -1,35 +1,161 @@
+/*
+  Copyright by Stefan Kurtz (C) 1999-2003
+  =====================================
+  You may use, copy and distribute this file freely as long as you
+   - do not change the file,
+   - leave this copyright notice in the file,
+   - do not make any profit with the distribution of this file
+   - give credit where credit is due
+  You are not allowed to copy or distribute this file otherwise
+  The commercial usage and distribution of this file is prohibited
+  Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
+*/
+
+/*
+ * Modified by Ludvig Sundström 2018 with permission from Stefan Kurtz.
+ * For full source control tree, see https://github.com/lsund/wotd
+ */
+
 #include "wotd.h"
 
-Uchar *text,                   // points to input string \(t\) of length \(n\)
-      *sentinel,               // points to \(t[n]\) which is undefined
-      characters[UCHAR_MAX + 1], // characters in \(t\) in alphabetical order
-      **suffixes,              // array of pointers to suffixes of \(t\)
-      **suffixbase,            // pointers into suffixes are w.r.t.\ this var
-      **sbuffer,               // buffer to sort suffixes in \texttt{sortByChar}
-      **sbufferspace = NULL;  // space to be used by \texttt{sbuffer}
+///////////////////////////////////////////////////////////////////////////////
+// Global Strings
 
-Uint lastrootchild, maxwidth, branchcount, leafcount;
+// points to input string `t` of length `n`
+Uchar *text;
 
-Uint  textlen,                 // length of \(t\)
-      maxstacksize,
-      alphasize,               // size of alphabet \(\Sigma\)
-      alphaindex[UCHAR_MAX + 1], // index of characters in \(\Sigma\)
-      occurrence[UCHAR_MAX + 1], // number of occurrences of character
-      *streetab = NULL,        // table to hold suffix tree representation
-      streetabsize,            // number of integers in \texttt{streetab} allocated
-      *nextfreeentry,          // pointer to next unused element in \texttt{streetab}
-      sbufferwidth,            // number of elements in \texttt{sbufferspace}
-      maxsbufferwidth,         // maximal number of elements in \texttt{sbufferspace}
-      suffixessize,            // number of unprocessed suffixes (for eager)
-      maxunusedsuffixes,       // when reached, then move and halve space for suffixes
-      rootchildtab[UCHAR_MAX + 1]; // constant time access to successors of \emph{root}
+// points to `t[n] = undefined`
+Uchar *sentinel;
 
-BOOL  rootevaluated;   // flag indicating that the root has been evaluated
+// characters in `t` in alphabetical order
+Uchar characters[UCHAR_MAX + 1];
+
+// array of pointers to suffixes of `t`
+Uchar **suffixes;
+
+// pointers into suffixes are with relation to this variable
+Uchar **suffixbase;
+
+// buffer for sorting sort suffixes in `src/sort.c`
+Uchar **sbuffer;
+
+// space to be used by `sbuffer`
+Uchar **sbufferspace = NULL;
+
+///////////////////////////////////////////////////////////////////////////////
+// Global Integers
+
+Uint lastrootchild;
+
+Uint maxwidth;
+
+Uint branchcount;
+
+Uint leafcount;
+
+// length of `t`
+Uint  textlen;
+
+Uint maxstacksize;
+
+// size of the alphabet `A`
+Uint alphasize;
+
+// index of characters in the alphabet `A`
+Uint alphaindex[UCHAR_MAX + 1];
+
+// number of occurrences of all characters
+Uint occurrence[UCHAR_MAX + 1];
+
+// table to hold suffix tree representation
+Uint *streetab = NULL;
+
+// number of integers in `streetab` allocated
+Uint streetabsize;
+
+// pointer to next unused element in `streetab`
+Uint *nextfreeentry;
+
+// number of elements in `sbufferspace`
+Uint sbufferwidth;
+
+// maximal number of elements in `sbufferspace`
+Uint maxsbufferwidth;
+
+// number of unprocessed suffixes (for eager evaluation)
+Uint suffixessize;
+
+// when reached, then move and halve space for suffixes
+Uint maxunusedsuffixes;
+
+// constant time access to successors of `root`
+Uint rootchildtab[UCHAR_MAX + 1];
+
+// flag indicating that the root has been evaluated
+BOOL  rootevaluated;
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Functions
+
+
+void wotd(BOOL evaleager, int npatterns, char ***o_patterns)
+{
+
+    char **patterns = *o_patterns;
+
+    if(evaleager) {
+
+        inittree();
+        initclock();
+        evaluateeager();
+        DEBUGCODE(3,showstreetab());
+        DEBUGCODE(3,showtree());
+        FREESPACE(suffixes);
+
+    } else {
+
+        initclock();
+        inittree();
+
+    }
+
+    int noccurs = 0;
+    FILE *fp = createfilehandle("", 0, "data/out.txt", "a");
+
+    for(int j = 0; j < npatterns; j++) {
+        BOOL res =
+            search_one_pattern(
+                evaleager ? occurseager : occurslazy,
+                text,
+                textlen,
+                strlen(patterns[j]),
+                patterns[j]
+            );
+        printf("%s occurs? %d\n", patterns[j], res);
+        if (res) {
+            fprintf(fp, "%s\n", patterns[j]);
+            noccurs++;
+        }
+    }
+    printf("noccurs: %d\n", noccurs);
+
+    DEBUG3(2,"#maxstack=%lu %lu %lu ",
+            (Showuint) maxstacksize,
+            (Showuint) textlen,
+            (Showuint) NODEINDEX(nextfreeentry));
+    DEBUG2(2,"%lu %.2f ",(Showuint) maxwidth,(double) maxwidth/textlen);
+    DEBUG2(2,"%lu %.2f\n",(Showuint) sbufferwidth,(double) sbufferwidth/textlen);
+    DEBUG4(2,"#q=%lu l=%lu %lu %.2f\n",
+            (Showuint) branchcount,
+            (Showuint) leafcount,
+            (Showuint) (branchcount*BRANCHWIDTH+leafcount),
+            (double) (4*(branchcount*BRANCHWIDTH+ leafcount))/textlen);
+}
+
 
 static void wotd_benchmark(
                 BOOL evaleager,
-                char *argv[],
-                int argc,
                 float rho,
                 Uint minpat,
                 Uint maxpat
@@ -49,19 +175,14 @@ static void wotd_benchmark(
 
     if(maxpat > 0 && maxpat <= textlen && rho != 0.0)
     {
-        searchpattern(
+        searchpattern_benchmark(
                 evaleager ? occurseager : occurslazy,
-                argv,
-                argc,
                 (void *) &resultpos,
                 text,
                 textlen,
                 rho,
                 minpat,
-                maxpat,
-                showpattern,
-                NULL
-                );
+                maxpat);
     }
 
     FREEARRAY(&resultpos,Uint);
@@ -77,54 +198,3 @@ static void wotd_benchmark(
             (Showuint) (branchcount*BRANCHWIDTH+leafcount),
             (double) (4*(branchcount*BRANCHWIDTH+ leafcount))/textlen);
 }
-
-void wotd(BOOL evaleager, char ***patterns_p, int npatterns)
-{
-
-    char **patterns = *patterns_p;
-    ArrayUint resultpos;
-
-    if(!evaleager) {
-
-        initclock();
-        inittree();
-
-    } else {
-
-        inittree();
-        initclock();
-        evaluateeager();
-        DEBUGCODE(3,showstreetab());
-        DEBUGCODE(3,showtree());
-        FREESPACE(suffixes);
-    }
-
-    INITARRAY(&resultpos,Uint);
-
-    int j;
-    for(j = 0; j < npatterns; j++) {
-        printf("%s\n", patterns[j]);
-        search_one_pattern(
-                evaleager ? occurseager : occurslazy,
-                (void *) &resultpos,
-                text,
-                textlen,
-                strlen(patterns[j]),
-                patterns[j]
-            );
-    }
-
-    FREEARRAY(&resultpos,Uint);
-    DEBUG3(2,"#maxstack=%lu %lu %lu ",
-            (Showuint) maxstacksize,
-            (Showuint) textlen,
-            (Showuint) NODEINDEX(nextfreeentry));
-    DEBUG2(2,"%lu %.2f ",(Showuint) maxwidth,(double) maxwidth/textlen);
-    DEBUG2(2,"%lu %.2f\n",(Showuint) sbufferwidth,(double) sbufferwidth/textlen);
-    DEBUG4(2,"#q=%lu l=%lu %lu %.2f\n",
-            (Showuint) branchcount,
-            (Showuint) leafcount,
-            (Showuint) (branchcount*BRANCHWIDTH+leafcount),
-            (double) (4*(branchcount*BRANCHWIDTH+ leafcount))/textlen);
-}
-

@@ -18,9 +18,8 @@
 
 #define MAXPATTERNLEN 1024
 
-void search_one_pattern(
-        BOOL (*occurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
-        void *occursinfo,
+BOOL search_one_pattern(
+        BOOL (*occurs) (Uchar *,Uint,Uchar *,Uchar *),
         Uchar *text,
         Uint textlen,
         Uint patternlen,
@@ -29,9 +28,10 @@ void search_one_pattern(
 
 
 void searchpattern_benchmark(
-        BOOL (*occurs) (void *,Uchar *,Uint,Uchar *,Uchar *),
+        BOOL (*occurs) (Uchar *,Uint,Uchar *,Uchar *),
         void *occursinfo,
-        Uchar *text,Uint textlen,
+        Uchar *text,
+        Uint textlen,
         float trialpercentage,
         Uint minpatternlen,
         Uint maxpatternlen

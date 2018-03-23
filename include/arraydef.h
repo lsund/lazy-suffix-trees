@@ -1,17 +1,15 @@
 /*
-  Copyright by Stefan Kurtz (C) 1999-2003
-  =====================================
-  You may use, copy and distribute this file freely as long as you
+   Copyright by Stefan Kurtz (C) 1999-2003
+   =====================================
+   You may use, copy and distribute this file freely as long as you
    - do not change the file,
    - leave this copyright notice in the file,
    - do not make any profit with the distribution of this file
    - give credit where credit is due
-  You are not allowed to copy or distribute this file otherwise
-  The commercial usage and distribution of this file is prohibited
-  Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
+   You are not allowed to copy or distribute this file otherwise
+   The commercial usage and distribution of this file is prohibited
+   Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
 */
-
-//\IgnoreLatex{
 
 #ifndef ARRAYDEF_H
 #define ARRAYDEF_H
@@ -20,27 +18,26 @@
 #include "failures.h"
 #include "spacedef.h"
 
-//}
 
 /*
-  This file defines macros to conveniently declare and
-  manipulate dynamic arrays whose size grow on demand. Each dynamic
-  array over some type \texttt{T}
-  is implemented by a structure consisting of three components:
-  \begin{enumerate}
-  \item
-  \texttt{space\#\#T} is a pointer to the space block of type \texttt{T}
-  allocated for the array.
-  \item
-  \texttt{allocated\#\#T} is an \texttt{Uint} storing the number
-  of entries in the array currently allocated.
-  \item
-  \texttt{nextfree\#\#T} holds the smallest index of the array where no
-  value is stored.
-  \end{enumerate}
-  Here \texttt{\#\#} is the concatenation operator of the C-preprocessor.
-  The following macro expands to a corresponding type definition over
-  some given \texttt{TYPE}.
+   This file defines macros to conveniently declare and
+   manipulate dynamic arrays whose size grow on demand. Each dynamic
+   array over some type \texttt{T}
+   is implemented by a structure consisting of three components:
+   \begin{enumerate}
+   \item
+   \texttt{space\#\#T} is a pointer to the space block of type \texttt{T}
+   allocated for the array.
+   \item
+   \texttt{allocated\#\#T} is an \texttt{Uint} storing the number
+   of entries in the array currently allocated.
+   \item
+   \texttt{nextfree\#\#T} holds the smallest index of the array where no
+   value is stored.
+   \end{enumerate}
+   Here \texttt{\#\#} is the concatenation operator of the C-preprocessor.
+   The following macro expands to a corresponding type definition over
+   some given \texttt{TYPE}.
 */
 
 #define DECLAREARRAYSTRUCT(TYPE)\
@@ -54,7 +51,7 @@
   \texttt{INITARRAY} initializes an empty array.
 */
 
-#define INITARRAY(A,TYPE)\
+#define INITARRAY(A, TYPE)\
         (A)->space##TYPE = NULL;\
         (A)->allocated##TYPE = (A)->nextfree##TYPE = 0
 

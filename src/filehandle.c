@@ -213,15 +213,17 @@ static void assignfilehandleinformation(char *file,
   a file handle is generated storing all relevant information.
 */
 
-/*@null@*/ FILE *createfilehandle(char *file,
-                                  const Uint line,
-                                  const char *path,
-                                  const char *mode)
+FILE *createfilehandle(
+        char *file,
+        const Uint line,
+        const char *path,
+        const char *mode
+    )
 {
   FILE *fp;
 
   FUNCTIONCALL;
-  fp = fopen(path,mode);
+  fp = fopen(path, mode);
   if(fp == NULL)
   {
     ERROR2("cannot open file \"%s\": %s",path,strerror(errno));
@@ -350,7 +352,7 @@ Sint writetofilehandle(char *file,
 {
   FUNCTIONCALL;
 
-  if(fwrite(ptr, (size_t) size, (size_t) nmemb,stream) != (size_t) nmemb)
+  if(fwrite(ptr, (size_t) size, (size_t) nmemb, stream) != (size_t) nmemb)
   {
     ERROR6("%s %lu: cannot write %lu items of size %lu to %s: %s",\
            file,(Showuint) line,(Showuint) nmemb,(Showuint) size,
