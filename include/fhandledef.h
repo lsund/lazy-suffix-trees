@@ -66,12 +66,6 @@ FILE *createfilehandle(
     );
 
 
-Sint deletefilehandle(
-        char *file,
-        Uint line,
-        FILE *fp
-    );
-
 void wraptmpfiledesc(Tmpfiledesc *tmpfiledesc);
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -80,9 +74,6 @@ void wraptmpfiledesc(Tmpfiledesc *tmpfiledesc);
 
 #define CREATEFILEHANDLE(PATH,MODE)\
         createfilehandle(__FILE__,(Uint) __LINE__,PATH,MODE)
-
-#define DELETEFILEHANDLE(FP)\
-        deletefilehandle(__FILE__,(Uint) __LINE__,FP)
 
 #define DECLAREREADFUNCTION(TYPE)\
         static Sint readnext ## TYPE(TYPE *read ## TYPE,FILE *fp)\

@@ -1,7 +1,7 @@
 #ifndef PREPROCDEF_H
 #define PREPROCDEF_H
 
-#define BRANCHWIDTH             UintConst(2)
+#define BRANCHWIDTH         UintConst(2)
 
 #define NODEINDEX(N)        ((Uint) ((N) - stree))
 

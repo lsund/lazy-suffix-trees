@@ -38,7 +38,7 @@ void wotd(BOOL evaleager, int npatterns, char ***o_patterns);
 
 void wotd_benchmark(
         BOOL evaleager,
-        float rho,
+        Uint trials,
         Uint minpat,
         Uint maxpat
     );

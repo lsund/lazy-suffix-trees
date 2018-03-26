@@ -182,41 +182,4 @@ FILE *createfilehandle(
   return fp;
 }
 
-/*EE
-  The following function closes a file and deletes the corresponding
-  a file handle. The file is identified by a file pointer.
-  The return code is 0, if everything is
-  okay. Otherwise, a negative error code is returned.
-*/
-Sint deletefilehandle(char *file,
-                      Uint line,
-                      FILE *fp)
-{
-  Uint fd;
-
-  fd = fromfileptr2filedesc(file,line,True,fp);
-  if(fclose(fp) != 0)
-  {
-    ERROR2("cannot close file \"%s\": %s",
-           filehandle[fd].path,strerror(errno));
-    return (Sint) -1;
-  }
-  DEBUG5(2,"# file %s, line %lu: close file \"%s\" with mode \"%s\" "
-           "at handle %lu\n",
-         file,
-         (Showuint) line,
-         filehandle[fd].path,
-         filehandle[fd].createmode,
-         (Showuint) fd);
-  strcpy(filehandle[fd].createmode,"");
-  filehandle[fd].createfile = NULL;
-  filehandle[fd].createline = 0;
-  currentopen--;
-  if(currentopen == 0)
-  {
-    FREESPACE(filehandle);
-    allocatedFilehandle = 0;
-  }
-  return 0;
-}
 

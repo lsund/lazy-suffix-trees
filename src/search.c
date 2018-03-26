@@ -44,11 +44,11 @@ static void checkargs(const Uint n, const Uint m)
 }
 
 
-static int checkargs_benchmark(
+static void checkargs_benchmark(
                 const Uint n,
                 const Uint m_max,
                 const Uint m_min,
-                const float trialpercentage
+                const Uint trials
             )
 {
     checkargs(n, m_max);
@@ -63,15 +63,10 @@ static int checkargs_benchmark(
         exit(EXIT_FAILURE);
     }
 
-    Uint trials;
-    if(trialpercentage >= 0.0) {
-        trials = (Uint) (trialpercentage * n);
-    } else {
-        fprintf(stderr,"trialpercentage negative %f", trialpercentage);
+    if(trials < 0) {
+        fprintf(stderr,"trials negative %u", trials);
         exit(EXIT_FAILURE);
     }
-
-    return trials;
 }
 
 
@@ -149,7 +144,7 @@ void searchpattern_benchmark(
         BOOL (*occurs) (Uchar *,Uint,Uchar *,Uchar *),
         Uchar *text,
         Uint n,
-        float trialpercentage,
+        Uint trials,
         Uint m_min,
         Uint m_max
     )
@@ -157,19 +152,11 @@ void searchpattern_benchmark(
     Uint i, m, patternstat[MAXPATTERNLEN+1] = {0};
     BOOL patternoccurs;
 
-    Uint trials = checkargs_benchmark(n, m_max, m_min, trialpercentage);
-
-    printf(
-        "# trials %lu minpat %lu maxpat %lu\n",
-        (Showuint) trials,
-        (Showuint) m_min,
-        (Showuint) m_max
-    );
+    checkargs_benchmark(n, m_max, m_min, trials);
 
     srand48(42349421);
 
-    for(i = 0; i < trials; i++)
-    {
+    for(i = 0; i < trials; i++) {
         m = randlen(m_min, m_max);
         patternstat[m]++;
 
@@ -191,6 +178,6 @@ void searchpattern_benchmark(
 
     DEBUGCODE(1,showpatternstat(&patternstat[0]));
 
-    DEBUG1(1,"%lu pattern processed as expected\n",(Showuint) trials);
+    /* DEBUG1(1,"%lu pattern processed as expected\n",(Showuint) trials); */
 }
 

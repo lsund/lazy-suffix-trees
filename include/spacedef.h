@@ -23,7 +23,6 @@ void spaceblockinfo(char *file,Uint linenum,void *ptr);
 void activeblocks(void);
 void checkspaceleak(void);
 void showspace(void);
-Uint getspacepeak(void);
 void showmemsize(void);
 void addspace(Uint);
 void subtractspace(Uint);
@@ -42,7 +41,6 @@ Filedesctype simplefileOpen(char *file,Uint line,
 Sint deletememorymap(char *file,Uint line,void *mappedfile);
 void mmcheckspaceleak(void);
 void mmshowspace(void);
-Uint mmgetspacepeak(void);
 Sint setlocalpagesize(void);
 
 #ifdef __cplusplus

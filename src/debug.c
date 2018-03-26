@@ -26,11 +26,9 @@
 #include "types.h"
 #include "fhandledef.h"
 #include "debugdef.h"
-#include "errordef.h"
+#include "error.h"
 #include "failures.h"
 #include "megabytes.h"
-
-#include "filehandle.pr"
 
 #define MAXPATTERNLEN 1024
 
@@ -157,25 +155,6 @@ FILE *getdbgfp(void)
   return debugfileptr;
 }
 
-/*EE
-  The following function closes the debug output pointer, if it is not
-  standard out.
-*/
-
-void debugclosefile(void)
-{
-  if(debugfileptr == NULL)
-  {
-    fprintf(stderr,"cannot close debugfileptr\n");
-    exit(EXIT_FAILURE);
-  }
-  if(DELETEFILEHANDLE(debugfileptr) != 0)
-  {
-    fprintf(stderr,"%s\n",messagespace());
-    NOTSUPPOSED;
-  }
-}
-
 static void showargs(char *argv[], Argctype argc)
 {
     Argctype argnum;
@@ -186,7 +165,7 @@ static void showargs(char *argv[], Argctype argc)
     (void) putc('\n',stderr);
 }
 
-static void showpatternstat(Uint *patternstat)
+void showpatternstat(Uint *patternstat)
 {
     Uint i;
 
@@ -227,7 +206,7 @@ void showrootchildtab(void)
     printf("#~-successor of root is leaf %lu\n",(Showuint) textlen);
 }
 
-static void showstree(void)
+void showstree(void)
 {
   Uint leftpointer, *nodeptr = stree;
 
@@ -333,7 +312,7 @@ static void showsubtree(Uint *father,int indent)
   scanedgelist((Uint) (UCHAR_MAX+1),nodeptr,indent);
 }
 
-static void showtree(void)
+void showtree(void)
 {
   Uint leafnum, edgelen, *nodeptr, *rcptr;
   Uchar *lefttext;

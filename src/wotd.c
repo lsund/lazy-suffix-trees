@@ -121,7 +121,8 @@ void wotd(BOOL evaleager, int npatterns, char ***o_patterns)
     }
 
     int noccurs = 0;
-    FILE *fp = createfilehandle("", 0, "data/out.txt", "a");
+    fclose(fopen("data/out.txt", "w"));
+    FILE *fp = fopen("data/out.txt", "a");
 
     for(int j = 0; j < npatterns; j++) {
         BOOL res =
@@ -132,39 +133,29 @@ void wotd(BOOL evaleager, int npatterns, char ***o_patterns)
                 strlen(patterns[j]),
                 patterns[j]
             );
-        printf("%s occurs? %d\n", patterns[j], res);
+        /* printf("%s occurs? %d\n", patterns[j], res); */
         if (res) {
             fprintf(fp, "%s\n", patterns[j]);
+            /* printf("%s\n", patterns[j]); */
             noccurs++;
         }
     }
     printf("noccurs: %d\n", noccurs);
+    fprintf(stdout, "%.2f\n", getruntime()/(double) ITER);
 
-    DEBUG3(2,"#maxstack=%lu %lu %lu ",
-            (Showuint) maxstacksize,
-            (Showuint) textlen,
-            (Showuint) NODEINDEX(nextfreeentry));
-    DEBUG2(2,"%lu %.2f ",(Showuint) maxwidth,(double) maxwidth/textlen);
-    DEBUG2(2,"%lu %.2f\n",(Showuint) sbufferwidth,(double) sbufferwidth/textlen);
-    DEBUG4(2,"#q=%lu l=%lu %lu %.2f\n",
-            (Showuint) branchcount,
-            (Showuint) leafcount,
-            (Showuint) (branchcount*BRANCHWIDTH+leafcount),
-            (double) (4*(branchcount*BRANCHWIDTH+ leafcount))/textlen);
-    DELETEFILEHANDLE(fp);
+    fclose(fp);
 }
 
 
 void wotd_benchmark(
         BOOL evaleager,
-        float rho,
+        Uint trials,
         Uint minpat,
         Uint maxpat
     )
 {
     inittree();
-    if(evaleager)
-    {
+    if (evaleager) {
         initclock();
         evaluateeager();
         DEBUGCODE(3,showstree());
@@ -172,26 +163,26 @@ void wotd_benchmark(
         FREESPACE(suffixes);
     }
 
-    if(maxpat > 0 && maxpat <= textlen && rho != 0.0)
-    {
+    if (maxpat > 0 && maxpat <= textlen && trials > 0) {
         searchpattern_benchmark(
                 evaleager ? occurseager : occurslazy,
                 text,
                 textlen,
-                rho,
+                trials,
                 minpat,
                 maxpat);
     }
+    /* fclose(fopen("data/out.txt", "w")); */
+    FILE *fp = fopen("data/out.txt", "a");
+    // trials patternlen textlen nbytes spaceUsage time
+    fprintf(fp, "%lu ", (Showuint) trials);
+    fprintf(fp, "%lu ", (Showuint) (maxpat + minpat) / 2);
+    fprintf(fp, "%lu ", (Showuint) textlen);
+    fprintf(fp, "%lu ", (Showuint) (branchcount * BRANCHWIDTH + leafcount));
+    fprintf(fp, "%.2f ",
+            (double) (sizeof(int) * (branchcount * BRANCHWIDTH + leafcount)) / textlen);
+    fprintf(fp, "%.2f\n", getruntime()/(double) ITER);
 
-    DEBUG3(2,"#maxstack=%lu %lu %lu ",
-            (Showuint) maxstacksize,
-            (Showuint) textlen,
-            (Showuint) NODEINDEX(nextfreeentry));
-    DEBUG2(2,"%lu %.2f ",(Showuint) maxwidth,(double) maxwidth/textlen);
-    DEBUG2(2,"%lu %.2f\n",(Showuint) sbufferwidth,(double) sbufferwidth/textlen);
-    DEBUG4(2,"#q=%lu l=%lu %lu %.2f\n",
-            (Showuint) branchcount,
-            (Showuint) leafcount,
-            (Showuint) (branchcount*BRANCHWIDTH+leafcount),
-            (double) (4*(branchcount*BRANCHWIDTH+ leafcount))/textlen);
+    /* fprintf(fp, "branchcount=%lu\n", (Showuint) branchcount); */
+    /* fprintf(fp, "leafcount=%lu\n", (Showuint) leafcount); */
 }

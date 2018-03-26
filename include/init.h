@@ -19,6 +19,7 @@ extern Uchar    *text,
 
 extern Uint     textlen,
                 alphasize,
+                maxwidth,
                 streesize,
                 suffixessize,
                 maxunusedsuffixes,

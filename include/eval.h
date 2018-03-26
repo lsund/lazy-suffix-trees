@@ -49,6 +49,8 @@ extern Uchar *text, *sentinel, **suffixbase, **sbuffer;
 
 extern Uint
     *nextfreeentry,
-    rootchildtab[UCHAR_MAX + 1], suffixessize, maxunusedsuffixes;
+    rootchildtab[UCHAR_MAX + 1], suffixessize,
+    maxunusedsuffixes, leafcount, branchcount,
+    lastrootchild;
 
 #endif

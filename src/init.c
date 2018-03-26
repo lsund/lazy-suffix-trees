@@ -5,7 +5,7 @@ void inittree(void)
 {
     Uint i;
 
-    DEBUGCODE(1,maxstacksize=maxwidth=branchcount=leafcount=0);
+    DEBUGCODE(1, maxstacksize=maxwidth=branchcount=leafcount=0);
     getUchars(text, textlen, characters, &alphasize);
     sentinel = text+textlen;
     streesize = BRANCHWIDTH;

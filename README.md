@@ -17,7 +17,7 @@ year =          2003
 
 # Credits
 
-All credit to Stefan Kurtz for commit
+This is a reimplementation of a suffix tree program by Stefan Kurtz. See
 `fd3d0c8769696459a0957dc62604ab974f097866 "Initial Commit"`
 
 All Later modifications were made under permission by by Stefan Kurz.

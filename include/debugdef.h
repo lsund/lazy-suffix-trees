@@ -212,6 +212,8 @@ void showrootchildtab(void);
 
 //}
 
+///////////////////////////////////////////////////////////////////////////////
+// Functions
 Sint getdebuglevel(void);
 BOOL getdebugwhere(void);
 void showmemsize(void);
@@ -222,7 +224,11 @@ void debugclosefile(void);
 
 void printAlpha (char *s);
 
-//\IgnoreLatex{
+void showtree(void);
+void showstree(void);
+void showpatternstat(Uint *patternstat);
+
+    //\IgnoreLatex{
 
 #ifdef __cplusplus
 }

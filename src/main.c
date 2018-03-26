@@ -12,16 +12,13 @@ int main(int argc,char *argv[])
     CHECKARGNUM(4,"(-lazy|-eager) filename patternfile");
     DEBUGLEVELSET;
 
-    if(strcmp(argv[1],"-lazy") != 0 && strcmp(argv[1],"-eager") != 0)
-    {
+    if (strcmp(argv[1],"-lazy") != 0 && strcmp(argv[1],"-eager") != 0) {
         fprintf(stderr,"Illegal option \"%s\"\n",argv[1]);
         exit(EXIT_FAILURE);
     }
-    if(strcmp(argv[1],"-eager") == 0)
-    {
+    if (strcmp(argv[1],"-eager") == 0) {
         evaleager = True;
-    } else
-    {
+    } else {
         evaleager = False;
     }
 
@@ -45,12 +42,15 @@ int main(int argc,char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    /* float rho = 0.5; */
-    /* int minpat = 5; */
-    /* int maxpat = 1000; */
-    /* wotd_benchmark(evaleager, rho, minpat, maxpat); */
+    int minpat = 10;
+    int maxpat = 20;
+    for (int k = 0; k < 100; k++) {
+        int trials = k * 10000;
+        wotd_benchmark(evaleager, trials, minpat, maxpat);
+    }
+        /* wotd_benchmark(evaleager, 351346, minpat, maxpat); */
 
-    wotd(evaleager, i, &patterns);
+    /* wotd(evaleager, i, &patterns); */
 
     freetextspace(text,textlen);
 
@@ -59,14 +59,5 @@ int main(int argc,char *argv[])
     }
     free(patterns);
 
-    if(evaleager)
-    {
-        SHOWTIME("wotdeager");
-        SHOWSPACE("wotdeager");
-    } else
-    {
-        SHOWTIME("wotdlazy");
-        SHOWSPACE("wotdlazy");
-    }
     return EXIT_SUCCESS;
 }

@@ -23,7 +23,7 @@ LDFLAGS+=-m64
 # CFLAGS+=-O3 -Wall -Werror -DNOSPACEBOOKKEEPING
 CFLAGS+=-O3 -Wall -DNOSPACEBOOKKEEPING
 
-# CFLAGS+=-DDEBUG
+CFLAGS+=-DDEBUG
 CFLAGS+=-g
 
 # SPLINTFLAGS=-DDEBUG -f Splintoptions
@@ -38,6 +38,8 @@ OBJ= obj/boyermoore.o\
     obj/seterror.o\
     obj/get_alpha.o \
     obj/spaceman.o\
+	obj/debug.o\
+	obj/util.o\
     obj/sort.o\
     obj/lcp.o\
     obj/wotd.o\
@@ -59,7 +61,7 @@ wotd: ${OBJ}
 	${CC} ${LDFLAGS} ${OBJ} -o bin/$@
 
 remake: clean all
-	./bin/wotd -lazy data/data.xml data/10000.txt
+	./bin/wotd -eager data/dataset/005.txt data/10000.txt
 
 clean:
 	rm -rf obj bin

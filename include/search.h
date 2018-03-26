@@ -46,7 +46,7 @@ void searchpattern_benchmark(
         BOOL (*occurs) (Uchar *,Uint,Uchar *,Uchar *),
         Uchar *text,
         Uint textlen,
-        float trialpercentage,
+        Uint trials,
         Uint minpatternlen,
         Uint maxpatternlen
     );
