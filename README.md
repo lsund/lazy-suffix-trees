@@ -1,6 +1,6 @@
 # WOTD
 
-This repository is based on the implementation by Stefan Kurz, according to the
+This repository is an implementation of lazy suffix tree construction, according to the
 following :
 
 ```
