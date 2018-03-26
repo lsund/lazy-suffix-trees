@@ -151,6 +151,7 @@ void wotd(BOOL evaleager, int npatterns, char ***o_patterns)
             (Showuint) leafcount,
             (Showuint) (branchcount*BRANCHWIDTH+leafcount),
             (double) (4*(branchcount*BRANCHWIDTH+ leafcount))/textlen);
+    DELETEFILEHANDLE(fp);
 }
 
 

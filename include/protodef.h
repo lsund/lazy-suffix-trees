@@ -89,38 +89,6 @@ double getruntime(void);
 
 Uint getclockticks(void);
 
-/*@null@*/ FILE *createfilehandle(char *file,
-                                  const Uint line,
-                                  const char *path,
-                                  const char *mode);
-
-Sint maketmpfile(char *file,
-                 Uint line,
-                 Tmpfiledesc *tmpfiledesc,
-                 char *fileprefix);
-
-void wraptmpfiledesc(Tmpfiledesc *tmpfiledesc);
-
-Sint deletefilehandle(char *file,
-                      Uint line,
-                      FILE *fp);
-
-Sint writetofilehandle(char *file,
-                       Uint line,
-                       void *ptr,
-                       Uint size,
-                       Uint nmemb,
-                       FILE *stream);
-
-Sint readfromfilehandle(char *file,
-                       Uint line,
-                       void *ptr,
-                       Uint size,
-                       Uint nmemb,
-                       FILE *stream);
-
-void checkfilehandles(void);
-
 Sint maxerrormsg(void);
 
 char *messagespace(void);

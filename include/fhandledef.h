@@ -11,8 +11,6 @@
   Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
 */
 
-//\IgnoreLatex{
-
 #ifndef FHANDLEDEF_H
 #define FHANDLEDEF_H
 #include <stdio.h>
@@ -22,6 +20,10 @@
 #define TMPFILESUFFIX        "XXXXXX"
 #define NUMBEROFX            strlen(TMPFILESUFFIX)
 #define TMPFILEPREFIX        "/tmp/Vmatch"
+
+// The maximal length of the string specifying the open mode of the
+// call to function createfilehandle.
+#define MAXOPENMODE 2
 
 #define WRITEMODE  "wb"   // writing in binary mode, important for MS-Windows
 #define READMODE   "rb"   // reading in binary mode, important for MS-Windows
@@ -34,39 +36,53 @@ typedef struct
   FILE *tmpfileptr;
 } Tmpfiledesc;
 
-//}
+// This file contains functions to store file handles for user opened files. A
+// file handle consists of
+// 1. The filepointer
+// 2. A string describing the open mode, corresponding to the second argument
+//    of fopen.
+// 3. The line number and the program file call where the open function was
+//    done.
+//
+// `file` and `line` if they occur are always the filename and linenumber,
+// where the function is called from.
+typedef struct filehandle {
+  char path[PATH_MAX + 1],
+       createmode[MAXOPENMODE + 1],
+       *createfile;
+  Uint createline;
+} Filehandle;
 
-/*
-  This file defines macros to simplify the calls to the
-  functions
-  \begin{itemize}
-  \item
-  \texttt{createfilehandle},
-  \item
-  \texttt{maketmpfile},
-  \item
-  \texttt{deletefilehandle},
-  \item
-  \texttt{writetofilehandle},
-  \item
-  and \texttt{readfromfilehandle}.
-  \end{itemize}
-*/
+
+///////////////////////////////////////////////////////////////////////////////
+// Functions
+
+
+FILE *createfilehandle(
+        char *file,
+        const Uint line,
+        const char *path,
+        const char *mode
+    );
+
+
+Sint deletefilehandle(
+        char *file,
+        Uint line,
+        FILE *fp
+    );
+
+void wraptmpfiledesc(Tmpfiledesc *tmpfiledesc);
+
+///////////////////////////////////////////////////////////////////////////////
+// Macros
+
 
 #define CREATEFILEHANDLE(PATH,MODE)\
         createfilehandle(__FILE__,(Uint) __LINE__,PATH,MODE)
 
-#define MAKETMPFILE(TMPFILEDESC,FILEPREFIX)\
-        maketmpfile(__FILE__,(Uint) __LINE__,TMPFILEDESC,FILEPREFIX)
-
 #define DELETEFILEHANDLE(FP)\
         deletefilehandle(__FILE__,(Uint) __LINE__,FP)
-
-#define WRITETOFILEHANDLE(PTR,SZ,NMEMB,FP)\
-        writetofilehandle(__FILE__,(Uint) __LINE__,PTR,SZ,NMEMB,FP)
-
-#define READFROMFILEHANDLE(PTR,SZ,NMEMB,FP)\
-        readfromfilehandle(__FILE__,(Uint) __LINE__,PTR,SZ,NMEMB,FP)
 
 #define DECLAREREADFUNCTION(TYPE)\
         static Sint readnext ## TYPE(TYPE *read ## TYPE,FILE *fp)\
@@ -87,8 +103,4 @@ typedef struct
           return 0;\
         }
 
-//\IgnoreLatex{
-
 #endif
-
-//}

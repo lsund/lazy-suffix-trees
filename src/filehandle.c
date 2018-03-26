@@ -1,21 +1,21 @@
 /*
-  Copyright by Stefan Kurtz (C) 2003
-  =====================================
-  You may use, copy and distribute this file freely as long as you
-   - do not change the file,
-   - leave this copyright notice in the file,
-   - do not make any profit with the distribution of this file
-   - give credit where credit is due
-  You are not allowed to copy or distribute this file otherwise
-  The commercial usage and distribution of this file is prohibited
-  Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
-*/
-
-//\Ignore{
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif /* HAVE_CONFIG_H */
+ * Copyright by Stefan Kurtz (C) 1999-2003
+ * =====================================
+ * You may use, copy and distribute this file freely as long as you
+ * - do not change the file,
+ * - leave this copyright notice in the file,
+ * - do not make any profit with the distribution of this file
+ * - give credit where credit is due
+ * You are not allowed to copy or distribute this file otherwise
+ * The commercial usage and distribution of this file is prohibited
+ * Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
+ *
+ * ======================================
+ *
+ * Modified by Ludvig Sundström 2018 with permission from Stefan Kurtz
+ * For full source control tree, see https://github.com/lsund/wotd
+ *
+ */
 
 #include <stdio.h>
 #include <errno.h>
@@ -27,127 +27,73 @@
 #include "failures.h"
 #include "protodef.h"
 
-//}
+// The table of filehandles
+static Filehandle *filehandle = NULL;
 
-/*EE
-  This file contains functions to store file handles for
-  user opened files. A file handle consists of
-  \begin{itemize}
-  \item
-  the filepointer
-  \item
-  a string describing the open mode, corresponding to the second
-  argument of fopen
-  \item
-  the line number and the program file call the the open
-  function was done.
-  \end{itemize}
-  The arguments \texttt{file} and \texttt{line}
-  (if they occur) are always the filename and the linenumber, the
-  function is called from. To supply the arguments, we recommend to
-  call the corresponding functions via some useful macros, as defined in the
-  file \texttt{fhandledef.h}.
-  \begin{enumerate}
-  \item
-  The function \texttt{createfilehandle} should be called
-  via the macro \texttt{CREATEFILEHANDLE}.
-  \item
-  The function \texttt{deletefilehandle} should be called
-  via the macro \texttt{DELETEFILEHANDLE}.
-  \end{enumerate}
-*/
+// Number of allocated filehandles
+static Uint allocatedFilehandle = 0;
 
-/*
-  The maximal length of the string specifying the open mode of the
-  call to function createfilehandle.
-*/
+// Number of open files
+static Uint currentopen = 0;
 
-#define MAXOPENMODE 2
 
-typedef struct
+// The following three tables store important information to
+// generate meaningfull error messages.
+static Uint fromfileptr2filedesc(
+        char *file,
+        Uint line,
+        BOOL existing,
+        FILE *fp
+    )
 {
-  char path[PATH_MAX+1],
-       createmode[MAXOPENMODE+1],
-       *createfile;
-  Uint createline;
-} Filehandle;
 
-/*
-  The following variable is a references to the table
-  of Filehandles.
-*/
+    FUNCTIONCALL;
 
-/*@null@*/ static Filehandle *filehandle = NULL;
-
-/*
-  current number of open files and of allocated file handles.
-*/
-
-static Uint allocatedFilehandle = 0,
-            currentopen = 0;
-
-/*
-  The following three tables store important information to
-  generate meaningfull error messages.
-*/
-
-static Uint fromfileptr2filedesc(char *file,
-                                 Uint line,
-                                 BOOL existing,
-                                 FILE *fp)
-{
-  Filedesctype fd;
-
-  FUNCTIONCALL;
-  fd = fileno(fp);
-  if(fd == -1)
-  {
-    fprintf(stderr,"cannot find filedescriptor: %s\n",strerror(errno));
-    NOTSUPPOSED;
-  }
-  if(existing)
-  {
-    if(allocatedFilehandle <= (Uint) fd)
-    {
-      fprintf(stderr,"file %s, line %lu: cannot open file: fd=%lu, "
-             "not enough file handles available\n",
-             file,
-             (Showuint) line,
-             (Showuint) fd);
-      NOTSUPPOSED;
-    } else
-    {
-      NOTSUPPOSEDTOBENULL(filehandle);
-      if(filehandle[fd].createfile == NULL)
-      {
-        fprintf(stderr,"file %s, line %lu: cannot open file: fd=%lu, "
-                "file handle not occurpied\n",
-                file,
-                (Showuint) line,
-                (Showuint) fd);
-        NOTSUPPOSED;
-      }
+    Filedesctype fd;
+    fd = fileno(fp);
+    if (fd == -1) {
+        fprintf(stderr,"cannot find filedescriptor: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
     }
-  }
-  return (Uint) fd;
+    if (existing) {
+        if (allocatedFilehandle <= (Uint) fd) {
+            fprintf(stderr,"file %s, line %lu: cannot open file: fd=%lu, "
+                    "not enough file handles available\n",
+                    file,
+                    (Showuint) line,
+                    (Showuint) fd);
+            exit(EXIT_FAILURE);
+        } else {
+            if(filehandle[fd].createfile == NULL)
+            {
+                fprintf(stderr,"file %s, line %lu: cannot open file: fd=%lu, "
+                        "file handle not occurpied\n",
+                        file,
+                        (Showuint) line,
+                        (Showuint) fd);
+                exit(EXIT_FAILURE);
+            }
+        }
+    }
+    return (Uint) fd;
 }
 
 /*@null@*/ static char *fileptr2filename(char *file,
-                                         Uint line,
-                                         FILE *fp)
+        Uint line,
+        FILE *fp)
 {
-  FUNCTIONCALL;
+    FUNCTIONCALL;
 
-  if(fp == stdout)
-  {
-    return "stdout";
-  }
-  if(fp == stderr)
-  {
-    return "stderr";
-  }
-  NOTSUPPOSEDTOBENULL(filehandle);
-  return filehandle[fromfileptr2filedesc(file,line,True,fp)].createfile;
+    if(fp == stdout)
+    {
+        return "stdout";
+    }
+    if(fp == stderr)
+    {
+        return "stderr";
+    }
+    NOTSUPPOSEDTOBENULL(filehandle);
+    return filehandle[fromfileptr2filedesc(file,line,True,fp)].createfile;
 }
 
 #define INCFILEHANDLES 16
@@ -237,77 +183,17 @@ FILE *createfilehandle(
 }
 
 /*EE
-  The following function creates a temporary file. The file pointer
-  to this file as well as the name of the temporary file is stored
-  in \texttt{tmpfiledesc}. The return code is 0, if everything is
-  okay. Otherwise, a negative error code is returned.
-*/
-
-Sint maketmpfile(char *file,
-                 Uint line,
-                 Tmpfiledesc *tmpfiledesc,
-                 char *fileprefix)
-{
-  FILE *fp;
-  Filedesctype fd;
-  Uint tmpfilenamelength;
-  char *usedfileprefix;
-
-  FUNCTIONCALL;
-  usedfileprefix = (fileprefix == NULL) ? TMPFILEPREFIX : fileprefix;
-  tmpfilenamelength = (Uint) (strlen(usedfileprefix) + NUMBEROFX + 1);
-  if(tmpfiledesc->tmpfilenamelength < tmpfilenamelength)
-  {
-    ALLOC(tmpfiledesc->tmpfilenamebuffer,
-                     tmpfiledesc->tmpfilenamebuffer,
-                     char,tmpfilenamelength);
-    tmpfiledesc->tmpfilenamelength = tmpfilenamelength;
-  }
-  sprintf(tmpfiledesc->tmpfilenamebuffer,"%s%s",usedfileprefix,TMPFILESUFFIX);
-  fd = mkstemp(tmpfiledesc->tmpfilenamebuffer);
-  if(fd == -1)
-  {
-    ERROR2("cannot open file \"%s\": %s",
-            tmpfiledesc->tmpfilenamebuffer,
-            strerror(errno));
-    return (Sint) -1;
-  }
-  fp = fdopen(fd,WRITEMODE);
-  if(fp == NULL)
-  {
-    ERROR2("cannot open file \"%s\": %s",tmpfiledesc->tmpfilenamebuffer,
-            strerror(errno));
-    return (Sint) -2;
-  }
-  tmpfiledesc->tmpfileptr = fp;
-  assignfilehandleinformation(file,
-                              line,
-                              (Uint) fd,
-                              tmpfiledesc->tmpfilenamebuffer,
-                              WRITEMODE);
-  return 0;
-}
-
-void wraptmpfiledesc(Tmpfiledesc *tmpfiledesc)
-{
-  FREESPACE(tmpfiledesc->tmpfilenamebuffer);
-  tmpfiledesc->tmpfilenamelength = 0;
-}
-
-/*EE
   The following function closes a file and deletes the corresponding
   a file handle. The file is identified by a file pointer.
   The return code is 0, if everything is
   okay. Otherwise, a negative error code is returned.
 */
-
 Sint deletefilehandle(char *file,
                       Uint line,
                       FILE *fp)
 {
   Uint fd;
 
-  NOTSUPPOSEDTOBENULL(filehandle);
   fd = fromfileptr2filedesc(file,line,True,fp);
   if(fclose(fp) != 0)
   {
@@ -334,86 +220,3 @@ Sint deletefilehandle(char *file,
   return 0;
 }
 
-/*EE
-  The following function writes \texttt{nmemb} elements each
-  of \texttt{size} bytes and referenced by \texttt{ptr} to
-  an output \texttt{stream}.
-  The return code is 0, if everything is
-  okay. Otherwise, a negative error code is returned.
-*/
-
-Sint writetofilehandle(char *file,
-                       Uint line,
-                       void *ptr,
-                       Uint size,
-                       Uint nmemb,
-                       FILE *stream)
-{
-  FUNCTIONCALL;
-
-  if(fwrite(ptr, (size_t) size, (size_t) nmemb, stream) != (size_t) nmemb)
-  {
-    ERROR6("%s %lu: cannot write %lu items of size %lu to %s: %s",\
-           file,(Showuint) line,(Showuint) nmemb,(Showuint) size,
-           fileptr2filename(file,line,stream),strerror(errno));
-    return (Sint) -1;
-  }
-  return 0;
-}
-
-/*EE
-  The following function reads \texttt{nmemb} elements each
-  of \texttt{size} bytes and referenced by \texttt{ptr} from
-  an input \texttt{stream}.
-  The return code is 0, if everything is
-  okay. Otherwise, a negative error code is returned.
-*/
-
-Sint readfromfilehandle(char *file,
-                       Uint line,
-                       void *ptr,
-                       Uint size,
-                       Uint nmemb,
-                       FILE *stream)
-{
-  FUNCTIONCALL;
-
-  if(fread(ptr, (size_t) size, (size_t) nmemb,stream) != (size_t) nmemb)
-  {
-    ERROR6("%s %lu: cannot read %lu items of size %lu to %s: %s",\
-           file,(Showuint) line,(Showuint) nmemb,(Showuint) size,
-           fileptr2filename(file,line,stream),strerror(errno));
-    return (Sint) -1;
-  }
-  return 0;
-}
-
-/*EE
-  The following function checks if all file created have
-  been closed. If not, then an error message is thrown and
-  the function exits.
-*/
-
-void checkfilehandles(void)
-{
-  Uint fd;
-
-  FUNCTIONCALL;
-  for(fd=0; fd < allocatedFilehandle; fd++)
-  {
-    NOTSUPPOSEDTOBENULL(filehandle);
-    if(filehandle[fd].createfile != NULL)
-    {
-      fprintf(stderr,"unclosed file: openend in file %s, line %lu\n",
-              filehandle[fd].path,
-              (Showuint) filehandle[fd].createline);
-      exit(EXIT_FAILURE);
-    }
-  }
-  if(currentopen > 0)
-  {
-    fprintf(stderr,"unclosed file: currentopen = %lu\n",
-            (Showuint) currentopen);
-    exit(EXIT_FAILURE);
-  }
-}
