@@ -38,7 +38,7 @@ OBJ= obj/boyermoore.o\
     obj/seterror.o\
     obj/get_alpha.o \
     obj/spaceman.o\
-    obj/counting_sort.o\
+    obj/sort.o\
     obj/lcp.o\
     obj/wotd.o\
 	obj/eval.o\

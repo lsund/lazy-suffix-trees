@@ -62,7 +62,7 @@ static void evaluate_root(Uint textlen)
 {
     if(!rootevaluated)
     {
-        sortByChar0();
+        counting_sort0();
         evalrootsuccedges(suffixes, suffixes + textlen - 1);
         rootevaluated = True;
     }

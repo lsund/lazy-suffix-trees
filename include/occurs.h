@@ -4,7 +4,7 @@
 #include "types.h"
 #include "preprocdef.h"
 #include "intbits.h"
-#include "counting_sort.h"
+#include "sort.h"
 #include "eval.h"
 #include "arraydef.h"
 

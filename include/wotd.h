@@ -17,7 +17,7 @@
 #include "fhandledef.h"
 #include "protodef.h"
 #include "preprocdef.h"
-#include "counting_sort.h"
+#include "sort.h"
 #include "util.h"
 #include "spaceman.h"
 #include "lcp.h"

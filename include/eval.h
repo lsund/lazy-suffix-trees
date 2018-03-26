@@ -7,7 +7,7 @@
 #include "preprocdef.h"
 #include "spaceman.h"
 #include "lcp.h"
-#include "counting_sort.h"
+#include "sort.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Macros

@@ -11,8 +11,8 @@ extern Uchar characters[UCHAR_MAX + 1];
 extern Uchar *text, *sentinel, **sbuffer, **suffixes;
 extern Uint textlen, alphasize;
 
-void sortByChar(Uchar **left,Uchar **right,Uint prefixlen);
+void counting_sort(Uchar **left,Uchar **right,Uint prefixlen);
 
-void sortByChar0(void);
+void counting_sort0(void);
 
 #endif

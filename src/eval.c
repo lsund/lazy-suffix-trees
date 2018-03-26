@@ -128,7 +128,7 @@ static Uint evaluatenodeeager(Uint node)
     }
     sbuffer = getsbufferspaceeager(left, right);
     prefixlen = grouplcp(left,right);
-    sortByChar(left,right,prefixlen);
+    counting_sort(left,right,prefixlen);
     return evalsuccedges(left,right);
 }
 
@@ -146,7 +146,7 @@ void evaluatenodelazy(Uint node)
 
     sbuffer = getsbufferspacelazy(left,right);
     prefixlen = grouplcp(left,right);
-    sortByChar(left,right,prefixlen);
+    counting_sort(left,right,prefixlen);
     (void) evalsuccedges(left,right);
 }
 
@@ -179,7 +179,7 @@ void evaluateeager(void)
 {
   Uint firstbranch, nextbranch, node, stacktop=0, stackalloc=0, *stack = NULL;
 
-  sortByChar0();
+  counting_sort0();
   firstbranch = evalrootsuccedges(suffixes,suffixes+textlen-1);
   if(firstbranch != UNDEFREFERENCE)
   {
