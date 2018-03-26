@@ -1,17 +1,21 @@
 /*
-  Copyright by Stefan Kurtz (C) 1999-2003
-  =====================================
-  You may use, copy and distribute this file freely as long as you
-   - do not change the file,
-   - leave this copyright notice in the file,
-   - do not make any profit with the distribution of this file
-   - give credit where credit is due
-  You are not allowed to copy or distribute this file otherwise
-  The commercial usage and distribution of this file is prohibited
-  Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
-*/
-
-//\IgnoreLatex{
+ * Copyright by Stefan Kurtz (C) 1999-2003
+ * =====================================
+ * You may use, copy and distribute this file freely as long as you
+ * - do not change the file,
+ * - leave this copyright notice in the file,
+ * - do not make any profit with the distribution of this file
+ * - give credit where credit is due
+ * You are not allowed to copy or distribute this file otherwise
+ * The commercial usage and distribution of this file is prohibited
+ * Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
+ *
+ * ======================================
+ *
+ * Modified by Ludvig Sundström 2018 with permission from Stefan Kurtz
+ * For full source control tree, see https://github.com/lsund/wotd
+ *
+ */
 
 #ifndef ERRORDEF_H
 #define ERRORDEF_H
@@ -19,44 +23,14 @@
 #include <stdlib.h>
 #include "types.h"
 
-#ifdef __cplusplus
-  extern "C" {
-#endif
-
+// The macros in this file write error messages into a buffer returned by
+// this funtion
 char *messagespace(void);
+
 Sint maxerrormsg(void);
 
-#ifdef __cplusplus
-}
-#endif
-
-//}
-
-/*
-  This file contains some macros to write error messages into a
-  buffer returned by the function \texttt{messagespace}.
-*/
-
-/*
-  There is a generic macro \texttt{GENERROR} (definition
-  not given) that checks if the
-  result of the computation \texttt{C} exceed the value returned
-  by the function \texttt{maxerrormessage}. If so, then a
-  corresponding error message is written to stderr.
-*/
-
-//\IgnoreLatex{
-
-#ifdef DEBUG
-#define THROWERRORLINE\
-        DEBUG2(1,"# throw error message in %s line %lu\n",__FILE__,\
-                                                (Showuint) __LINE__)
-#else
-#define THROWERRORLINE /* Nothing */
-#endif
 
 #define GENERROR(C);\
-        THROWERRORLINE;\
         if(((Sint) (C)) >= maxerrormsg())\
         {\
           fprintf(stderr,"file %s, line %lu: "\
@@ -64,12 +38,6 @@ Sint maxerrormsg(void);
                   __FILE__,(Showuint) __LINE__);\
           exit(EXIT_FAILURE);\
         }
-
-/*
-  The different error macros call \texttt{sprintf} with the corresponding
-  number of arguments.
-*/
-
 
 #define ERROR0(F)\
         GENERROR(sprintf(messagespace(),F))
@@ -95,24 +63,18 @@ Sint maxerrormsg(void);
 #define ERROR7(F,A1,A2,A3,A4,A5,A6,A7)\
         GENERROR(sprintf(messagespace(),F,A1,A2,A3,A4,A5,A6,A7))
 
-//}
 
-
-/*
-  The following is a macro to show the usage line for all programs
-  which have options and an indexname as the last argument.
-*/
+// The following is a macro to show the usage line for all programs
+// which have options and an indexname as the last argument.
 
 #define USAGEOUT\
         ERROR2("Usage: %s options indexname\n"\
                "%s -help shows possible options",\
-                argv[0],argv[0]);
+                argv[0], argv[0]);
 
-/*
-  The following is the standard message in the main function. It shows the
-  program name and the error message as returned by the function
-  \texttt{messagespace}.
-*/
+// The following is the standard message in the main function. It shows the
+// program name and the error message as returned by the function
+// \texttt{messagespace}.
 
 #define STANDARDMESSAGE\
         fprintf(stderr,"%s: %s\n",argv[0],messagespace());\
@@ -136,8 +98,4 @@ Sint maxerrormsg(void);
 
 #define FUNCTIONFINISH /*@ignore@*/DEBUG1(3,"done with %s\n",__func__)/*@end@*/
 
-//\IgnoreLatex{
-
 #endif
-
-//}

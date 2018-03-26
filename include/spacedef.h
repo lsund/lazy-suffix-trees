@@ -17,7 +17,6 @@
 #define SPACEDEF_H
 #include <string.h>
 #include "types.h"
-#include "errordef.h"
 
 Sint checkenvvaronoff(char *varname);
 void spaceblockinfo(char *file,Uint linenum,void *ptr);

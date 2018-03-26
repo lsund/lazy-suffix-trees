@@ -21,7 +21,6 @@
 #include <string.h>
 #include "types.h"
 #include "debugdef.h"
-#include "errordef.h"
 
 #ifdef __cplusplus
 #define THEMAPFAILED 0

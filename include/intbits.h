@@ -17,7 +17,6 @@
 #define INTBITS_H
 #include <limits.h>
 #include "types.h"
-#include "errordef.h"
 #include "spacedef.h"
 
 //}

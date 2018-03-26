@@ -23,7 +23,6 @@
 #include "types.h"
 #include "fhandledef.h"
 #include "spacedef.h"
-#include "errordef.h"
 #include "debugdef.h"
 #include "failures.h"
 #include "protodef.h"

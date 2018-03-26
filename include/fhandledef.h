@@ -17,7 +17,7 @@
 #define FHANDLEDEF_H
 #include <stdio.h>
 #include "types.h"
-#include "errordef.h"
+#include "error.h"
 
 #define TMPFILESUFFIX        "XXXXXX"
 #define NUMBEROFX            strlen(TMPFILESUFFIX)

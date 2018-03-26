@@ -14,7 +14,6 @@
 #ifndef ARRAYDEF_H
 #define ARRAYDEF_H
 #include "types.h"
-#include "errordef.h"
 #include "failures.h"
 #include "spacedef.h"
 
