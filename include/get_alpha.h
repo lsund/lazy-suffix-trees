@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <limits.h>
+
 #include "types.h"
 
 void getAlpha (char *s, char *alpha, Uint *alphaSize);

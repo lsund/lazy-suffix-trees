@@ -23,3 +23,24 @@ void showpattern(Uchar *w, Uint wlen)
   (void) fwrite(w,sizeof(Uchar),(size_t) wlen,stderr);
 }
 
+Uint wotdtreesize(
+        Uchar *textarg,
+        Uint textlenarg,
+        Uchar *alphabet,
+        Uint alphasizearg
+        )
+{
+    text      = textarg;
+    textlen   = textlenarg;
+    alphasize = alphasizearg;
+
+    memcpy(characters, alphabet, sizeof(Uchar) * alphasize);
+    inittree();
+    evaluateeager();
+
+    DEBUGCODE(3,showstree());
+    DEBUGCODE(3,showtree());
+    FREESPACE(suffixes);
+
+    return maxstacksize;
+}

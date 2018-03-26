@@ -12,19 +12,19 @@ void inittree(void)
 
     ALLOC(stree,stree,Uint,streesize + MAXSUCCSPACE);
     nextfreeentry = stree;
-    suffixessize = textlen+1;
+    suffixessize = textlen + 1;
     maxunusedsuffixes = suffixessize >> 1;
 
-    ALLOC(suffixes,NULL,Uchar *,suffixessize);
+    ALLOC(suffixes,NULL,Uchar *, suffixessize);
     suffixbase = suffixes;
     sbufferwidth = 0;
     maxsbufferwidth = textlen >> 8;
     rootevaluated = False;
 
-    for(i = 0; i < alphasize; i++) {
+    for (i = 0; i < alphasize; i++) {
         alphaindex[(Uint) characters[i]] = i;
     }
-    for(i = 0; i <= UCHAR_MAX; i++) {
+    for (i = 0; i <= UCHAR_MAX; i++) {
         occurrence[i] = 0;
     }
 }

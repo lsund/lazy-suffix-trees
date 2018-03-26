@@ -16,39 +16,29 @@
  *
  */
 
-#ifndef SEARCHPAT_H
-#define SEARCHPAT_H
 
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
+#ifndef CHAR_H
+#define CHAR_H
 #include <limits.h>
 
-#include "types.h"
-#include "debugdef.h"
-#include "char.h"
-#include "boyermoore.h"
-#include "reverse.h"
 
-#define MAXPATTERNLEN 1024
-
-BOOL search_one_pattern(
-        BOOL (*occurs) (Uchar *,Uint,Uchar *,Uchar *),
-        Uchar *text,
-        Uint textlen,
-        Uint patternlen,
-        char *mypattern
-    );
+// separator symbol in multiple seq
+#define SEPARATOR       UCHAR_MAX
 
 
+// wildcard symbol in multiple seq
+#define WILDCARD        (SEPARATOR - 1)
 
-void searchpattern_benchmark(
-        BOOL (*occurs) (Uchar *,Uint,Uchar *,Uchar *),
-        Uchar *text,
-        Uint textlen,
-        float trialpercentage,
-        Uint minpatternlen,
-        Uint maxpatternlen
-    );
+
+// undefined character in multiple seq
+#define UNDEFCHAR       (SEPARATOR - 2)
+
+
+// either WILDCARD or SEPARATOR
+#define ISSPECIAL(C)    ((C) >= (Uchar) WILDCARD)
+
+
+// neither WILDCARD nor SEPARATOR
+#define ISNOTSPECIAL(C) ((C) < (Uchar) WILDCARD)
 
 #endif

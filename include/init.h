@@ -6,11 +6,11 @@
 #include "protodef.h"
 #include "spaceman.h"
 #include "fhandledef.h"
-
+#include "get_alpha.h"
+#include "wotd.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Fields
-
 
 extern Uchar    *text,
                 *sentinel,
