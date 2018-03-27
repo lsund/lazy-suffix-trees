@@ -175,7 +175,7 @@ void wotd_benchmark(
                 minpat,
                 maxpat);
     }
-    /* fclose(fopen("data/out.txt", "w")); */
+    fclose(fopen("data/out.txt", "w"));
     FILE *fp = fopen("data/out.txt", "a");
     // trials patternlen textlen nbytes spaceUsage time
     fprintf(fp, "%lu ", (Showuint) trials);

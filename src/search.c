@@ -163,21 +163,17 @@ void searchpattern_benchmark(
         Uchar pattern[MAXPATTERNLEN+1];
         BOOL special = make_text_pattern(n, m, text, pattern);
 
-        if(!special)
-        {
-            // Every second pattern
-            if(i & 1)
-            {
-                reverse(pattern, m); // Reverse every second string
+        if (!special) {
+            // Reverse Every second pattern
+            if (i & 1) {
+                reverse(pattern, m);
             }
 
-            patternoccurs =
-                occurs(text, n, pattern, pattern+m-1);
+            patternoccurs = occurs(text, n, pattern, pattern+m-1);
         }
     }
 
     DEBUGCODE(1,showpatternstat(&patternstat[0]));
 
-    /* DEBUG1(1,"%lu pattern processed as expected\n",(Showuint) trials); */
 }
 
