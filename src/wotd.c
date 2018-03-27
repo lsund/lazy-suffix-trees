@@ -154,13 +154,16 @@ void wotd_benchmark(
         Uint maxpat
     )
 {
-    inittree();
     if (evaleager) {
+        inittree();
         initclock();
         evaluateeager();
         DEBUGCODE(3,showstree());
         DEBUGCODE(3,showtree());
         FREESPACE(suffixes);
+    } else {
+        inittree();
+        initclock();
     }
 
     if (maxpat > 0 && maxpat <= textlen && trials > 0) {
@@ -176,11 +179,11 @@ void wotd_benchmark(
     FILE *fp = fopen("data/out.txt", "a");
     // trials patternlen textlen nbytes spaceUsage time
     fprintf(fp, "%lu ", (Showuint) trials);
-    fprintf(fp, "%lu ", (Showuint) (maxpat + minpat) / 2);
-    fprintf(fp, "%lu ", (Showuint) textlen);
-    fprintf(fp, "%lu ", (Showuint) (branchcount * BRANCHWIDTH + leafcount));
-    fprintf(fp, "%.2f ",
-            (double) (sizeof(int) * (branchcount * BRANCHWIDTH + leafcount)) / textlen);
+    /* fprintf(fp, "%lu ", (Showuint) (maxpat + minpat) / 2); */
+    /* fprintf(fp, "%lu ", (Showuint) textlen); */
+    /* fprintf(fp, "%lu ", (Showuint) (branchcount * BRANCHWIDTH + leafcount)); */
+    /* fprintf(fp, "%.2f ", */
+            /* (double) (sizeof(int) * (branchcount * BRANCHWIDTH + leafcount)) / textlen); */
     fprintf(fp, "%.2f\n", getruntime()/(double) ITER);
 
     /* fprintf(fp, "branchcount=%lu\n", (Showuint) branchcount); */
