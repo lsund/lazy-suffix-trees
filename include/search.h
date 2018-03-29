@@ -25,7 +25,7 @@
 #include <limits.h>
 
 #include "types.h"
-#include "debugdef.h"
+#include "debug.h"
 #include "char.h"
 #include "boyermoore.h"
 #include "reverse.h"

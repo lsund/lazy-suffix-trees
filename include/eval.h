@@ -4,7 +4,7 @@
 #include "failures.h"
 #include "intbits.h"
 #include "types.h"
-#include "preprocdef.h"
+#include "basedef.h"
 #include "spaceman.h"
 #include "lcp.h"
 #include "sort.h"

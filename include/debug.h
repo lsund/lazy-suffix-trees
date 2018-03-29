@@ -16,7 +16,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include "preprocdef.h"
+#include "basedef.h"
 #include "intbits.h"
 #include "util.h"
 

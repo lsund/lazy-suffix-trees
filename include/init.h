@@ -2,10 +2,10 @@
 #define INIT_H
 
 #include "types.h"
-#include "debugdef.h"
+#include "debug.h"
 #include "protodef.h"
 #include "spaceman.h"
-#include "fhandledef.h"
+#include "filehandle.h"
 #include "get_alpha.h"
 #include "wotd.h"
 

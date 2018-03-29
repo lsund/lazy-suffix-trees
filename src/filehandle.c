@@ -17,15 +17,7 @@
  *
  */
 
-#include <stdio.h>
-#include <errno.h>
-#include <string.h>
-#include "types.h"
-#include "fhandledef.h"
-#include "spacedef.h"
-#include "debugdef.h"
-#include "failures.h"
-#include "protodef.h"
+#include "filehandle.h"
 
 // The table of filehandles
 static Filehandle *filehandle = NULL;

@@ -8,15 +8,13 @@
 #include <sys/types.h>
 #include <string.h>
 #include "types.h"
-#include "debugdef.h"
 #include "spacedef.h"
 #include "experim.h"
 #include "intbits.h"
-#include "args.h"
 #include "arraydef.h"
-#include "fhandledef.h"
+#include "filehandle.h"
 #include "protodef.h"
-#include "preprocdef.h"
+#include "basedef.h"
 #include "sort.h"
 #include "util.h"
 #include "spaceman.h"

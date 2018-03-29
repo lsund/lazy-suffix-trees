@@ -3,9 +3,9 @@
 #define SPACEMAN_H
 
 #include "types.h"
-#include "debugdef.h"
+#include "debug.h"
 #include "spacedef.h"
-#include "preprocdef.h"
+#include "basedef.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Globals

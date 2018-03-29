@@ -3,7 +3,7 @@
 #define COUNTING_SORT_H
 
 #include "types.h"
-#include "debugdef.h"
+#include "debug.h"
 
 extern Uint occurrence[UCHAR_MAX + 1];
 extern Uchar characters[UCHAR_MAX + 1];

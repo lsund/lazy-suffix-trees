@@ -2,7 +2,7 @@
 #define OCCURS_H
 
 #include "types.h"
-#include "preprocdef.h"
+#include "basedef.h"
 #include "intbits.h"
 #include "sort.h"
 #include "eval.h"

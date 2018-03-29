@@ -21,7 +21,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "types.h"
-#include "fhandledef.h"
 
 #ifdef __cplusplus
 extern "C" {

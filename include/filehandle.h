@@ -1,21 +1,36 @@
 /*
-  Copyright by Stefan Kurtz (C) 2003
-  =====================================
-  You may use, copy and distribute this file freely as long as you
-   - do not change the file,
-   - leave this copyright notice in the file,
-   - do not make any profit with the distribution of this file
-   - give credit where credit is due
-  You are not allowed to copy or distribute this file otherwise
-  The commercial usage and distribution of this file is prohibited
-  Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
-*/
+ * Copyright by Stefan Kurtz (C) 1999-2003
+ * =====================================
+ * You may use, copy and distribute this file freely as long as you
+ * - do not change the file,
+ * - leave this copyright notice in the file,
+ * - do not make any profit with the distribution of this file
+ * - give credit where credit is due
+ * You are not allowed to copy or distribute this file otherwise
+ * The commercial usage and distribution of this file is prohibited
+ * Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
+ *
+ * ======================================
+ *
+ * Modified by Ludvig Sundström 2018 with permission from Stefan Kurtz
+ * For full source control tree, see https://github.com/lsund/wotd
+ *
+ */
 
 #ifndef FHANDLEDEF_H
 #define FHANDLEDEF_H
+
 #include <stdio.h>
 #include "types.h"
 #include "error.h"
+#include <stdio.h>
+#include <errno.h>
+#include <string.h>
+#include "types.h"
+#include "spacedef.h"
+#include "debug.h"
+#include "failures.h"
+#include "protodef.h"
 
 #define TMPFILESUFFIX        "XXXXXX"
 #define NUMBEROFX            strlen(TMPFILESUFFIX)
@@ -25,16 +40,12 @@
 // call to function createfilehandle.
 #define MAXOPENMODE 2
 
-#define WRITEMODE  "wb"   // writing in binary mode, important for MS-Windows
-#define READMODE   "rb"   // reading in binary mode, important for MS-Windows
-#define APPENDMODE "ab"   // appending in binary mode, important for MS-Windows
-
-typedef struct
-{
-  char *tmpfilenamebuffer;
-  Uint tmpfilenamelength;
-  FILE *tmpfileptr;
-} Tmpfiledesc;
+// Writing binary mode
+#define WRITEMODE  "wb"
+// Reading binary mode
+#define READMODE   "rb"
+// Appending binary mode
+#define APPENDMODE "ab"
 
 // This file contains functions to store file handles for user opened files. A
 // file handle consists of
@@ -65,8 +76,6 @@ FILE *createfilehandle(
         const char *mode
     );
 
-
-void wraptmpfiledesc(Tmpfiledesc *tmpfiledesc);
 
 ///////////////////////////////////////////////////////////////////////////////
 // Macros

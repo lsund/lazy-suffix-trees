@@ -20,7 +20,7 @@
 #include <unistd.h>
 #include <string.h>
 #include "types.h"
-#include "debugdef.h"
+#include "debug.h"
 
 #ifdef __cplusplus
 #define THEMAPFAILED 0

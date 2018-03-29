@@ -42,14 +42,14 @@ int main(int argc,char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    int minpat = 5;
-    int maxpat = 1000;
-    for (int k = 1; k < 20; k++) {
-        int trials = k * 10000;
-        wotd_benchmark(evaleager, trials, minpat, maxpat);
-    }
+    /* int minpat = 5; */
+    /* int maxpat = 1000; */
+    /* for (int k = 1; k < 20; k++) { */
+    /*     int trials = k * 10000; */
+    /*     wotd_benchmark(evaleager, trials, minpat, maxpat); */
+    /* } */
 
-    /* wotd(evaleager, i, &patterns); */
+    wotd(evaleager, i, &patterns);
 
     freetextspace(text, textlen);
 
