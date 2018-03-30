@@ -22,33 +22,10 @@ void reverse(Uchar *s,Uint len)
 {
   Uchar *front, *back, tmp;
 
-  for(front = s, back = s + len - 1; front < back; front++, back--)
-  {
+  for(front = s, back = s + len - 1; front < back; front++, back--) {
     tmp = *front;
     *front = *back;
     *back = tmp;
-  }
-}
-
-void reversecomplement(Uchar *s,Uint len)
-{
-  Uchar *front, *back, tmp = 0;
-
-  for(front = s, back = s + len - 1; front <= back; front++, back--)
-  {
-    ASSIGNCOMPLEMENT(tmp,*front);
-    ASSIGNCOMPLEMENT(*front,*back);
-    *back = tmp;
-  }
-}
-
-void complement(Uchar *s,Uint len)
-{
-  Uchar *sptr;
-
-  for(sptr = s; sptr < s + len; sptr++)
-  {
-    ASSIGNCOMPLEMENT(*sptr,*sptr);
   }
 }
 

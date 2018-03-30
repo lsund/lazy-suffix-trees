@@ -271,7 +271,7 @@ static void scanedgelist(Uint firstchar,Uint *firstsucc,int indent) {
 
 
 // Print a string representation of a subtree
-static void showsubtree(Uint *father,int indent) {
+void showsubtree(Uint *father,int indent) {
   Uint *nodeptr;
   Uchar *cptr;
 
