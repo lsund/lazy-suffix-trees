@@ -101,6 +101,7 @@ void setdebuglevel(void)
     CHECKALLTYPESIZES
 }
 
+
 // Set debug file name
 void setdebuglevelfilename(char *filename)
 {
@@ -113,9 +114,7 @@ void setdebuglevelfilename(char *filename)
   setdebuglevel();
 }
 
-/*EE
-  The following function looks up the output pointer.
-*/
+
 // Lookup output pointer
 FILE *getdbgfp(void)
 {
@@ -127,24 +126,25 @@ FILE *getdbgfp(void)
   return debugfileptr;
 }
 
+
+// Print the arguments in argv
 static void showargs(char *argv[], Argctype argc)
 {
     Argctype argnum;
-    for(argnum = 0; argnum < argc; argnum++)
-    {
+    for(argnum = 0; argnum < argc; argnum++) {
         fprintf(stderr,"%s ",argv[argnum]);
     }
     (void) putc('\n',stderr);
 }
 
+
+// Print how many patterns were searched of length 1-n
 void showpatternstat(Uint *patternstat)
 {
     Uint i;
 
-    for(i=0; i<= (Uint) MAXPATTERNLEN; i++)
-    {
-        if(patternstat[i] > 0)
-        {
+    for(i=0; i<= (Uint) MAXPATTERNLEN; i++) {
+        if(patternstat[i] > 0) {
             printf("%lu patterns of length %lu\n",(Showuint) patternstat[i],
                     (Showuint) i);
         }
@@ -152,22 +152,19 @@ void showpatternstat(Uint *patternstat)
 }
 
 
+// Print the successor of the root
 void showrootchildtab(void)
 {
     Uint i;
 
-    for(i=0; i<=UCHAR_MAX; i++)
-    {
-        if(rootchildtab[i] != UNDEFINEDSUCC)
-        {
-            if(rootchildtab[i] & LEAFBIT)
-            {
+    for (i=0; i<=UCHAR_MAX; i++) {
+        if (rootchildtab[i] != UNDEFINEDSUCC) {
+            if (rootchildtab[i] & LEAFBIT) {
                 printf("#(%lu)%c-successor of root is leaf %lu\n",
                         (Showuint) i,
                         (char) i,
                         (Showuint) (rootchildtab[i] & ~LEAFBIT));
-            } else
-            {
+            } else {
                 printf("#(%lu)%c-successor of root is branch %ld\n",
                         (Showuint) i,
                         (char) i,
@@ -178,100 +175,103 @@ void showrootchildtab(void)
     printf("#~-successor of root is leaf %lu\n",(Showuint) textlen);
 }
 
+
+// Print a string representation of the suffix tree
 void showstree(void)
 {
-  Uint leftpointer, *nodeptr = stree;
+    Uint leftpointer, *nodeptr = stree;
 
-  showrootchildtab();
-  while(nodeptr < nextfreeentry)
-  {
-    if(ISLEAF(nodeptr))
+    showrootchildtab();
+    while(nodeptr < nextfreeentry)
     {
-      printf("#%lu: ",(Showuint) NODEINDEX(nodeptr));
-      leftpointer = GETLP(nodeptr);
-      printf(" Leaf %lu",(Showuint) leftpointer);
-      if(ISRIGHTMOSTCHILD(nodeptr))
-      {
-        printf(" (last)");
-      }
-      nodeptr++;
-    } else
-    {
-      printf("#%lu: ",(Showuint) NODEINDEX(nodeptr));
-      leftpointer = GETLP(nodeptr);
-      printf(" Branch(%lu,%lu)",(Showuint) leftpointer,
-                                (Showuint) GETFIRSTCHILD(nodeptr));
-      if(ISRIGHTMOSTCHILD(nodeptr))
-      {
-        printf(" (last)");
-      }
-      nodeptr += BRANCHWIDTH;
+        if(ISLEAF(nodeptr))
+        {
+            printf("#%lu: ",(Showuint) NODEINDEX(nodeptr));
+            leftpointer = GETLP(nodeptr);
+            printf(" Leaf %lu",(Showuint) leftpointer);
+            if(ISRIGHTMOSTCHILD(nodeptr))
+            {
+                printf(" (last)");
+            }
+            nodeptr++;
+        } else
+        {
+            printf("#%lu: ",(Showuint) NODEINDEX(nodeptr));
+            leftpointer = GETLP(nodeptr);
+            printf(" Branch(%lu,%lu)",(Showuint) leftpointer,
+                    (Showuint) GETFIRSTCHILD(nodeptr));
+            if(ISRIGHTMOSTCHILD(nodeptr))
+            {
+                printf(" (last)");
+            }
+            nodeptr += BRANCHWIDTH;
+        }
+        (void) putchar('\n');
     }
-    (void) putchar('\n');
-  }
 }
 
+
+// How long is the edge below this node?
 static Uint getedgelen(Uint *nodeptr)
 {
-  return GETLP(stree + GETFIRSTCHILD(nodeptr)) - GETLP(nodeptr);
+    return GETLP(stree + GETFIRSTCHILD(nodeptr)) - GETLP(nodeptr);
 }
 
-static void showsubtree(Uint *father,int indent);
 
-static void scanedgelist(Uint firstchar,Uint *firstsucc,int indent)
-{
-  Uint leftpointer, edgelen, *nodeptr = firstsucc;
-  Uchar *lefttext;
+static void scanedgelist(Uint firstchar,Uint *firstsucc,int indent) {
+    Uint leftpointer, edgelen, *nodeptr = firstsucc;
+    Uchar *lefttext;
 
-  while(True)
-  {
-    if(ISLEAF(nodeptr))
+    while(True)
     {
-      leftpointer = GETLP(nodeptr);
-      lefttext = text + leftpointer;
-      if(lefttext == sentinel)
-      {
-        if(firstchar == (Uint) (UCHAR_MAX+1))
+        if(ISLEAF(nodeptr))
         {
-          printf("%*s~\n",indent,"");
-        }
-      } else
-      {
-        if(firstchar == *lefttext)
+            leftpointer = GETLP(nodeptr);
+            lefttext = text + leftpointer;
+            if(lefttext == sentinel)
+            {
+                if(firstchar == (Uint) (UCHAR_MAX+1))
+                {
+                    printf("%*s~\n",indent,"");
+                }
+            } else
+            {
+                if(firstchar == *lefttext)
+                {
+                    printf("%*s",indent,"");
+                    showstring(lefttext, sentinel);
+                    (void) putchar('\n');
+                }
+            }
+            if(ISRIGHTMOSTCHILD(nodeptr))
+            {
+                break;
+            }
+            nodeptr++;
+        } else
         {
-          printf("%*s",indent,"");
-          showstring(lefttext, sentinel);
-          (void) putchar('\n');
+            leftpointer = GETLP(nodeptr);
+            lefttext = text + leftpointer;
+            if(firstchar == *lefttext)
+            {
+                edgelen = getedgelen(nodeptr);
+                printf("%*s",indent,"");
+                showstring(lefttext,lefttext + edgelen - 1);
+                (void) putchar('\n');
+                showsubtree(nodeptr,indent+6);
+            }
+            if(ISRIGHTMOSTCHILD(nodeptr))
+            {
+                break;
+            }
+            nodeptr += BRANCHWIDTH;
         }
-      }
-      if(ISRIGHTMOSTCHILD(nodeptr))
-      {
-        break;
-      }
-      nodeptr++;
-    } else
-    {
-      leftpointer = GETLP(nodeptr);
-      lefttext = text + leftpointer;
-      if(firstchar == *lefttext)
-      {
-        edgelen = getedgelen(nodeptr);
-        printf("%*s",indent,"");
-        showstring(lefttext,lefttext + edgelen - 1);
-        (void) putchar('\n');
-        showsubtree(nodeptr,indent+6);
-      }
-      if(ISRIGHTMOSTCHILD(nodeptr))
-      {
-        break;
-      }
-      nodeptr += BRANCHWIDTH;
     }
-  }
 }
 
-static void showsubtree(Uint *father,int indent)
-{
+
+// Print a string representation of a subtree
+static void showsubtree(Uint *father,int indent) {
   Uint *nodeptr;
   Uchar *cptr;
 
@@ -284,60 +284,61 @@ static void showsubtree(Uint *father,int indent)
   scanedgelist((Uint) (UCHAR_MAX+1),nodeptr,indent);
 }
 
+
+// Print a string representation of a tree
 void showtree(void)
 {
-  Uint leafnum, edgelen, *nodeptr, *rcptr;
-  Uchar *lefttext;
+    Uint leafnum, edgelen, *nodeptr, *rcptr;
+    Uchar *lefttext;
 
-  for(rcptr = rootchildtab; rcptr <= rootchildtab+UCHAR_MAX; rcptr++)
-  {
-    if(*rcptr != UNDEFINEDSUCC)
+    for(rcptr = rootchildtab; rcptr <= rootchildtab+UCHAR_MAX; rcptr++)
     {
-      if(ISLEAF(rcptr))
-      {
-        leafnum = *rcptr & ~LEAFBIT;
-        lefttext = text + leafnum;
-        showstring(lefttext,sentinel);
-        (void) putchar('\n');
-      } else
-      {
-        nodeptr = stree + *rcptr;
-        lefttext = text + GETLP(nodeptr);
-        edgelen = getedgelen(nodeptr);
-        showstring(lefttext,lefttext + edgelen - 1);
-        (void) putchar('\n');
-        showsubtree(nodeptr,6);
-      }
+        if(*rcptr != UNDEFINEDSUCC)
+        {
+            if(ISLEAF(rcptr))
+            {
+                leafnum = *rcptr & ~LEAFBIT;
+                lefttext = text + leafnum;
+                showstring(lefttext,sentinel);
+                (void) putchar('\n');
+            } else
+            {
+                nodeptr = stree + *rcptr;
+                lefttext = text + GETLP(nodeptr);
+                edgelen = getedgelen(nodeptr);
+                showstring(lefttext,lefttext + edgelen - 1);
+                (void) putchar('\n');
+                showsubtree(nodeptr,6);
+            }
+        }
     }
-  }
-  printf("~\n");
+    printf("~\n");
 }
 
+
+// Print the alphabet and its size
 void printAlpha (char *s)
 {
-  Uint i, j, occ[UCHAR_MAX+1] = {0};
-  char *scopy;
+    Uint i, j, occ[UCHAR_MAX+1] = {0};
+    char *scopy;
 
-  for (scopy = s; *scopy != '\0'; scopy++)
-  {
-    occ[(int) *scopy]++;
-  }
-  printf("alpha=(");
-  for (j=0, i=0; i<=(Uint) UCHAR_MAX; i++)
-  {
-    if (occ[i] > 0)
-    {
-      (void) putchar((char) i);
-      j++;
+    for (scopy = s; *scopy != '\0'; scopy++) {
+        occ[(int) *scopy]++;
     }
-  }
-  printf(")\nalphasize=%lu\n",(Showuint) j);
-  for(i=0; i<=(Uint) UCHAR_MAX; i++)
-  {
-    if(occ[i] > 0)
-    {
-      printf("'%c':%lu\n",(char) i,(Showuint) occ[i]);
+    printf("alpha=(");
+    for (j=0, i=0; i<=(Uint) UCHAR_MAX; i++) {
+        if (occ[i] > 0) {
+            (void) putchar((char) i);
+            j++;
+        }
     }
-  }
+    printf(")\nalphasize=%lu\n",(Showuint) j);
+    for (i=0; i<=(Uint) UCHAR_MAX; i++) {
+        if (occ[i] > 0) {
+            printf("'%c':%lu\n",(char) i,(Showuint) occ[i]);
+        }
+    }
 }
+
+
 #endif

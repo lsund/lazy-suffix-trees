@@ -32,6 +32,7 @@ extern Uint     rootchildtab[UCHAR_MAX + 1],
 
 void showrootchildtab(void);
 
+void showsubtree(Uint *father,int indent);
 /*
   This file defines macros for producing debugging messages. Except for
   the first two macros, all macros are only defined in case
