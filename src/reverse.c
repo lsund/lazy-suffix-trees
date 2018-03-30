@@ -15,7 +15,6 @@
 #include <config.h>
 #endif /* HAVE_CONFIG_H */
 
-#include "compl.h"
 #include "types.h"
 
 void reverse(Uchar *s,Uint len)
