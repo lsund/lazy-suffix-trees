@@ -9,7 +9,6 @@
 #include <string.h>
 #include "types.h"
 #include "spacedef.h"
-#include "experim.h"
 #include "intbits.h"
 #include "filehandle.h"
 #include "basedef.h"
