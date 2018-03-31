@@ -74,7 +74,6 @@ static void evaluate_root(Uint textlen)
 
 BOOL occurslazy(
         Uchar *text,
-        Uint textlen,
         Uchar *leftpattern,
         Uchar *rightpattern
     )
@@ -164,7 +163,6 @@ BOOL occurslazy(
 
 BOOL occurseager(
         Uchar *text,
-        Uint textlen,
         Uchar *leftpattern,
         Uchar *rightpattern)
 {
@@ -227,7 +225,6 @@ BOOL occurseager(
 BOOL occurrenceseager(
         void *state,
         Uchar *text,
-        Uint textlen,
         Uchar *leftpattern,
         Uchar *rightpattern)
 {

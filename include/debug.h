@@ -11,14 +11,24 @@
   Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
 */
 
-#ifndef DEBUGDEF_H
-#define DEBUGDEF_H
+#ifndef DEBUG_H
+#define DEBUG_H
 
 #include <stdlib.h>
 #include <stdio.h>
 #include "basedef.h"
-#include "intbits.h"
+#include "bitvector.h"
 #include "util.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
+#include <limits.h>
+#include <unistd.h>
+#include "types.h"
+#include "io.h"
+#include "debug.h"
+#include "error.h"
 
 extern Uchar *text, *sentinel, characters[UCHAR_MAX + 1];
 extern Uint     rootchildtab[UCHAR_MAX + 1],

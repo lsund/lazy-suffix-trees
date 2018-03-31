@@ -13,8 +13,8 @@
 
 //\IgnoreLatex{
 
-#ifndef INTBITS_H
-#define INTBITS_H
+#ifndef BITVECTOR_H
+#define BITVECTOR_H
 #include <limits.h>
 #include "types.h"
 #include "spaceman.h"
@@ -30,7 +30,7 @@
 #define INTWORDSIZE\
         (UintConst(1) << LOGWORDSIZE)     // # of bits in Uint = w
 #define FIRSTBIT\
-        (UintConst(1) << (INTWORDSIZE-1)) // \(10^{w-1}\)
+        (UintConst(1) << (INTWORDSIZE - 1)) // \(10^{w-1}\)
 #define ISBITSET(S,I)\
         (((S) << (I)) & FIRSTBIT)         // is \(i\)th bit set?
 #define ITHBIT(I)\

@@ -2,7 +2,6 @@
 #include "boyermoore.h"
 
 BOOL bmhsearch(
-        void *info,
         Uchar *text,
         Uint textlen,
         Uchar *pattern,

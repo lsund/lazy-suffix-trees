@@ -11,17 +11,7 @@
   Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
 */
 
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <ctype.h>
-#include <string.h>
-#include <limits.h>
-#include <unistd.h>
-#include "types.h"
-#include "io.h"
 #include "debug.h"
-#include "error.h"
 
 /*EE
   This module defines functions for handling debug levels and
@@ -109,17 +99,6 @@ FILE *getdbgfp(void)
     exit(EXIT_FAILURE);
   }
   return debugfileptr;
-}
-
-
-// Print the arguments in argv
-static void showargs(char *argv[], Argctype argc)
-{
-    Argctype argnum;
-    for(argnum = 0; argnum < argc; argnum++) {
-        fprintf(stderr,"%s ",argv[argnum]);
-    }
-    (void) putc('\n',stderr);
 }
 
 

@@ -47,8 +47,7 @@ static void checkargs(const Uint n, const Uint m)
 static void checkargs_benchmark(
                 const Uint n,
                 const Uint m_max,
-                const Uint m_min,
-                const Uint trials
+                const Uint m_min
             )
 {
     checkargs(n, m_max);
@@ -60,11 +59,6 @@ static void checkargs_benchmark(
             (Showuint) m_max,
             (Showuint) m_min
         );
-        exit(EXIT_FAILURE);
-    }
-
-    if(trials < 0) {
-        fprintf(stderr,"trials negative %u", trials);
         exit(EXIT_FAILURE);
     }
 }
@@ -116,7 +110,7 @@ static Uint randlen(Uint m_min, Uint m_max)
 
 
 BOOL search_one_pattern(
-        BOOL (*occurs) (Uchar *, Uint, Uchar *, Uchar *),
+        BOOL (*occurs) (Uchar *, Uchar *, Uchar *),
         Uchar *text,
         Uint n,
         Uint m,
@@ -131,7 +125,7 @@ BOOL search_one_pattern(
 
     BOOL patternoccurs;
     if(!special) {
-        patternoccurs = occurs(text, n, pattern, pattern + m - 1);
+        patternoccurs = occurs(text, pattern, pattern + m - 1);
     } else {
         exit(EXIT_FAILURE);
     }
@@ -141,7 +135,7 @@ BOOL search_one_pattern(
 
 
 void searchpattern_benchmark(
-        BOOL (*occurs) (Uchar *,Uint,Uchar *,Uchar *),
+        BOOL (*occurs) (Uchar *, Uchar *, Uchar *),
         Uchar *text,
         Uint n,
         Uint trials,
@@ -150,9 +144,8 @@ void searchpattern_benchmark(
     )
 {
     Uint i, m, patternstat[MAXPATTERNLEN+1] = {0};
-    BOOL patternoccurs;
 
-    checkargs_benchmark(n, m_max, m_min, trials);
+    checkargs_benchmark(n, m_max, m_min);
 
     srand48(42349421);
 
@@ -169,7 +162,7 @@ void searchpattern_benchmark(
                 reverse(pattern, m);
             }
 
-            patternoccurs = occurs(text, n, pattern, pattern+m-1);
+            occurs(text, pattern, pattern+m-1);
         }
     }
 

@@ -70,24 +70,6 @@ static Uint filedesc(
     return (Uint) fd;
 }
 
-/*@null@*/ static char *fileptr2filename(char *file,
-        Uint line,
-        FILE *fp)
-{
-    FUNCTIONCALL;
-
-    if(fp == stdout)
-    {
-        return "stdout";
-    }
-    if(fp == stderr)
-    {
-        return "stderr";
-    }
-    NOTSUPPOSEDTOBENULL(filehandle);
-    return filehandle[filedesc(file,line,True,fp)].createfile;
-}
-
 static void setinfo(char *file, Uint line, Uint fd, char *path, char *mode)
 {
   while (fd >= allocatedFilehandle) {

@@ -3,7 +3,7 @@
 
 #include "types.h"
 #include "basedef.h"
-#include "intbits.h"
+#include "bitvector.h"
 #include "sort.h"
 #include "eval.h"
 #include "array.h"
@@ -136,13 +136,11 @@ extern BOOL rootevaluated;
 
 BOOL occurslazy(
         Uchar *text,
-        Uint textlen,
         Uchar *leftpattern,
         Uchar *rightpattern
     );
 
 
 BOOL occurseager(Uchar *text,
-                        /*@unused@*/ Uint textlen,
                         Uchar *leftpattern,Uchar *rightpattern);
 #endif

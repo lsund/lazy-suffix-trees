@@ -33,7 +33,7 @@
 #define MAXPATTERNLEN 1024
 
 BOOL search_one_pattern(
-        BOOL (*occurs) (Uchar *,Uint,Uchar *,Uchar *),
+        BOOL (*occurs) (Uchar *, Uchar *, Uchar *),
         Uchar *text,
         Uint textlen,
         Uint patternlen,
@@ -43,7 +43,7 @@ BOOL search_one_pattern(
 
 
 void searchpattern_benchmark(
-        BOOL (*occurs) (Uchar *,Uint,Uchar *,Uchar *),
+        BOOL (*occurs) (Uchar *, Uchar *, Uchar *),
         Uchar *text,
         Uint textlen,
         Uint trials,

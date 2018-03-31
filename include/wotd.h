@@ -9,7 +9,7 @@
 #include <string.h>
 #include "types.h"
 #include "spaceman.h"
-#include "intbits.h"
+#include "bitvector.h"
 #include "io.h"
 #include "basedef.h"
 #include "util.h"
