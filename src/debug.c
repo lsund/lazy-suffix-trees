@@ -100,19 +100,6 @@ void setdebuglevel(void)
 }
 
 
-// Set debug file name
-void setdebuglevelfilename(char *filename)
-{
-  debugfileptr = CREATEFILEHANDLE(filename,WRITEMODE);
-  if(debugfileptr == NULL)
-  {
-    fprintf(stderr,"%s\n",messagespace());
-    NOTSUPPOSED;
-  }
-  setdebuglevel();
-}
-
-
 // Lookup output pointer
 FILE *getdbgfp(void)
 {

@@ -165,7 +165,6 @@ void showsubtree(Uint *father,int indent);
 */
 
 #define DEBUGLEVELSET            setdebuglevel()
-#define DEBUGLEVELSETFILENAME(F) setdebuglevelfilename(F)
 #define DEBUGCLOSEFILE           debugclosefile()
 
 /*
@@ -219,7 +218,6 @@ Sint getdebuglevel(void);
 BOOL getdebugwhere(void);
 void showmemsize(void);
 void setdebuglevel(void);
-void setdebuglevelfilename(char *filename);
 FILE *getdbgfp(void);
 void debugclosefile(void);
 
@@ -251,7 +249,6 @@ void showpatternstat(Uint *patternstat);
 #define DEBUGDECL(S)               /* nothing */
 #define DEBUGCODE(L,S)             /* nothing */
 #define DEBUGLEVELSET              /* nothing */
-#define DEBUGLEVELSETFILENAME(FP)  /* nothing */
 #define DEBUGCLOSEFILE(FP)         /* nothing */
 #define CASE(I)                    /* nothing */
 #define CASELINE(I)                /* nothing */

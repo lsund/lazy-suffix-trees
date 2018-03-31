@@ -20,45 +20,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Macros
 
-
-#define TMPFILESUFFIX        "XXXXXX"
-
-#define NUMBEROFX            strlen(TMPFILESUFFIX)
-
-#define TMPFILEPREFIX        "/tmp/Vmatch"
-
-// The maximal length of the string specifying the open mode of the
-// call to function createfilehandle.
-#define MAXOPENMODE 2
-
 // Writing binary mode
 #define WRITEMODE  "wb"
 // Reading binary mode
 #define READMODE   "rb"
 // Appending binary mode
 #define APPENDMODE "ab"
-
-#define CREATEFILEHANDLE(PATH,MODE)\
-        createfilehandle(__FILE__,(Uint) __LINE__,PATH,MODE)
-
-#define DECLAREREADFUNCTION(TYPE)\
-        static Sint readnext ## TYPE(TYPE *read ## TYPE,FILE *fp)\
-        {\
-          if(fread(read ## TYPE,sizeof(TYPE),(size_t) 1,fp) != (size_t) 1)\
-          {\
-            if(feof(fp))\
-            {\
-              ERROR1("unexpected end of file when trying to read %s",#TYPE);\
-              return (Sint) -1;\
-            }\
-            if(ferror(fp))\
-            {\
-              ERROR1("error when trying to read next %s",#TYPE);\
-              return (Sint) -2;\
-            }\
-          }\
-          return 0;\
-        }
 
 ///////////////////////////////////////////////////////////////////////////////
 // Structs
@@ -74,7 +41,7 @@
 // where the function is called from.
 typedef struct filehandle {
   char path[PATH_MAX + 1],
-       createmode[MAXOPENMODE + 1],
+       createmode[3],
        *createfile;
   Uint createline;
 } Filehandle;
@@ -83,8 +50,6 @@ typedef struct filehandle {
 ///////////////////////////////////////////////////////////////////////////////
 // Functions
 
-
-int fileOpen(char *name, Uint *textlen, BOOL writefile);
 
 caddr_t fileParts(int fd,Uint offset,Uint len,BOOL writemap);
 

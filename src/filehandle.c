@@ -120,12 +120,6 @@ static void assignfilehandleinformation(char *file,
            file,(Showuint) line,path,mode,(Showuint) fd);
     NOTSUPPOSED;
   }
-  if(strlen(mode) > (size_t) MAXOPENMODE)
-  {
-    fprintf(stderr,"file %s, line %lu: cannot open file \"%s\": "
-                   "illegal open mode \"%s\"\n",file,(Showuint) line,path,mode);
-    NOTSUPPOSED;
-  }
   strcpy(filehandle[fd].createmode,mode);
   if(strlen(path) > PATH_MAX)
   {
