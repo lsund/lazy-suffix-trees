@@ -17,7 +17,7 @@
  *
  */
 
-#include "filehandle.h"
+#include "io.h"
 
 // The table of filehandles
 static Filehandle *filehandle = NULL;

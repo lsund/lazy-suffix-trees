@@ -19,7 +19,7 @@
 #include <limits.h>
 #include <unistd.h>
 #include "types.h"
-#include "filehandle.h"
+#include "io.h"
 #include "debug.h"
 #include "error.h"
 

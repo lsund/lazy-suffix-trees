@@ -11,7 +11,7 @@
   Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
 */
 
-#include "readfile.h"
+#include "io.h"
 
 /*
   Open then file name, and deliver a file descriptor. The length of the

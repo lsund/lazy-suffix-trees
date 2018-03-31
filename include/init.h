@@ -4,7 +4,7 @@
 #include "types.h"
 #include "debug.h"
 #include "spaceman.h"
-#include "filehandle.h"
+#include "io.h"
 #include "get_alpha.h"
 #include "wotd.h"
 
