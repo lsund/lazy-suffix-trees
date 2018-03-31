@@ -60,7 +60,7 @@ wotd: ${OBJ}
 	${CC} ${LDFLAGS} ${OBJ} -o bin/$@
 
 remake: clean all
-	./bin/wotd -lazy data/data.xml data/10000.txt
+	./bin/wotd -eager data/data.xml data/10000.txt
 
 clean:
 	rm -rf obj bin
