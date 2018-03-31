@@ -22,7 +22,6 @@
 #include "filehandle.h"
 #include "debug.h"
 #include "error.h"
-#include "failures.h"
 
 /*EE
   This module defines functions for handling debug levels and

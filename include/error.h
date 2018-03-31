@@ -103,4 +103,39 @@ void reseterror(void);
 
 #define FUNCTIONFINISH /*@ignore@*/DEBUG1(3,"done with %s\n",__func__)/*@end@*/
 
+
+// Failures
+
+#define NOTSUPPOSED\
+        fprintf(stderr,"%s: line %lu: This case is not supposed to occur\n",\
+                       __FILE__,(Showuint) __LINE__);\
+        exit(EXIT_FAILURE)
+
+#define DEFAULTFAILURE default:\
+                       fprintf(stderr, "line %lu in file %s: this point "\
+                                       "should never be reached; aborting "\
+                                       "program\n" , (Showuint) __LINE__,\
+                                       __FILE__);\
+                       exit(EXIT_FAILURE)
+
+
+#define NOTIMPLEMENTED\
+        fprintf(stderr, "file %s, line %lu: this case is not implemented\n",\
+                __FILE__,(Showuint) __LINE__);\
+        exit(EXIT_FAILURE)
+
+/*
+  The following macro checks a ptr. If it is \texttt{NULL}, then the
+  program terminates with an error.
+*/
+
+#ifdef DEBUG
+#define NOTSUPPOSEDTOBENULL(PTR)\
+        if((PTR) == NULL)\
+        {\
+          NOTSUPPOSED;\
+        }
+#else
+#define NOTSUPPOSEDTOBENULL(PTR) /* Nothing */
+#endif
 #endif

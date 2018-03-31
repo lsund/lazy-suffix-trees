@@ -29,7 +29,6 @@
 #include "types.h"
 #include "spacedef.h"
 #include "debug.h"
-#include "failures.h"
 
 #define TMPFILESUFFIX        "XXXXXX"
 #define NUMBEROFX            strlen(TMPFILESUFFIX)

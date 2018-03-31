@@ -1,7 +1,7 @@
 #ifndef EVAL_H
 #define EVAL_H
 
-#include "failures.h"
+#include "error.h"
 #include "intbits.h"
 #include "types.h"
 #include "basedef.h"
