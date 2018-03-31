@@ -17,8 +17,137 @@
  *
  */
 
-
 #include "io.h"
+
+// The table of filehandles
+static Filehandle *filehandle = NULL;
+
+// Number of allocated filehandles
+static Uint allocatedFilehandle = 0;
+
+// Number of open files
+static Uint currentopen = 0;
+
+
+// The following three tables store important information to
+// generate meaningfull error messages.
+static Uint filedesc(
+        char *file,
+        Uint line,
+        BOOL existing,
+        FILE *fp
+    )
+{
+
+    FUNCTIONCALL;
+
+    Filedesctype fd;
+    fd = fileno(fp);
+    if (fd == -1) {
+        fprintf(stderr,"cannot find filedescriptor: %s\n", strerror(errno));
+        exit(EXIT_FAILURE);
+    }
+    if (existing) {
+        if (allocatedFilehandle <= (Uint) fd) {
+            fprintf(stderr,"file %s, line %lu: cannot open file: fd=%lu, "
+                    "not enough file handles available\n",
+                    file,
+                    (Showuint) line,
+                    (Showuint) fd);
+            exit(EXIT_FAILURE);
+        } else {
+            if (filehandle[fd].createfile == NULL)
+            {
+                fprintf(stderr,"file %s, line %lu: cannot open file: fd=%lu, "
+                        "file handle not occurpied\n",
+                        file,
+                        (Showuint) line,
+                        (Showuint) fd);
+                exit(EXIT_FAILURE);
+            }
+        }
+    }
+    return (Uint) fd;
+}
+
+/*@null@*/ static char *fileptr2filename(char *file,
+        Uint line,
+        FILE *fp)
+{
+    FUNCTIONCALL;
+
+    if(fp == stdout)
+    {
+        return "stdout";
+    }
+    if(fp == stderr)
+    {
+        return "stderr";
+    }
+    NOTSUPPOSEDTOBENULL(filehandle);
+    return filehandle[filedesc(file,line,True,fp)].createfile;
+}
+
+static void setinfo(char *file, Uint line, Uint fd, char *path, char *mode)
+{
+  while (fd >= allocatedFilehandle) {
+    Uint i;
+
+    ALLOC(
+        filehandle,
+        filehandle,
+        Filehandle,
+        allocatedFilehandle + INCFILEHANDLES
+    );
+
+    for (i=allocatedFilehandle; i<allocatedFilehandle+INCFILEHANDLES; i++) {
+      filehandle[i].createfile = NULL;
+    }
+
+    allocatedFilehandle += INCFILEHANDLES;
+
+  }
+
+  NOTSUPPOSEDTOBENULL(filehandle);
+
+  if (filehandle[fd].createfile != NULL) {
+    fprintf(stderr,"file %s, line %lu: open file \"%s\" with mode \"%s\": "
+                   "handle %lu already occupied\n",
+           file,(Showuint) line,path,mode,(Showuint) fd);
+    exit(EXIT_FAILURE);
+  }
+  strcpy(filehandle[fd].createmode,mode);
+  if (strlen(path) > PATH_MAX) {
+    fprintf(stderr,"file %s, line %lu: cannot open file \"%s\": "
+                   "path is too long\n",file,(Showuint) line,path);
+    exit(EXIT_FAILURE);
+  }
+  strcpy(filehandle[fd].path,path);
+
+  filehandle[fd].createfile = file;
+  filehandle[fd].createline = line;
+
+  currentopen++;
+}
+
+
+// Create a filehandle for the relevant file information
+FILE *createfilehandle(char *file, Uint line, char *path, char *mode)
+{
+    FILE *fp;
+
+    FUNCTIONCALL;
+    fp = fopen(path, mode);
+
+    if (fp == NULL) {
+        ERROR2("cannot open file \"%s\": %s", path, strerror(errno));
+        return NULL;
+    }
+
+    setinfo(file, line, filedesc(file,line,False,fp), path, mode);
+
+    return fp;
+}
 
 
 // Open file in readmode, return file descriptor. The length of the file is
@@ -140,7 +269,7 @@ int file2Array(char *name, Uint *textlen, int size, char ***wordsp)
         }
 
         /* Get rid of CR or LF at end of line */
-        for (j=strlen(words[i])-1;j>=0 && (words[i][j]=='\n' || words[i][j]=='\r');j--) {
+        for (j=strlen(words[i])-1; j>=0 && (words[i][j]=='\n' || words[i][j]=='\r'); j--) {
             ;
         }
         words[i][j + 1]='\0';

@@ -27,6 +27,8 @@
 // Appending binary mode
 #define APPENDMODE "ab"
 
+#define INCFILEHANDLES 16
+
 ///////////////////////////////////////////////////////////////////////////////
 // Structs
 
@@ -62,12 +64,7 @@ caddr_t file2String(char *name, Uint *textlen);
 
 int file2Array(char *name, Uint *textlen, int nlines, char ***words);
 
-FILE *createfilehandle(
-        char *file,
-        const Uint line,
-        const char *path,
-        const char *mode
-    );
+FILE *createfilehandle(char *file, Uint line, char *path, char *mode);
 
 #endif
 

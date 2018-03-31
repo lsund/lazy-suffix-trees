@@ -31,10 +31,9 @@ SPLINTFLAGS=-DDEBUG
 
 OBJ= obj/boyermoore.o\
     obj/reverse.o\
-    obj/readfile.o\
     obj/search.o\
     obj/clock.o\
-    obj/filehandle.o\
+    obj/io.o\
     obj/seterror.o\
     obj/get_alpha.o \
     obj/spaceman.o\
