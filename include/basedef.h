@@ -41,6 +41,8 @@
 
 #define GETLPUNEVAL(N)          SUFFIXNUMBER(GETLEFTBOUNDARY(N))
 
+// Transform bytes into megabytes
+#define MEGABYTES(V)  ((double) (V)/((UintConst(1) << 20) - 1))
 
 ///////////////////////////////////////////////////////////////////////////////
 // Setters
