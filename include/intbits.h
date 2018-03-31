@@ -17,7 +17,7 @@
 #define INTBITS_H
 #include <limits.h>
 #include "types.h"
-#include "spacedef.h"
+#include "spaceman.h"
 
 //}
 

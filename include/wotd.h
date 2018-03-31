@@ -8,7 +8,7 @@
 #include <sys/types.h>
 #include <string.h>
 #include "types.h"
-#include "spacedef.h"
+#include "spaceman.h"
 #include "intbits.h"
 #include "filehandle.h"
 #include "basedef.h"

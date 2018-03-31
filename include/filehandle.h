@@ -27,7 +27,7 @@
 #include <errno.h>
 #include <string.h>
 #include "types.h"
-#include "spacedef.h"
+#include "spaceman.h"
 #include "debug.h"
 
 #define TMPFILESUFFIX        "XXXXXX"

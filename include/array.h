@@ -20,7 +20,7 @@
 #ifndef ARRAY_H
 #define ARRAY_H
 #include "types.h"
-#include "spacedef.h"
+#include "spaceman.h"
 #include "error.h"
 
 // This file declare and manipulate dynamic arrays whose size grow on demand.
