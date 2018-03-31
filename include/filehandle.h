@@ -30,7 +30,6 @@
 #include "spacedef.h"
 #include "debug.h"
 #include "failures.h"
-#include "protodef.h"
 
 #define TMPFILESUFFIX        "XXXXXX"
 #define NUMBEROFX            strlen(TMPFILESUFFIX)

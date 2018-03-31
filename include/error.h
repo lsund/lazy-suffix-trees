@@ -29,6 +29,11 @@ char *messagespace(void);
 
 Sint maxerrormsg(void);
 
+void seterror(Sint code);
+
+Sint geterror(void);
+
+void reseterror(void);
 
 #define GENERROR(C);\
         if(((Sint) (C)) >= maxerrormsg())\

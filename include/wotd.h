@@ -12,13 +12,14 @@
 #include "experim.h"
 #include "intbits.h"
 #include "filehandle.h"
-#include "protodef.h"
 #include "basedef.h"
 #include "util.h"
 #include "spaceman.h"
 #include "lcp.h"
 #include "occurs.h"
 #include "search.h"
+#include "readfile.h"
+#include "clock.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////

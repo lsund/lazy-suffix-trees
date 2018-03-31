@@ -10,22 +10,8 @@
   The commercial usage and distribution of this file is prohibited
   Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
 */
-#include <stdio.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <sys/uio.h>
-#include <sys/mman.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <string.h>
-#include "types.h"
-#include "debug.h"
 
-#ifdef __cplusplus
-#define THEMAPFAILED 0
-#else
-#endif
+#include "readfile.h"
 
 /*
   Open then file name, and deliver a file descriptor. The length of the

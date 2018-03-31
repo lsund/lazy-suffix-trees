@@ -23,7 +23,6 @@
 #include "debug.h"
 #include "error.h"
 #include "failures.h"
-#include "megabytes.h"
 
 /*EE
   This module defines functions for handling debug levels and

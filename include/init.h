@@ -3,7 +3,6 @@
 
 #include "types.h"
 #include "debug.h"
-#include "protodef.h"
 #include "spaceman.h"
 #include "filehandle.h"
 #include "get_alpha.h"
