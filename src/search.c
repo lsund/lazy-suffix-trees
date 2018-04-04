@@ -24,13 +24,13 @@
 Bool (*searchfun) (Uchar *, Uchar *, Uchar *);
 
 
-static Bool copy_pattern(Uint m, Uchar *pattern, char *mypattern)
+static Bool copy_pattern(Uchar *pattern, char *current_pattern, Uint patternlen)
 {
-    for(Uint j = 0; j < m; j++) {
+    for(Uint i = 0; i < patternlen; i++) {
 
-        pattern[j] = mypattern[j];
+        pattern[i] = current_pattern[i];
 
-        if (ISSPECIAL(pattern[j])) {
+        if (ISSPECIAL(pattern[i])) {
             return True;
         }
     }
@@ -39,16 +39,16 @@ static Bool copy_pattern(Uint m, Uchar *pattern, char *mypattern)
 }
 
 
-static Bool sample_random_pattern(Uint n, Uint m, Uchar *text, Uchar *pattern)
+static Bool sample_random_pattern(Uint patternlen, Uchar *pattern)
 {
-    Uint start = (Uint) (drand48() * (double) (n-m));
+    Uint start = (Uint) (drand48() * (double) (textlen - patternlen));
 
-    if(start > n - m) {
+    if(start > textlen - patternlen) {
         fprintf(stderr,"Not enough characters left\n");
         exit(EXIT_FAILURE);
     }
 
-    for(Uint j = 0; j < m; j++) {
+    for(Uint j = 0; j < patternlen; j++) {
 
         pattern[j] = text[start + j];
 
@@ -68,7 +68,7 @@ Bool try_search_pattern(char *current_pattern, Uint patternlen)
 {
 
     Uchar pattern[MAXPATTERNLEN + 1];
-    Bool special = copy_pattern(patternlen, pattern, current_pattern);
+    Bool special = copy_pattern(pattern, current_pattern, patternlen);
 
     if (special) {
         ERROR("Found an unparsable pattern");
@@ -82,17 +82,15 @@ Bool try_search_pattern(char *current_pattern, Uint patternlen)
 void iterate_search_patterns(Uint trials, Uint minlen, Uint maxlen)
 {
     Uint patternlen;
-    Uint patternstat[MAXPATTERNLEN+1] = {0};
 
     // Magic number seed
     srand48(42349421);
 
     for(Uint i = 0; i < trials; i++) {
         patternlen = randlen(minlen, maxlen);
-        patternstat[patternlen]++;
 
         Uchar pattern[MAXPATTERNLEN + 1];
-        Bool special = sample_random_pattern(textlen, patternlen, text, pattern);
+        Bool special = sample_random_pattern(patternlen, pattern);
 
         if (!special) {
             if (i & 1) {

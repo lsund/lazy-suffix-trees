@@ -235,7 +235,6 @@ void printAlpha (char *s);
 
 void showtree(void);
 void showstree(void);
-void showpatternstat(Uint *patternstat);
 
     //\IgnoreLatex{
 

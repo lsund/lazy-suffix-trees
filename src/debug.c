@@ -102,20 +102,6 @@ FILE *getdbgfp(void)
 }
 
 
-// Print how many patterns were searched of length 1-n
-void showpatternstat(Uint *patternstat)
-{
-    Uint i;
-
-    for(i=0; i<= (Uint) MAXPATTERNLEN; i++) {
-        if(patternstat[i] > 0) {
-            printf("%lu patterns of length %lu\n",(Showuint) patternstat[i],
-                    (Showuint) i);
-        }
-    }
-}
-
-
 // Print the successor of the root
 void showrootchildtab(void)
 {

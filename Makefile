@@ -59,10 +59,16 @@ dirs:
 wotd: ${OBJ}
 	${CC} ${LDFLAGS} ${OBJ} -o bin/$@
 
-bench: clean all
+benchE: clean all
+	./bin/wotd -eager data/dataset/005.txt data/10000.txt bench
+
+runE: clean all
+	./bin/wotd -eager data/data.xml data/10000.txt run
+
+benchL: clean all
 	./bin/wotd -lazy data/dataset/005.txt data/10000.txt bench
 
-run: clean all
+runL: clean all
 	./bin/wotd -lazy data/data.xml data/10000.txt run
 
 clean:
