@@ -62,10 +62,10 @@ void run_patterns(const char *path, Bool evaleager, int npatterns, char ***o_pat
 
     for(int j = 0; j < npatterns; j++) {
 
-        char *pattern = patterns[j];
-        Uint patternlen = strlen(pattern);
+        char *current_pattern = patterns[j];
+        Uint patternlen = strlen(current_pattern);
 
-        Bool exists = search_one_pattern(patternlen, pattern);
+        Bool exists = try_search_pattern(current_pattern, patternlen);
 
         if (exists) {
             fprintf(fp, "%s\n", patterns[j]);
@@ -97,7 +97,7 @@ void run_benchmark(
         ERROR("Max pattern length must be smaller than the text length");
     }
 
-    searchpattern_benchmark(trials, minpat, maxpat);
+    iterate_search_patterns(trials, minpat, maxpat);
 
     FILE *fp = open_append(path);
     print_statistics(fp, trials);

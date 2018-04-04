@@ -24,21 +24,22 @@
 Bool (*searchfun) (Uchar *, Uchar *, Uchar *);
 
 
-static Bool make_pattern(Uint m, Uchar *pattern, char *mypattern)
+static Bool copy_pattern(Uint m, Uchar *pattern, char *mypattern)
 {
     for(Uint j = 0; j < m; j++) {
 
         pattern[j] = mypattern[j];
 
-        if(ISSPECIAL(pattern[j])) {
+        if (ISSPECIAL(pattern[j])) {
             return True;
         }
     }
+
     return False;
 }
 
 
-static Bool make_text_pattern(Uint n, Uint m, Uchar *text, Uchar *pattern)
+static Bool sample_random_pattern(Uint n, Uint m, Uchar *text, Uchar *pattern)
 {
     Uint start = (Uint) (drand48() * (double) (n-m));
 
@@ -63,55 +64,43 @@ static Bool make_text_pattern(Uint n, Uint m, Uchar *text, Uchar *pattern)
 // Public Interface
 
 
-Bool search_one_pattern(
-        Uint m,
-        char *mypattern
-    )
+Bool try_search_pattern(char *current_pattern, Uint patternlen)
 {
 
     Uchar pattern[MAXPATTERNLEN + 1];
-    Bool special = make_pattern(m, pattern, mypattern);
+    Bool special = copy_pattern(patternlen, pattern, current_pattern);
 
-    Bool patternoccurs;
-    if(!special) {
-        patternoccurs = searchfun(text, pattern, pattern + m - 1);
-    } else {
-        exit(EXIT_FAILURE);
+    if (special) {
+        ERROR("Found an unparsable pattern");
     }
 
-    return patternoccurs;
+    return searchfun(text, pattern, pattern + patternlen - 1);
+
 }
 
 
-void searchpattern_benchmark(
-        Uint trials,
-        Uint m_min,
-        Uint m_max
-    )
+void iterate_search_patterns(Uint trials, Uint minlen, Uint maxlen)
 {
-    Uint i, m, patternstat[MAXPATTERNLEN+1] = {0};
+    Uint patternlen;
+    Uint patternstat[MAXPATTERNLEN+1] = {0};
 
     // Magic number seed
     srand48(42349421);
 
-    for(i = 0; i < trials; i++) {
-        m = randlen(m_min, m_max);
-        patternstat[m]++;
+    for(Uint i = 0; i < trials; i++) {
+        patternlen = randlen(minlen, maxlen);
+        patternstat[patternlen]++;
 
-        Uchar pattern[MAXPATTERNLEN+1];
-        Bool special = make_text_pattern(textlen, m, text, pattern);
+        Uchar pattern[MAXPATTERNLEN + 1];
+        Bool special = sample_random_pattern(textlen, patternlen, text, pattern);
 
         if (!special) {
-            // Reverse Every second pattern
             if (i & 1) {
-                reverse(pattern, m);
+                reverse(pattern, patternlen);
             }
 
-            searchfun(text, pattern, pattern+m-1);
+            searchfun(text, pattern, pattern + patternlen - 1);
         }
     }
-
-    DEBUGCODE(1,showpatternstat(&patternstat[0]));
-
 }
 

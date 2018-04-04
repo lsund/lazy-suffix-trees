@@ -33,17 +33,12 @@
 
 #define MAXPATTERNLEN 1024
 
-Bool search_one_pattern(
-        Uint patternlen,
-        char *mypattern
-    );
+Bool try_search_pattern(char *current_pattern, Uint patternlen);
 
 
 
-void searchpattern_benchmark(
-        Uint trials,
-        Uint minpatternlen,
-        Uint maxpatternlen
-    );
+// Randomly sampling patterns from the text, reversing every second to simulate
+// the case where a pattern does not exist.
+void iterate_search_patterns(Uint trials, Uint minlen, Uint maxlen);
 
 #endif
