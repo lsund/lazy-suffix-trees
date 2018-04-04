@@ -16,7 +16,12 @@
  * For full source control tree, see https://github.com/lsund/wotd
  */
 
+
 #include "wotd.h"
+
+
+BOOL (*searchfun) (Uchar *, Uchar *, Uchar *);
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // Functions
@@ -45,24 +50,22 @@ static void print_statistics(FILE *fp, int trials)
 // Public API
 
 
-void wotd(const char *path, BOOL evaleager, int npatterns, char ***o_patterns)
+void run_patterns(const char *path, BOOL evaleager, int npatterns, char ***o_patterns)
 {
 
     init_evaluation(evaleager);
 
-    BOOL (*eager_or_lazy) (Uchar *, Uchar *, Uchar *)  =
-        evaleager ? occurseager : occurslazy;
-
     int noccurs     = 0;
     char **patterns = *o_patterns;
     FILE *fp        = open_append(path);
+    searchfun       = evaleager ? occurseager : occurslazy;
 
     for(int j = 0; j < npatterns; j++) {
 
         char *pattern = patterns[j];
         Uint patternlen = strlen(pattern);
 
-        BOOL exists = search_one_pattern( eager_or_lazy, patternlen, pattern);
+        BOOL exists = search_one_pattern(patternlen, pattern);
 
         if (exists) {
             fprintf(fp, "%s\n", patterns[j]);
@@ -77,7 +80,7 @@ void wotd(const char *path, BOOL evaleager, int npatterns, char ***o_patterns)
 }
 
 
-void wotd_benchmark(
+void run_benchmark(
         const char *path,
         BOOL evaleager,
         Uint trials,
@@ -88,11 +91,10 @@ void wotd_benchmark(
 
     init_evaluation(evaleager);
 
-    BOOL (*eager_or_lazy) (Uchar *, Uchar *, Uchar *)  =
-        evaleager ? occurseager : occurslazy;
+    searchfun = evaleager ? occurseager : occurslazy;
 
     if (maxpat > 0 && maxpat <= textlen && trials > 0) {
-        searchpattern_benchmark(eager_or_lazy, trials, minpat, maxpat);
+        searchpattern_benchmark(trials, minpat, maxpat);
     }
 
     FILE *fp = open_append(path);

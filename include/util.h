@@ -17,6 +17,8 @@ void showpattern(Uchar *w, Uint wlen);
 
 void printtime();
 
+Uint randlen(Uint m_min, Uint m_max);
+
 // Macros for checking argument numbers
 
 // Check if the number of arguments is exactly N

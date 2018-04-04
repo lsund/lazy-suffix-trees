@@ -80,4 +80,7 @@ extern Uint rootchildtab[UCHAR_MAX + 1];
 // flag indicating that the root has been evaluated
 extern BOOL  rootevaluated;
 
+
+extern BOOL (*searchfun) (Uchar *, Uchar *, Uchar *);
+
 #endif

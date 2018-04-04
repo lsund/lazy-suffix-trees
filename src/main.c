@@ -12,12 +12,12 @@ int main(int argc,char *argv[])
     CHECKARGNUM(5, "(-lazy|-eager) filename patternfile (bench|run)");
     DEBUGLEVELSET;
 
-    if (strcmp(argv[1],"-lazy") != 0 && strcmp(argv[1],"-eager") != 0) {
+    if (strcmp(argv[1], "-lazy") != 0 && strcmp(argv[1],"-eager") != 0) {
         fprintf(stderr,"Illegal option \"%s\"\n",argv[1]);
         exit(EXIT_FAILURE);
     }
 
-    if (strcmp(argv[1],"-eager") == 0) {
+    if (strcmp(argv[1], "-eager") == 0) {
         evaleager = True;
     } else {
         evaleager = False;
@@ -31,15 +31,13 @@ int main(int argc,char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    patternfile = argv[3];
-    int size = 128;
+    patternfile     = argv[3];
+    int size        = 128;
     char **patterns = (char **) malloc(sizeof(char *) * size);
-    int i = file2Array(patternfile, &patternslen, size, &patterns);
+    int i           = file2Array(patternfile, &patternslen, size, &patterns);
 
     if(textlen > MAXTEXTLEN) {
-        fprintf(stderr,"Textlen = %lu > maximal textlen = %lu\n",
-                (Showuint) textlen,(Showuint) MAXTEXTLEN);
-
+        fprintf(stderr, "Text too large. see MAXTEXTLEN");
         exit(EXIT_FAILURE);
     }
 
@@ -50,17 +48,17 @@ int main(int argc,char *argv[])
         int minpat = 5;
         int maxpat = 1000;
 
-        wotd_benchmark(path, evaleager, 5, minpat, maxpat);
+        run_benchmark(path, evaleager, 5, minpat, maxpat);
 
     } else {
 
-        wotd(path, evaleager, i, &patterns);
+        run_patterns(path, evaleager, i, &patterns);
 
     }
 
     freetextspace(text, textlen);
 
-    for (;i>=0;i--) {
+    for (; i >= 0; i--) {
         free(patterns[i]);
     }
     free(patterns);

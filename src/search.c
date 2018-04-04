@@ -21,47 +21,7 @@
 #include "search.h"
 
 
-static void checkargs(const Uint n, const Uint m)
-{
-    if(m > (Uint) MAXPATTERNLEN) {
-        fprintf(
-            stderr,
-            "maxpatternlen=%lu > %lu\n",
-            (Showuint) m,
-            (Showuint) MAXPATTERNLEN
-        );
-        exit(EXIT_FAILURE);
-    }
-    if(n <= m) {
-        fprintf(
-            stderr,
-            "textlen=%lu <= maxpatternlen = %lu\n",
-            (Showuint) n,
-            (Showuint) m
-        );
-        exit(EXIT_FAILURE);
-    }
-}
-
-
-static void checkargs_benchmark(
-                const Uint n,
-                const Uint m_max,
-                const Uint m_min
-            )
-{
-    checkargs(n, m_max);
-
-    if(m_max < m_min) {
-        fprintf(
-            stderr,
-            "maxpatternlen=%lu < %lu\n",
-            (Showuint) m_max,
-            (Showuint) m_min
-        );
-        exit(EXIT_FAILURE);
-    }
-}
+BOOL (*searchfun) (Uchar *, Uchar *, Uchar *);
 
 
 static BOOL make_pattern(Uint m, Uchar *pattern, char *mypattern)
@@ -99,31 +59,22 @@ static BOOL make_text_pattern(Uint n, Uint m, Uchar *text, Uchar *pattern)
 }
 
 
-static Uint randlen(Uint m_min, Uint m_max)
-{
-    return m_min == m_max ? m_min : (m_min + (drand48() * (double) (m_max-m_min+1)));
-}
-
-
 ///////////////////////////////////////////////////////////////////////////////
 // Public Interface
 
 
 BOOL search_one_pattern(
-        BOOL (*occurs) (Uchar *, Uchar *, Uchar *),
         Uint m,
         char *mypattern
     )
 {
-
-    checkargs(textlen, m);
 
     Uchar pattern[MAXPATTERNLEN + 1];
     BOOL special = make_pattern(m, pattern, mypattern);
 
     BOOL patternoccurs;
     if(!special) {
-        patternoccurs = occurs(text, pattern, pattern + m - 1);
+        patternoccurs = searchfun(text, pattern, pattern + m - 1);
     } else {
         exit(EXIT_FAILURE);
     }
@@ -133,7 +84,6 @@ BOOL search_one_pattern(
 
 
 void searchpattern_benchmark(
-        BOOL (*occurs) (Uchar *, Uchar *, Uchar *),
         Uint trials,
         Uint m_min,
         Uint m_max
@@ -141,8 +91,7 @@ void searchpattern_benchmark(
 {
     Uint i, m, patternstat[MAXPATTERNLEN+1] = {0};
 
-    checkargs_benchmark(textlen, m_max, m_min);
-
+    // Magic number seed
     srand48(42349421);
 
     for(i = 0; i < trials; i++) {
@@ -158,7 +107,7 @@ void searchpattern_benchmark(
                 reverse(pattern, m);
             }
 
-            occurs(text, pattern, pattern+m-1);
+            searchfun(text, pattern, pattern+m-1);
         }
     }
 

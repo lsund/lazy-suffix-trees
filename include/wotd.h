@@ -28,9 +28,9 @@ void inittree(void);
 
 void evaluateeager(void);
 
-void wotd(const char *path, BOOL evaleager, int npatterns, char ***o_patterns);
+void run_patterns(const char *path, BOOL evaleager, int npatterns, char ***o_patterns);
 
-void wotd_benchmark(
+void run_benchmark(
         const char *path,
         BOOL evaleager,
         Uint trials,
