@@ -16,7 +16,7 @@ static Uint evalsuccedges(Uchar **left,Uchar **right)
 {
     Uchar firstchar, **r, **l;
     Uint leafnum, firstbranch = UNDEFREFERENCE, *previousnode = NULL;
-    BOOL sentineledge = False;
+    Bool sentineledge = False;
 
     allocstree();
     if(*right == sentinel)

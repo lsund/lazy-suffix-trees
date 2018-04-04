@@ -26,7 +26,7 @@
 static Sint debuglevel = 0;
 
 // DEBUGWHERE
-static BOOL debugwhere = False;
+static Bool debugwhere = False;
 
 // Debug log file
 static FILE *debugfileptr = NULL;
@@ -37,7 +37,7 @@ Sint getdebuglevel(void) {
 }
 
 // Get the value of DEBUGWHERE
-BOOL getdebugwhere(void) {
+Bool getdebugwhere(void) {
   return debugwhere;
 }
 

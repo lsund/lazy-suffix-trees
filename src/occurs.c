@@ -72,7 +72,7 @@ static void evaluate_root(Uint textlen)
 // Public Interface
 
 
-BOOL occurslazy(
+Bool occurslazy(
         Uchar *text,
         Uchar *leftpattern,
         Uchar *rightpattern
@@ -161,7 +161,7 @@ BOOL occurslazy(
     }
 }
 
-BOOL occurseager(
+Bool occurseager(
         Uchar *text,
         Uchar *leftpattern,
         Uchar *rightpattern)
@@ -222,7 +222,7 @@ BOOL occurseager(
 }
 
 
-BOOL occurrenceseager(
+Bool occurrenceseager(
         void *state,
         Uchar *text,
         Uchar *leftpattern,

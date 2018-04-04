@@ -28,11 +28,11 @@ void inittree(void);
 
 void evaluateeager(void);
 
-void run_patterns(const char *path, BOOL evaleager, int npatterns, char ***o_patterns);
+void run_patterns(const char *path, Bool evaleager, int npatterns, char ***o_patterns);
 
 void run_benchmark(
         const char *path,
-        BOOL evaleager,
+        Bool evaleager,
         Uint trials,
         Uint minpat,
         Uint maxpat

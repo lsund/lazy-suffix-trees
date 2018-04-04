@@ -34,7 +34,7 @@ static Uint currentopen = 0;
 static Uint filedesc(
         char *file,
         Uint line,
-        BOOL existing,
+        Bool existing,
         FILE *fp
     )
 {
@@ -135,7 +135,7 @@ FILE *createfilehandle(char *file, Uint line, char *path, char *mode)
 // Open file in readmode, return file descriptor. The length of the file is
 // stored in `textlen`. If `writefile` is true if the file should also be
 // opened for triting.
-static int fileOpen(char *name, Uint *textlen, BOOL writefile)
+static int fileOpen(char *name, Uint *textlen, Bool writefile)
 {
     int fd;
     struct stat buf;
@@ -153,7 +153,7 @@ static int fileOpen(char *name, Uint *textlen, BOOL writefile)
 }
 
 // Allocates `len` bytes starting at offset in the file `fd` into memory.
-caddr_t fileParts(int fd, Uint offset, Uint len, BOOL writemap)
+caddr_t fileParts(int fd, Uint offset, Uint len, Bool writemap)
 {
     caddr_t addr;
 

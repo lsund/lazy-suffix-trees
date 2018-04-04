@@ -12,7 +12,7 @@ extern Uchar *text, **suffixbase, *sentinel;
 
 extern Uint *stree, rootchildtab[UCHAR_MAX + 1];
 
-extern BOOL rootevaluated;
+extern Bool rootevaluated;
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -134,14 +134,14 @@ extern BOOL rootevaluated;
 ///////////////////////////////////////////////////////////////////////////////
 // Functions
 
-BOOL occurslazy(
+Bool occurslazy(
         Uchar *text,
         Uchar *leftpattern,
         Uchar *rightpattern
     );
 
 
-BOOL occurseager(
+Bool occurseager(
         Uchar *text,
         Uchar *leftpattern,
         Uchar *rightpattern

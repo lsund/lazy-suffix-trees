@@ -21,10 +21,10 @@
 #include "search.h"
 
 
-BOOL (*searchfun) (Uchar *, Uchar *, Uchar *);
+Bool (*searchfun) (Uchar *, Uchar *, Uchar *);
 
 
-static BOOL make_pattern(Uint m, Uchar *pattern, char *mypattern)
+static Bool make_pattern(Uint m, Uchar *pattern, char *mypattern)
 {
     for(Uint j = 0; j < m; j++) {
 
@@ -38,7 +38,7 @@ static BOOL make_pattern(Uint m, Uchar *pattern, char *mypattern)
 }
 
 
-static BOOL make_text_pattern(Uint n, Uint m, Uchar *text, Uchar *pattern)
+static Bool make_text_pattern(Uint n, Uint m, Uchar *text, Uchar *pattern)
 {
     Uint start = (Uint) (drand48() * (double) (n-m));
 
@@ -63,16 +63,16 @@ static BOOL make_text_pattern(Uint n, Uint m, Uchar *text, Uchar *pattern)
 // Public Interface
 
 
-BOOL search_one_pattern(
+Bool search_one_pattern(
         Uint m,
         char *mypattern
     )
 {
 
     Uchar pattern[MAXPATTERNLEN + 1];
-    BOOL special = make_pattern(m, pattern, mypattern);
+    Bool special = make_pattern(m, pattern, mypattern);
 
-    BOOL patternoccurs;
+    Bool patternoccurs;
     if(!special) {
         patternoccurs = searchfun(text, pattern, pattern + m - 1);
     } else {
@@ -99,7 +99,7 @@ void searchpattern_benchmark(
         patternstat[m]++;
 
         Uchar pattern[MAXPATTERNLEN+1];
-        BOOL special = make_text_pattern(textlen, m, text, pattern);
+        Bool special = make_text_pattern(textlen, m, text, pattern);
 
         if (!special) {
             // Reverse Every second pattern

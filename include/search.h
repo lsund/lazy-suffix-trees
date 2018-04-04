@@ -33,7 +33,7 @@
 
 #define MAXPATTERNLEN 1024
 
-BOOL search_one_pattern(
+Bool search_one_pattern(
         Uint patternlen,
         char *mypattern
     );

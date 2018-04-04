@@ -6,7 +6,7 @@ extern Uint textlen;
 int main(int argc,char *argv[])
 {
     char *filename, *patternfile;
-    BOOL evaleager;
+    Bool evaleager;
     Uint patternslen;
 
     CHECKARGNUM(5, "(-lazy|-eager) filename patternfile (bench|run)");

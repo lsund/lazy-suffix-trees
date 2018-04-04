@@ -25,7 +25,7 @@ Uint    textlen,
         occurrence[UCHAR_MAX + 1],
         rootchildtab[UCHAR_MAX + 1];
 
-BOOL    rootevaluated;
+Bool    rootevaluated;
 
 void inittree(void)
 {

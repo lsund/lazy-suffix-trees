@@ -269,23 +269,23 @@ int mkstemp(char *);
   checking if it has been defined previously.
 */
 
-#ifndef BOOL
-#define BOOL unsigned char
+#ifndef Bool
+#define Bool unsigned char
 #endif
 
 #ifndef False
-#define False ((BOOL) 0)
+#define False ((Bool) 0)
 #endif
 
 #ifndef True
-#define True ((BOOL) 1)
+#define True ((Bool) 1)
 #endif
 
 /*
   Show a boolean value as a string or as a character 0 or 1.
 */
 
-#define SHOWBOOL(B) ((B) ? "True" : "False")
+#define SHOWBool(B) ((B) ? "True" : "False")
 #define SHOWBIT(B)  ((B) ? '1' : '0')
 
 /*
@@ -333,7 +333,7 @@ typedef Listtype Stringtype;    // \Typedef{Stringtype}
 typedef struct
 {
   Uint uintvalue;
-  BOOL defined;
+  Bool defined;
 } DefinedUint;   // \Typedef{DefinedUint}
 
 /*

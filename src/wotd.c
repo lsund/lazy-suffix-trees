@@ -20,14 +20,14 @@
 #include "wotd.h"
 
 
-BOOL (*searchfun) (Uchar *, Uchar *, Uchar *);
+Bool (*searchfun) (Uchar *, Uchar *, Uchar *);
 
 
 ///////////////////////////////////////////////////////////////////////////////
 // Functions
 
 
-static void init_evaluation(BOOL evaleager)
+static void init_evaluation(Bool evaleager)
 {
     inittree();
     initclock();
@@ -50,7 +50,7 @@ static void print_statistics(FILE *fp, int trials)
 // Public API
 
 
-void run_patterns(const char *path, BOOL evaleager, int npatterns, char ***o_patterns)
+void run_patterns(const char *path, Bool evaleager, int npatterns, char ***o_patterns)
 {
 
     init_evaluation(evaleager);
@@ -65,7 +65,7 @@ void run_patterns(const char *path, BOOL evaleager, int npatterns, char ***o_pat
         char *pattern = patterns[j];
         Uint patternlen = strlen(pattern);
 
-        BOOL exists = search_one_pattern(patternlen, pattern);
+        Bool exists = search_one_pattern(patternlen, pattern);
 
         if (exists) {
             fprintf(fp, "%s\n", patterns[j]);
@@ -82,7 +82,7 @@ void run_patterns(const char *path, BOOL evaleager, int npatterns, char ***o_pat
 
 void run_benchmark(
         const char *path,
-        BOOL evaleager,
+        Bool evaleager,
         Uint trials,
         Uint minpat,
         Uint maxpat
