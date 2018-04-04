@@ -21,12 +21,12 @@
 #include "search.h"
 
 
-Bool (*searchfun) (Uchar *, Uchar *, Uchar *);
+Bool (*searchfun) (Uchar *, Uchar *);
 
 
-static Bool copy_pattern(Uchar *pattern, char *current_pattern, Uint patternlen)
+static Bool copy_pattern(Uchar *pattern, char *current_pattern, Uint len)
 {
-    for(Uint i = 0; i < patternlen; i++) {
+    for(Uint i = 0; i < len; i++) {
 
         pattern[i] = current_pattern[i];
 
@@ -39,7 +39,7 @@ static Bool copy_pattern(Uchar *pattern, char *current_pattern, Uint patternlen)
 }
 
 
-static Bool sample_random_pattern(Uint patternlen, Uchar *pattern)
+static Bool sample_random_pattern(Uchar *pattern, Uint patternlen)
 {
     Uint start = (Uint) (drand48() * (double) (textlen - patternlen));
 
@@ -74,7 +74,7 @@ Bool try_search_pattern(char *current_pattern, Uint patternlen)
         ERROR("Found an unparsable pattern");
     }
 
-    return searchfun(text, pattern, pattern + patternlen - 1);
+    return searchfun(pattern, pattern + patternlen - 1);
 
 }
 
@@ -87,17 +87,17 @@ void iterate_search_patterns(Uint trials, Uint minlen, Uint maxlen)
     srand48(42349421);
 
     for(Uint i = 0; i < trials; i++) {
-        patternlen = randlen(minlen, maxlen);
 
         Uchar pattern[MAXPATTERNLEN + 1];
-        Bool special = sample_random_pattern(patternlen, pattern);
+        patternlen = randlen(minlen, maxlen);
+
+        Bool special = sample_random_pattern(pattern, patternlen);
 
         if (!special) {
             if (i & 1) {
                 reverse(pattern, patternlen);
             }
-
-            searchfun(text, pattern, pattern + patternlen - 1);
+            searchfun(pattern, pattern + patternlen - 1);
         }
     }
 }

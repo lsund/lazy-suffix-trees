@@ -129,32 +129,32 @@ void showrootchildtab(void)
 // Print a string representation of the suffix tree
 void showstree(void)
 {
-    Uint leftpointer, *nodeptr = stree;
+    Uint leftpointer, *vertex = stree;
 
     showrootchildtab();
-    while(nodeptr < nextfreeentry)
+    while(vertex < nextfreeentry)
     {
-        if(ISLEAF(nodeptr))
+        if(IS_LEAF(vertex))
         {
-            printf("#%lu: ",(Showuint) NODEINDEX(nodeptr));
-            leftpointer = GETLP(nodeptr);
+            printf("#%lu: ",(Showuint) NODEINDEX(vertex));
+            leftpointer = GET_LP(vertex);
             printf(" Leaf %lu",(Showuint) leftpointer);
-            if(ISRIGHTMOSTCHILD(nodeptr))
+            if(IS_RIGHTMOST(vertex))
             {
                 printf(" (last)");
             }
-            nodeptr++;
+            vertex++;
         } else
         {
-            printf("#%lu: ",(Showuint) NODEINDEX(nodeptr));
-            leftpointer = GETLP(nodeptr);
+            printf("#%lu: ",(Showuint) NODEINDEX(vertex));
+            leftpointer = GET_LP(vertex);
             printf(" Branch(%lu,%lu)",(Showuint) leftpointer,
-                    (Showuint) GETFIRSTCHILD(nodeptr));
-            if(ISRIGHTMOSTCHILD(nodeptr))
+                    (Showuint) FIRST_CHILD(vertex));
+            if(IS_RIGHTMOST(vertex))
             {
                 printf(" (last)");
             }
-            nodeptr += BRANCHWIDTH;
+            vertex += BRANCHWIDTH;
         }
         (void) putchar('\n');
     }

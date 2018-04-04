@@ -19,23 +19,20 @@ static Uint evalsuccedges(Uchar **left,Uchar **right)
     Bool sentineledge = False;
 
     allocstree();
-    if(*right == sentinel)
-    {
-        right--;  // skip the smallest suffix
+    if(*right == sentinel) {
+        // skip the smallest suffix
+        right--;
         sentineledge = True;
     }
-    for(l=left; l<=right; l=r+1)
-    {
-        for(firstchar=**l,r=l; r<right && **(r+1)==firstchar; r++)
+    for(l=left; l<=right; l=r+1) {
+        for(firstchar=**l, r = l; r < right && **(r + 1) == firstchar; r++)
         {
-            /* nothing */ ;
+            ;
         }
         previousnode = nextfreeentry;
         // create branching node
-        if(r > l)
-        {
-            if(firstbranch == UNDEFREFERENCE)
-            {
+        if(r > l) {
+            if(firstbranch == UNDEFREFERENCE) {
                 firstbranch = NODEINDEX(nextfreeentry);
             }
             STOREBOUNDARIES(nextfreeentry,l,r);
@@ -106,15 +103,15 @@ Uint evalrootsuccedges(Uchar **left,Uchar **right)
 
 static Uint evaluatenodeeager(Uint node)
 {
-    Uint prefixlen, *nodeptr, unusedsuffixes;
+    Uint prefixlen, *vertex, unusedsuffixes;
     Uchar **left, **right;
 
     DEBUG1(3,"#evaluatenodeeager(%lu)\n",(Showuint) node);
-    nodeptr = stree + node;
-    left = GETLEFTBOUNDARY(nodeptr);
-    right = GETRIGHTBOUNDARY(nodeptr);
-    SETLP(nodeptr,SUFFIXNUMBER(left));
-    SETFIRSTCHILD(nodeptr,NODEINDEX(nextfreeentry));
+    vertex = stree + node;
+    left = GETLEFTBOUNDARY(vertex);
+    right = GETRIGHTBOUNDARY(vertex);
+    SETLP(vertex,SUFFIXNUMBER(left));
+    SETFIRSTCHILD(vertex,NODEINDEX(nextfreeentry));
 
     unusedsuffixes = (Uint) (left - suffixes);
     if(suffixessize > UintConst(10000) && unusedsuffixes > maxunusedsuffixes)
@@ -144,15 +141,15 @@ static Uint evaluatenodeeager(Uint node)
 
 void evaluatenodelazy(Uint node)
 {
-    Uint prefixlen, *nodeptr;
+    Uint prefixlen, *vertex;
     Uchar **left, **right;
 
     DEBUG1(3,"#evaluatenodelazy(%lu)\n",(Showuint) node);
-    nodeptr = stree + node;
-    left = GETLEFTBOUNDARY(nodeptr);
-    right = GETRIGHTBOUNDARY(nodeptr);
-    SETLP(nodeptr,SUFFIXNUMBER(left));
-    SETFIRSTCHILD(nodeptr,NODEINDEX(nextfreeentry));
+    vertex = stree + node;
+    left = GETLEFTBOUNDARY(vertex);
+    right = GETRIGHTBOUNDARY(vertex);
+    SETLP(vertex,SUFFIXNUMBER(left));
+    SETFIRSTCHILD(vertex,NODEINDEX(nextfreeentry));
 
     sbuffer = getsbufferspacelazy(left,right);
     prefixlen = grouplcp(left,right);
@@ -162,25 +159,21 @@ void evaluatenodelazy(Uint node)
 
 static Uint getnextbranch(Uint previousbranch)
 {
-    Uint *nodeptr = stree + previousbranch;
+    Uint *vertex = stree + previousbranch;
 
-    if(ISRIGHTMOSTCHILD(nodeptr))
+    if(IS_RIGHTMOST(vertex))
     {
         return UNDEFREFERENCE;
     }
-    nodeptr += BRANCHWIDTH;
-    while(True)
-    {
-        if(ISLEAF(nodeptr))
-        {
-            if(ISRIGHTMOSTCHILD(nodeptr))
-            {
+    vertex += BRANCHWIDTH;
+    while(True) {
+        if(IS_LEAF(vertex)) {
+            if(IS_RIGHTMOST(vertex)) {
                 return UNDEFREFERENCE;
             }
-            nodeptr++;
-        } else
-        {
-            return NODEINDEX(nodeptr);
+            vertex++;
+        } else {
+            return NODEINDEX(vertex);
         }
     }
 }
@@ -191,16 +184,12 @@ void evaluateeager(void)
 
   counting_sort0();
   firstbranch = evalrootsuccedges(suffixes,suffixes+textlen-1);
-  if(firstbranch != UNDEFREFERENCE)
-  {
+  if(firstbranch != UNDEFREFERENCE) {
     PUSHNODE(firstbranch);
-    while(NOTSTACKEMPTY)
-    {
+    while(NOTSTACKEMPTY) {
       POPNODE(node);
-      while(node != UNDEFREFERENCE)
-      {
-        if((nextbranch = getnextbranch(node)) != UNDEFREFERENCE)
-        {
+      while(node != UNDEFREFERENCE) {
+        if((nextbranch = getnextbranch(node)) != UNDEFREFERENCE) {
           PUSHNODE(nextbranch);
         }
         node = evaluatenodeeager(node);

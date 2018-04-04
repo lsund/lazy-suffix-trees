@@ -22,49 +22,58 @@
 #include "occurs.h"
 
 
-static void collectpositions(ArrayUint *resultpos, Uint *firstsucc)
+static void generate_lps(ArrayUint *resultpos, Uint *firstsucc)
 {
-    Uint leftpointer, *nodeptr = firstsucc;
+    Uint lp;
+    Uint *vertex = firstsucc;
 
     while(True) {
 
-        if (ISLEAF(nodeptr)) {
-            leftpointer = GETLP(nodeptr);
-            STOREINARRAY(resultpos, Uint, 256, leftpointer);
-            if (ISRIGHTMOSTCHILD(nodeptr)) {
+        if (IS_LEAF(vertex)) {
+
+            lp = GET_LP(vertex);
+            ARRAY_STORE(resultpos, Uint, CELL_SIZE, lp);
+
+            if (IS_RIGHTMOST(vertex)) {
                 break;
+            } else {
+                vertex++;
             }
-            nodeptr++;
+
         } else {
-            collectpositions(resultpos, nodeptr);
-            if (ISRIGHTMOSTCHILD(nodeptr)) {
+
+            generate_lps(resultpos, vertex);
+
+            if (IS_RIGHTMOST(vertex)) {
                 break;
             }
-            nodeptr += BRANCHWIDTH;
+
+            vertex += BRANCHWIDTH;
         }
     }
 }
 
 
-static Uint firstchildlp(Uint *nodeptr)
+static Uint first_child_lp(Uint *vertex)
 {
-    Uint *firstchildptr = stree + GETFIRSTCHILD(nodeptr);
+    Uint *child = stree + FIRST_CHILD(vertex);
 
-    if (!ISLEAF(firstchildptr) && ISUNEVALUATED(firstchildptr)) {
-        return GETLPUNEVAL(firstchildptr);
+    if (!IS_LEAF(child) && IS_UNEVALUATED(child)) {
+        return GET_LP_UNEVAL(child);
     } else {
-        return GETLP(firstchildptr);
+        return GET_LP(child);
     }
 }
 
 
 static void evaluate_root(Uint textlen)
 {
-    if(!rootevaluated)
-    {
+    if(!rootevaluated) {
+
         counting_sort0();
         evalrootsuccedges(suffixes, suffixes + textlen - 1);
         rootevaluated = True;
+
     }
 }
 
@@ -73,7 +82,6 @@ static void evaluate_root(Uint textlen)
 
 
 Bool occurslazy(
-        Uchar *text,
         Uchar *leftpattern,
         Uchar *rightpattern
     )
@@ -91,22 +99,22 @@ Bool occurslazy(
 
     evaluate_root(textlen);
 
-    Uint *nodeptr;
+    Uint *vertex;
     Uchar *lefttext;
 
     // Checks if there is an a-edge from the root
     CHECK_A_EDGE;
 
     Uint v;
-    if (ISUNEVALUATED(nodeptr)) {
-        v = NODEINDEX(nodeptr);
+    if (IS_UNEVALUATED(vertex)) {
+        v = NODEINDEX(vertex);
         evaluatenodelazy(v);
-        nodeptr = stree + v;
+        vertex = stree + v;
     }
 
-    Uint leftpointer = GETLP(nodeptr);
-    lefttext = text + GETLP(nodeptr);
-    edgelen = firstchildlp(nodeptr) - leftpointer;
+    Uint leftpointer = GET_LP(vertex);
+    lefttext = text + GET_LP(vertex);
+    edgelen = first_child_lp(vertex) - leftpointer;
     CHECKBRANCHEDGE;
 
     while(True)
@@ -117,26 +125,26 @@ Bool occurslazy(
         }
 
         firstchar = *probe;
-        nodeptr   = stree + GETFIRSTCHILD(nodeptr);
+        vertex   = stree + FIRST_CHILD(vertex);
 
         while(True)
         {
-            if(ISLEAF(nodeptr)) {
+            if(IS_LEAF(vertex)) {
 
-                leftpointer = GETLP(nodeptr);
+                leftpointer = GET_LP(vertex);
                 lefttext = text + leftpointer;
-                CHECKLEAFEDGE;
+                MATCH_LEAF_EDGE;
 
-                if(ISRIGHTMOSTCHILD(nodeptr)) {
+                if(IS_RIGHTMOST(vertex)) {
                     return False;
                 }
-                nodeptr++;
+                vertex++;
             } else {
 
-                if(ISUNEVALUATED(nodeptr)) {
-                    leftpointer = GETLPUNEVAL(nodeptr);
+                if(IS_UNEVALUATED(vertex)) {
+                    leftpointer = GET_LP_UNEVAL(vertex);
                 } else {
-                    leftpointer = GETLP(nodeptr);
+                    leftpointer = GET_LP(vertex);
                 }
                 lefttext = text + leftpointer;
                 edgechar = *lefttext;
@@ -144,29 +152,28 @@ Bool occurslazy(
                 {
                     break;
                 }
-                if(ISRIGHTMOSTCHILD(nodeptr))
+                if(IS_RIGHTMOST(vertex))
                 {
                     return False;
                 }
-                nodeptr += BRANCHWIDTH;
+                vertex += BRANCHWIDTH;
             }
         }
-        if(ISUNEVALUATED(nodeptr)) {
-            v = NODEINDEX(nodeptr);
+        if(IS_UNEVALUATED(vertex)) {
+            v = NODEINDEX(vertex);
             evaluatenodelazy(v);
-            nodeptr = stree + v;
+            vertex = stree + v;
         }
-        edgelen = firstchildlp(nodeptr) - leftpointer;
+        edgelen = first_child_lp(vertex) - leftpointer;
         CHECKBRANCHEDGE;
     }
 }
 
 Bool occurseager(
-        Uchar *text,
         Uchar *leftpattern,
         Uchar *rightpattern)
 {
-  Uint *nodeptr, edgelen, newleftpointer, leftpointer, prefixlen;
+  Uint *vertex, edgelen, newleftpointer, leftpointer, prefixlen;
   Uchar *lefttext, *probe = leftpattern, firstchar, edgechar;
 
   if(probe > rightpattern)   // check for empty word
@@ -175,10 +182,10 @@ Bool occurseager(
   }
   firstchar = *probe;
   CHECK_A_EDGE;
-  leftpointer = GETLP(nodeptr);
+  leftpointer = GET_LP(vertex);
   lefttext = text + leftpointer;
-  nodeptr = stree + GETFIRSTCHILD(nodeptr);
-  newleftpointer = GETLP(nodeptr);
+  vertex = stree + FIRST_CHILD(vertex);
+  newleftpointer = GET_LP(vertex);
   edgelen = newleftpointer - leftpointer;
   CHECKBRANCHEDGE;
   while(True)
@@ -190,16 +197,16 @@ Bool occurseager(
     firstchar = *probe;
     while(True)
     {
-      leftpointer = GETLP(nodeptr);
+      leftpointer = GET_LP(vertex);
       lefttext = text + leftpointer;
-      if(ISLEAF(nodeptr))
+      if(IS_LEAF(vertex))
       {
-        CHECKLEAFEDGE;
-        if(ISRIGHTMOSTCHILD(nodeptr))
+        MATCH_LEAF_EDGE;
+        if(IS_RIGHTMOST(vertex))
         {
           return False;
         }
-        nodeptr++;
+        vertex++;
       } else
       {
         edgechar = *lefttext;
@@ -207,15 +214,15 @@ Bool occurseager(
         {
           break;
         }
-        if(ISRIGHTMOSTCHILD(nodeptr))
+        if(IS_RIGHTMOST(vertex))
         {
           return False;
         }
-        nodeptr += BRANCHWIDTH;
+        vertex += BRANCHWIDTH;
       }
     }
-    nodeptr = stree + GETFIRSTCHILD(nodeptr);
-    newleftpointer = GETLP(nodeptr);
+    vertex = stree + FIRST_CHILD(vertex);
+    newleftpointer = GET_LP(vertex);
     edgelen = newleftpointer - leftpointer;
     CHECKBRANCHEDGE;
   }
@@ -224,11 +231,10 @@ Bool occurseager(
 
 Bool occurrenceseager(
         void *state,
-        Uchar *text,
         Uchar *leftpattern,
         Uchar *rightpattern)
 {
-    Uint *nodeptr, edgelen, newleftpointer, leftpointer, prefixlen;
+    Uint *vertex, edgelen, newleftpointer, leftpointer, prefixlen;
     Uchar *lefttext, *probe = leftpattern, firstchar, edgechar;
     ArrayUint *resultpos = (ArrayUint *) state;
 
@@ -238,49 +244,47 @@ Bool occurrenceseager(
         return True;
     }
     firstchar = *probe;
-    CHECKROOTCHILDWITHPOS;
-    leftpointer = GETLP(nodeptr);
+    CHECK_A_EDGE_POS;
+
+    leftpointer = GET_LP(vertex);
     lefttext = text + leftpointer;
-    nodeptr = stree + GETFIRSTCHILD(nodeptr);
-    newleftpointer = GETLP(nodeptr);
+    vertex = stree + FIRST_CHILD(vertex);
+    newleftpointer = GET_LP(vertex);
     edgelen = newleftpointer - leftpointer;
     CHECKBRANCHEDGEWITHPOS;
     while(True)
     {
         if(probe > rightpattern)   // check for empty word
         {
-            STOREINARRAY(resultpos,Uint,256,newleftpointer);
+            ARRAY_STORE(resultpos, Uint, CELL_SIZE, newleftpointer);
             return True;
         }
         firstchar = *probe;
         while(True)
         {
-            leftpointer = GETLP(nodeptr);
+            leftpointer = GET_LP(vertex);
             lefttext = text + leftpointer;
-            if(ISLEAF(nodeptr))
+            if(IS_LEAF(vertex))
             {
                 CHECKLEAFEDGEWITHPOS;
-                if(ISRIGHTMOSTCHILD(nodeptr))
-                {
+                if(IS_RIGHTMOST(vertex)) {
                     return False;
                 }
-                nodeptr++;
+                vertex++;
             } else
             {
                 edgechar = *lefttext;
-                if(edgechar == firstchar)
-                {
+                if(edgechar == firstchar) {
                     break;
                 }
-                if(ISRIGHTMOSTCHILD(nodeptr))
-                {
+                if(IS_RIGHTMOST(vertex)) {
                     return False;
                 }
-                nodeptr += BRANCHWIDTH;
+                vertex += BRANCHWIDTH;
             }
         }
-        nodeptr = stree + GETFIRSTCHILD(nodeptr);
-        newleftpointer = GETLP(nodeptr);
+        vertex = stree + FIRST_CHILD(vertex);
+        newleftpointer = GET_LP(vertex);
         edgelen = newleftpointer - leftpointer;
         CHECKBRANCHEDGEWITHPOS;
     }

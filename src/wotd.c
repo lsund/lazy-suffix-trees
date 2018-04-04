@@ -20,7 +20,7 @@
 #include "wotd.h"
 
 
-Bool (*searchfun) (Uchar *, Uchar *, Uchar *);
+Bool (*searchfun) (Uchar *, Uchar *);
 
 
 ///////////////////////////////////////////////////////////////////////////////

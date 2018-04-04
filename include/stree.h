@@ -18,10 +18,10 @@
 #define UNEVALUATEDBIT          FIRSTBIT
 
 // LP is the leaf set of on edge plus the length of the string leading up to it
-#define GETLP(P)                ((*(P)) & ~(LEAFBIT | RIGHTMOSTCHILDBIT))
+#define GET_LP(P)                ((*(P)) & ~(LEAFBIT | RIGHTMOSTCHILDBIT))
 
 // The number for the first child of the vertex pointer
-#define GETFIRSTCHILD(P)        (*((P) + 1))
+#define FIRST_CHILD(P)        (*((P) + 1))
 
 // startposition of suffix
 #define SUFFIXNUMBER(L)         ((Uint) (*(L) - text))
@@ -33,7 +33,7 @@
 #define GETRIGHTBOUNDARY(P)     (suffixbase + ((*((P) + 1)) & ~UNEVALUATEDBIT))
 
 // The lp number of an unevaluated vertex
-#define GETLPUNEVAL(N)          SUFFIXNUMBER(GETLEFTBOUNDARY(N))
+#define GET_LP_UNEVAL(N)          SUFFIXNUMBER(GETLEFTBOUNDARY(N))
 
 ///////////////////////////////////////////////////////////////////////////////
 // Setters
@@ -52,11 +52,11 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Queries
 
-#define ISLEAF(P)               ((*(P)) & LEAFBIT)
+#define IS_LEAF(P)               ((*(P)) & LEAFBIT)
 
-#define ISRIGHTMOSTCHILD(P)     ((*(P)) & RIGHTMOSTCHILDBIT)
+#define IS_RIGHTMOST(P)     ((*(P)) & RIGHTMOSTCHILDBIT)
 
-#define ISUNEVALUATED(P)        ((*((P)+1)) & UNEVALUATEDBIT)
+#define IS_UNEVALUATED(P)        ((*((P)+1)) & UNEVALUATEDBIT)
 
 
 #endif

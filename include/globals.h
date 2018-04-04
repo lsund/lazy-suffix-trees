@@ -81,6 +81,6 @@ extern Uint rootchildtab[UCHAR_MAX + 1];
 extern Bool  rootevaluated;
 
 
-extern Bool (*searchfun) (Uchar *, Uchar *, Uchar *);
+extern Bool (*searchfun) (Uchar *, Uchar *);
 
 #endif

@@ -33,6 +33,7 @@
 //                allocated
 // 3. nextfree - holds the smallest index of the array where no value is stored
 
+#define CELL_SIZE 256
 
 // Declares a array struct of type T
 #define DECLAREARRAYSTRUCT(TYPE)\
@@ -76,8 +77,8 @@
 
 // Checks the space and stores `V` in the `nextfree` component of the array.
 // `nextfree` is incremented.
-#define STOREINARRAY(A,TYPE,L,VAL)\
-        CHECKARRAYSPACE(A,TYPE,L);\
+#define ARRAY_STORE(A, TYPE, L, VAL)\
+        CHECKARRAYSPACE(A, TYPE, L);\
         (A)->space##TYPE[(A)->nextfree##TYPE++] = VAL
 
 

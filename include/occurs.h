@@ -35,11 +35,11 @@ extern Bool rootevaluated;
             }\
             return False;\
         }\
-        nodeptr = stree + rootchild;\
+        vertex = stree + rootchild;\
      }
 
 
-#define CHECKROOTCHILDWITHPOS\
+#define CHECK_A_EDGE_POS\
         {\
           Uint rootchild;\
           if((rootchild = rootchildtab[firstchar]) == UNDEFINEDSUCC)\
@@ -52,17 +52,17 @@ extern Bool rootevaluated;
             if((Uint) (rightpattern-probe) ==\
                     lcp(probe+1,rightpattern,lefttext+1,sentinel-1))\
             {\
-              STOREINARRAY(resultpos, Uint,256, rootchild & ~LEAFBIT);\
+              ARRAY_STORE(resultpos, Uint,256, rootchild & ~LEAFBIT);\
               return True;\
             }\
             return False;\
           }\
-          nodeptr = stree + rootchild;\
+          vertex = stree + rootchild;\
         }
 
 
 // Tries to match the remainder of the pattern with the current leaf edge
-#define CHECKLEAFEDGE\
+#define MATCH_LEAF_EDGE\
         if(lefttext == sentinel)\
         {\
           return False;\
@@ -90,7 +90,7 @@ extern Bool rootevaluated;
           if((Uint) (rightpattern - probe) ==\
                   lcp(probe+1,rightpattern,lefttext+1,sentinel-1))\
           {\
-            STOREINARRAY(resultpos,Uint,256,(Uint) (lefttext - text));\
+            ARRAY_STORE(resultpos, Uint, 256, (Uint) (lefttext - text));\
             return True;\
           }\
           return False;\
@@ -124,7 +124,7 @@ extern Bool rootevaluated;
         {\
           if(prefixlen == (Uint) (rightpattern - probe + 1))\
           {\
-            collectpositions(resultpos,nodeptr);\
+            generate_lps(resultpos,vertex);\
             return True;\
           }\
           return False;\
@@ -135,14 +135,12 @@ extern Bool rootevaluated;
 // Functions
 
 Bool occurslazy(
-        Uchar *text,
         Uchar *leftpattern,
         Uchar *rightpattern
     );
 
 
 Bool occurseager(
-        Uchar *text,
         Uchar *leftpattern,
         Uchar *rightpattern
     );
