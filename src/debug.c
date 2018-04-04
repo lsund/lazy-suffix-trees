@@ -136,7 +136,7 @@ void showstree(void)
     {
         if(IS_LEAF(vertex))
         {
-            printf("#%lu: ",(Showuint) NODEINDEX(vertex));
+            printf("#%lu: ",(Showuint) INDEX(vertex));
             leftpointer = GET_LP(vertex);
             printf(" Leaf %lu",(Showuint) leftpointer);
             if(IS_RIGHTMOST(vertex))
@@ -146,7 +146,7 @@ void showstree(void)
             vertex++;
         } else
         {
-            printf("#%lu: ",(Showuint) NODEINDEX(vertex));
+            printf("#%lu: ",(Showuint) INDEX(vertex));
             leftpointer = GET_LP(vertex);
             printf(" Branch(%lu,%lu)",(Showuint) leftpointer,
                     (Showuint) FIRST_CHILD(vertex));

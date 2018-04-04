@@ -33,7 +33,7 @@ static Uint evalsuccedges(Uchar **left,Uchar **right)
         // create branching node
         if(r > l) {
             if(firstbranch == UNDEFREFERENCE) {
-                firstbranch = NODEINDEX(nextfreeentry);
+                firstbranch = INDEX(nextfreeentry);
             }
             STOREBOUNDARIES(nextfreeentry,l,r);
             // store l and r. resume later with this unevaluated node
@@ -78,12 +78,12 @@ Uint evalrootsuccedges(Uchar **left,Uchar **right)
         {
             if(firstbranch == UNDEFREFERENCE)
             {
-                firstbranch = NODEINDEX(nextfreeentry);
+                firstbranch = INDEX(nextfreeentry);
             }
             STOREBOUNDARIES(nextfreeentry,l,r);
             // store l and r. resume later with this unevaluated branch node
-            rootchildtab[firstchar] = NODEINDEX(nextfreeentry);
-            DEBUGCODE(1,lastrootchild = NODEINDEX(nextfreeentry));
+            rootchildtab[firstchar] = INDEX(nextfreeentry);
+            DEBUGCODE(1,lastrootchild = INDEX(nextfreeentry));
             nextfreeentry += BRANCHWIDTH;
             DEBUGCODE(1,branchcount++);
         } else // create leaf
@@ -111,7 +111,7 @@ static Uint evaluatenodeeager(Uint node)
     left = GETLEFTBOUNDARY(vertex);
     right = GETRIGHTBOUNDARY(vertex);
     SETLP(vertex,SUFFIXNUMBER(left));
-    SETFIRSTCHILD(vertex,NODEINDEX(nextfreeentry));
+    SETFIRSTCHILD(vertex,INDEX(nextfreeentry));
 
     unusedsuffixes = (Uint) (left - suffixes);
     if(suffixessize > UintConst(10000) && unusedsuffixes > maxunusedsuffixes)
@@ -139,17 +139,17 @@ static Uint evaluatenodeeager(Uint node)
     return evalsuccedges(left,right);
 }
 
-void evaluatenodelazy(Uint node)
+void eval_node(Uint node)
 {
     Uint prefixlen, *vertex;
     Uchar **left, **right;
 
-    DEBUG1(3,"#evaluatenodelazy(%lu)\n",(Showuint) node);
+    DEBUG1(3,"#eval_node(%lu)\n",(Showuint) node);
     vertex = stree + node;
     left = GETLEFTBOUNDARY(vertex);
     right = GETRIGHTBOUNDARY(vertex);
     SETLP(vertex,SUFFIXNUMBER(left));
-    SETFIRSTCHILD(vertex,NODEINDEX(nextfreeentry));
+    SETFIRSTCHILD(vertex,INDEX(nextfreeentry));
 
     sbuffer = getsbufferspacelazy(left,right);
     prefixlen = grouplcp(left,right);
@@ -173,7 +173,7 @@ static Uint getnextbranch(Uint previousbranch)
             }
             vertex++;
         } else {
-            return NODEINDEX(vertex);
+            return INDEX(vertex);
         }
     }
 }
@@ -182,7 +182,7 @@ void evaluateeager(void)
 {
   Uint firstbranch, nextbranch, node, stacktop=0, stackalloc=0, *stack = NULL;
 
-  counting_sort0();
+  create_suffix_groups();
   firstbranch = evalrootsuccedges(suffixes,suffixes+textlen-1);
   if(firstbranch != UNDEFREFERENCE) {
     PUSHNODE(firstbranch);

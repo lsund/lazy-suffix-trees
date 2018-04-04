@@ -11,8 +11,12 @@ extern Uchar characters[UCHAR_MAX + 1];
 extern Uchar *text, *sentinel, **sbuffer, **suffixes;
 extern Uint textlen, alphasize;
 
-void counting_sort(Uchar **left,Uchar **right,Uint prefixlen);
+void counting_sort(Uchar **left,Uchar **right, Uint prefixlen);
 
-void counting_sort0(void);
+// Determines the groups for all suffixes of the input string
+//
+// Scan all suffixes, determining the size of each group and then sorts the all
+// suffixes into the array suffixes.
+void create_suffix_groups(void);
 
 #endif

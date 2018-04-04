@@ -58,7 +58,7 @@ void run_patterns(const char *path, Bool evaleager, int npatterns, char ***o_pat
     int noccurs     = 0;
     char **patterns = *o_patterns;
     FILE *fp        = open_append(path);
-    searchfun       = evaleager ? occurseager : occurslazy;
+    searchfun       = evaleager ? search_eager : search_lazy;
 
     for(int j = 0; j < npatterns; j++) {
 
@@ -91,7 +91,7 @@ void run_benchmark(
 
     init_evaluation(evaleager);
 
-    searchfun = evaleager ? occurseager : occurslazy;
+    searchfun = evaleager ? search_eager : search_lazy;
 
     if (maxpat > textlen) {
         ERROR("Max pattern length must be smaller than the text length");

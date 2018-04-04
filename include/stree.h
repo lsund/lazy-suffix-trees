@@ -2,11 +2,13 @@
 #ifndef STREE_H
 #define STREE_H
 
+#include "types.h"
+#include "bitvector.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Getters
 
-#define NODEINDEX(N)            ((Uint) ((N) - stree))
+#define INDEX(N)            ((Uint) ((N) - stree))
 
 // leaf at this address
 #define LEAFBIT                 FIRSTBIT
@@ -52,11 +54,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Queries
 
-#define IS_LEAF(P)               ((*(P)) & LEAFBIT)
+#define IS_LEAF(P)              ((*(P)) & LEAFBIT)
 
-#define IS_RIGHTMOST(P)     ((*(P)) & RIGHTMOSTCHILDBIT)
+#define IS_RIGHTMOST(P)         ((*(P)) & RIGHTMOSTCHILDBIT)
 
-#define IS_UNEVALUATED(P)        ((*((P)+1)) & UNEVALUATEDBIT)
-
+#define IS_UNEVALUATED(P)       ((*((P)+1)) & UNEVALUATEDBIT)
 
 #endif

@@ -51,7 +51,7 @@ Uchar **getsbufferspacelazy(Uchar **left, Uchar **right)
 
 void allocstree(void)
 {
-    Uint tmpindex = NODEINDEX(nextfreeentry);
+    Uint tmpindex = INDEX(nextfreeentry);
     if(tmpindex >= streesize)
     {
         streesize += (textlen / 10);

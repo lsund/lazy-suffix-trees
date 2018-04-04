@@ -66,11 +66,11 @@ static Uint first_child_lp(Uint *vertex)
 }
 
 
-static void evaluate_root(Uint textlen)
+static void evaluate_root_lazy(Uint textlen)
 {
     if(!rootevaluated) {
 
-        counting_sort0();
+        create_suffix_groups();
         evalrootsuccedges(suffixes, suffixes + textlen - 1);
         rootevaluated = True;
 
@@ -81,45 +81,43 @@ static void evaluate_root(Uint textlen)
 // Public Interface
 
 
-Bool occurslazy(
-        Uchar *leftpattern,
-        Uchar *rightpattern
-    )
+Bool search_lazy(Uchar *left, Uchar *right)
 {
-    Uint edgelen, prefixlen;
-    Uchar firstchar, edgechar;
 
-    Uchar *probe = leftpattern;
-    // Check for empty word
-    if(probe > rightpattern) {
-        return True;
-    } else {
-        firstchar = *probe;
-    }
 
-    evaluate_root(textlen);
-
-    Uint *vertex;
     Uchar *lefttext;
 
-    // Checks if there is an a-edge from the root
+    // Check for empty word
+
+    Uchar *probe;
+    Uchar firstchar;
+    CHECK_EMPTY;
+
+    evaluate_root_lazy(textlen);
+
+    Uint *vertex;
     CHECK_A_EDGE;
 
-    Uint v;
+    Uint vertex_num;
     if (IS_UNEVALUATED(vertex)) {
-        v = NODEINDEX(vertex);
-        evaluatenodelazy(v);
-        vertex = stree + v;
+
+        vertex_num = INDEX(vertex);
+        eval_node(vertex_num);
+        vertex = stree + vertex_num;
+
     }
 
-    Uint leftpointer = GET_LP(vertex);
+    Uint lp = GET_LP(vertex);
     lefttext = text + GET_LP(vertex);
-    edgelen = first_child_lp(vertex) - leftpointer;
+
+    Uint edgelen = first_child_lp(vertex) - lp;
+    Uint prefixlen;
     CHECKBRANCHEDGE;
 
+    Uchar edgechar;
     while(True)
     {
-        if(probe > rightpattern)   // check for empty word
+        if(probe > right)   // check for empty word
         {
             return True;
         }
@@ -131,8 +129,8 @@ Bool occurslazy(
         {
             if(IS_LEAF(vertex)) {
 
-                leftpointer = GET_LP(vertex);
-                lefttext = text + leftpointer;
+                lp = GET_LP(vertex);
+                lefttext = text + lp;
                 MATCH_LEAF_EDGE;
 
                 if(IS_RIGHTMOST(vertex)) {
@@ -142,11 +140,11 @@ Bool occurslazy(
             } else {
 
                 if(IS_UNEVALUATED(vertex)) {
-                    leftpointer = GET_LP_UNEVAL(vertex);
+                    lp = GET_LP_UNEVAL(vertex);
                 } else {
-                    leftpointer = GET_LP(vertex);
+                    lp = GET_LP(vertex);
                 }
-                lefttext = text + leftpointer;
+                lefttext = text + lp;
                 edgechar = *lefttext;
                 if(edgechar == firstchar)
                 {
@@ -160,101 +158,96 @@ Bool occurslazy(
             }
         }
         if(IS_UNEVALUATED(vertex)) {
-            v = NODEINDEX(vertex);
-            evaluatenodelazy(v);
-            vertex = stree + v;
+            vertex_num = INDEX(vertex);
+            eval_node(vertex_num);
+            vertex = stree + vertex_num;
         }
-        edgelen = first_child_lp(vertex) - leftpointer;
+        edgelen = first_child_lp(vertex) - lp;
         CHECKBRANCHEDGE;
     }
 }
 
-Bool occurseager(
-        Uchar *leftpattern,
-        Uchar *rightpattern)
+Bool search_eager(Uchar *left, Uchar *right)
 {
-  Uint *vertex, edgelen, newleftpointer, leftpointer, prefixlen;
-  Uchar *lefttext, *probe = leftpattern, firstchar, edgechar;
+    Uint *vertex, edgelen, newleftpointer, lp, prefixlen;
+    Uchar *lefttext, *probe = left, firstchar, edgechar;
 
-  if(probe > rightpattern)   // check for empty word
-  {
-    return True;
-  }
-  firstchar = *probe;
-  CHECK_A_EDGE;
-  leftpointer = GET_LP(vertex);
-  lefttext = text + leftpointer;
-  vertex = stree + FIRST_CHILD(vertex);
-  newleftpointer = GET_LP(vertex);
-  edgelen = newleftpointer - leftpointer;
-  CHECKBRANCHEDGE;
-  while(True)
-  {
-    if(probe > rightpattern)   // check for empty word
+    if(probe > right)   // check for empty word
     {
-      return True;
+        return True;
     }
     firstchar = *probe;
-    while(True)
-    {
-      leftpointer = GET_LP(vertex);
-      lefttext = text + leftpointer;
-      if(IS_LEAF(vertex))
-      {
-        MATCH_LEAF_EDGE;
-        if(IS_RIGHTMOST(vertex))
-        {
-          return False;
-        }
-        vertex++;
-      } else
-      {
-        edgechar = *lefttext;
-        if(edgechar == firstchar)
-        {
-          break;
-        }
-        if(IS_RIGHTMOST(vertex))
-        {
-          return False;
-        }
-        vertex += BRANCHWIDTH;
-      }
-    }
+    CHECK_A_EDGE;
+    lp = GET_LP(vertex);
+    lefttext = text + lp;
     vertex = stree + FIRST_CHILD(vertex);
     newleftpointer = GET_LP(vertex);
-    edgelen = newleftpointer - leftpointer;
+    edgelen = newleftpointer - lp;
     CHECKBRANCHEDGE;
-  }
+    while(True)
+    {
+        if(probe > right)   // check for empty word
+        {
+            return True;
+        }
+        firstchar = *probe;
+        while(True)
+        {
+            lp = GET_LP(vertex);
+            lefttext = text + lp;
+            if(IS_LEAF(vertex))
+            {
+                MATCH_LEAF_EDGE;
+                if(IS_RIGHTMOST(vertex))
+                {
+                    return False;
+                }
+                vertex++;
+            } else
+            {
+                edgechar = *lefttext;
+                if(edgechar == firstchar)
+                {
+                    break;
+                }
+                if(IS_RIGHTMOST(vertex))
+                {
+                    return False;
+                }
+                vertex += BRANCHWIDTH;
+            }
+        }
+        vertex = stree + FIRST_CHILD(vertex);
+        newleftpointer = GET_LP(vertex);
+        edgelen = newleftpointer - lp;
+        CHECKBRANCHEDGE;
+    }
 }
 
 
-Bool occurrenceseager(
-        void *state,
-        Uchar *leftpattern,
-        Uchar *rightpattern)
+Bool occurrenceseager(void *state, Uchar *left, Uchar *right)
 {
-    Uint *vertex, edgelen, newleftpointer, leftpointer, prefixlen;
-    Uchar *lefttext, *probe = leftpattern, firstchar, edgechar;
+    Uint *vertex, edgelen, newleftpointer, lp, prefixlen;
+    Uchar *lefttext, *probe = left, firstchar, edgechar;
     ArrayUint *resultpos = (ArrayUint *) state;
 
     resultpos->nextfreeUint = 0;
-    if(probe > rightpattern)   // check for empty word
+    if(probe > right)   // check for empty word
     {
         return True;
     }
     firstchar = *probe;
     CHECK_A_EDGE_POS;
 
-    leftpointer = GET_LP(vertex);
-    lefttext = text + leftpointer;
+    lp = GET_LP(vertex);
+    lefttext = text + lp;
     vertex = stree + FIRST_CHILD(vertex);
     newleftpointer = GET_LP(vertex);
-    edgelen = newleftpointer - leftpointer;
+    edgelen = newleftpointer - lp;
     CHECKBRANCHEDGEWITHPOS;
     while(True)
     {
-        if(probe > rightpattern)   // check for empty word
+        if(probe > right)   // check for empty word
         {
             ARRAY_STORE(resultpos, Uint, CELL_SIZE, newleftpointer);
             return True;
@@ -262,8 +255,8 @@ Bool occurrenceseager(
         firstchar = *probe;
         while(True)
         {
-            leftpointer = GET_LP(vertex);
-            lefttext = text + leftpointer;
+            lp = GET_LP(vertex);
+            lefttext = text + lp;
             if(IS_LEAF(vertex))
             {
                 CHECKLEAFEDGEWITHPOS;
@@ -285,7 +278,7 @@ Bool occurrenceseager(
         }
         vertex = stree + FIRST_CHILD(vertex);
         newleftpointer = GET_LP(vertex);
-        edgelen = newleftpointer - leftpointer;
+        edgelen = newleftpointer - lp;
         CHECKBRANCHEDGEWITHPOS;
     }
 }

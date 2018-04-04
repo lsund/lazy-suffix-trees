@@ -38,26 +38,28 @@ void counting_sort(Uchar **left, Uchar **right, Uint prefixlen)
     }
 }
 
-void counting_sort0(void)
+void create_suffix_groups(void)
 {
-    Uchar *cptr, **nextFree = suffixes;
+    Uchar *c, **nextFree = suffixes;
     Uint a;
 
     // determine size for each group
-    for (cptr = text; cptr < text + textlen; cptr++) {
-        occurrence[(Uint) *cptr]++;
+    for (c = text; c < text + textlen; c++) {
+        occurrence[(Uint) *c]++;
     }
-    for (cptr = characters; cptr < characters + alphasize; cptr++) {
-        a = (Uint) *cptr;
+
+    for (c = characters; c < characters + alphasize; c++) {
+        a = (Uint) *c;
         bound[a] = nextFree + occurrence[a] - 1;
         nextFree = bound[a] + 1;
         occurrence[a] = 0;
     }
+
     // insert suffixes into array
-    for (cptr = text + textlen - 1; cptr >= text; cptr--) {
-        *(bound[(Uint) *cptr]--) = cptr;
+    for (c = text + textlen - 1; c >= text; c--) {
+        *(bound[(Uint) *c]--) = c;
     }
+
     // suffix \$ is the largest suffix
     suffixes[textlen] = sentinel;
 }
-

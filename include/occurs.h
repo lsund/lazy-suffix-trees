@@ -1,6 +1,7 @@
 #ifndef OCCURS_H
 #define OCCURS_H
 
+#include "stree.h"
 #include "types.h"
 #include "basedef.h"
 #include "bitvector.h"
@@ -19,6 +20,15 @@ extern Bool rootevaluated;
 // Macros
 
 
+#define CHECK_EMPTY\
+    if(left > right) {\
+        return True;\
+    } else {\
+        probe = left;\
+        firstchar = *left;\
+    }\
+
+
 // Checks if there is an a-edge out from the root
 #define CHECK_A_EDGE\
     {\
@@ -28,8 +38,8 @@ extern Bool rootevaluated;
         }\
         if(rootchild & LEAFBIT) {\
             lefttext = text + (rootchild & ~LEAFBIT);\
-            Uint lcp_res = lcp(probe + 1, rightpattern, lefttext + 1, sentinel - 1);\
-            if ((Uint) (rightpattern-probe) == lcp_res)\
+            Uint lcp_res = lcp(probe + 1, right, lefttext + 1, sentinel - 1);\
+            if ((Uint) (right - probe) == lcp_res)\
             {\
               return True;\
             }\
@@ -49,8 +59,8 @@ extern Bool rootevaluated;
           if(rootchild & LEAFBIT)\
           {\
             lefttext = text + (rootchild & ~LEAFBIT);\
-            if((Uint) (rightpattern-probe) ==\
-                    lcp(probe+1,rightpattern,lefttext+1,sentinel-1))\
+            if((Uint) (right-probe) ==\
+                    lcp(probe+1,right,lefttext+1,sentinel-1))\
             {\
               ARRAY_STORE(resultpos, Uint,256, rootchild & ~LEAFBIT);\
               return True;\
@@ -70,8 +80,8 @@ extern Bool rootevaluated;
         edgechar = *lefttext;\
         if(edgechar == firstchar)\
         {\
-          if((Uint) (rightpattern - probe) ==\
-                     lcp(probe+1,rightpattern,lefttext+1,sentinel-1))\
+          if((Uint) (right - probe) ==\
+                     lcp(probe+1,right,lefttext+1,sentinel-1))\
           {\
             return True;\
           }\
@@ -87,8 +97,8 @@ extern Bool rootevaluated;
         edgechar = *lefttext;\
         if(edgechar == firstchar)\
         {\
-          if((Uint) (rightpattern - probe) ==\
-                  lcp(probe+1,rightpattern,lefttext+1,sentinel-1))\
+          if((Uint) (right - probe) ==\
+                  lcp(probe+1,right,lefttext+1,sentinel-1))\
           {\
             ARRAY_STORE(resultpos, Uint, 256, (Uint) (lefttext - text));\
             return True;\
@@ -99,13 +109,13 @@ extern Bool rootevaluated;
 // Tries to match the remainder of the pattern with the current branch edge
 #define CHECKBRANCHEDGE\
         prefixlen = UintConst(1)+\
-                    lcp(probe+1,rightpattern,lefttext+1,lefttext+edgelen-1);\
+                    lcp(probe+1,right,lefttext+1,lefttext+edgelen-1);\
         if(prefixlen == edgelen)\
         {\
           probe += edgelen;\
         } else\
         {\
-          if(prefixlen == (Uint) (rightpattern - probe + 1))\
+          if(prefixlen == (Uint) (right - probe + 1))\
           {\
             return True;\
           }\
@@ -116,13 +126,13 @@ extern Bool rootevaluated;
 #define CHECKBRANCHEDGEWITHPOS\
         prefixlen =\
             UintConst(1)+\
-            lcp(probe+1,rightpattern,lefttext+1,lefttext+edgelen-1);\
+            lcp(probe+1,right,lefttext+1,lefttext+edgelen-1);\
         if(prefixlen == edgelen)\
         {\
           probe += edgelen;\
         } else\
         {\
-          if(prefixlen == (Uint) (rightpattern - probe + 1))\
+          if(prefixlen == (Uint) (right - probe + 1))\
           {\
             generate_lps(resultpos,vertex);\
             return True;\
@@ -134,15 +144,9 @@ extern Bool rootevaluated;
 ///////////////////////////////////////////////////////////////////////////////
 // Functions
 
-Bool occurslazy(
-        Uchar *leftpattern,
-        Uchar *rightpattern
-    );
 
+Bool search_lazy(Uchar *left, Uchar *right);
 
-Bool occurseager(
-        Uchar *leftpattern,
-        Uchar *rightpattern
-    );
+Bool search_eager(Uchar *left, Uchar *right);
 
 #endif

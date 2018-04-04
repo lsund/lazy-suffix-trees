@@ -37,7 +37,7 @@
 
 Uint evalrootsuccedges(Uchar **left,Uchar **right);
 
-void evaluatenodelazy(Uint node);
+void eval_node(Uint node);
 
 void evaluateeager(void);
 
