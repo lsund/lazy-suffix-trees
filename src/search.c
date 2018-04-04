@@ -111,14 +111,12 @@ static Uint randlen(Uint m_min, Uint m_max)
 
 BOOL search_one_pattern(
         BOOL (*occurs) (Uchar *, Uchar *, Uchar *),
-        Uchar *text,
-        Uint n,
         Uint m,
         char *mypattern
     )
 {
 
-    checkargs(n, m);
+    checkargs(textlen, m);
 
     Uchar pattern[MAXPATTERNLEN + 1];
     BOOL special = make_pattern(m, pattern, mypattern);
@@ -136,7 +134,6 @@ BOOL search_one_pattern(
 
 void searchpattern_benchmark(
         BOOL (*occurs) (Uchar *, Uchar *, Uchar *),
-        Uint n,
         Uint trials,
         Uint m_min,
         Uint m_max
@@ -144,7 +141,7 @@ void searchpattern_benchmark(
 {
     Uint i, m, patternstat[MAXPATTERNLEN+1] = {0};
 
-    checkargs_benchmark(n, m_max, m_min);
+    checkargs_benchmark(textlen, m_max, m_min);
 
     srand48(42349421);
 
@@ -153,7 +150,7 @@ void searchpattern_benchmark(
         patternstat[m]++;
 
         Uchar pattern[MAXPATTERNLEN+1];
-        BOOL special = make_text_pattern(n, m, text, pattern);
+        BOOL special = make_text_pattern(textlen, m, text, pattern);
 
         if (!special) {
             // Reverse Every second pattern

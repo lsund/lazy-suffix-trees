@@ -35,8 +35,6 @@
 
 BOOL search_one_pattern(
         BOOL (*occurs) (Uchar *, Uchar *, Uchar *),
-        Uchar *text,
-        Uint textlen,
         Uint patternlen,
         char *mypattern
     );
@@ -45,7 +43,6 @@ BOOL search_one_pattern(
 
 void searchpattern_benchmark(
         BOOL (*occurs) (Uchar *, Uchar *, Uchar *),
-        Uint textlen,
         Uint trials,
         Uint minpatternlen,
         Uint maxpatternlen

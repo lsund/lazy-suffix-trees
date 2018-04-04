@@ -48,22 +48,22 @@ static void print_statistics(FILE *fp, int trials)
 void wotd(const char *path, BOOL evaleager, int npatterns, char ***o_patterns)
 {
 
-    char **patterns = *o_patterns;
-
     init_evaluation(evaleager);
 
-    FILE *fp = open_append(path);
+    BOOL (*eager_or_lazy) (Uchar *, Uchar *, Uchar *)  =
+        evaleager ? occurseager : occurslazy;
 
-    int noccurs = 0;
+    int noccurs     = 0;
+    char **patterns = *o_patterns;
+    FILE *fp        = open_append(path);
+
     for(int j = 0; j < npatterns; j++) {
-        BOOL exists =
-            search_one_pattern(
-                evaleager ? occurseager : occurslazy,
-                text,
-                textlen,
-                strlen(patterns[j]),
-                patterns[j]
-            );
+
+        char *pattern = patterns[j];
+        Uint patternlen = strlen(pattern);
+
+        BOOL exists = search_one_pattern( eager_or_lazy, patternlen, pattern);
+
         if (exists) {
             fprintf(fp, "%s\n", patterns[j]);
             noccurs++;
@@ -92,16 +92,12 @@ void wotd_benchmark(
         evaleager ? occurseager : occurslazy;
 
     if (maxpat > 0 && maxpat <= textlen && trials > 0) {
-        searchpattern_benchmark(
-            eager_or_lazy,
-            textlen,
-            trials,
-            minpat,
-            maxpat
-        );
+        searchpattern_benchmark(eager_or_lazy, trials, minpat, maxpat);
     }
 
     FILE *fp = open_append(path);
     print_statistics(fp, trials);
     printtime();
+
+    fclose(fp);
 }
