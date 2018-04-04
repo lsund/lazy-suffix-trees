@@ -9,13 +9,14 @@ int main(int argc,char *argv[])
     BOOL evaleager;
     Uint patternslen;
 
-    CHECKARGNUM(4,"(-lazy|-eager) filename patternfile");
+    CHECKARGNUM(5, "(-lazy|-eager) filename patternfile (bench|run)");
     DEBUGLEVELSET;
 
     if (strcmp(argv[1],"-lazy") != 0 && strcmp(argv[1],"-eager") != 0) {
         fprintf(stderr,"Illegal option \"%s\"\n",argv[1]);
         exit(EXIT_FAILURE);
     }
+
     if (strcmp(argv[1],"-eager") == 0) {
         evaleager = True;
     } else {
@@ -42,14 +43,20 @@ int main(int argc,char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    /* int minpat = 5; */
-    /* int maxpat = 1000; */
-    /* for (int k = 1; k < 20; k++) { */
-    /*     int trials = k * 10000; */
-    /*     wotd_benchmark(evaleager, trials, minpat, maxpat); */
-    /* } */
+    const char *path = "data/out.txt";
 
-    wotd(evaleager, i, &patterns);
+    if (strcmp(argv[4], "bench") == 0) {
+
+        int minpat = 5;
+        int maxpat = 1000;
+
+        wotd_benchmark(path, evaleager, 5, minpat, maxpat);
+
+    } else {
+
+        wotd(path, evaleager, i, &patterns);
+
+    }
 
     freetextspace(text, textlen);
 

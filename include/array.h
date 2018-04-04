@@ -85,7 +85,7 @@
 #define FREEARRAY(A,TYPE)\
         if((A)->space##TYPE != NULL)\
         {\
-          FREESPACE((A)->space##TYPE);\
+          FREE((A)->space##TYPE);\
         }
 
 

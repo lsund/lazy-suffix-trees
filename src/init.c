@@ -1,11 +1,37 @@
 
 #include "init.h"
 
+Uchar   *text,
+        *sentinel,
+        characters[UCHAR_MAX + 1],
+        **suffixbase,
+        **suffixes,
+        **sbuffer;
+
+Uint    textlen,
+        alphasize,
+        maxwidth,
+        *stree,
+        leafcount,
+        branchcount,
+        streesize,
+        suffixessize,
+        maxstacksize,
+        *nextfreeentry,
+        maxunusedsuffixes,
+        sbufferwidth,
+        maxsbufferwidth,
+        alphaindex[UCHAR_MAX + 1],
+        occurrence[UCHAR_MAX + 1],
+        rootchildtab[UCHAR_MAX + 1];
+
+BOOL    rootevaluated;
+
 void inittree(void)
 {
     Uint i;
 
-    DEBUGCODE(1, maxstacksize=maxwidth=branchcount=leafcount=0);
+    DEBUGCODE(1, maxstacksize = maxwidth = branchcount = leafcount = 0);
     getUchars(text, textlen, characters, &alphasize);
     sentinel = text+textlen;
     streesize = BRANCHWIDTH;

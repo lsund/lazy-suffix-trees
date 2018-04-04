@@ -1,6 +1,16 @@
 
 #include "spaceman.h"
 
+Uchar **suffixes, **sbufferspace;
+
+Uint    sbufferwidth,
+        maxsbufferwidth,
+        *nextfreeentry,
+        *stree,
+        streesize,
+        textlen;
+
+
 Uchar **getsbufferspaceeager(Uchar **left, Uchar **right)
 {
     Uint width = (Uint) (right - left + 1);

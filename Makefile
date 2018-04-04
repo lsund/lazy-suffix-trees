@@ -20,8 +20,8 @@ mode=64bit
 CFLAGS+=-m64 -DSIXTYFOURBITS $(INCLUDE)
 LDFLAGS+=-m64
 
-# CFLAGS+=-O3 -Wall -Werror -DNOSPACEBOOKKEEPING
-CFLAGS+=-O3 -Wall -Wextra -Werror -DNOSPACEBOOKKEEPING
+# CFLAGS+=-O3 -Wall -Werror
+CFLAGS+=-O3 -Wall -Wextra -Werror
 
 CFLAGS+=-DDEBUG
 CFLAGS+=-g
@@ -59,8 +59,11 @@ dirs:
 wotd: ${OBJ}
 	${CC} ${LDFLAGS} ${OBJ} -o bin/$@
 
-remake: clean all
-	./bin/wotd -eager data/data.xml data/10000.txt
+bench: clean all
+	./bin/wotd -eager data/dataset/005.txt data/10000.txt bench
+
+run: clean all
+	./bin/wotd -eager data/data.xml data/10000.txt run
 
 clean:
 	rm -rf obj bin

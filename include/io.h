@@ -66,5 +66,8 @@ int file2Array(char *name, Uint *textlen, int nlines, char ***words);
 
 FILE *createfilehandle(char *file, Uint line, char *path, char *mode);
 
+// Opens the path for appending, erasing any prior content of the same file
+FILE *open_append(const char *path);
+
 #endif
 

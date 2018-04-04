@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <limits.h>
 
+#include "globals.h"
 #include "types.h"
 #include "debug.h"
 #include "char.h"
@@ -44,7 +45,6 @@ BOOL search_one_pattern(
 
 void searchpattern_benchmark(
         BOOL (*occurs) (Uchar *, Uchar *, Uchar *),
-        Uchar *text,
         Uint textlen,
         Uint trials,
         Uint minpatternlen,

@@ -15,6 +15,8 @@ void showstring(Uchar *left, Uchar *right);
 
 void showpattern(Uchar *w, Uint wlen);
 
+void printtime();
+
 // Macros for checking argument numbers
 
 // Check if the number of arguments is exactly N

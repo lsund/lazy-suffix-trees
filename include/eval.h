@@ -1,6 +1,7 @@
 #ifndef EVAL_H
 #define EVAL_H
 
+#include "globals.h"
 #include "error.h"
 #include "bitvector.h"
 #include "types.h"
@@ -40,17 +41,5 @@ void evaluatenodelazy(Uint node);
 
 void evaluateeager(void);
 
-
-///////////////////////////////////////////////////////////////////////////////
-// Fields
-
-
-extern Uchar *text, *sentinel, **suffixbase, **sbuffer;
-
-extern Uint
-    *nextfreeentry,
-    rootchildtab[UCHAR_MAX + 1], suffixessize,
-    maxunusedsuffixes, leafcount, branchcount,
-    lastrootchild;
 
 #endif

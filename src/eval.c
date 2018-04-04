@@ -1,6 +1,16 @@
 
 #include "eval.h"
 
+Uchar   *text, *sentinel, **suffixbase, **sbuffer;
+
+Uint    *nextfreeentry,
+        rootchildtab[UCHAR_MAX + 1],
+        suffixessize,
+        maxunusedsuffixes,
+        leafcount,
+        branchcount,
+        lastrootchild;
+
 
 static Uint evalsuccedges(Uchar **left,Uchar **right)
 {
@@ -196,7 +206,7 @@ void evaluateeager(void)
         node = evaluatenodeeager(node);
       }
     }
-    FREESPACE(stack);
+    FREE(stack);
   }
 }
 

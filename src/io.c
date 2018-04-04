@@ -263,3 +263,10 @@ int file2Array(char *name, Uint *textlen, int size, char ***wordsp)
 
     return i;
 }
+
+
+FILE *open_append(const char *path)
+{
+    fclose(fopen(path, WRITEMODE));
+    return fopen(path, APPENDMODE);
+}

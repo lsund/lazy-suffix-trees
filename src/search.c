@@ -136,7 +136,6 @@ BOOL search_one_pattern(
 
 void searchpattern_benchmark(
         BOOL (*occurs) (Uchar *, Uchar *, Uchar *),
-        Uchar *text,
         Uint n,
         Uint trials,
         Uint m_min,

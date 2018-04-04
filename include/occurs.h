@@ -141,6 +141,10 @@ BOOL occurslazy(
     );
 
 
-BOOL occurseager(Uchar *text,
-                        Uchar *leftpattern,Uchar *rightpattern);
+BOOL occurseager(
+        Uchar *text,
+        Uchar *leftpattern,
+        Uchar *rightpattern
+    );
+
 #endif
