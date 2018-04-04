@@ -35,6 +35,10 @@ Sint geterror(void);
 
 void reseterror(void);
 
+#define ERROR(S);\
+    fprintf(stderr, "Error: %s\n", S);\
+    exit(EXIT_FAILURE);
+
 #define GENERROR(C);\
         if(((Sint) (C)) >= maxerrormsg())\
         {\

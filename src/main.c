@@ -13,22 +13,16 @@ int main(int argc,char *argv[])
     DEBUGLEVELSET;
 
     if (strcmp(argv[1], "-lazy") != 0 && strcmp(argv[1],"-eager") != 0) {
-        fprintf(stderr,"Illegal option \"%s\"\n",argv[1]);
-        exit(EXIT_FAILURE);
+        ERROR("Must provide -lazy or -eager as first argument");
     }
 
-    if (strcmp(argv[1], "-eager") == 0) {
-        evaleager = True;
-    } else {
-        evaleager = False;
-    }
+    evaleager = strcmp(argv[1], "-eager") == 0;
 
     filename = argv[2];
     text = (Uchar *) file2String(filename, &textlen);
 
     if(text == NULL) {
-        fprintf(stderr, "%s: Cannot open file %s\n", argv[0], filename);
-        exit(EXIT_FAILURE);
+        ERROR("Cannot open file");
     }
 
     patternfile     = argv[3];
@@ -37,8 +31,7 @@ int main(int argc,char *argv[])
     int i           = file2Array(patternfile, &patternslen, size, &patterns);
 
     if(textlen > MAXTEXTLEN) {
-        fprintf(stderr, "Text too large. see MAXTEXTLEN");
-        exit(EXIT_FAILURE);
+        ERROR("Text too large, see MAXTEXTLEN");
     }
 
     const char *path = "data/out.txt";

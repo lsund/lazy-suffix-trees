@@ -93,9 +93,11 @@ void run_benchmark(
 
     searchfun = evaleager ? occurseager : occurslazy;
 
-    if (maxpat > 0 && maxpat <= textlen && trials > 0) {
-        searchpattern_benchmark(trials, minpat, maxpat);
+    if (maxpat > textlen) {
+        ERROR("Max pattern length must be smaller than the text length");
     }
+
+    searchpattern_benchmark(trials, minpat, maxpat);
 
     FILE *fp = open_append(path);
     print_statistics(fp, trials);
