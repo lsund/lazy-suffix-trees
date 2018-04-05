@@ -52,6 +52,30 @@ static Bool no_successor(Uchar patt_head)
 }
 
 
+static Bool finished(Uchar *patt_probe, Uchar *patt_end)
+{
+    return patt_probe > patt_end;
+}
+
+
+static Bool match(Uchar *text_probe, Uchar *patt_probe, Uchar *patt_end)
+{
+    Uint len = lcp(patt_probe+1,patt_end,text_probe+1,sentinel-1);
+    return (Uint) (patt_end - patt_probe) == len;
+}
+
+
+/* static Sint match_edge(Uchar *text_probe, Uchar *patt_probe, Uchar *patt_end, Uint edgelen) */
+/* { */
+/*     Uint len = lcp(patt_probe+1,patt_end,text_probe+1,text_probe+edgelen-1); */
+/*     Bool is_prefix = len != edgelen - 1; */
+/*     return  is_prefix && (len == (Uint) (patt_end - patt_probe)); */
+/* } */
+
+
+/* static Bool match_edge(Uchar * */
+
+
 static Bool check_a_edge(
                 Uint rootchild,
                 Uchar **text_probe,
@@ -59,15 +83,9 @@ static Bool check_a_edge(
                 Uchar *patt_end)
 {
     *text_probe = text + (rootchild & ~LEAFBIT);
-    Uint len = lcp(patt_probe + 1, patt_end, *text_probe + 1, sentinel - 1);
-    return ((Uint) (patt_end - patt_probe) == len);
+    return match(*text_probe, patt_probe, patt_end);
 }
 
-
-static Bool finished(Uchar *patt_probe, Uchar *patt_end)
-{
-    return patt_probe > patt_end;
-}
 
 ///////////////////////////////////////////////////////////////////////////////
 // Public Interface
@@ -120,12 +138,12 @@ Bool search(Uchar *patt, Uchar *patt_end)
 
     Uint edgelen = first_child_lp(vertex) - lp;
     Uint prefixlen;
-    // Tries to match the remainder of the pattern with the current branch edge
+    // Tries to match the remainder of the pattern with a prefix the current branch edge
     prefixlen = lcp(patt_probe+1,patt_end,text_probe+1,text_probe+edgelen-1);
-    if(prefixlen == edgelen - 1) {
-        patt_probe += edgelen;
-    } else {
+    if(prefixlen != edgelen - 1) {
         return (prefixlen == (Uint) (patt_end - patt_probe));
+    } else {
+        patt_probe += edgelen;
     }
 
     Uchar edgechar;
@@ -141,7 +159,16 @@ Bool search(Uchar *patt, Uchar *patt_end)
 
                 lp = GET_LP(vertex);
                 text_probe = text + lp;
-                MATCH_LEAF_EDGE;
+                /* MATCH_LEAF_EDGE; */
+                //
+                if(text_probe == sentinel) {
+                    return False;
+                }
+                edgechar = *text_probe;
+                if(edgechar == patt_head) {
+                    return match(text_probe, patt_probe, patt_end);
+                }
+                //
 
                 if(IS_RIGHTMOST(vertex)) {
                     return False;
@@ -174,11 +201,12 @@ Bool search(Uchar *patt, Uchar *patt_end)
             vertex = stree + vertex_num;
         }
         edgelen = first_child_lp(vertex) - lp;
+        //
         prefixlen = lcp(patt_probe+1,patt_end,text_probe+1,text_probe+edgelen-1);
-        if(prefixlen == edgelen - 1) {
-            patt_probe += edgelen;
-        } else {
+        if(prefixlen != edgelen - 1) {
             return (prefixlen == (Uint) (patt_end - patt_probe));
+        } else {
+            patt_probe += edgelen;
         }
     }
 
