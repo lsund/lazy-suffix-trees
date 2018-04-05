@@ -21,9 +21,6 @@
 #include "search.h"
 
 
-Bool (*searchfun) (Uchar *, Uchar *);
-
-
 static Bool copy_pattern(Uchar *pattern, char *current_pattern, Uint len)
 {
     for(Uint i = 0; i < len; i++) {
@@ -74,7 +71,7 @@ Bool try_search_pattern(char *current_pattern, Uint patternlen)
         ERROR("Found an unparsable pattern");
     }
 
-    return searchfun(pattern, pattern + patternlen - 1);
+    return search(pattern, pattern + patternlen - 1);
 
 }
 
@@ -97,7 +94,7 @@ void iterate_search_patterns(Uint trials, Uint minlen, Uint maxlen)
             if (i & 1) {
                 reverse(pattern, patternlen);
             }
-            searchfun(pattern, pattern + patternlen - 1);
+            search(pattern, pattern + patternlen - 1);
         }
     }
 }

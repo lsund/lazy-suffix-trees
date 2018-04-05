@@ -6,26 +6,19 @@ extern Uint textlen;
 int main(int argc,char *argv[])
 {
     char *filename, *patternfile;
-    Bool evaleager;
     Uint patternslen;
 
-    CHECKARGNUM(5, "(-lazy|-eager) filename patternfile (bench|run)");
+    CHECKARGNUM(4, "filename patternfile (bench|run)");
     DEBUGLEVELSET;
 
-    if (strcmp(argv[1], "-lazy") != 0 && strcmp(argv[1],"-eager") != 0) {
-        ERROR("Must provide -lazy or -eager as first argument");
-    }
-
-    evaleager = strcmp(argv[1], "-eager") == 0;
-
-    filename = argv[2];
+    filename = argv[1];
     text = (Uchar *) file2String(filename, &textlen);
 
     if(text == NULL) {
         ERROR("Cannot open file");
     }
 
-    patternfile     = argv[3];
+    patternfile     = argv[2];
     int size        = 128;
     char **patterns = (char **) malloc(sizeof(char *) * size);
     int i           = file2Array(patternfile, &patternslen, size, &patterns);
@@ -36,16 +29,16 @@ int main(int argc,char *argv[])
 
     const char *path = "data/out.txt";
 
-    if (strcmp(argv[4], "bench") == 0) {
+    if (strcmp(argv[3], "bench") == 0) {
 
-        int minpat = 5;
+        int minpat = 500;
         int maxpat = 1000;
 
-        run_benchmark(path, evaleager, 5, minpat, maxpat);
+        run_benchmark(path, 100000, minpat, maxpat);
 
     } else {
 
-        run_patterns(path, evaleager, i, &patterns);
+        run_patterns(path, i, &patterns);
 
     }
 

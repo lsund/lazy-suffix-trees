@@ -27,18 +27,6 @@ Bool (*searchfun) (Uchar *, Uchar *);
 // Functions
 
 
-static void init_evaluation(Bool evaleager)
-{
-    inittree();
-    initclock();
-
-    if (evaleager) {
-        evaluateeager();
-        FREE(suffixes);
-    }
-}
-
-
 static void print_statistics(FILE *fp, int trials)
 {
     fprintf(fp, "%lu ", (Showuint) trials);
@@ -50,15 +38,15 @@ static void print_statistics(FILE *fp, int trials)
 // Public API
 
 
-void run_patterns(const char *path, Bool evaleager, int npatterns, char ***o_patterns)
+void run_patterns(const char *path, int npatterns, char ***o_patterns)
 {
 
-    init_evaluation(evaleager);
+    inittree();
+    initclock();
 
     int noccurs     = 0;
     char **patterns = *o_patterns;
     FILE *fp        = open_append(path);
-    searchfun       = evaleager ? search_eager : search_lazy;
 
     for(int j = 0; j < npatterns; j++) {
 
@@ -80,18 +68,11 @@ void run_patterns(const char *path, Bool evaleager, int npatterns, char ***o_pat
 }
 
 
-void run_benchmark(
-        const char *path,
-        Bool evaleager,
-        Uint trials,
-        Uint minpat,
-        Uint maxpat
-    )
+void run_benchmark(const char *path, Uint trials, Uint minpat, Uint maxpat)
 {
 
-    init_evaluation(evaleager);
-
-    searchfun = evaleager ? search_eager : search_lazy;
+    inittree();
+    initclock();
 
     if (maxpat > textlen) {
         ERROR("Max pattern length must be smaller than the text length");

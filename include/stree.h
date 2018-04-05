@@ -10,7 +10,7 @@
 
 #define INDEX(N)            ((Uint) ((N) - stree))
 
-// leaf at this address
+// Bit determining if leaf
 #define LEAFBIT                 FIRSTBIT
 
 // right most child of succ list

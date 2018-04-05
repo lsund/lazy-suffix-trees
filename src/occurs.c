@@ -22,38 +22,6 @@
 #include "occurs.h"
 
 
-static void generate_lps(ArrayUint *resultpos, Uint *firstsucc)
-{
-    Uint lp;
-    Uint *vertex = firstsucc;
-
-    while(True) {
-
-        if (IS_LEAF(vertex)) {
-
-            lp = GET_LP(vertex);
-            ARRAY_STORE(resultpos, Uint, CELL_SIZE, lp);
-
-            if (IS_RIGHTMOST(vertex)) {
-                break;
-            } else {
-                vertex++;
-            }
-
-        } else {
-
-            generate_lps(resultpos, vertex);
-
-            if (IS_RIGHTMOST(vertex)) {
-                break;
-            }
-
-            vertex += BRANCHWIDTH;
-        }
-    }
-}
-
-
 static Uint first_child_lp(Uint *vertex)
 {
     Uint *child = stree + FIRST_CHILD(vertex);
@@ -66,7 +34,7 @@ static Uint first_child_lp(Uint *vertex)
 }
 
 
-static void evaluate_root_lazy(Uint textlen)
+static void evaluate_root_lazy()
 {
     if(!rootevaluated) {
 
@@ -77,28 +45,68 @@ static void evaluate_root_lazy(Uint textlen)
     }
 }
 
+
+static Bool no_successor(Uchar patt_head)
+{
+    return (rootchildtab[patt_head]) == UNDEFINEDSUCC;
+}
+
+
+static Bool check_a_edge(
+                Uint rootchild,
+                Uchar **text_probe,
+                Uchar *patt_probe,
+                Uchar *patt_end)
+{
+    *text_probe = text + (rootchild & ~LEAFBIT);
+    Uint len = lcp(patt_probe + 1, patt_end, *text_probe + 1, sentinel - 1);
+    return ((Uint) (patt_end - patt_probe) == len);
+}
+
+
+static Bool finished(Uchar *patt_probe, Uchar *patt_end)
+{
+    return patt_probe > patt_end;
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // Public Interface
 
 
-Bool search_lazy(Uchar *left, Uchar *right)
+Bool search(Uchar *patt, Uchar *patt_end)
 {
 
 
-    Uchar *lefttext;
+    Uchar *text_probe, *patt_probe;
+    Uchar patt_head;
 
     // Check for empty word
+    if(patt > patt_end) {
+        return True;
+    } else {
+        patt_probe = patt;
+        patt_head  = *patt;
+    }
 
-    Uchar *probe;
-    Uchar firstchar;
-    CHECK_EMPTY;
-
-    evaluate_root_lazy(textlen);
+    evaluate_root_lazy();
 
     Uint *vertex;
-    CHECK_A_EDGE;
+    Uint rootchild;
+
+    if (no_successor(patt_head)) {
+        return False;
+    } else {
+        rootchild = rootchildtab[patt_head];
+    }
+
+    if (IS_LEAF(&rootchild)) {
+        return check_a_edge(rootchild, &text_probe, patt_probe, patt_end);
+    }
+
+    vertex = stree + rootchild;
 
     Uint vertex_num;
+
     if (IS_UNEVALUATED(vertex)) {
 
         vertex_num = INDEX(vertex);
@@ -108,35 +116,38 @@ Bool search_lazy(Uchar *left, Uchar *right)
     }
 
     Uint lp = GET_LP(vertex);
-    lefttext = text + GET_LP(vertex);
+    text_probe = text + GET_LP(vertex);
 
     Uint edgelen = first_child_lp(vertex) - lp;
     Uint prefixlen;
-    CHECKBRANCHEDGE;
+    // Tries to match the remainder of the pattern with the current branch edge
+    prefixlen = lcp(patt_probe+1,patt_end,text_probe+1,text_probe+edgelen-1);
+    if(prefixlen == edgelen - 1) {
+        patt_probe += edgelen;
+    } else {
+        return (prefixlen == (Uint) (patt_end - patt_probe));
+    }
 
     Uchar edgechar;
-    while(True)
-    {
-        if(probe > right)   // check for empty word
-        {
-            return True;
-        }
 
-        firstchar = *probe;
+    while(!finished(patt_probe, patt_end)) {
+
+        patt_head = *patt_probe;
         vertex   = stree + FIRST_CHILD(vertex);
 
-        while(True)
-        {
-            if(IS_LEAF(vertex)) {
+        while(True) {
+
+            if (IS_LEAF(vertex)) {
 
                 lp = GET_LP(vertex);
-                lefttext = text + lp;
+                text_probe = text + lp;
                 MATCH_LEAF_EDGE;
 
                 if(IS_RIGHTMOST(vertex)) {
                     return False;
                 }
                 vertex++;
+
             } else {
 
                 if(IS_UNEVALUATED(vertex)) {
@@ -144,9 +155,9 @@ Bool search_lazy(Uchar *left, Uchar *right)
                 } else {
                     lp = GET_LP(vertex);
                 }
-                lefttext = text + lp;
-                edgechar = *lefttext;
-                if(edgechar == firstchar)
+                text_probe = text + lp;
+                edgechar = *text_probe;
+                if(edgechar == patt_head)
                 {
                     break;
                 }
@@ -163,123 +174,14 @@ Bool search_lazy(Uchar *left, Uchar *right)
             vertex = stree + vertex_num;
         }
         edgelen = first_child_lp(vertex) - lp;
-        CHECKBRANCHEDGE;
-    }
-}
-
-Bool search_eager(Uchar *left, Uchar *right)
-{
-    Uint *vertex, edgelen, newleftpointer, lp, prefixlen;
-    Uchar *lefttext, *probe = left, firstchar, edgechar;
-
-    if(probe > right)   // check for empty word
-    {
-        return True;
-    }
-    firstchar = *probe;
-    CHECK_A_EDGE;
-    lp = GET_LP(vertex);
-    lefttext = text + lp;
-    vertex = stree + FIRST_CHILD(vertex);
-    newleftpointer = GET_LP(vertex);
-    edgelen = newleftpointer - lp;
-    CHECKBRANCHEDGE;
-    while(True)
-    {
-        if(probe > right)   // check for empty word
-        {
-            return True;
+        prefixlen = lcp(patt_probe+1,patt_end,text_probe+1,text_probe+edgelen-1);
+        if(prefixlen == edgelen - 1) {
+            patt_probe += edgelen;
+        } else {
+            return (prefixlen == (Uint) (patt_end - patt_probe));
         }
-        firstchar = *probe;
-        while(True)
-        {
-            lp = GET_LP(vertex);
-            lefttext = text + lp;
-            if(IS_LEAF(vertex))
-            {
-                MATCH_LEAF_EDGE;
-                if(IS_RIGHTMOST(vertex))
-                {
-                    return False;
-                }
-                vertex++;
-            } else
-            {
-                edgechar = *lefttext;
-                if(edgechar == firstchar)
-                {
-                    break;
-                }
-                if(IS_RIGHTMOST(vertex))
-                {
-                    return False;
-                }
-                vertex += BRANCHWIDTH;
-            }
-        }
-        vertex = stree + FIRST_CHILD(vertex);
-        newleftpointer = GET_LP(vertex);
-        edgelen = newleftpointer - lp;
-        CHECKBRANCHEDGE;
     }
-}
 
-
-Bool occurrenceseager(void *state, Uchar *left, Uchar *right)
-{
-    Uint *vertex, edgelen, newleftpointer, lp, prefixlen;
-    Uchar *lefttext, *probe = left, firstchar, edgechar;
-    ArrayUint *resultpos = (ArrayUint *) state;
-
-    resultpos->nextfreeUint = 0;
-    if(probe > right)   // check for empty word
-    {
-        return True;
-    }
-    firstchar = *probe;
-    CHECK_A_EDGE_POS;
-
-    lp = GET_LP(vertex);
-    lefttext = text + lp;
-    vertex = stree + FIRST_CHILD(vertex);
-    newleftpointer = GET_LP(vertex);
-    edgelen = newleftpointer - lp;
-    CHECKBRANCHEDGEWITHPOS;
-    while(True)
-    {
-        if(probe > right)   // check for empty word
-        {
-            ARRAY_STORE(resultpos, Uint, CELL_SIZE, newleftpointer);
-            return True;
-        }
-        firstchar = *probe;
-        while(True)
-        {
-            lp = GET_LP(vertex);
-            lefttext = text + lp;
-            if(IS_LEAF(vertex))
-            {
-                CHECKLEAFEDGEWITHPOS;
-                if(IS_RIGHTMOST(vertex)) {
-                    return False;
-                }
-                vertex++;
-            } else
-            {
-                edgechar = *lefttext;
-                if(edgechar == firstchar) {
-                    break;
-                }
-                if(IS_RIGHTMOST(vertex)) {
-                    return False;
-                }
-                vertex += BRANCHWIDTH;
-            }
-        }
-        vertex = stree + FIRST_CHILD(vertex);
-        newleftpointer = GET_LP(vertex);
-        edgelen = newleftpointer - lp;
-        CHECKBRANCHEDGEWITHPOS;
-    }
+    return True;
 }
 
