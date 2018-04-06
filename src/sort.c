@@ -3,32 +3,28 @@
 
 Uchar **bound[UCHAR_MAX + 1];
 
-
-Uint *charmap;
-
-static void map_add(Uchar a)
-{
-    *(charmap + a) = (Uint) a;
-}
-
 // Determine size for each group
-static void determine_groupsize(Uchar **c, Uchar **left, Uchar **right, Uint prefixlen)
+static void get_count(Uchar **arr, Uint len)
 {
-    for (c = left; c <= right; c++) {
+    // This can be too small
+    /* for (c = left; c <= right; c++) { */
+    /*     // drop the common prefix */
+    /*     occurrence[(Uint) **c]++; */
+    /* } */
+    for (Uint i = 0; i <= len; i++) {
         // drop the common prefix
-        *c += prefixlen;
-        /* printf("%zu\n", sizeof(Uchar)); */
-        occurrence[(Uint) **c]++;
+        /* *c += prefixlen; */
+        /* printf("arr: %d\n", arr[i]); */
+        occurrence[(Uint) *arr[i]]++;
     }
 }
 
-
-static void determine_bounds(Uchar **i, Uchar **left, Uchar **right)
+static void set_bounds(Uchar **arr, Uint len)
 {
     Uint a;
     Uchar **nextFree = sbuffer;
-    for (i = left; i <= right; i++) {
-        a = (Uint) **i;
+    for (Uint i = 0; i <= len; i++) {
+        a = (Uint) *arr[i];
         if (occurrence[a] > 0) {
             bound[a] = nextFree + occurrence[a] - 1;
             nextFree = bound[a] + 1;
@@ -38,17 +34,18 @@ static void determine_bounds(Uchar **i, Uchar **left, Uchar **right)
 }
 
 
-static void insert_suffixes(Uchar **i, Uchar **left, Uchar **right)
+static void insert_suffixes(Uchar **arr, Uint len)
 {
-    for (i = right; i >= left; i--) {
-        *(bound[(Uint) **i]--) = *i;
+
+    for (int i = len; i >= 0; i--) {
+        *(bound[(Uint) *arr[i]]--) = arr[i];
     }
 }
 
 
 void counting_sort(Uchar **left, Uchar **right, Uint prefixlen)
 {
-    Uchar **i = NULL;
+    Uchar **c = NULL;
     Uchar **j = NULL;
 
     // Shortest suffix is sentinel, skip
@@ -57,29 +54,24 @@ void counting_sort(Uchar **left, Uchar **right, Uint prefixlen)
         right--;
     }
 
-    if (False) {
-        charmap = calloc(UCHAR_MAX + 1, sizeof(Uint));
-        // Add characters to map
-        for (Uchar i = 0; i < UCHAR_MAX; i++) {
-            map_add(i);
-        }
-        for (Uchar i = 0; i < UCHAR_MAX; i++) {
-            printf("%zu\n", charmap[i]);
-        }
-        exit(EXIT_SUCCESS);
+    Uchar *arr[500000];
+    c = left;
+    for (int i = 0; i <= right - left; i++, c++) {
+        *c += prefixlen;
+        arr[(Uint) i] = *c;
     }
 
-    determine_groupsize(i, left, right, prefixlen);
+    get_count(arr, right - left);
 
     // determine right bound for each group
-    determine_bounds(i, left, right);
+    set_bounds(arr, right - left);
 
     // insert suffixes into buffer
-    insert_suffixes(i, left, right);
+    insert_suffixes(arr, right - left);
 
     // copy grouped suffixes back
-    for (i = left, j = sbuffer; i <= right; i++, j++) {
-        *i = *j;
+    for (c = left, j = sbuffer; c <= right; c++, j++) {
+        *c = *j;
     }
 }
 

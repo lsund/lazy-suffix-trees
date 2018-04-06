@@ -21,7 +21,8 @@ CFLAGS+=-m64 -DSIXTYFOURBITS $(INCLUDE)
 LDFLAGS+=-m64
 
 # CFLAGS+=-O3 -Wall -Werror
-CFLAGS+=-O3 -Wall -Wextra -Werror
+# CFLAGS+=-O3 -Wall -Wextra -Werror
+CFLAGS+=-O3 -Wall
 
 CFLAGS+=-DDEBUG
 CFLAGS+=-g
