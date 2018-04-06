@@ -30,22 +30,23 @@ CFLAGS+=-g
 SPLINTFLAGS=-DDEBUG
 
 OBJ= obj/boyermoore.o\
-    obj/reverse.o\
-    obj/search.o\
-    obj/clock.o\
-    obj/io.o\
-    obj/seterror.o\
-    obj/get_alpha.o \
-    obj/spaceman.o\
-	obj/debug.o\
-	obj/util.o\
-    obj/sort.o\
-    obj/lcp.o\
-    obj/wotd.o\
-	obj/eval.o\
-	obj/occurs.o\
-	obj/init.o\
-    obj/main.o
+	 obj/utf.o\
+     obj/reverse.o\
+     obj/search.o\
+     obj/clock.o\
+     obj/io.o\
+     obj/seterror.o\
+     obj/get_alpha.o \
+     obj/spaceman.o\
+	 obj/debug.o\
+	 obj/util.o\
+     obj/sort.o\
+     obj/lcp.o\
+     obj/wotd.o\
+	 obj/eval.o\
+	 obj/occurs.o\
+	 obj/init.o\
+     obj/main.o
 
 
 OBJ2 = obj/treesize.o
@@ -64,6 +65,9 @@ bench: clean all
 
 run: clean all
 	./bin/wotd data/data.xml data/10000.txt run
+
+utf8: clean all
+	./bin/wotd data/utftest.txt data/utftest.txt run
 
 clean:
 	rm -rf obj bin

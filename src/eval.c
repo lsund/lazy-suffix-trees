@@ -101,44 +101,6 @@ Uint evalrootsuccedges(Uchar **left,Uchar **right)
     return firstbranch;
 }
 
-static Uint evaluatenodeeager(Uint node)
-{
-    Uint prefixlen, *vertex, unusedsuffixes;
-    Uchar **left, **right;
-
-    DEBUG1(3,"#evaluatenodeeager(%lu)\n",(Showuint) node);
-    vertex = stree + node;
-    left = GETLEFTBOUNDARY(vertex);
-    right = GETRIGHTBOUNDARY(vertex);
-    SETLP(vertex,SUFFIXNUMBER(left));
-    SETFIRSTCHILD(vertex,INDEX(nextfreeentry));
-
-    unusedsuffixes = (Uint) (left - suffixes);
-    if(suffixessize > UintConst(10000) && unusedsuffixes > maxunusedsuffixes)
-    {
-        Uint tmpdiff, width = (Uint) (right - left + 1);
-        Uchar **i, **j;
-        for(i=left, j=suffixes; i<suffixes+suffixessize; i++, j++)
-        {
-            *j = *i;  // move remaining suffixes to the left
-        }
-        suffixessize -= unusedsuffixes;
-        maxunusedsuffixes = suffixessize >> 1;
-        tmpdiff = (Uint) (suffixes - suffixbase);
-        DEBUG2(2,"#move[%lu,%lu] ",(Showuint) (left-suffixes),
-                (Showuint) (left-suffixes+suffixessize));
-        DEBUG1(2,"[0,%lu]\n",(Showuint) suffixessize);
-        ALLOC(suffixes,suffixes,Uchar *,suffixessize);
-        suffixbase = suffixes - (tmpdiff + unusedsuffixes);
-        left = suffixes;
-        right = suffixes + width - 1;
-    }
-    sbuffer = getsbufferspaceeager(left, right);
-    prefixlen = grouplcp(left,right);
-    counting_sort(left,right,prefixlen);
-    return evalsuccedges(left,right);
-}
-
 void eval_node(Uint node)
 {
     Uint prefixlen, *vertex;
@@ -155,47 +117,5 @@ void eval_node(Uint node)
     prefixlen = grouplcp(left,right);
     counting_sort(left,right,prefixlen);
     (void) evalsuccedges(left,right);
-}
-
-static Uint getnextbranch(Uint previousbranch)
-{
-    Uint *vertex = stree + previousbranch;
-
-    if(IS_RIGHTMOST(vertex))
-    {
-        return UNDEFREFERENCE;
-    }
-    vertex += BRANCHWIDTH;
-    while(True) {
-        if(IS_LEAF(vertex)) {
-            if(IS_RIGHTMOST(vertex)) {
-                return UNDEFREFERENCE;
-            }
-            vertex++;
-        } else {
-            return INDEX(vertex);
-        }
-    }
-}
-
-void evaluateeager(void)
-{
-  Uint firstbranch, nextbranch, node, stacktop=0, stackalloc=0, *stack = NULL;
-
-  create_suffix_groups();
-  firstbranch = evalrootsuccedges(suffixes,suffixes+textlen-1);
-  if(firstbranch != UNDEFREFERENCE) {
-    PUSHNODE(firstbranch);
-    while(NOTSTACKEMPTY) {
-      POPNODE(node);
-      while(node != UNDEFREFERENCE) {
-        if((nextbranch = getnextbranch(node)) != UNDEFREFERENCE) {
-          PUSHNODE(nextbranch);
-        }
-        node = evaluatenodeeager(node);
-      }
-    }
-    FREE(stack);
-  }
 }
 

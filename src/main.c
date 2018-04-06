@@ -14,6 +14,18 @@ int main(int argc,char *argv[])
     filename = argv[1];
     text = (Uchar *) file2String(filename, &textlen);
 
+    /* Uint len = 4; */
+    /* Uint *test = (Uint *) malloc(sizeof(Uint)); */
+    /* printf("%s\n", text); */
+    /* while (True) { */
+    /*     from_utf8(&text, text + len, test); */
+    /*     if (*test == 0) { */
+    /*         break; */
+    /*     } */
+    /*     printf("%lu\n", *test); */
+    /* } */
+    /* exit(EXIT_SUCCESS); */
+
     if(text == NULL) {
         ERROR("Cannot open file");
     }

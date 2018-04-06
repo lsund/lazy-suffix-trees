@@ -3,3 +3,23 @@ rho is trialpercentage. Number of trials is (textlen * rho)
 export DEBUGLEVEL to enable debugging
 
 some functions like allocandusespaceptr is not implemented
+
+UTF encoding:
+
+ASSUMPTIONS:
+
+1. pattern file and text file are encoded in the same way
+
+
+OBSERVATIONS:
+
+2. Only characters in the pattern file needs to be considered, due to lazy
+   construction
+
+
+METHOD:
+
+1. Generate a list of all characters in the pattern file.
+
+2. In sort: Map each character to an index
+
