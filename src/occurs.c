@@ -22,6 +22,16 @@
 #include "occurs.h"
 
 
+static Pattern init_pattern(Uchar *patt_start, Uchar *patt_end)
+{
+    Pattern patt;
+    patt.head  = *patt_start;
+    patt.probe = patt_start;
+    patt.end   = patt_end;
+    return patt;
+}
+
+
 static Uint first_child_lp(Uint *vertex)
 {
     Uint *child = stree + FIRST_CHILD(vertex);
@@ -158,13 +168,7 @@ Bool search(Uchar *patt_start, Uchar *patt_end)
     Uint *vertex;
     Uint vertex_num;
 
-    Pattern patt;
-    patt.head = *patt_start;
-    patt.probe = patt_start;
-    patt.end = patt_end;
-
-    /* Uchar patt_head = *patt; */
-    /* Uchar *patt_probe = patt; */
+    Pattern patt = init_pattern(patt_start, patt_end);
 
     if(empty_pattern(patt)) {
         return True;
