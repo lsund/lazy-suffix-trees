@@ -8,6 +8,7 @@
 #include "sort.h"
 #include "eval.h"
 #include "array.h"
+#include "result.h"
 
 extern Uchar *text, **suffixbase, *sentinel;
 
