@@ -17,6 +17,13 @@ extern Uint *stree, rootchildtab[UCHAR_MAX + 1];
 extern Bool rootevaluated;
 
 
+typedef struct pattern {
+    Uchar head;
+    Uchar *probe;
+    Uchar *end;
+} Pattern;
+
+
 ///////////////////////////////////////////////////////////////////////////////
 // Macros
 
