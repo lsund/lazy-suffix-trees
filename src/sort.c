@@ -3,28 +3,34 @@
 
 Uchar **bound[UCHAR_MAX + 1];
 
-// Determine size for each group
-static void get_count(Uchar **arr, Uint len)
+
+Uint *charmap;
+
+static void map_add(Uchar a)
 {
-    // This can be too small
-    /* for (c = left; c <= right; c++) { */
-    /*     // drop the common prefix */
-    /*     occurrence[(Uint) **c]++; */
-    /* } */
-    for (Uint i = 0; i <= len; i++) {
+    *(charmap + a) = (Uint) a;
+}
+
+// Determine size for each group
+static void determine_groupsize(Uchar **left, Uchar **right, Uint prefixlen)
+{
+
+    Uchar **c;
+    for (c = left; c <= right; c++) {
         // drop the common prefix
-        /* *c += prefixlen; */
-        /* printf("arr: %d\n", arr[i]); */
-        occurrence[(Uint) *arr[i]]++;
+        *c += prefixlen;
+        occurrence[(Uint) **c]++;
     }
 }
 
-static void set_bounds(Uchar **arr, Uint len)
+
+static void determine_bounds(Uchar **left, Uchar **right)
 {
     Uint a;
     Uchar **nextFree = sbuffer;
-    for (Uint i = 0; i <= len; i++) {
-        a = (Uint) *arr[i];
+    Uchar **c;
+    for (c = left; c <= right; c++) {
+        a = (Uint) **c;
         if (occurrence[a] > 0) {
             bound[a] = nextFree + occurrence[a] - 1;
             nextFree = bound[a] + 1;
@@ -34,18 +40,18 @@ static void set_bounds(Uchar **arr, Uint len)
 }
 
 
-static void insert_suffixes(Uchar **arr, Uint len)
+static void insert_suffixes(Uchar **left, Uchar **right)
 {
-
-    for (int i = len; i >= 0; i--) {
-        *(bound[(Uint) *arr[i]]--) = arr[i];
+    Uchar **c;
+    for (c = right; c >= left; c--) {
+        *(bound[(Uint) **c]--) = *c;
     }
 }
 
 
 void counting_sort(Uchar **left, Uchar **right, Uint prefixlen)
 {
-    Uchar **c = NULL;
+    Uchar **i = NULL;
     Uchar **j = NULL;
 
     // Shortest suffix is sentinel, skip
@@ -54,24 +60,17 @@ void counting_sort(Uchar **left, Uchar **right, Uint prefixlen)
         right--;
     }
 
-    Uchar *arr[500000];
-    c = left;
-    for (int i = 0; i <= right - left; i++, c++) {
-        *c += prefixlen;
-        arr[(Uint) i] = *c;
-    }
-
-    get_count(arr, right - left);
+    determine_groupsize(left, right, prefixlen);
 
     // determine right bound for each group
-    set_bounds(arr, right - left);
+    determine_bounds(left, right);
 
     // insert suffixes into buffer
-    insert_suffixes(arr, right - left);
+    insert_suffixes(left, right);
 
     // copy grouped suffixes back
-    for (c = left, j = sbuffer; c <= right; c++, j++) {
-        *c = *j;
+    for (i = left, j = sbuffer; i <= right; i++, j++) {
+        *i = *j;
     }
 }
 
