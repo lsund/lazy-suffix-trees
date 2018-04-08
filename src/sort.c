@@ -6,25 +6,25 @@
 // Determine size for each group
 static void get_count(Uchar **left, Uchar **right, Uint prefixlen)
 {
-
-    Uchar **c;
-    for (c = left; c <= right; c++) {
+    Uchar **suffix_probe;
+    for (suffix_probe = left; suffix_probe <= right; suffix_probe++) {
         // drop the common prefix
-        *c += prefixlen;
-        occurrence[(Uint) **c]++;
+        *suffix_probe += prefixlen;
+        occurrence[(Uint) **suffix_probe]++;
     }
 }
 
 
 static void set_group_bounds(Uchar **left, Uchar **right, Uchar ***upper_bounds)
 {
-    // Sort buffer points to a sufficiently big allocated memory block
+    // Sort buffer is already allocated, a sufficiently large memory block for
+    // all suffix poniters.
     Uchar **lower_bound = sort_buffer;
-    Uchar **suffix;
+    Uchar **suffix_probe;
 
-    for (suffix = left; suffix <= right; suffix++) {
+    for (suffix_probe = left; suffix_probe <= right; suffix_probe++) {
 
-        Uint head = (Uint) **suffix;
+        Uint head = **suffix_probe;
         if (occurrence[head] > 0) {
 
             // 'allocate' the upper bound for the current character.
@@ -33,7 +33,6 @@ static void set_group_bounds(Uchar **left, Uchar **right, Uchar ***upper_bounds)
             upper_bounds[head] = lower_bound + occurrence[head] - 1;
             lower_bound        = upper_bounds[head] + 1;
             occurrence[head]   = '\0';
-
         }
     }
 }
@@ -41,27 +40,22 @@ static void set_group_bounds(Uchar **left, Uchar **right, Uchar ***upper_bounds)
 
 static void insert_suffixes(Uchar **left, Uchar **right, Uchar ***upper_bounds)
 {
-    Uchar **suffix;
-    for (suffix = right; suffix >= left; suffix--) {
+    Uchar **suffix_probe;
+    for (suffix_probe = right; suffix_probe >= left; suffix_probe--) {
         // Decrement the pointer to bounds for this specific character,
         // then insert the suffix pointed to by c.
         //
         // This fills up the slot allocated for this group with suffix tree
         // addresses, end to start.
-        Uchar head = **suffix;
-        *(upper_bounds[head]--) = *suffix;
+        Uint head              = **suffix_probe;
+        *(upper_bounds[head]--) = *suffix_probe;
     }
 }
 
 
 void counting_sort(Uchar **left, Uchar **right, Uint prefixlen)
 {
-    Uchar **i = NULL;
-    Uchar **j = NULL;
-
-
     Uchar **upper_bounds[UCHAR_MAX + 1];
-
 
     // Shortest suffix is sentinel, skip
     if (*right + prefixlen == sentinel) {
@@ -75,12 +69,19 @@ void counting_sort(Uchar **left, Uchar **right, Uint prefixlen)
     // determine right bound for each group
     set_group_bounds(left, right, upper_bounds);
 
-    // insert suffixes into buffer
+    // Create buffer
     insert_suffixes(left, right, upper_bounds);
 
-    // copy grouped suffixes back
-    for (i = left, j = sort_buffer; i <= right; i++, j++) {
-        *i = *j;
+    Uchar **suffix_probe = left;
+    Uchar **buffer_probe = sort_buffer;
+
+    // copy grouped suffixes back from buffer
+    while (suffix_probe <= right) {
+
+        *suffix_probe = *buffer_probe;
+
+        suffix_probe++;
+        buffer_probe++;
     }
 }
 

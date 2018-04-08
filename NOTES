@@ -21,7 +21,6 @@ OBSERVATIONS:
    possible to represent all characters. This will however require 8 times as
    much space.
 
+ACTIONS:
 
-
-
-
+Change Uchar to represent an unsigned integer
