@@ -13,13 +13,15 @@ ASSUMPTIONS:
 
 OBSERVATIONS:
 
-2. Only characters in the pattern file needs to be considered, due to lazy
+1. Only characters in the pattern file needs to be considered, due to lazy
    construction
 
+2. The sort is based on the fact that characters are of 1 byte (a normal
+   character). By preprocessing the text into long unsigned ints, it will be
+   possible to represent all characters. This will however require 8 times as
+   much space.
 
-METHOD:
 
-1. Generate a list of all characters in the pattern file.
 
-2. In sort: Map each character to an index
+
 

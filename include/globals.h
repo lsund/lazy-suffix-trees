@@ -22,8 +22,8 @@ extern Uchar **suffixes;
 // pointers into suffixes are with relation to this variable
 extern Uchar **suffixbase;
 
-// buffer for sorting sort suffixes in `src/sort.c`
-extern Uchar **sbuffer;
+// buffer for sorting suffixes in `src/sort.c`
+extern Uchar **sort_buffer;
 
 // space to be used by `sbuffer`
 extern Uchar **sbufferspace;

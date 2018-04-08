@@ -5,8 +5,7 @@ Uchar   *text,
         *sentinel,
         characters[UCHAR_MAX + 1],
         **suffixbase,
-        **suffixes,
-        **sbuffer;
+        **suffixes;
 
 Uint    textlen,
         alphasize,

@@ -1,7 +1,7 @@
 
 #include "eval.h"
 
-Uchar   *text, *sentinel, **suffixbase, **sbuffer;
+Uchar   *text, *sentinel, **suffixbase, **sort_buffer;
 
 Uint    *nextfreeentry,
         rootchildtab[UCHAR_MAX + 1],
@@ -113,7 +113,7 @@ void eval_node(Uint node)
     SETLP(vertex,SUFFIXNUMBER(left));
     SETFIRSTCHILD(vertex,INDEX(nextfreeentry));
 
-    sbuffer = getsbufferspacelazy(left,right);
+    sort_buffer = getsbufferspacelazy(left,right);
     prefixlen = grouplcp(left,right);
     counting_sort(left,right,prefixlen);
     (void) evalsuccedges(left,right);
