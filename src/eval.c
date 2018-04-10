@@ -3,13 +3,10 @@
 
 Uchar   *text, *sentinel, **suffixbase, **sort_buffer;
 
-Uint    *nextfreeentry,
+Uint    *next_free,
         rootchildtab[UCHAR_MAX + 1],
         suffixessize,
-        maxunusedsuffixes,
-        leafcount,
-        branchcount,
-        lastrootchild;
+        maxunusedsuffixes;
 
 
 static Uint evalsuccedges(Uchar **left,Uchar **right)
@@ -29,30 +26,27 @@ static Uint evalsuccedges(Uchar **left,Uchar **right)
         {
             ;
         }
-        previousnode = nextfreeentry;
+        previousnode = next_free;
         // create branching node
         if(r > l) {
             if(firstbranch == UNDEFREFERENCE) {
-                firstbranch = INDEX(nextfreeentry);
+                firstbranch = INDEX(next_free);
             }
-            STOREBOUNDARIES(nextfreeentry,l,r);
+            STOREBOUNDARIES(next_free,l,r);
             // store l and r. resume later with this unevaluated node
-            nextfreeentry += BRANCHWIDTH;
-            DEBUGCODE(1,branchcount++);
+            next_free += BRANCHWIDTH;
         } else // create leaf
         {
             leafnum = SUFFIXNUMBER(l);
-            SETLEAF(nextfreeentry,leafnum);
-            nextfreeentry++;
-            DEBUGCODE(1,leafcount++);
+            SETLEAF(next_free,leafnum);
+            next_free++;
         }
     }
     if(sentineledge)
     {
         leafnum = SUFFIXNUMBER(right+1);
-        SETLEAF(nextfreeentry,leafnum);
-        previousnode = nextfreeentry++;
-        DEBUGCODE(1,leafcount++);
+        SETLEAF(next_free,leafnum);
+        previousnode = next_free++;
     }
     NOTSUPPOSEDTOBENULL(previousnode);
     *previousnode |= RIGHTMOSTCHILDBIT;
@@ -78,26 +72,22 @@ Uint evalrootsuccedges(Uchar **left,Uchar **right)
         {
             if(firstbranch == UNDEFREFERENCE)
             {
-                firstbranch = INDEX(nextfreeentry);
+                firstbranch = INDEX(next_free);
             }
-            STOREBOUNDARIES(nextfreeentry,l,r);
+            STOREBOUNDARIES(next_free,l,r);
             // store l and r. resume later with this unevaluated branch node
-            rootchildtab[firstchar] = INDEX(nextfreeentry);
-            DEBUGCODE(1,lastrootchild = INDEX(nextfreeentry));
-            nextfreeentry += BRANCHWIDTH;
-            DEBUGCODE(1,branchcount++);
+            rootchildtab[firstchar] = INDEX(next_free);
+            next_free += BRANCHWIDTH;
         } else // create leaf
         {
             leafnum = SUFFIXNUMBER(l);
-            SETLEAF(nextfreeentry,leafnum);
+            SETLEAF(next_free,leafnum);
             rootchildtab[firstchar] = leafnum | LEAFBIT;
-            nextfreeentry++;
-            DEBUGCODE(1,leafcount++);
+            next_free++;
         }
     }
-    SETLEAF(nextfreeentry,textlen | RIGHTMOSTCHILDBIT);
-    nextfreeentry++;
-    DEBUGCODE(1,leafcount++);
+    SETLEAF(next_free,textlen | RIGHTMOSTCHILDBIT);
+    next_free++;
     return firstbranch;
 }
 
@@ -108,10 +98,10 @@ void eval_node(Uint node)
 
     DEBUG1(3,"#eval_node(%lu)\n",(Showuint) node);
     vertex = stree + node;
-    left = GETLEFTBOUNDARY(vertex);
-    right = GETRIGHTBOUNDARY(vertex);
+    left   = GETLEFTBOUNDARY(vertex);
+    right  = GETRIGHTBOUNDARY(vertex);
     SETLP(vertex,SUFFIXNUMBER(left));
-    SETFIRSTCHILD(vertex,INDEX(nextfreeentry));
+    SETFIRSTCHILD(vertex,INDEX(next_free));
 
     sort_buffer = getsbufferspacelazy(left,right);
     prefixlen = grouplcp(left,right);

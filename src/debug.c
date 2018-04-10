@@ -132,7 +132,7 @@ void showstree(void)
     Uint leftpointer, *vertex = stree;
 
     showrootchildtab();
-    while(vertex < nextfreeentry)
+    while(vertex < next_free)
     {
         if(IS_LEAF(vertex))
         {

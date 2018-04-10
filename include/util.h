@@ -9,7 +9,7 @@
 
 extern Uchar *sentinel, *text, characters[UCHAR_MAX + 1];
 
-extern Uint maxstacksize, textlen, alphasize;
+extern Uint textlen, alphasize;
 
 void showstring(Uchar *left, Uchar *right);
 

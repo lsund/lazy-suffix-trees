@@ -122,7 +122,7 @@ Since we have a virtual sentinel character which is different from all possible
 but each of the other edges can lead to a branching node. Hence, to evaluate a
 branching node, we have to enlarge the size of \texttt{stree} by at least
 \texttt{MAXSUCCSPACE} integers. This is done by the function
-\texttt{allocstree}, when \texttt{nextfreeentry} reaches the end of the
+\texttt{allocstree}, when \texttt{next_free} reaches the end of the
 block currently allocated for \texttt{stree}.
 
 

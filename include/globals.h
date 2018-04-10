@@ -19,7 +19,7 @@ extern Uchar characters[UCHAR_MAX + 1];
 // array of pointers to suffixes of `t`
 extern Uchar **suffixes;
 
-// pointers into suffixes are with relation to this variable
+// pointers into suffixes depend on this variable
 extern Uchar **suffixbase;
 
 // buffer for sorting suffixes in `src/sort.c`
@@ -31,18 +31,8 @@ extern Uchar **sbufferspace;
 ///////////////////////////////////////////////////////////////////////////////
 // Global Integers
 
-extern Uint lastrootchild;
-
-extern Uint maxwidth;
-
-extern Uint branchcount;
-
-extern Uint leafcount;
-
 // length of `t`
 extern Uint  textlen;
-
-extern Uint maxstacksize;
 
 // size of the alphabet `A`
 extern Uint alphasize;
@@ -60,7 +50,7 @@ extern Uint *stree;
 extern Uint streesize;
 
 // pointer to next unused element in `stree`
-extern Uint *nextfreeentry;
+extern Uint *next_free;
 
 // number of elements in `sbufferspace`
 extern Uint sbufferwidth;

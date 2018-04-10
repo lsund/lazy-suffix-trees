@@ -34,7 +34,6 @@ extern Uchar *text, *sentinel, characters[UCHAR_MAX + 1];
 extern Uint     rootchildtab[UCHAR_MAX + 1],
                 textlen,
                 *stree,
-                *nextfreeentry,
                 alphasize;
 
 ///////////////////////////////////////////////////////////////////////////////

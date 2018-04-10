@@ -5,7 +5,7 @@ Uchar **suffixes, **sbufferspace;
 
 Uint    sbufferwidth,
         maxsbufferwidth,
-        *nextfreeentry,
+        *next_free,
         *stree,
         streesize,
         textlen;
@@ -32,13 +32,13 @@ Uchar **getsbufferspacelazy(Uchar **left, Uchar **right)
 
 void allocstree(void)
 {
-    Uint tmpindex = INDEX(nextfreeentry);
+    Uint tmpindex = INDEX(next_free);
     if(tmpindex >= streesize)
     {
         streesize += (textlen / 10);
         ALLOC(stree, stree, Uint, streesize + MAXSUCCSPACE);
         // update necessary, since stree may have been moved.
-        nextfreeentry = stree + tmpindex;
+        next_free = stree + tmpindex;
     }
 }
 

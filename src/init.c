@@ -9,14 +9,11 @@ Uchar   *text,
 
 Uint    textlen,
         alphasize,
-        maxwidth,
         *stree,
         leafcount,
-        branchcount,
         streesize,
         suffixessize,
-        maxstacksize,
-        *nextfreeentry,
+        *next_free,
         maxunusedsuffixes,
         sbufferwidth,
         maxsbufferwidth,
@@ -30,21 +27,20 @@ void inittree(void)
 {
     Uint i;
 
-    DEBUGCODE(1, maxstacksize = maxwidth = branchcount = leafcount = 0);
     getUchars(text, textlen, characters, &alphasize);
-    sentinel = text+textlen;
+    sentinel  = text + textlen;
     streesize = BRANCHWIDTH;
 
-    ALLOC(stree,stree,Uint,streesize + MAXSUCCSPACE);
-    nextfreeentry = stree;
-    suffixessize = textlen + 1;
+    ALLOC(stree, stree, Uint, streesize + MAXSUCCSPACE);
+    next_free     = stree;
+    suffixessize      = textlen + 1;
     maxunusedsuffixes = suffixessize >> 1;
 
-    ALLOC(suffixes,NULL,Uchar *, suffixessize);
-    suffixbase = suffixes;
-    sbufferwidth = 0;
+    ALLOC(suffixes, NULL, Uchar *, suffixessize);
+    suffixbase      = suffixes;
+    sbufferwidth    = 0;
     maxsbufferwidth = textlen >> 8;
-    rootevaluated = False;
+    rootevaluated   = False;
 
     for (i = 0; i < alphasize; i++) {
         alphaindex[(Uint) characters[i]] = i;

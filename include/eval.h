@@ -22,7 +22,6 @@
           stackalloc += 100;\
           ALLOC(stack,stack,Uint,stackalloc);\
         }\
-        DEBUGCODE(1,if(stacktop > maxstacksize) { maxstacksize = stacktop;});\
         NOTSUPPOSEDTOBENULL(stack);\
         stack[stacktop++] = N
 
