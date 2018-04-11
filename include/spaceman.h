@@ -17,6 +17,7 @@
 
 
 // Simplify calls to space managing functions
+// S is the pointer
 #define ALLOCSPACE(S, T, N)\
         (T *) realloc(S, sizeof(T) * (size_t) (N))
 
