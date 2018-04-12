@@ -35,6 +35,9 @@ ASSUMPTIONS:
 
 # IMPLICATIONS:
 
+The suffix tree needs to represent a sequence of codepoints instead of a
+sequence of ascii characters.
+
 Each character needs 4 bytes of space instead of 1 byte of space.
 
 ## These global variables need to change
@@ -46,7 +49,9 @@ Each character needs 4 bytes of space instead of 1 byte of space.
 
 ## Functions that needs to change
 
-* `get_characters`
+* `get_characters` Assumes Uchars. The logic is OK, but both loops assume that
+  counts is a static array of size 256. This needs to be a dynamic array that
+  can store arbitrarily many elements.
 
 ## These structures need to be a linked list rather than a static array
 

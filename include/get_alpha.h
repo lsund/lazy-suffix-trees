@@ -5,6 +5,7 @@
 #include <limits.h>
 
 #include "types.h"
+#include "basedef.h"
 
 void get_characters(Uchar *text, Uint textlen, Uchar *alpha, Uint *alphasize);
 

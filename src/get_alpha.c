@@ -21,18 +21,21 @@
 
 #include "get_alpha.h"
 
+// Iterate over the text and store the counts of each character. Then iterate
+// over 1->256 (all uchars) and store them in the `alpha` parameter, if the
+// occurence is greater than 0.
 void get_characters(Uchar *text, Uint textlen, Uchar *alpha, Uint *alphasize)
 {
-    Uint occ[UCHAR_MAX + 1] = {0};
+    Uint counts[MAX_CHARS + 1] = {0};
     Uchar *text_probe;
 
     for (text_probe = text; text_probe < text + textlen; text_probe++) {
-        occ[(Uint) *text_probe]++;
+        counts[(Uint) *text_probe]++;
     }
 
     Uint i, j;
-    for (j = 0, i = 0; i <= UCHAR_MAX; i++) {
-        if (occ[i] > 0) {
+    for (j = 0, i = 0; i <= MAX_CHARS; i++) {
+        if (counts[i] > 0) {
             alpha[j++] = (Uchar) i;
         }
     }
