@@ -25,7 +25,7 @@ extern Uchar *sentinel;
 extern Uchar characters[UCHAR_MAX + 1];
 
 // number of occurrences for the first character of the current suffixes
-extern Uint suffixhead_occurrence[UCHAR_MAX + 1];
+extern Uint suffixhead_count[UCHAR_MAX + 1];
 
 ///////////////////////////////////////////////////////////////////////////////
 // Sorting Buffer
