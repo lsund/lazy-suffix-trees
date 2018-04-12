@@ -1,7 +1,7 @@
 
 #include "eval.h"
 
-Uchar   *text, *sentinel, **suffixbase, **current_sortbuffer;
+Uchar   *text, *sentinel, **current_sortbuffer;
 
 Uint    *next_free,
         rootchildtab[UCHAR_MAX + 1],

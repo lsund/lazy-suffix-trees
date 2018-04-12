@@ -68,8 +68,7 @@ pointer, we determine the corresponding suffix number with
 
 An unevaluated branching node \(\overline{u}\) is represented by a record of
 two integers which store two pointers \(\mathit{left}(\overline{u})\) and
-\(\mathit{right}(\overline{u})\). These pointers are relative to a pointer
-\texttt{suffixbase}. The macros \texttt{STOREBOUNDARIES}
+\(\mathit{right}(\overline{u})\). The macros \texttt{STOREBOUNDARIES}
 \texttt{GETLEFTBOUNDARY} \texttt{GETRIGHTBOUNDARY} are used for storing and
 retrieving these pointers.\\
 
@@ -193,8 +192,7 @@ suffix pointers at positions larger than \(q\) exactly \(q\) positions to the
 left, and reduce the size of the array \texttt{suffixes} to the number of the
 remaining suffixes. More precisely, we approximately halve the size of the
 array \texttt{suffixes}. To have valid pointers into the array
-\texttt{suffixes}, we let all suffix pointers be relative to the pointer
-\texttt{suffixbase}. This is decremented by \(q\) as well.
+\texttt{suffixes}. This is decremented by \(q\) as well.
 \texttt{evaluatenodeeager} returns a reference to the next node to be processed
 in eager evaluation.\\
 

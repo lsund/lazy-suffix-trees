@@ -29,10 +29,10 @@
 #define SUFFIXNUMBER(L)         ((Uint) (*(L) - text))
 
 // The left boundry of the remaining suffixes
-#define GETLEFTBOUNDARY(P)      (suffixbase + *(P))
+#define GETLEFTBOUNDARY(P)      (suffixes + *(P))
 
 // The right boundry of the remaining suffixes
-#define GETRIGHTBOUNDARY(P)     (suffixbase + ((*((P) + 1)) & ~UNEVALUATEDBIT))
+#define GETRIGHTBOUNDARY(P)     (suffixes + ((*((P) + 1)) & ~UNEVALUATEDBIT))
 
 // The lp number of an unevaluated vertex
 #define GET_LP_UNEVAL(N)          SUFFIXNUMBER(GETLEFTBOUNDARY(N))
@@ -47,8 +47,8 @@
 #define SETLEAF(P,L)            *(P) = (L) | LEAFBIT
 
 // Store the left and right boundaries for the remaining suffixes
-#define STOREBOUNDARIES(P,L,R)  *(P) = (Uint) ((L) - suffixbase);\
-                                *((P)+1) = ((R) - suffixbase) | UNEVALUATEDBIT
+#define STOREBOUNDARIES(P,L,R)  *(P) = (Uint) ((L) - suffixes);\
+                                *((P)+1) = ((R) - suffixes) | UNEVALUATEDBIT
 
 
 ///////////////////////////////////////////////////////////////////////////////

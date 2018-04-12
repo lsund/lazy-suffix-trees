@@ -10,7 +10,7 @@
 #include "array.h"
 #include "result.h"
 
-extern Uchar *text, **suffixbase, *sentinel;
+extern Uchar *text, *sentinel;
 
 extern Uint *stree, rootchildtab[UCHAR_MAX + 1];
 

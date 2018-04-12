@@ -19,10 +19,6 @@ extern Uchar characters[UCHAR_MAX + 1];
 // array of pointers to suffixes of `t`
 extern Uchar **suffixes;
 
-// pointers into suffixes depend on this variable
-extern Uchar **suffixbase;
-
-
 ///////////////////////////////////////////////////////////////////////////////
 // Sorting Buffer
 // buffer for sorting suffixes in `src/sort.c`

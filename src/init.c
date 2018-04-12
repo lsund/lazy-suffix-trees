@@ -4,7 +4,6 @@
 Uchar   *text,
         *sentinel,
         characters[UCHAR_MAX + 1],
-        **suffixbase,
         **suffixes;
 
 Uint    textlen,
@@ -37,7 +36,6 @@ void inittree(void)
     maxunusedsuffixes = suffixessize >> 1;
 
     ALLOC(suffixes, NULL, Uchar *, suffixessize);
-    suffixbase       = suffixes;
     sort_bufferwidth = 0;
     max_sortbufferwidth  = textlen >> 8;
     rootevaluated    = False;

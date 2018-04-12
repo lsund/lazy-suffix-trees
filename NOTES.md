@@ -37,7 +37,14 @@ ASSUMPTIONS:
 
 Each character needs 4 bytes of space instead of 1 byte of space.
 
-These structures need to be a linked list rather than a static array
+## These global variables need to change
+
+* `text`        pointer to Uchar            -> pointer to Uint
+* `sentinel`    pointer to Uchar            -> pointer to Uint
+* `characters`  array of Uchar              -> hashtable of Uint -> Uint
+* `suffixes`    pointer to Uchar pointers   -> pointer to Uint pointers
+
+## These structures need to be a linked list rather than a static array
 
 * occurence - counts the number of occurences of all characters
 
