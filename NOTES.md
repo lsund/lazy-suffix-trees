@@ -41,8 +41,12 @@ Each character needs 4 bytes of space instead of 1 byte of space.
 
 * `text`        pointer to Uchar            -> pointer to Uint
 * `sentinel`    pointer to Uchar            -> pointer to Uint
-* `characters`  array of Uchar              -> hashtable of Uint -> Uint
 * `suffixes`    pointer to Uchar pointers   -> pointer to Uint pointers
+* `characters`  array of Uchar              -> hashtable of Uint -> Uint
+
+## Functions that needs to change
+
+* `get_characters`
 
 ## These structures need to be a linked list rather than a static array
 

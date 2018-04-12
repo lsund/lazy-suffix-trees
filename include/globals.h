@@ -24,8 +24,8 @@ extern Uchar *sentinel;
 // characters in `t` in alphabetical order
 extern Uchar characters[UCHAR_MAX + 1];
 
-// number of occurrences of all characters
-extern Uint occurrence[UCHAR_MAX + 1];
+// number of occurrences for the first character of the current suffixes
+extern Uint suffixhead_occurrence[UCHAR_MAX + 1];
 
 ///////////////////////////////////////////////////////////////////////////////
 // Sorting Buffer
@@ -43,7 +43,7 @@ extern Uint sortbufferwidth;
 extern Uint max_sortbufferwidth;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Suffix tree
+// Suffix tree representation
 
 //  Tree representation
 extern Uint *stree;

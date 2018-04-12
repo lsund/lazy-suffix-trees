@@ -23,12 +23,14 @@
 
 void get_characters(Uchar *text, Uint textlen, Uchar *alpha, Uint *alphasize)
 {
-    Uint occ[UCHAR_MAX+1] = {0}, i, j;
-    Uchar *tptr;
+    Uint occ[UCHAR_MAX + 1] = {0};
+    Uchar *text_probe;
 
-    for (tptr = text; tptr < text+textlen; tptr++) {
-        occ[(Uint) *tptr]++;
+    for (text_probe = text; text_probe < text + textlen; text_probe++) {
+        occ[(Uint) *text_probe]++;
     }
+
+    Uint i, j;
     for (j = 0, i = 0; i <= UCHAR_MAX; i++) {
         if (occ[i] > 0) {
             alpha[j++] = (Uchar) i;

@@ -10,7 +10,7 @@ static void get_count(Uchar **left, Uchar **right, Uint prefixlen)
     for (suffix_probe = left; suffix_probe <= right; suffix_probe++) {
         // drop the common prefix
         *suffix_probe += prefixlen;
-        occurrence[(Uint) **suffix_probe]++;
+        suffixhead_occurrence[(Uint) **suffix_probe]++;
     }
 }
 
@@ -25,14 +25,14 @@ static void set_group_bounds(Uchar **left, Uchar **right, Uchar ***upper_bounds)
     for (suffix_probe = left; suffix_probe <= right; suffix_probe++) {
 
         Uint head = **suffix_probe;
-        if (occurrence[head] > 0) {
+        if (suffixhead_occurrence[head] > 0) {
 
             // 'allocate' the upper bound for the current character.
             // upper_bounds[head] now points to a allocated memory address,
             // enough space in distance from the last group
-            upper_bounds[head] = lower_bound + occurrence[head] - 1;
+            upper_bounds[head] = lower_bound + suffixhead_occurrence[head] - 1;
             lower_bound        = upper_bounds[head] + 1;
-            occurrence[head]   = '\0';
+            suffixhead_occurrence[head]   = '\0';
         }
     }
 }
@@ -94,14 +94,14 @@ void create_suffix_groups(void)
 
     // determine size for each group
     for (c = text; c < text + textlen; c++) {
-        occurrence[(Uint) *c]++;
+        suffixhead_occurrence[(Uint) *c]++;
     }
 
     for (c = characters; c < characters + alphasize; c++) {
         a               = (Uint) *c;
-        upper_bounds[a] = nextFree + occurrence[a] - 1;
+        upper_bounds[a] = nextFree + suffixhead_occurrence[a] - 1;
         nextFree        = upper_bounds[a] + 1;
-        occurrence[a]   = 0;
+        suffixhead_occurrence[a]   = 0;
     }
 
     // insert suffixes into array

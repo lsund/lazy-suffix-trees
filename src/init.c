@@ -14,7 +14,7 @@ Uint    textlen,
         *next_free,
         sort_bufferwidth,
         max_sortbufferwidth,
-        occurrence[UCHAR_MAX + 1];
+        suffixhead_occurrence[UCHAR_MAX + 1];
 
 
 Bool    root_evaluated;
@@ -37,7 +37,7 @@ void inittree(void)
     root_evaluated    = False;
 
     for (i = 0; i <= UCHAR_MAX; i++) {
-        occurrence[i] = 0;
+        suffixhead_occurrence[i] = 0;
     }
 }
 
