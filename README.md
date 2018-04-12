@@ -15,6 +15,9 @@ year =          2003
 }
 ```
 
+The goal of this reimplementation is to make the algorithm work for unicode.
+This is a work in progres.s
+
 # Credits
 
 This is a reimplementation of a suffix tree program by Stefan Kurtz. See
