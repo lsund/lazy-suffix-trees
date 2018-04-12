@@ -14,10 +14,10 @@ Uint    textlen,
         *next_free,
         sort_bufferwidth,
         max_sortbufferwidth,
-        occurrence[UCHAR_MAX + 1],
-        rootchildtab[UCHAR_MAX + 1];
+        occurrence[UCHAR_MAX + 1];
 
-Bool    rootevaluated;
+
+Bool    root_evaluated;
 
 void inittree(void)
 {
@@ -34,7 +34,7 @@ void inittree(void)
     ALLOC(suffixes, NULL, Uchar *, textlen + 1);
     sort_bufferwidth = 0;
     max_sortbufferwidth  = textlen >> 8;
-    rootevaluated    = False;
+    root_evaluated    = False;
 
     for (i = 0; i <= UCHAR_MAX; i++) {
         occurrence[i] = 0;

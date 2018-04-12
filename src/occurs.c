@@ -18,8 +18,15 @@
  *
  */
 
-
 #include "occurs.h"
+
+Uchar   *text,
+        *sentinel,
+        **suffixes;
+
+Uint *stree, root_children[UCHAR_MAX + 1];
+
+Bool root_evaluated;
 
 
 static Pattern init_pattern(Uchar *patt_start, Uchar *patt_end)
@@ -46,17 +53,17 @@ static Uint first_child_lp(Uint *vertex)
 
 static void evaluate_root_lazy()
 {
-    if(!rootevaluated) {
+    if(!root_evaluated) {
         create_suffix_groups();
         evalrootsuccedges(suffixes, suffixes + textlen - 1);
-        rootevaluated = True;
+        root_evaluated = True;
     }
 }
 
 
 static Bool no_root_edge(Pattern patt)
 {
-    return (rootchildtab[patt.head]) == UNDEFINEDSUCC;
+    return (root_children[patt.head]) == UNDEFINEDSUCC;
 }
 
 
@@ -177,7 +184,7 @@ Bool search(Uchar *patt_start, Uchar *patt_end)
     if (no_root_edge(patt)) {
         return False;
     } else {
-        rootchild = rootchildtab[patt.head];
+        rootchild = root_children[patt.head];
     }
 
     if (IS_LEAF(&rootchild)) {

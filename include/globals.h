@@ -55,9 +55,9 @@ extern Uint streesize;
 extern Uint *next_free;
 
 // constant time access to successors of `root`
-extern Uint rootchildtab[UCHAR_MAX + 1];
+extern Uint root_children[UCHAR_MAX + 1];
 
 // flag indicating that the root has been evaluated
-extern Bool rootevaluated;
+extern Bool root_evaluated;
 
 #endif

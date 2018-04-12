@@ -3,7 +3,7 @@
 
 Uchar   *text, *sentinel, **current_sortbuffer;
 
-Uint    *next_free, rootchildtab[UCHAR_MAX + 1];
+Uint    *next_free, root_children[UCHAR_MAX + 1];
 
 
 static Bool skip_sentinel(Uchar ***right)
@@ -84,13 +84,13 @@ static Uint evalsuccedges(Uchar **left, Uchar **right)
 
 
 // Evaluates all outgoing edges from the root. This is a specialization of
-// `evaledges`, and in addition it initialized `rootchildtab`
+// `evaledges`, and in addition it initialized `root_children`
 Uint evalrootsuccedges(Uchar **left, Uchar **right)
 {
     Uchar firstchar, **r, **l;
     Uint *rptr, leafnum, firstbranch = UNDEFREFERENCE;
 
-    for(rptr = rootchildtab; rptr <= rootchildtab + UCHAR_MAX; rptr++) {
+    for(rptr = root_children; rptr <= root_children + UCHAR_MAX; rptr++) {
         *rptr = UNDEFINEDSUCC;
     }
     for(l = left; l <= right; l = r + 1) {
@@ -106,13 +106,13 @@ Uint evalrootsuccedges(Uchar **left, Uchar **right)
             }
             STOREBOUNDARIES(next_free, l, r);
             // store l and r. resume later with this unevaluated branch node
-            rootchildtab[firstchar] = INDEX(next_free);
+            root_children[firstchar] = INDEX(next_free);
             next_free += BRANCHWIDTH;
         } else {
             // Create leaf
             leafnum = SUFFIXNUMBER(l);
             SETLEAF(next_free,leafnum);
-            rootchildtab[firstchar] = leafnum | LEAFBIT;
+            root_children[firstchar] = leafnum | LEAFBIT;
             next_free++;
         }
     }

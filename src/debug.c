@@ -108,17 +108,17 @@ void showrootchildtab(void)
     Uint i;
 
     for (i=0; i<=UCHAR_MAX; i++) {
-        if (rootchildtab[i] != UNDEFINEDSUCC) {
-            if (rootchildtab[i] & LEAFBIT) {
+        if (root_children[i] != UNDEFINEDSUCC) {
+            if (root_children[i] & LEAFBIT) {
                 printf("#(%lu)%c-successor of root is leaf %lu\n",
                         (Showuint) i,
                         (char) i,
-                        (Showuint) (rootchildtab[i] & ~LEAFBIT));
+                        (Showuint) (root_children[i] & ~LEAFBIT));
             } else {
                 printf("#(%lu)%c-successor of root is branch %ld\n",
                         (Showuint) i,
                         (char) i,
-                        (Showsint) rootchildtab[i]);
+                        (Showsint) root_children[i]);
             }
         }
     }
