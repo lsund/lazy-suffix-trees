@@ -1,4 +1,4 @@
-#include "wotd.h"
+#include "search.h"
 
 extern Uchar *text;
 extern Uint textlen;
@@ -46,11 +46,11 @@ int main(int argc,char *argv[])
         int minpat = 500;
         int maxpat = 1000;
 
-        run_benchmark(path, 100000, minpat, maxpat);
+        search_benchmark(path, 100000, minpat, maxpat);
 
     } else {
 
-        run_patterns(path, i, &patterns);
+        search_patterns(path, i, &patterns);
 
     }
 

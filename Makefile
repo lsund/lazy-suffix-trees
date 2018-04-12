@@ -33,7 +33,6 @@ SPLINTFLAGS=-DDEBUG
 OBJ= obj/boyermoore.o\
 	 obj/utf.o\
      obj/reverse.o\
-     obj/search.o\
      obj/clock.o\
      obj/io.o\
      obj/seterror.o\
@@ -43,7 +42,7 @@ OBJ= obj/boyermoore.o\
 	 obj/util.o\
      obj/sort.o\
      obj/lcp.o\
-     obj/wotd.o\
+     obj/search.o\
 	 obj/eval.o\
 	 obj/occurs.o\
 	 obj/init.o\

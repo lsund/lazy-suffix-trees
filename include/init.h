@@ -7,7 +7,7 @@
 #include "spaceman.h"
 #include "io.h"
 #include "get_alpha.h"
-#include "wotd.h"
+#include "search.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Functions

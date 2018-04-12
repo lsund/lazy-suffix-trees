@@ -1,24 +1,34 @@
 /*
- * Copyright by Stefan Kurtz (C) 1999-2003
- * =====================================
- * You may use, copy and distribute this file freely as long as you
- * - do not change the file,
- * - leave this copyright notice in the file,
- * - do not make any profit with the distribution of this file
- * - give credit where credit is due
- * You are not allowed to copy or distribute this file otherwise
- * The commercial usage and distribution of this file is prohibited
- * Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
- *
- * ======================================
- *
- * Modified by Ludvig Sundström 2018 with permission from Stefan Kurtz
+  Copyright by Stefan Kurtz (C) 1999-2003
+  =====================================
+  You may use, copy and distribute this file freely as long as you
+   - do not change the file,
+   - leave this copyright notice in the file,
+   - do not make any profit with the distribution of this file
+   - give credit where credit is due
+  You are not allowed to copy or distribute this file otherwise
+  The commercial usage and distribution of this file is prohibited
+  Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
+*/
+
+/*
+ * Modified by Ludvig Sundström 2018 with permission from Stefan Kurtz.
  * For full source control tree, see https://github.com/lsund/wotd
- *
  */
 
 
 #include "search.h"
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Functions
+
+
+static void print_statistics(FILE *fp, int trials)
+{
+    fprintf(fp, "%lu ", (Showuint) trials);
+    fprintf(fp, "%.2f\n", getruntime()/(double) ITER);
+}
 
 
 static Bool copy_pattern(Uchar *pattern, char *current_pattern, Uint len)
@@ -57,11 +67,7 @@ static Bool sample_random_pattern(Uchar *pattern, Uint patternlen)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Public Interface
-
-
-Bool try_search_pattern(char *current_pattern, Uint patternlen)
+static Bool try_search_pattern(char *current_pattern, Uint patternlen)
 {
 
     Uchar pattern[MAXPATTERNLEN + 1];
@@ -76,7 +82,9 @@ Bool try_search_pattern(char *current_pattern, Uint patternlen)
 }
 
 
-void iterate_search_patterns(Uint trials, Uint minlen, Uint maxlen)
+// Randomly sampling patterns from the text, reversing every second to simulate
+// the case where a pattern does not exist.
+static void iterate_search_patterns(Uint trials, Uint minlen, Uint maxlen)
 {
     Uint patternlen;
 
@@ -99,3 +107,56 @@ void iterate_search_patterns(Uint trials, Uint minlen, Uint maxlen)
     }
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+// Public API
+
+
+void search_patterns(const char *path, int npatterns, char ***patterns_ptr)
+{
+
+    inittree();
+    initclock();
+
+    int noccurs     = 0;
+    char **patterns = *patterns_ptr;
+    FILE *fp        = open_append(path);
+
+    for(int j = 0; j < npatterns; j++) {
+
+        char *current_pattern = patterns[j];
+        Uint patternlen = strlen(current_pattern);
+
+        Bool exists = try_search_pattern(current_pattern, patternlen);
+
+        if (exists) {
+            fprintf(fp, "%s\n", patterns[j]);
+            noccurs++;
+        }
+    }
+
+    printf("noccurs: %d\n", noccurs);
+    printtime();
+
+    fclose(fp);
+}
+
+
+void search_benchmark(const char *path, Uint trials, Uint minpat, Uint maxpat)
+{
+
+    inittree();
+    initclock();
+
+    if (maxpat > textlen) {
+        ERROR("Max pattern length must be smaller than the text length");
+    }
+
+    iterate_search_patterns(trials, minpat, maxpat);
+
+    FILE *fp = open_append(path);
+    print_statistics(fp, trials);
+    printtime();
+
+    fclose(fp);
+}
