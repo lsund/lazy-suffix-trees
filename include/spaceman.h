@@ -53,9 +53,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Functions
 
-Uchar **getsbufferspacelazy(Uchar **left, Uchar **right);
-
-Uchar **getsbufferspaceeager(Uchar **left, Uchar **right);
+Uchar **get_sortbuffer(Uchar **left, Uchar **right);
 
 void allocstree(void);
 

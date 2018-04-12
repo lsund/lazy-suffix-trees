@@ -15,8 +15,8 @@ Uint    textlen,
         suffixessize,
         *next_free,
         maxunusedsuffixes,
-        sbufferwidth,
-        maxsbufferwidth,
+        sort_bufferwidth,
+        max_sortbufferwidth,
         alphaindex[UCHAR_MAX + 1],
         occurrence[UCHAR_MAX + 1],
         rootchildtab[UCHAR_MAX + 1];
@@ -37,10 +37,10 @@ void inittree(void)
     maxunusedsuffixes = suffixessize >> 1;
 
     ALLOC(suffixes, NULL, Uchar *, suffixessize);
-    suffixbase      = suffixes;
-    sbufferwidth    = 0;
-    maxsbufferwidth = textlen >> 8;
-    rootevaluated   = False;
+    suffixbase       = suffixes;
+    sort_bufferwidth = 0;
+    max_sortbufferwidth  = textlen >> 8;
+    rootevaluated    = False;
 
     for (i = 0; i < alphasize; i++) {
         alphaindex[(Uint) characters[i]] = i;

@@ -21,6 +21,16 @@ OBSERVATIONS:
    possible to represent all characters. This will however require 8 times as
    much space.
 
-ACTIONS:
+CONCLUSIONS:
 
-Change Uchar to represent an unsigned integer
+The only thing that makes this algorithm effective is the fact that it iterates
+over characters.
+
+There are a few reasons for this:
+
+* Memory is allocated for the algorithm in one place:
+  spaceman:get_sortbuffer. Here, one byte is allocated for each suffix.
+
+* This space is 'chopped' into chunks by the sorting algorithm. Under the
+  assumption that the first character only can be a Unsigned char, only an
+  array with 258 entries is needed to manage the bounds of these chunks.

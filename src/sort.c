@@ -19,7 +19,7 @@ static void set_group_bounds(Uchar **left, Uchar **right, Uchar ***upper_bounds)
 {
     // Sort buffer is already allocated, a sufficiently large memory block for
     // all suffix poniters.
-    Uchar **lower_bound = sort_buffer;
+    Uchar **lower_bound = current_sortbuffer;
     Uchar **suffix_probe;
 
     for (suffix_probe = left; suffix_probe <= right; suffix_probe++) {
@@ -47,7 +47,7 @@ static void insert_suffixes(Uchar **left, Uchar **right, Uchar ***upper_bounds)
         //
         // This fills up the slot allocated for this group with suffix tree
         // addresses, end to start.
-        Uint head              = **suffix_probe;
+        Uint head               = **suffix_probe;
         *(upper_bounds[head]--) = *suffix_probe;
     }
 }
@@ -73,7 +73,7 @@ void counting_sort(Uchar **left, Uchar **right, Uint prefixlen)
     insert_suffixes(left, right, upper_bounds);
 
     Uchar **suffix_probe = left;
-    Uchar **buffer_probe = sort_buffer;
+    Uchar **buffer_probe = current_sortbuffer;
 
     // copy grouped suffixes back from buffer
     while (suffix_probe <= right) {
@@ -98,10 +98,10 @@ void create_suffix_groups(void)
     }
 
     for (c = characters; c < characters + alphasize; c++) {
-        a = (Uint) *c;
+        a               = (Uint) *c;
         upper_bounds[a] = nextFree + occurrence[a] - 1;
-        nextFree = upper_bounds[a] + 1;
-        occurrence[a] = 0;
+        nextFree        = upper_bounds[a] + 1;
+        occurrence[a]   = 0;
     }
 
     // insert suffixes into array

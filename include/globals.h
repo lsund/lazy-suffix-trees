@@ -22,11 +22,20 @@ extern Uchar **suffixes;
 // pointers into suffixes depend on this variable
 extern Uchar **suffixbase;
 
+
+///////////////////////////////////////////////////////////////////////////////
+// Sorting Buffer
 // buffer for sorting suffixes in `src/sort.c`
-extern Uchar **sort_buffer;
+extern Uchar **current_sortbuffer;
 
 // space to be used by `sort_buffer`
-extern Uchar **sbufferspace;
+extern Uchar **sortbuffer;
+
+// number of elements in `sbufferspace`
+extern Uint sortbufferwidth;
+
+// maximal number of elements in `sbufferspace`
+extern Uint max_sortbufferwidth;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Global Integers
@@ -51,12 +60,6 @@ extern Uint streesize;
 
 // pointer to next unused element in `stree`
 extern Uint *next_free;
-
-// number of elements in `sbufferspace`
-extern Uint sbufferwidth;
-
-// maximal number of elements in `sbufferspace`
-extern Uint maxsbufferwidth;
 
 // number of unprocessed suffixes (for eager evaluation)
 extern Uint suffixessize;

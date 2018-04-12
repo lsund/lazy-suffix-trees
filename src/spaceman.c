@@ -1,32 +1,34 @@
 
 #include "spaceman.h"
 
-Uchar **suffixes, **sbufferspace;
+Uchar **suffixes, **sortbuffer;
 
-Uint    sbufferwidth,
-        maxsbufferwidth,
+Uint    sortbufferwidth,
+        max_sortbufferwidth,
         *next_free,
         *stree,
         streesize,
         textlen;
 
-Uchar **getsbufferspacelazy(Uchar **left, Uchar **right)
-{
+
+Uchar **get_sortbuffer(Uchar **left, Uchar **right) {
+
     Uint width = (Uint) (right - left + 1);
 
-    if(sbufferwidth > maxsbufferwidth && maxsbufferwidth > width)
-    {
-        sbufferwidth = maxsbufferwidth;
-        ALLOC(sbufferspace, sbufferspace, Uchar *, sbufferwidth);
-    } else
-    {
-        if(width > sbufferwidth)
-        {
-            sbufferwidth = width;
-            ALLOC(sbufferspace,sbufferspace,Uchar *,sbufferwidth);
+    if(sortbufferwidth > max_sortbufferwidth && max_sortbufferwidth > width) {
+
+        sortbufferwidth = max_sortbufferwidth;
+        ALLOC(sortbuffer, sortbuffer, Uchar *, sortbufferwidth);
+
+    } else {
+
+        if(width > sortbufferwidth) {
+            sortbufferwidth = width;
+            ALLOC(sortbuffer, sortbuffer, Uchar *, sortbufferwidth);
         }
+
     }
-    return sbufferspace;
+    return sortbuffer;
 }
 
 

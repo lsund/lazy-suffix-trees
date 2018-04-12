@@ -47,11 +47,9 @@ static Uint first_child_lp(Uint *vertex)
 static void evaluate_root_lazy()
 {
     if(!rootevaluated) {
-
         create_suffix_groups();
         evalrootsuccedges(suffixes, suffixes + textlen - 1);
         rootevaluated = True;
-
     }
 }
 
