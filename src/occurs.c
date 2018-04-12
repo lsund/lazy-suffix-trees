@@ -54,7 +54,7 @@ static void evaluate_root_lazy()
 }
 
 
-static Bool no_successor(Pattern patt)
+static Bool no_root_edge(Pattern patt)
 {
     return (rootchildtab[patt.head]) == UNDEFINEDSUCC;
 }
@@ -66,7 +66,7 @@ static Bool empty_pattern(Pattern patt)
 }
 
 
-static Bool pattern_matched(Pattern patt, Uint len)
+static Bool match_length(Pattern patt, Uint len)
 {
     return (Uint) (patt.end - patt.probe) == len;
 }
@@ -75,7 +75,7 @@ static Bool pattern_matched(Pattern patt, Uint len)
 static Bool match(Uchar *text_probe, Pattern patt)
 {
     Uint len = lcp(patt.probe, patt.end, text_probe, sentinel - 1);
-    return pattern_matched(patt, len);
+    return match_length(patt, len);
 }
 
 
@@ -85,7 +85,7 @@ static Bool is_prefix(Uint prefixlen, Uint edgelen)
 }
 
 
-static Bool check_a_edge(
+static Bool match_a_edge(
                 Uint rootchild,
                 Uchar **text_probe,
                 Pattern patt
@@ -113,7 +113,7 @@ static Uint get_lp(Uint *vertex)
 }
 
 
-static void eval_if_uneval(Uint **vertex, Uint *vertex_num)
+static void eval_if_need(Uint **vertex, Uint *vertex_num)
 {
     if(IS_UNEVALUATED(*vertex)) {
         *vertex_num = INDEX(*vertex);
@@ -174,22 +174,23 @@ Bool search(Uchar *patt_start, Uchar *patt_end)
 
     evaluate_root_lazy();
 
-    if (no_successor(patt)) {
+    Uint rootchild;
+    if (no_root_edge(patt)) {
         return False;
+    } else {
+        rootchild = rootchildtab[patt.head];
     }
 
-    Uint rootchild = rootchildtab[patt.head];
-
     if (IS_LEAF(&rootchild)) {
-        return check_a_edge(rootchild, &text_probe, patt);
+        return match_a_edge(rootchild, &text_probe, patt);
     }
 
     vertex = stree + rootchild;
-    eval_if_uneval(&vertex, &vertex_num);
+    eval_if_need(&vertex, &vertex_num);
     update_lengths(vertex, patt, &edgelen, &prefixlen);
 
     if(is_prefix(prefixlen, edgelen)) {
-        return pattern_matched(patt, prefixlen);
+        return match_length(patt, prefixlen);
     }
 
     patt.probe += edgelen;
@@ -197,11 +198,12 @@ Bool search(Uchar *patt_start, Uchar *patt_end)
     while(!empty_pattern(patt)) {
 
         patt.head = *patt.probe;
-        vertex   = stree + FIRST_CHILD(vertex);
+        vertex    = stree + FIRST_CHILD(vertex);
 
-        Uint lp;
 
         while(True) {
+
+            Uint lp;
 
             if (IS_LEAF(vertex)) {
 
@@ -233,12 +235,11 @@ Bool search(Uchar *patt_start, Uchar *patt_end)
             }
         }
 
-        eval_if_uneval(&vertex, &vertex_num);
-
+        eval_if_need(&vertex, &vertex_num);
         update_lengths(vertex, patt, &edgelen, &prefixlen);
 
         if(is_prefix(prefixlen, edgelen)) {
-            return pattern_matched(patt, prefixlen);
+            return match_length(patt, prefixlen);
         }
 
         patt.probe += edgelen;

@@ -46,9 +46,6 @@ extern Uint  textlen;
 // size of the alphabet `A`
 extern Uint alphasize;
 
-// index of characters in the alphabet `A`
-extern Uint alphaindex[UCHAR_MAX + 1];
-
 // number of occurrences of all characters
 extern Uint occurrence[UCHAR_MAX + 1];
 

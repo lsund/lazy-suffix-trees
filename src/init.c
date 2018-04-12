@@ -17,7 +17,6 @@ Uint    textlen,
         maxunusedsuffixes,
         sort_bufferwidth,
         max_sortbufferwidth,
-        alphaindex[UCHAR_MAX + 1],
         occurrence[UCHAR_MAX + 1],
         rootchildtab[UCHAR_MAX + 1];
 
@@ -27,9 +26,10 @@ void inittree(void)
 {
     Uint i;
 
-    getUchars(text, textlen, characters, &alphasize);
     sentinel  = text + textlen;
     streesize = BRANCHWIDTH;
+
+    get_characters(text, textlen, characters, &alphasize);
 
     ALLOC(stree, stree, Uint, streesize + MAXSUCCSPACE);
     next_free     = stree;
@@ -42,9 +42,6 @@ void inittree(void)
     max_sortbufferwidth  = textlen >> 8;
     rootevaluated    = False;
 
-    for (i = 0; i < alphasize; i++) {
-        alphaindex[(Uint) characters[i]] = i;
-    }
     for (i = 0; i <= UCHAR_MAX; i++) {
         occurrence[i] = 0;
     }

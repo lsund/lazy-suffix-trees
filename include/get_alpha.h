@@ -6,8 +6,6 @@
 
 #include "types.h"
 
-void getAlpha (char *s, char *alpha, Uint *alphaSize);
-
-void getUchars(Uchar *text, Uint textlen, Uchar *alpha, Uint *alphasize);
+void get_characters(Uchar *text, Uint textlen, Uchar *alpha, Uint *alphasize);
 
 #endif
