@@ -13,7 +13,6 @@ Uint    textlen,
         streesize,
         suffixessize,
         *next_free,
-        maxunusedsuffixes,
         sort_bufferwidth,
         max_sortbufferwidth,
         occurrence[UCHAR_MAX + 1],
@@ -33,7 +32,6 @@ void inittree(void)
     ALLOC(stree, stree, Uint, streesize + MAXSUCCSPACE);
     next_free     = stree;
     suffixessize      = textlen + 1;
-    maxunusedsuffixes = suffixessize >> 1;
 
     ALLOC(suffixes, NULL, Uchar *, suffixessize);
     sort_bufferwidth = 0;

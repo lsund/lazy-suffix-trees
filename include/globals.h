@@ -3,12 +3,20 @@
 #define GLOBALS_H
 
 #include "types.h"
-
 ///////////////////////////////////////////////////////////////////////////////
-// Global Strings
+// The text
 
 // points to input string `t` of length `n`
 extern Uchar *text;
+
+// length of `t`
+extern Uint  textlen;
+
+// array of pointers to suffixes of `t`
+extern Uchar **suffixes;
+
+// size of the alphabet `A`
+extern Uint alphasize;
 
 // points to `t[n] = undefined`
 extern Uchar *sentinel;
@@ -16,11 +24,12 @@ extern Uchar *sentinel;
 // characters in `t` in alphabetical order
 extern Uchar characters[UCHAR_MAX + 1];
 
-// array of pointers to suffixes of `t`
-extern Uchar **suffixes;
+// number of occurrences of all characters
+extern Uint occurrence[UCHAR_MAX + 1];
 
 ///////////////////////////////////////////////////////////////////////////////
 // Sorting Buffer
+
 // buffer for sorting suffixes in `src/sort.c`
 extern Uchar **current_sortbuffer;
 
@@ -34,18 +43,9 @@ extern Uint sortbufferwidth;
 extern Uint max_sortbufferwidth;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Global Integers
+// Suffix tree
 
-// length of `t`
-extern Uint  textlen;
-
-// size of the alphabet `A`
-extern Uint alphasize;
-
-// number of occurrences of all characters
-extern Uint occurrence[UCHAR_MAX + 1];
-
-// table to hold suffix tree representation
+//  Tree representation
 extern Uint *stree;
 
 // number of integers in `stree` allocated
@@ -56,9 +56,6 @@ extern Uint *next_free;
 
 // number of unprocessed suffixes (for eager evaluation)
 extern Uint suffixessize;
-
-// when reached, then move and halve space for suffixes
-extern Uint maxunusedsuffixes;
 
 // constant time access to successors of `root`
 extern Uint rootchildtab[UCHAR_MAX + 1];

@@ -5,8 +5,7 @@ Uchar   *text, *sentinel, **current_sortbuffer;
 
 Uint    *next_free,
         rootchildtab[UCHAR_MAX + 1],
-        suffixessize,
-        maxunusedsuffixes;
+        suffixessize;
 
 
 static Bool skip_sentinel(Uchar ***right)
