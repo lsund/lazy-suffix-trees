@@ -3,9 +3,7 @@
 
 Uchar   *text, *sentinel, **current_sortbuffer;
 
-Uint    *next_free,
-        rootchildtab[UCHAR_MAX + 1],
-        suffixessize;
+Uint    *next_free, rootchildtab[UCHAR_MAX + 1];
 
 
 static Bool skip_sentinel(Uchar ***right)

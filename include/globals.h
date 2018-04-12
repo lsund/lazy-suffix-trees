@@ -54,13 +54,10 @@ extern Uint streesize;
 // pointer to next unused element in `stree`
 extern Uint *next_free;
 
-// number of unprocessed suffixes (for eager evaluation)
-extern Uint suffixessize;
-
 // constant time access to successors of `root`
 extern Uint rootchildtab[UCHAR_MAX + 1];
 
 // flag indicating that the root has been evaluated
-extern Bool  rootevaluated;
+extern Bool rootevaluated;
 
 #endif

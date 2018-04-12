@@ -11,7 +11,6 @@ Uint    textlen,
         *stree,
         leafcount,
         streesize,
-        suffixessize,
         *next_free,
         sort_bufferwidth,
         max_sortbufferwidth,
@@ -31,9 +30,8 @@ void inittree(void)
 
     ALLOC(stree, stree, Uint, streesize + MAXSUCCSPACE);
     next_free     = stree;
-    suffixessize      = textlen + 1;
 
-    ALLOC(suffixes, NULL, Uchar *, suffixessize);
+    ALLOC(suffixes, NULL, Uchar *, textlen + 1);
     sort_bufferwidth = 0;
     max_sortbufferwidth  = textlen >> 8;
     rootevaluated    = False;

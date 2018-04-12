@@ -160,7 +160,6 @@ static Result try_match_leaf(Uchar *text_probe, Pattern patt, Uint *vertex)
 Bool search(Uchar *patt_start, Uchar *patt_end)
 {
 
-
     Uchar *text_probe;
     Uint edgelen, prefixlen;
     Uint *vertex;
