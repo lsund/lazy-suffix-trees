@@ -42,10 +42,10 @@ Each character needs 4 bytes of space instead of 1 byte of space.
 
 ## These global variables need to change
 
-* `text`        pointer to Uchar            -> pointer to Uint
-* `sentinel`    pointer to Uchar            -> pointer to Uint
-* `suffixes`    pointer to Uchar pointers   -> pointer to Uint pointers
-* `characters`  array of Uchar              -> hashtable of Uint -> Uint
+* `text`                pointer to Uchar            -> pointer to Uint
+* `sentinel`            pointer to Uchar            -> pointer to Uint
+* `suffixes`            pointer to Uchar pointers   -> pointer to Uint pointers
+* `characters`          array of Uchar              -> hashtable of Uint -> Uint
 
 ## Functions that needs to change
 
@@ -53,9 +53,13 @@ Each character needs 4 bytes of space instead of 1 byte of space.
   counts is a static array of size 256. This needs to be a dynamic array that
   can store arbitrarily many elements.
 
-## These structures need to be a linked list rather than a static array
 
-* occurence - counts the number of occurences of all characters
+### sort.c
 
+* `get_count`: is fine
 
+* `set_group_bounds`: `lower_bound` and `upper_bounds` need to be a pointer to
+  Uint pointers.
+
+CONTINUE AT INSERT SUFFIXES
 

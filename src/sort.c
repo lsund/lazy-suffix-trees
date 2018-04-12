@@ -10,15 +10,17 @@ static void get_count(Uchar **left, Uchar **right, Uint prefixlen)
     for (suffix_probe = left; suffix_probe <= right; suffix_probe++) {
         // drop the common prefix
         *suffix_probe += prefixlen;
-        suffixhead_count[(Uint) **suffix_probe]++;
+
+        Uint head      = **suffix_probe;
+        suffixhead_count[head]++;
     }
 }
 
 
 static void set_group_bounds(Uchar **left, Uchar **right, Uchar ***upper_bounds)
 {
-    // Sort buffer is already allocated, a sufficiently large memory block for
-    // all suffix poniters.
+    // `current_sortbuffer` is already allocated, a sufficiently large memory
+    // block for all suffix pointers.
     Uchar **lower_bound = current_sortbuffer;
     Uchar **suffix_probe;
 
@@ -32,7 +34,7 @@ static void set_group_bounds(Uchar **left, Uchar **right, Uchar ***upper_bounds)
             // enough space in distance from the last group
             upper_bounds[head] = lower_bound + suffixhead_count[head] - 1;
             lower_bound        = upper_bounds[head] + 1;
-            suffixhead_count[head]   = '\0';
+            suffixhead_count[head]   = 0;
         }
     }
 }

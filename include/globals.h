@@ -3,6 +3,7 @@
 #define GLOBALS_H
 
 #include "types.h"
+#include "basedef.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // The text
@@ -23,10 +24,10 @@ extern Uint alphasize;
 extern Uchar *sentinel;
 
 // characters in `t` in alphabetical order
-extern Uchar characters[UCHAR_MAX + 1];
+extern Uchar characters[MAX_CHARS + 1];
 
 // number of occurrences for the first character of the current suffixes
-extern Uint suffixhead_count[UCHAR_MAX + 1];
+extern Uint suffixhead_count[MAX_CHARS + 1];
 
 ///////////////////////////////////////////////////////////////////////////////
 // Sorting Buffer
@@ -56,7 +57,7 @@ extern Uint streesize;
 extern Uint *next_free;
 
 // constant time access to successors of `root`
-extern Uint root_children[UCHAR_MAX + 1];
+extern Uint root_children[MAX_CHARS + 1];
 
 // flag indicating that the root has been evaluated
 extern Bool root_evaluated;
