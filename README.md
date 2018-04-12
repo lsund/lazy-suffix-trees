@@ -16,11 +16,10 @@ year =          2003
 ```
 
 The goal of this reimplementation is to make the algorithm work for unicode.
-This is a work in progres.s
+This is a work in progress.
 
 # Credits
 
-This is a reimplementation of a suffix tree program by Stefan Kurtz. See
-`fd3d0c8769696459a0957dc62604ab974f097866 "Initial Commit"`
+The initial program is credited [Stefan Kurtz](https://www.biologie.uni-hamburg.de/service/wissenschaftsservice/mitarbeiter/professoren-promotionsverfahren/skurtz.html) is specified under `fd3d0c8769696459a0957dc62604ab974f097866 "Initial Commit"`.
 
 All Later modifications were made under permission by by Stefan Kurz.
