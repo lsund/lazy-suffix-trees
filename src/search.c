@@ -63,6 +63,7 @@ static Bool sample_random_pattern(Uchar *pattern, Uint patternlen)
             return True;
         }
     }
+    pattern[patternlen] = '\0';
     return False;
 }
 
