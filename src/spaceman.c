@@ -35,8 +35,7 @@ Uchar **get_sortbuffer(Uchar **left, Uchar **right) {
 void allocstree(void)
 {
     Uint tmpindex = INDEX(next_free);
-    if(tmpindex >= streesize)
-    {
+    if(tmpindex >= streesize) {
         streesize += (textlen / 10);
         ALLOC(stree, stree, Uint, streesize + MAXSUCCSPACE);
         // update necessary, since stree may have been moved.

@@ -4,11 +4,6 @@
 
 #include "types.h"
 
-Bool bmhsearch(
-        Uchar *text,
-        Uint textlen,
-        Uchar *pattern,
-        Uchar *patternright
-    );
+Bool bmhsearch(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright);
 
 #endif

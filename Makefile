@@ -10,6 +10,8 @@
 # The commercial usage and distribution of this file is prohibited
 # Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
 #
+#
+# Mudified by Ludvig Sundström 2018 permitted by Stefan Kurtz
 
 CC=gcc
 LD=${CC}
@@ -27,9 +29,6 @@ CFLAGS+=-O3 -Wall
 CFLAGS+=-DDEBUG
 CFLAGS+=-g
 
-# SPLINTFLAGS=-DDEBUG -f Splintoptions
-SPLINTFLAGS=-DDEBUG
-
 OBJ= obj/boyermoore.o\
 	 obj/utf.o\
      obj/reverse.o\
@@ -45,20 +44,22 @@ OBJ= obj/boyermoore.o\
      obj/search.o\
 	 obj/eval.o\
 	 obj/occurs.o\
-	 obj/init.o\
-     obj/main.o
+	 obj/init.o
 
 
-OBJ2 = obj/treesize.o
+TEST_OBJ = obj/test_search.o
 
-# all:wotd.splint wotd wotd.dbg.x
-all:dirs wotd
+
+all: dirs wotd
 
 dirs:
 	mkdir -p obj bin
 
-wotd: ${OBJ}
-	${CC} ${LDFLAGS} ${OBJ} -o bin/$@
+wotd: dirs ${OBJ}
+	${CC} ${LDFLAGS} ${INCLUDE} ${OBJ} src/main.c -o bin/$@
+
+test: dirs ${OBJ} ${TEST_OBJ}
+	${CC} ${LDFLAGS} ${INCLUDE} ${OBJ} ${TEST_OBJ} test/test.c -o bin/test
 
 bench: clean all
 	./bin/wotd data/dataset/005.txt data/10000.txt bench
@@ -69,14 +70,14 @@ run: clean all
 utf8: clean all
 	./bin/wotd data/utftest.txt data/utftest.txt run
 
+runtest: clean test
+	./bin/test
+
 clean:
 	rm -rf obj bin
 
 obj/%.o:src/%.c
 	$(CC) $(CFLAGS) -c src/$*.c -o $@
 
-
-# wotd.splint:wotd.c
-# 	splint ${SPLINTFLAGS} wotd.c
-# 	touch wotd.splint
-
+obj/test_%.o:test/test_%.c
+	$(CC) $(CFLAGS) -c test/test_$*.c -o $@
