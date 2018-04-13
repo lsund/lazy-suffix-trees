@@ -1,3 +1,10 @@
+# TODO
+
+Read unicode specification
+ask stackoverflow question on mapping unicode character to integer
+
+# MISC
+
 rho is trialpercentage. Number of trials is (textlen * rho)
 
 export DEBUGLEVEL to enable debugging
