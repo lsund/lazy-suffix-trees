@@ -55,7 +55,7 @@ void showsubtree(Uint *father,int indent);
 */
 
 #define STAMP\
-        printf("STAMP(%lu,%s)\n",(Showuint) __LINE__,__FILE__);\
+        printf("STAMP(%lu,%s)\n",(Ulong) __LINE__,__FILE__);\
         (void) fflush(stdout)
 
 #define CONDSTAMPC(C) if(C){STAMP;}
@@ -137,13 +137,13 @@ void showsubtree(Uint *father,int indent);
         {\
           fprintf(getdbgfp(),\
                   "file \"%s\", line %lu: level n [1..%lu] required\n",\
-                  __FILE__,(Showuint) __LINE__,(Showuint) MAXDEBUGLEVEL);\
+                  __FILE__,(Ulong) __LINE__,(Ulong) MAXDEBUGLEVEL);\
           exit(EXIT_FAILURE);\
         }\
         if(((Sint) (L)) <= getdebuglevel() && getdebugwhere())\
         {\
           fprintf(getdbgfp(),"file \"%s\", line %lu: ",__FILE__,\
-                  (Showuint) __LINE__);\
+                  (Ulong) __LINE__);\
         }\
         if(((Sint) (L)) <= getdebuglevel())
 
@@ -191,19 +191,19 @@ void showsubtree(Uint *father,int indent);
   To follow the program flow the following macros can be used.
 */
 
-#define CASE(I)       fprintf(getdbgfp(),"Case(%ld)\n",(Showsint) (I)); (void) fflush(stdout)
+#define CASE(I)       fprintf(getdbgfp(),"Case(%ld)\n",(Slong) (I)); (void) fflush(stdout)
 #define CASELINE(I)   fprintf(getdbgfp(),"file %s, line %lu: Case(%ld)\n",\
-                              __FILE__,(Showuint) __LINE__,(Showuint) (I))
+                              __FILE__,(Ulong) __LINE__,(Ulong) (I))
 
 #define COMPAREUINTVALUES(VAL1,VAL2)\
         if((VAL1) != (VAL2))\
         {\
           fprintf(stderr,"%s, line %lu: %s = %lu != %lu = %s\n",\
                           __FILE__,\
-                          (Showuint) __LINE__,\
+                          (Ulong) __LINE__,\
                           #VAL1,\
-                          (Showuint) (VAL1),\
-                          (Showuint) (VAL2),\
+                          (Ulong) (VAL1),\
+                          (Ulong) (VAL2),\
                           #VAL2);\
           exit(EXIT_FAILURE);\
         }

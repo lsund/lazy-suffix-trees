@@ -11,8 +11,6 @@
   Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
 */
 
-//\IgnoreLatex{
-
 #ifndef TYPES_H
 #define TYPES_H
 #include <sys/types.h>
@@ -20,181 +18,44 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-/*
-  Some rules about types:
-  - do not use Ulong, these are not portable.
-  - do not use the constants, UINT_MAX, INT_MAX and INT_MIN
-  The following are the assumptions about the types:
-  - size(Uint) >= 4
-  - size(Sint) >= 4
-  - size(Ushort) = 2
-  - size(Sshort) = 2
-  No other assumptions are to be made.
-*/
+// This is the assumptions about the types
+// size(Uint) >= 4
+// size(Sint) >= 4
+// size(Ushort) = 2
+// size(Sshort) = 2
 
-//}
 
-/*
-  This file contains some basic type definition.
-*/
+// Primitives
+typedef unsigned char  Uchar;
+typedef unsigned short Ushort;
 
-typedef unsigned char  Uchar;         // \Typedef{Uchar}
-typedef unsigned short Ushort;        // \Typedef{Ushort}
+typedef unsigned long  Uint;
+typedef signed   long  Sint;
 
-/*
-  The following is the central case distinction to accomodate
-  code for 32 bit integers and 64 bit integers.
-*/
+typedef unsigned long  Ulong;
+typedef signed   long  Slong;
 
-#ifdef SIXTYFOURBITS
+#define LOGWORDSIZE    6
+#define UintConst(N)   (N##UL)
+#define SintConst(N)   (N##L)
 
-typedef unsigned long  Uint;          // \Typedef{Uint}
-typedef signed   long  Sint;          // \Typedef{Sint}
-#define LOGWORDSIZE    6              // base 2 logarithm of wordsize
-#define UintConst(N)   (N##UL)        // unsigned integer constant
-#define SintConst(N)   (N##L)         // signed integer constant
+#define Bool unsigned char
 
-#else
+#define False ((Bool) 0)
 
-typedef unsigned int  Uint;          // \Typedef{Uint}
-typedef signed   int  Sint;          // \Typedef{Sint}
-#define LOGWORDSIZE   5              // base 2 logarithm of wordsize
-#define UintConst(N)  (N##U)         // unsigned integer constant
-#define SintConst(N)  (N)            // signed integer constant
-
-#endif
-
-/*
-  Type of unsigned integer in \texttt{printf}.
-*/
-
-typedef unsigned long Showuint;     // \Typedef{Showuint}
-
-/*
-  Type of signed integer in \texttt{printf}.
-*/
-
-typedef signed long Showsint;       // \Typedef{Showsint}
-
-/*
-  Type of integer in \texttt{scanf}.
-*/
-
-typedef signed long Scaninteger;    // \Typedef{Scaninteger}
-
-/*
-  Argument of a function from \texttt{ctype.h}.
-*/
+#define True ((Bool) 1)
 
 typedef int Ctypeargumenttype;      // \Typedef{Ctypeargumenttype}
 
-/*
-  type of second argument of fgets
-*/
-
-typedef int Fgetssizetype;      // \Typedef{Fgetssizetype}
-
-/*
-  Return type of \texttt{fgetc} and \texttt{getc}.
-*/
-
-typedef int Fgetcreturntype;        // \Typedef{Fgetcreturntype}
-
-/*
-  Type of first argument of \texttt{putc}.
-*/
-
-typedef int Fputcfirstargtype;      // \Typedef{Fputcfirstargtype}
-
-/*
-  Returntype of \texttt{putc}.
-*/
-
-typedef int Fputcreturntype;      // \Typedef{Fputcreturntype}
-
-/*
-  Return type of \texttt{strcmp}.
-*/
-
-typedef int Strcmpreturntype;       // \Typedef{Strcmpreturntype}
-
-/*
-  Type of a file descriptor.
-*/
-
 typedef int Filedesctype;           // \Typedef{Filedesctype}
-
-/*
-  Return type of \texttt{qsort} function.
-*/
 
 typedef int Qsortcomparereturntype; // \Typedef{Qsortcomparefunction}
 
-/*
-  Return type of \texttt{sprintf} function.
-*/
-
-typedef int Sprintfreturntype;     // \Typedef{Sprintfreturntype}
-
-/*
-  Type of fieldwidth in \texttt{printf} format string.
-*/
-
 typedef int Fieldwidthtype;         // \Typedef{Fieldwidthtype}
-
-/*
-  Type of \texttt{argc}-parameter in main.
-*/
 
 typedef int Argctype;               // \Typedef{Argctype}
 
-/*
-  Return type of \texttt{getrlimit}
-*/
-
 typedef int Getrlimitreturntype;    // \Typedef{Getrlimitreturntype}
-
-/*
-  type of error flag for gzerror
-*/
-
-typedef int Gzerrorflagtype;
-
-/*
-  This is the type for option numbers
-*/
-
-typedef int Optionnumbertype;
-
-/*
-  This is the type for the xdrop scores.
-*/
-
-typedef Sint Xdropscore;        // \Typedef{Xdropscore}
-
-/*
-  This is the type of the third argument of the function gzread
-*/
-
-typedef unsigned int Gzreadthirdarg;
-
-/*
-  This is the return type of fclose like functions
-*/
-
-typedef int Fclosereturntype;
-
-/*
-  This is the return type of fprintf like functions
-*/
-
-typedef int Fprintfreturntype;
-
-/*
-  This is the return value of the function regcomp and regexec
-*/
-
-typedef int Regexreturntype;
 
 /*
   We have output functions of different arity, all accepting integer values
@@ -219,17 +80,17 @@ typedef int Sysconfargtype;         // \Typedef{Sysconfargtype}
         if(sizeof(T) OP (S))\
         {\
           DEBUG4(1,"# sizeof(%s) %s (%ld bytes,%ld bits) as expected\n",\
-                  #T,#OP,(Showsint) sizeof(T),\
-                         (Showsint) (CHAR_BIT * sizeof(T)));\
+                  #T,#OP,(Slong) sizeof(T),\
+                         (Slong) (CHAR_BIT * sizeof(T)));\
         } else\
         {\
           fprintf(stderr,"typesize constraint\n");\
           fprintf(stderr,"  sizeof(%s) = (%ld bytes,%ld bits) %s %lu bytes\n",\
                   #T,\
-                  (Showsint) sizeof(T),\
-                  (Showsint) (CHAR_BIT * sizeof(T)),\
+                  (Slong) sizeof(T),\
+                  (Slong) (CHAR_BIT * sizeof(T)),\
                   #OP,\
-                  (Showuint) (S));\
+                  (Ulong) (S));\
           fprintf(stderr,"does not hold\n");\
           exit(EXIT_FAILURE);\
         }
@@ -263,23 +124,6 @@ int mkstemp(char *);
 #endif
 
 //}
-
-/*
-  A type for boolean values defined as a constant to allow
-  checking if it has been defined previously.
-*/
-
-#ifndef Bool
-#define Bool unsigned char
-#endif
-
-#ifndef False
-#define False ((Bool) 0)
-#endif
-
-#ifndef True
-#define True ((Bool) 1)
-#endif
 
 /*
   Show a boolean value as a string or as a character 0 or 1.

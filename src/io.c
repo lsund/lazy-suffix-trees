@@ -52,8 +52,8 @@ static Uint filedesc(
             fprintf(stderr,"file %s, line %lu: cannot open file: fd=%lu, "
                     "not enough file handles available\n",
                     file,
-                    (Showuint) line,
-                    (Showuint) fd);
+                    (Ulong) line,
+                    (Ulong) fd);
             exit(EXIT_FAILURE);
         } else {
             if (filehandle[fd].createfile == NULL)
@@ -61,8 +61,8 @@ static Uint filedesc(
                 fprintf(stderr,"file %s, line %lu: cannot open file: fd=%lu, "
                         "file handle not occurpied\n",
                         file,
-                        (Showuint) line,
-                        (Showuint) fd);
+                        (Ulong) line,
+                        (Ulong) fd);
                 exit(EXIT_FAILURE);
             }
         }
@@ -95,13 +95,13 @@ static void setinfo(char *file, Uint line, Uint fd, char *path, char *mode)
   if (filehandle[fd].createfile != NULL) {
     fprintf(stderr,"file %s, line %lu: open file \"%s\" with mode \"%s\": "
                    "handle %lu already occupied\n",
-           file,(Showuint) line,path,mode,(Showuint) fd);
+           file,(Ulong) line,path,mode,(Ulong) fd);
     exit(EXIT_FAILURE);
   }
   strcpy(filehandle[fd].createmode,mode);
   if (strlen(path) > PATH_MAX) {
     fprintf(stderr,"file %s, line %lu: cannot open file \"%s\": "
-                   "path is too long\n",file,(Showuint) line,path);
+                   "path is too long\n",file,(Ulong) line,path);
     exit(EXIT_FAILURE);
   }
   strcpy(filehandle[fd].path,path);

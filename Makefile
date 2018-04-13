@@ -11,7 +11,7 @@
 # Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
 #
 #
-# Mudified by Ludvig Sundström 2018 permitted by Stefan Kurtz
+# Modified by Ludvig Sundström 2018 under permission by Stefan Kurtz
 
 CC=gcc
 LD=${CC}

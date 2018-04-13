@@ -44,7 +44,7 @@ void reseterror(void);
         {\
           fprintf(stderr,"file %s, line %lu: "\
                          "space for errormessage too small\n",\
-                  __FILE__,(Showuint) __LINE__);\
+                  __FILE__,(Ulong) __LINE__);\
           exit(EXIT_FAILURE);\
         }
 
@@ -112,20 +112,20 @@ void reseterror(void);
 
 #define NOTSUPPOSED\
         fprintf(stderr,"%s: line %lu: This case is not supposed to occur\n",\
-                       __FILE__,(Showuint) __LINE__);\
+                       __FILE__,(Ulong) __LINE__);\
         exit(EXIT_FAILURE)
 
 #define DEFAULTFAILURE default:\
                        fprintf(stderr, "line %lu in file %s: this point "\
                                        "should never be reached; aborting "\
-                                       "program\n" , (Showuint) __LINE__,\
+                                       "program\n" , (Ulong) __LINE__,\
                                        __FILE__);\
                        exit(EXIT_FAILURE)
 
 
 #define NOTIMPLEMENTED\
         fprintf(stderr, "file %s, line %lu: this case is not implemented\n",\
-                __FILE__,(Showuint) __LINE__);\
+                __FILE__,(Ulong) __LINE__);\
         exit(EXIT_FAILURE)
 
 /*

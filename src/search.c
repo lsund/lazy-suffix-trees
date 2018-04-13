@@ -26,7 +26,7 @@
 
 static void print_statistics(FILE *fp, int trials)
 {
-    fprintf(fp, "%lu ", (Showuint) trials);
+    fprintf(fp, "%lu ", (Ulong) trials);
     fprintf(fp, "%.2f\n", getruntime()/(double) ITER);
 }
 

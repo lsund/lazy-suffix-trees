@@ -45,7 +45,7 @@ Bool getdebugwhere(void) {
 void setdebuglevel(void)
 {
     char *envstring;
-    Scaninteger readint;
+    int readint;
 
     debugfileptr = stdout;
     if((envstring = getenv("DEBUGLEVEL")) != NULL)
@@ -55,15 +55,15 @@ void setdebuglevel(void)
         {
             fprintf(stderr,"environment variable DEBUGLEVEL=%s, ",envstring);
             fprintf(stderr,"it must be a digit between 0 and %lu\n",
-                    (Showuint) MAXDEBUGLEVEL);
+                    (Ulong) MAXDEBUGLEVEL);
             exit(EXIT_FAILURE);
         }
         if (sscanf(envstring,"%ld",&readint) != 1 || readint < 0 ||
-                readint > (Scaninteger) MAXDEBUGLEVEL)
+                readint > (int) MAXDEBUGLEVEL)
         {
             fprintf(stderr,"environment variable DEBUGLEVEL=%s, ",envstring);
             fprintf(stderr,"it must be a digit between 0 and %lu\n",
-                    (Showuint) MAXDEBUGLEVEL);
+                    (Ulong) MAXDEBUGLEVEL);
             exit(EXIT_FAILURE);
         }
         debuglevel = (Sint) readint;
@@ -111,18 +111,18 @@ void showrootchildtab(void)
         if (root_children[i] != UNDEFINEDSUCC) {
             if (root_children[i] & LEAFBIT) {
                 printf("#(%lu)%c-successor of root is leaf %lu\n",
-                        (Showuint) i,
+                        (Ulong) i,
                         (char) i,
-                        (Showuint) (root_children[i] & ~LEAFBIT));
+                        (Ulong) (root_children[i] & ~LEAFBIT));
             } else {
                 printf("#(%lu)%c-successor of root is branch %ld\n",
-                        (Showuint) i,
+                        (Ulong) i,
                         (char) i,
-                        (Showsint) root_children[i]);
+                        (Slong) root_children[i]);
             }
         }
     }
-    printf("#~-successor of root is leaf %lu\n",(Showuint) textlen);
+    printf("#~-successor of root is leaf %lu\n",(Ulong) textlen);
 }
 
 
@@ -136,9 +136,9 @@ void showstree(void)
     {
         if(IS_LEAF(vertex))
         {
-            printf("#%lu: ",(Showuint) INDEX(vertex));
+            printf("#%lu: ",(Ulong) INDEX(vertex));
             leftpointer = GET_LP(vertex);
-            printf(" Leaf %lu",(Showuint) leftpointer);
+            printf(" Leaf %lu",(Ulong) leftpointer);
             if(IS_RIGHTMOST(vertex))
             {
                 printf(" (last)");
@@ -146,10 +146,10 @@ void showstree(void)
             vertex++;
         } else
         {
-            printf("#%lu: ",(Showuint) INDEX(vertex));
+            printf("#%lu: ",(Ulong) INDEX(vertex));
             leftpointer = GET_LP(vertex);
-            printf(" Branch(%lu,%lu)",(Showuint) leftpointer,
-                    (Showuint) FIRST_CHILD(vertex));
+            printf(" Branch(%lu,%lu)",(Ulong) leftpointer,
+                    (Ulong) FIRST_CHILD(vertex));
             if(IS_RIGHTMOST(vertex))
             {
                 printf(" (last)");
@@ -177,10 +177,10 @@ void printAlpha (char *s)
             j++;
         }
     }
-    printf(")\nalphasize=%lu\n",(Showuint) j);
+    printf(")\nalphasize=%lu\n",(Ulong) j);
     for (i=0; i<=(Uint) UCHAR_MAX; i++) {
         if (occ[i] > 0) {
-            printf("'%c':%lu\n",(char) i,(Showuint) occ[i]);
+            printf("'%c':%lu\n",(char) i,(Ulong) occ[i]);
         }
     }
 }

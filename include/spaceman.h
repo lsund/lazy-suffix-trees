@@ -27,8 +27,8 @@
         if((V) == NULL)\
         {\
           fprintf(stderr,"file %s, line %lu: malloc(%lu) failed\n",\
-                  __FILE__,(Showuint) __LINE__,\
-                  (Showuint) (sizeof(T) * (size_t) (N)));\
+                  __FILE__,(Ulong) __LINE__,\
+                  (Ulong) (sizeof(T) * (size_t) (N)));\
           exit(EXIT_FAILURE);\
         }
 
