@@ -6,4 +6,7 @@
 
 Bool bmhsearch(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright);
 
+
+Bool naive_search(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright);
+
 #endif

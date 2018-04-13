@@ -200,11 +200,10 @@ int file2Array(char *name, Uint *textlen, int size, char ***wordsp)
     if (fd < 0) {
         return -1;
     }
-    int max_line_len = 100;
+    int max_line_len = 1001;
 
     /* Allocate lines of text */
-    if (words==NULL)
-    {
+    if (words == NULL) {
         fprintf(stderr,"Out of memory (1).\n");
         exit(1);
     }
@@ -246,7 +245,7 @@ int file2Array(char *name, Uint *textlen, int size, char ***wordsp)
             exit(4);
         }
 
-        if (!fgets(words[i], max_line_len-1, fp)) {
+        if (!fgets(words[i], max_line_len - 1, fp)) {
             break;
         }
 

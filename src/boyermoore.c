@@ -8,6 +8,7 @@ Bool bmhsearch(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright)
 
     m = (Uint) (patternright - pattern + 1);
     for (i = 0; i < m - 1; i++) {
+        printf("%c\n", pattern[i]);
         rmostocc[(Uint) pattern[i]] = i + 1;
     }
     for(j = 0; j <= textlen - m; j += m - rmostocc[(Uint) text[j + m - 1]]) {
@@ -15,6 +16,27 @@ Bool bmhsearch(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright)
             if (k < 0) {
                 return True;
             }
+    }
+    return False;
+}
+
+
+Bool naive_search(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright)
+{
+    Uint m = (Uint) (patternright - pattern);
+    Uint j = 0;
+
+    for (Uint i = 0; i < textlen; i++) {
+        for (j = 0; j < m; j++) {
+            if (pattern[j] == text[i]) {
+                i++;
+            } else {
+                break;
+            }
+        }
+        if (j == m) {
+            return True;
+        }
     }
     return False;
 }
