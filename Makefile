@@ -20,11 +20,10 @@ INCLUDE=-I'include'
 mode=64bit
 
 CFLAGS+=-m64 -DSIXTYFOURBITS $(INCLUDE)
-LDFLAGS+=-m64
 
 # CFLAGS+=-O3 -Wall -Werror
 # CFLAGS+=-O3 -Wall -Wextra -Werror
-CFLAGS+=-O3 -Wall
+# CFLAGS+=-O3 -Wall
 
 CFLAGS+=-DDEBUG
 CFLAGS+=-g
@@ -56,16 +55,17 @@ dirs:
 	mkdir -p obj bin
 
 wotd: dirs ${OBJ}
-	${CC} ${LDFLAGS} ${INCLUDE} ${OBJ} src/main.c -o bin/$@
+	${CC} ${CFLAGS} ${INCLUDE} ${OBJ} src/main.c -o bin/$@
 
 test: dirs ${OBJ} ${TEST_OBJ}
-	${CC} ${LDFLAGS} ${INCLUDE} ${OBJ} ${TEST_OBJ} test/test.c -o bin/test
+	${CC} ${CFLAGS} ${INCLUDE} ${OBJ} ${TEST_OBJ} test/test.c -o bin/test
 
 bench: clean all
 	./bin/wotd data/dataset/005.txt data/10000.txt bench
 
 run: clean all
-	./bin/wotd data/data.xml data/10000.txt run
+	# ./bin/wotd data/data.xml data/10000.txt run
+	./bin/wotd data/dataset/005.txt data/test-patterns.txt run
 
 utf8: clean all
 	./bin/wotd data/utftest.txt data/utftest.txt run

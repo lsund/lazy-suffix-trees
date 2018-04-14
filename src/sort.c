@@ -12,6 +12,9 @@ static void get_count(Uchar **left, Uchar **right, Uint prefixlen)
         *suffix_probe += prefixlen;
 
         Uint head      = **suffix_probe;
+        // Here, a conversion is needed to get the right index. We cannot just
+        // index on the value of the character, it needs to be mapped to an
+        // integer range, say 1 - 4096
         suffixhead_count[head]++;
     }
 }

@@ -81,7 +81,8 @@ static Bool match_length(Pattern patt, Uint len)
 
 static Bool match(Uchar *text_probe, Pattern patt)
 {
-    Uint len = lcp(patt.probe, patt.end, text_probe, sentinel - 1);
+    // Changed below to plus 1
+    Uint len = lcp(patt.probe + 1, patt.end, text_probe + 1, sentinel - 1);
     return match_length(patt, len);
 }
 

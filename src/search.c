@@ -33,6 +33,7 @@ static void print_statistics(FILE *fp, int trials)
 
 static Bool copy_pattern(Uchar *pattern, char *current_pattern, Uint len)
 {
+    *(pattern + len) = '\0';
     for(Uint i = 0; i < len; i++) {
 
         pattern[i] = current_pattern[i];
@@ -68,21 +69,6 @@ static Bool sample_random_pattern(Uchar *pattern, Uint patternlen)
 }
 
 
-static Bool try_search_pattern(char *current_pattern, Uint patternlen)
-{
-
-    Uchar pattern[MAXPATTERNLEN + 1];
-    Bool special = copy_pattern(pattern, current_pattern, patternlen);
-
-    if (special) {
-        ERROR("Found an unparsable pattern");
-    }
-
-    return search(pattern, pattern + patternlen - 1);
-
-}
-
-
 // Randomly sampling patterns from the text, reversing every second to simulate
 // the case where a pattern does not exist.
 static void iterate_search_patterns(Uint trials, Uint minlen, Uint maxlen)
@@ -112,6 +98,21 @@ static void iterate_search_patterns(Uint trials, Uint minlen, Uint maxlen)
 ///////////////////////////////////////////////////////////////////////////////
 // Public API
 
+Bool search_pattern(char *current_pattern, Uint patternlen)
+{
+
+    Uchar pattern[MAXPATTERNLEN + 1];
+    Bool special = copy_pattern(pattern, current_pattern, patternlen);
+
+    if (special) {
+        ERROR("Found an unparsable pattern");
+    }
+
+    return search(pattern, pattern + patternlen - 1);
+
+}
+
+
 
 void search_patterns(const char *path, int npatterns, char ***patterns_ptr)
 {
@@ -127,8 +128,9 @@ void search_patterns(const char *path, int npatterns, char ***patterns_ptr)
 
         char *current_pattern = patterns[j];
         Uint patternlen = strlen(current_pattern);
+        printf("%lu\n", patternlen);
 
-        Bool exists = try_search_pattern(current_pattern, patternlen);
+        Bool exists = search_pattern(current_pattern, patternlen);
 
         if (exists) {
             fprintf(fp, "%s\n", patterns[j]);

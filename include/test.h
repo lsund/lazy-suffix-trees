@@ -11,6 +11,7 @@
 #include "search.h"
 #include "io.h"
 #include "boyermoore.h"
+#include "search.h"
 
 #define ANSI_COLOR_RED      "\x1b[31m"
 #define ANSI_COLOR_RESET    "\x1b[0m"
