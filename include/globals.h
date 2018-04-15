@@ -60,6 +60,6 @@ extern Uint *next_free;
 extern Uint root_children[MAX_CHARS + 1];
 
 // flag indicating that the root has been evaluated
-extern Bool root_evaluated;
+extern bool root_evaluated;
 
 #endif

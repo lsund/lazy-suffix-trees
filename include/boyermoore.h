@@ -4,9 +4,9 @@
 
 #include "types.h"
 
-Bool bmhsearch(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright);
+bool bmhsearch(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright);
 
 
-Bool naive_search(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright);
+bool naive_search(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright);
 
 #endif

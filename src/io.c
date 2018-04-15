@@ -34,7 +34,7 @@ static Uint currentopen = 0;
 static Uint filedesc(
         char *file,
         Uint line,
-        Bool existing,
+        bool existing,
         FILE *fp
     )
 {
@@ -126,7 +126,7 @@ FILE *createfilehandle(char *file, Uint line, char *path, char *mode)
         return NULL;
     }
 
-    setinfo(file, line, filedesc(file,line,False,fp), path, mode);
+    setinfo(file, line, filedesc(file,line,false,fp), path, mode);
 
     return fp;
 }
@@ -135,7 +135,7 @@ FILE *createfilehandle(char *file, Uint line, char *path, char *mode)
 // Open file in readmode, return file descriptor. The length of the file is
 // stored in `textlen`. If `writefile` is true if the file should also be
 // opened for triting.
-static int fileOpen(char *name, Uint *textlen, Bool writefile)
+static int fileOpen(char *name, Uint *textlen, bool writefile)
 {
     int fd;
     struct stat buf;
@@ -153,7 +153,7 @@ static int fileOpen(char *name, Uint *textlen, Bool writefile)
 }
 
 // Allocates `len` bytes starting at offset in the file `fd` into memory.
-caddr_t fileParts(int fd, Uint offset, Uint len, Bool writemap)
+caddr_t fileParts(int fd, Uint offset, Uint len, bool writemap)
 {
     caddr_t addr;
 
@@ -186,17 +186,17 @@ caddr_t file2String(char *name, Uint *textlen)
 {
     int fd;
 
-    fd = fileOpen(name, textlen, False);
+    fd = fileOpen(name, textlen, false);
     if(fd < 0) {
         return NULL;
     }
-    return fileParts(fd, 0, *textlen, False);
+    return fileParts(fd, 0, *textlen, false);
 }
 
 int file2Array(char *name, Uint *textlen, int size, char ***wordsp)
 {
     char **words = *wordsp;
-    int fd = fileOpen(name, textlen, False);
+    int fd = fileOpen(name, textlen, false);
     if (fd < 0) {
         return -1;
     }

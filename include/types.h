@@ -17,6 +17,7 @@
 #include <limits.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 // This is the assumptions about the types
 // size(Uint) >= 4
@@ -38,12 +39,6 @@ typedef signed   long  Slong;
 #define LOGWORDSIZE    6
 #define UintConst(N)   (N##UL)
 #define SintConst(N)   (N##L)
-
-#define Bool unsigned char
-
-#define False ((Bool) 0)
-
-#define True ((Bool) 1)
 
 typedef int Ctypeargumenttype;      // \Typedef{Ctypeargumenttype}
 
@@ -129,7 +124,7 @@ int mkstemp(char *);
   Show a boolean value as a string or as a character 0 or 1.
 */
 
-#define SHOWBool(B) ((B) ? "True" : "False")
+#define SHOWbool(B) ((B) ? "true" : "false")
 #define SHOWBIT(B)  ((B) ? '1' : '0')
 
 /*
@@ -177,7 +172,7 @@ typedef Listtype Stringtype;    // \Typedef{Stringtype}
 typedef struct
 {
   Uint uintvalue;
-  Bool defined;
+  bool defined;
 } DefinedUint;   // \Typedef{DefinedUint}
 
 /*

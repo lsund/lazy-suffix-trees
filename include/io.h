@@ -53,12 +53,12 @@ typedef struct filehandle {
 // Functions
 
 
-caddr_t fileParts(int fd,Uint offset,Uint len,Bool writemap);
+caddr_t fileParts(int fd,Uint offset,Uint len,bool writemap);
 
 void freetextspace(Uchar *text, Uint textlen);
 
 caddr_t genfile2String(char *name, Uint *textlen,
-                                  Bool writefile, Bool writemap);
+                                  bool writefile, bool writemap);
 
 caddr_t file2String(char *name, Uint *textlen);
 

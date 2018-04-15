@@ -41,7 +41,7 @@ Uint grouplcp(Uchar **left, Uchar **right) {
     Uchar cmpchar, **i;
     Uint j = UintConst(1);
 
-    while (True) {
+    while (true) {
 
         if(*right + j == sentinel) {
             return j;

@@ -1,7 +1,7 @@
 
 #include "boyermoore.h"
 
-Bool bmhsearch(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright)
+bool bmhsearch(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright)
 {
     Uint m, i, j, rmostocc[UCHAR_MAX+1] = {0};
     Sint k;
@@ -14,14 +14,14 @@ Bool bmhsearch(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright)
     for(j = 0; j <= textlen - m; j += m - rmostocc[(Uint) text[j + m - 1]]) {
         for(k = (Sint) (m - 1); k >= 0 && pattern[k] == text[j + k]; k--)
             if (k < 0) {
-                return True;
+                return true;
             }
     }
-    return False;
+    return false;
 }
 
 
-Bool naive_search(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright)
+bool naive_search(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright)
 {
     Uint m = (Uint) (patternright - pattern);
     Uint j = 0;
@@ -37,8 +37,8 @@ Bool naive_search(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright
             }
         }
         if (j == m) {
-            return True;
+            return true;
         }
     }
-    return False;
+    return false;
 }

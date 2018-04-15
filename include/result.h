@@ -5,8 +5,8 @@
 #include "types.h"
 
 typedef struct result {
-    Bool def;
-    Bool val;
+    bool def;
+    bool val;
 } Result;
 
 #endif

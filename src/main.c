@@ -17,7 +17,7 @@ int main(int argc,char *argv[])
     /* Uint len = 4; */
     /* Uint *test = (Uint *) malloc(sizeof(Uint)); */
     /* printf("%s\n", text); */
-    /* while (True) { */
+    /* while (true) { */
     /*     from_utf8(&text, text + len, test); */
     /*     if (*test == 0) { */
     /*         break; */

@@ -224,7 +224,7 @@ void showsubtree(Uint *father,int indent);
 ///////////////////////////////////////////////////////////////////////////////
 // Functions
 Sint getdebuglevel(void);
-Bool getdebugwhere(void);
+bool getdebugwhere(void);
 void showmemsize(void);
 void setdebuglevel(void);
 FILE *getdbgfp(void);

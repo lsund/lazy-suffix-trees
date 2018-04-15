@@ -21,14 +21,14 @@ char *utest_search_for(char *patternfile, char *textfile)
 
         char *current_pattern = patterns[j];
         Uint patternlen = strlen(current_pattern);
-        Bool really_exists = naive_search(
+        bool really_exists = naive_search(
                                 text,
                                 textlen,
                                 (Uchar *) current_pattern,
                                 ((Uchar *) current_pattern) + patternlen
                              );
 
-        Bool exists = search_pattern(current_pattern, patternlen);
+        bool exists = search_pattern(current_pattern, patternlen);
         if (really_exists != exists) {
             printf("%d %d\n", really_exists, exists);
             printf("%s\n", patterns[j]);

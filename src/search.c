@@ -31,7 +31,7 @@ static void print_statistics(FILE *fp, int trials)
 }
 
 
-static Bool copy_pattern(Uchar *pattern, char *current_pattern, Uint len)
+static bool copy_pattern(Uchar *pattern, char *current_pattern, Uint len)
 {
     *(pattern + len) = '\0';
     for(Uint i = 0; i < len; i++) {
@@ -39,15 +39,15 @@ static Bool copy_pattern(Uchar *pattern, char *current_pattern, Uint len)
         pattern[i] = current_pattern[i];
 
         if (ISSPECIAL(pattern[i])) {
-            return True;
+            return true;
         }
     }
 
-    return False;
+    return false;
 }
 
 
-static Bool sample_random_pattern(Uchar *pattern, Uint patternlen)
+static bool sample_random_pattern(Uchar *pattern, Uint patternlen)
 {
     Uint start = (Uint) (drand48() * (double) (textlen - patternlen));
 
@@ -61,11 +61,11 @@ static Bool sample_random_pattern(Uchar *pattern, Uint patternlen)
         pattern[j] = text[start + j];
 
         if(ISSPECIAL(pattern[j])) {
-            return True;
+            return true;
         }
     }
     pattern[patternlen] = '\0';
-    return False;
+    return false;
 }
 
 
@@ -83,7 +83,7 @@ static void iterate_search_patterns(Uint trials, Uint minlen, Uint maxlen)
         Uchar pattern[MAXPATTERNLEN + 1];
         patternlen = randlen(minlen, maxlen);
 
-        Bool special = sample_random_pattern(pattern, patternlen);
+        bool special = sample_random_pattern(pattern, patternlen);
 
         if (!special) {
             if (i & 1) {
@@ -98,11 +98,11 @@ static void iterate_search_patterns(Uint trials, Uint minlen, Uint maxlen)
 ///////////////////////////////////////////////////////////////////////////////
 // Public API
 
-Bool search_pattern(char *current_pattern, Uint patternlen)
+bool search_pattern(char *current_pattern, Uint patternlen)
 {
 
     Uchar pattern[MAXPATTERNLEN + 1];
-    Bool special = copy_pattern(pattern, current_pattern, patternlen);
+    bool special = copy_pattern(pattern, current_pattern, patternlen);
 
     if (special) {
         ERROR("Found an unparsable pattern");
@@ -129,7 +129,7 @@ void search_patterns(const char *path, int npatterns, char ***patterns_ptr)
         char *current_pattern = patterns[j];
         Uint patternlen = strlen(current_pattern);
 
-        Bool exists = search_pattern(current_pattern, patternlen);
+        bool exists = search_pattern(current_pattern, patternlen);
 
         if (exists) {
             fprintf(fp, "%s\n", patterns[j]);

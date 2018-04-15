@@ -17,7 +17,7 @@ Uint    textlen,
         suffixhead_count[UCHAR_MAX + 1];
 
 
-Bool    root_evaluated;
+bool    root_evaluated;
 
 void inittree(void)
 {
@@ -34,7 +34,7 @@ void inittree(void)
     ALLOC(suffixes, NULL, Uchar *, textlen + 1);
     sort_bufferwidth = 0;
     max_sortbufferwidth  = textlen >> 8;
-    root_evaluated    = False;
+    root_evaluated    = false;
 
     for (i = 0; i <= UCHAR_MAX; i++) {
         suffixhead_count[i] = 0;

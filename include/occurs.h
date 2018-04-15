@@ -30,9 +30,9 @@ typedef struct pattern {
             Uint prefix = lcp(patt_probe + 1, patt_end, text_probe + 1, sentinel - 1);\
             if ((Uint) (patt_end - patt_probe) == prefix)\
             {\
-              return True;\
+              return true;\
             }\
-            return False;\
+            return false;\
         }\
         vertex = stree + rootchild;\
      }
@@ -42,7 +42,7 @@ typedef struct pattern {
 #define MATCH_LEAF_EDGE\
         if(text_probe == sentinel)\
         {\
-          return False;\
+          return false;\
         }\
         edgechar = *text_probe;\
         if(edgechar == patt_head)\
@@ -50,9 +50,9 @@ typedef struct pattern {
           if((Uint) (patt_end - patt_probe) ==\
                      lcp(patt_probe+1,patt_end,text_probe+1,sentinel-1))\
           {\
-            return True;\
+            return true;\
           }\
-          return False;\
+          return false;\
         }
 
 
@@ -62,6 +62,6 @@ typedef struct pattern {
 // Functions
 
 
-Bool search(Uchar *left, Uchar *patt_end);
+bool search(Uchar *left, Uchar *patt_end);
 
 #endif

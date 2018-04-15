@@ -26,7 +26,7 @@
 static Sint debuglevel = 0;
 
 // DEBUGWHERE
-static Bool debugwhere = False;
+static bool debugwhere = false;
 
 // Debug log file
 static FILE *debugfileptr = NULL;
@@ -37,7 +37,7 @@ Sint getdebuglevel(void) {
 }
 
 // Get the value of DEBUGWHERE
-Bool getdebugwhere(void) {
+bool getdebugwhere(void) {
   return debugwhere;
 }
 
@@ -72,12 +72,12 @@ void setdebuglevel(void)
     {
         if(strcmp(envstring,"on") == 0)
         {
-            debugwhere = True;
+            debugwhere = true;
         } else
         {
             if(strcmp(envstring,"off") == 0)
             {
-                debugwhere = False;
+                debugwhere = false;
             } else
             {
                 fprintf(stderr,"environment variable DEBUGWHERE=%s, ",envstring);

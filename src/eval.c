@@ -6,13 +6,13 @@ Uchar   *text, *sentinel, **current_sortbuffer;
 Uint    *next_free, root_children[UCHAR_MAX + 1];
 
 
-static Bool skip_sentinel(Uchar ***right)
+static bool skip_sentinel(Uchar ***right)
 {
     if(**right == sentinel) {
         right--;
-        return True;
+        return true;
     }
-    return False;
+    return false;
 }
 
 static void create_inner_vertex(Uint *firstbranch, Uchar **l, Uchar **r)
@@ -58,7 +58,7 @@ static Uint evalsuccedges(Uchar **left, Uchar **right)
     Uint firstbranch = UNDEFREFERENCE, *previousnode = NULL;
 
     allocstree();
-    Bool sentineledge = skip_sentinel(&right);
+    bool sentineledge = skip_sentinel(&right);
 
 
     for (probe = left; probe <= right; probe = bound + 1) {
