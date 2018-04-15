@@ -12,6 +12,21 @@ int main(int argc,char *argv[])
     DEBUGLEVELSET;
 
     filename = argv[1];
+
+    setlocale(LC_ALL, "en_US.utf8");
+    FILE *in = fopen("data/utftest.txt", "r");
+    wchar_t *wtext = malloc(sizeof(wchar_t) * MAXTEXTLEN);
+    wint_t c;
+    Uint i = 0;
+    while ((c = fgetwc(in)) != WEOF) {
+        wtext[i] = c;
+        i++;
+    }
+    wtext[i + 1] = '\0';
+    printf("%lu\n", i);
+    get_wcharacters(in, wtext, 0, NULL, 0);
+    fclose(in);
+
     text = (Uchar *) file2String(filename, &textlen);
 
     if(text == NULL) {
