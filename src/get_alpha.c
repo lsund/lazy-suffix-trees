@@ -43,10 +43,18 @@ void get_characters(Uchar *text, Uint textlen, Uchar *alpha, Uint *alphasize)
 }
 
 
-void get_wcharacters(FILE *in, wchar_t *text, Uint textlen, wchar_t *alpha, Uint alphasize)
+Uint get_max(wchar_t *text, Uint textlen)
 {
 
-    printf("string: %ls\n", text);
+    wchar_t *text_probe;
+    Uint max = 0;
+    for (text_probe = text; text_probe < text + textlen; text_probe++) {
+        if ((Uint) *text_probe > max) {
+            printf("New max: %lu\n", (Uint) *text_probe);
+            max = *text_probe;
+        }
+    }
+    return max;
 }
 
 

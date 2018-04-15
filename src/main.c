@@ -1,7 +1,7 @@
 #include "search.h"
 
-extern Uchar *text;
-extern Uint textlen;
+Uchar *text;
+Uint textlen, max_codepoint;
 
 int main(int argc,char *argv[])
 {
@@ -14,19 +14,19 @@ int main(int argc,char *argv[])
     filename = argv[1];
 
     setlocale(LC_ALL, "en_US.utf8");
-    FILE *in = fopen("data/utftest.txt", "r");
+    FILE *in = fopen(filename, "r");
     wchar_t *wtext = malloc(sizeof(wchar_t) * MAXTEXTLEN);
     wint_t c;
-    Uint i = 0;
     while ((c = fgetwc(in)) != WEOF) {
-        wtext[i] = c;
-        i++;
+        wtext[textlen] = c;
+        textlen++;
     }
-    wtext[i + 1] = '\0';
-    printf("%lu\n", i);
-    get_wcharacters(in, wtext, 0, NULL, 0);
+    wtext[textlen + 1] = '\0';
+    printf("%lu\n", textlen);
+    max_codepoint = get_max(wtext, textlen);
     fclose(in);
 
+    textlen = 0;
     text = (Uchar *) file2String(filename, &textlen);
 
     if(text == NULL) {
