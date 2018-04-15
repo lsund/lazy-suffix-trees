@@ -47,11 +47,23 @@ char *utest_search()
 
     char *error;
 
+    mu_message(DATA, "Akz patterns\n");
     error = utest_search_for("data/10000.txt", "data/data.xml");
     if (error) return error;
+
+    mu_message(DATA, "Easy test patterns\n");
     error = utest_search_for("data/test-patterns.txt", "data/dataset/005.txt");
     if (error) return error;
+
+    mu_message(DATA, "Random exiting patterns\n");
     error = utest_search_for("data/random-patterns.txt", "data/dataset/005.txt");
+    if (error) return error;
+
+    mu_message(DATA, "Random non-existing patterns\n");
+    error = utest_search_for(
+                "data/random-patterns-non-existing.txt",
+                "data/dataset/005.txt"
+            );
     if (error) return error;
 
     return NULL;
