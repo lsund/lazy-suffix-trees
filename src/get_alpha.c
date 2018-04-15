@@ -41,3 +41,12 @@ void get_characters(Uchar *text, Uint textlen, Uchar *alpha, Uint *alphasize)
     }
     *alphasize = j;
 }
+
+
+void get_wcharacters(FILE *in, wchar_t *text, Uint textlen, wchar_t *alpha, Uint alphasize)
+{
+
+    printf("string: %ls\n", text);
+}
+
+

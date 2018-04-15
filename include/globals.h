@@ -26,6 +26,8 @@ extern Uchar *sentinel;
 // characters in `t` in alphabetical order
 extern Uchar characters[MAX_CHARS + 1];
 
+extern Uint indices[MAX_CHARS + 1];
+
 // number of occurrences for the first character of the current suffixes
 extern Uint suffixhead_count[MAX_CHARS + 1];
 

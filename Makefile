@@ -29,7 +29,6 @@ CFLAGS+=-DDEBUG
 CFLAGS+=-g
 
 OBJ= obj/boyermoore.o\
-	 obj/utf.o\
      obj/reverse.o\
      obj/clock.o\
      obj/io.o\
@@ -66,9 +65,6 @@ bench: clean all
 run: clean all
 	# ./bin/wotd data/data.xml data/10000.txt run
 	./bin/wotd data/dataset/005.txt data/test-patterns.txt run
-
-utf8: clean all
-	./bin/wotd data/utftest.txt data/utftest.txt run
 
 runtest: clean test
 	./bin/test

@@ -1,6 +1,15 @@
 
 #include "sort.h"
 
+// Increases the count for this particular character
+
+static void increase_count(Uint codepoint)
+{
+    /* int i = get_index(codepoint); */
+    Uint i = codepoint;
+    suffixhead_count[i]++;
+}
+
 // This array points to a list of suffixes
 
 // Determine size for each group
@@ -15,7 +24,7 @@ static void get_count(Uchar **left, Uchar **right, Uint prefixlen)
         // Here, a conversion is needed to get the right index. We cannot just
         // index on the value of the character, it needs to be mapped to an
         // integer range, say 1 - 4096
-        suffixhead_count[head]++;
+        increase_count((Uint) head);
     }
 }
 

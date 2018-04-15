@@ -42,17 +42,26 @@ ASSUMPTIONS:
 
 # IMPLICATIONS:
 
-The suffix tree needs to represent a sequence of codepoints instead of a
+1. The suffix tree needs to represent a sequence of codepoints instead of a
 sequence of ascii characters.
 
-Each character needs 4 bytes of space instead of 1 byte of space.
+2. Each character is an `wchar_t` instead of a Uchar. This is size 4 bytes,
+   just like Uint.
+
+3. A mapping is needed from all characters in the pattern file to a specific
+   index.
+
+4. Instead of manipulating `suffix_heads` directly, it is done through a common
+   interface. These functions first retrieve the index, then manipulate
+   `suffix_heads`.
+
 
 ## These global variables need to change
 
-* `text`                pointer to Uchar            -> pointer to Uint
-* `sentinel`            pointer to Uchar            -> pointer to Uint
-* `suffixes`            pointer to Uchar pointers   -> pointer to Uint pointers
-* `characters`          array of Uchar              -> hashtable of Uint -> Uint
+* `text`                pointer to Uchar            -> pointer to `wchar_t`
+* `sentinel`            pointer to Uchar            -> pointer to `wchar_t`
+* `suffixes`            pointer to Uchar pointers   -> pointer to `wchar_t` pointers
+* `characters`          array of Uchar              -> hashtable of `wchar_t` -> `wchar_t`
 
 ## Functions that needs to change
 
@@ -60,13 +69,12 @@ Each character needs 4 bytes of space instead of 1 byte of space.
   counts is a static array of size 256. This needs to be a dynamic array that
   can store arbitrarily many elements.
 
-
 ### sort.c
 
 * `get_count`: is fine
 
 * `set_group_bounds`: `lower_bound` and `upper_bounds` need to be a pointer to
-  Uint pointers.
+  `wchar_t` pointers.
 
 CONTINUE AT INSERT SUFFIXES
 

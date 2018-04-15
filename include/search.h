@@ -19,7 +19,6 @@
 #include "occurs.h"
 #include "search.h"
 #include "clock.h"
-#include "utf.h"
 #include "char.h"
 #include "reverse.h"
 

@@ -33,13 +33,27 @@ int main(int argc,char *argv[])
     patternfile     = argv[2];
     int size        = 128;
     char **patterns = (char **) malloc(sizeof(char *) * size);
-    int i           = file2Array(patternfile, &patternslen, size, &patterns);
+    int npatterns  = file2Array(patternfile, &patternslen, size, &patterns);
 
     if(textlen > MAXTEXTLEN) {
         ERROR("Text too large, see MAXTEXTLEN");
     }
 
     const char *path = "data/out.txt";
+
+    /* setlocale(LC_ALL, "en_US.utf8"); */
+    /* FILE *in = fopen("data/utftest.txt", "r"); */
+    /* wchar_t *text = malloc(sizeof(wchar_t) * MAXTEXTLEN); */
+    /* wint_t c; */
+    /* Uint i = 0; */
+    /* while ((c = fgetwc(in)) != WEOF) { */
+    /*     text[i] = c; */
+    /*     i++; */
+    /* } */
+    /* text[i + 1] = '\0'; */
+    /* printf("%lu\n", i); */
+    /* get_wcharacters(in, text, 0, NULL, 0); */
+    /* fclose(in); */
 
     if (strcmp(argv[3], "bench") == 0) {
 
@@ -50,14 +64,14 @@ int main(int argc,char *argv[])
 
     } else {
 
-        search_patterns(path, i, &patterns);
+        search_patterns(path, npatterns, &patterns);
 
     }
 
     freetextspace(text, textlen);
 
-    for (; i >= 0; i--) {
-        free(patterns[i]);
+    for (; npatterns >= 0; npatterns--) {
+        free(patterns[npatterns]);
     }
     free(patterns);
 
