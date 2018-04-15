@@ -60,7 +60,7 @@ test: dirs ${OBJ} ${TEST_OBJ}
 	${CC} ${CFLAGS} ${INCLUDE} ${OBJ} ${TEST_OBJ} test/test.c -o bin/test
 
 bench: clean all
-	./bin/wotd data/dataset/005.txt data/10000.txt bench
+	./bin/wotd data/data.xml data/10000.txt bench
 
 run: clean all
 	./bin/wotd data/data.xml data/10000.txt run

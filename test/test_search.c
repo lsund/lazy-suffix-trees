@@ -28,7 +28,7 @@ char *utest_search_for(char *patternfile, char *textfile)
                                 ((Uchar *) current_pattern) + patternlen
                              );
 
-        bool exists = search_pattern(current_pattern, patternlen);
+        bool exists = try_search(current_pattern, patternlen);
         if (really_exists != exists) {
             printf("%d %d\n", really_exists, exists);
             printf("%s\n", patterns[j]);

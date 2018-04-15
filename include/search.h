@@ -26,10 +26,10 @@
 // Functions
 
 
-bool search_pattern(char *current_pattern, Uint patternlen);
+bool try_search(char *current_pattern, Uint patternlen);
 
-void search_patterns(const char *path, int npatterns, char ***o_patterns);
+void try_search_patterns(const char *path, int npatterns, char ***o_patterns);
 
-void search_benchmark(const char *path, Uint trials, Uint minpat, Uint maxpat);
+void try_search_random_patterns(const char *path, Uint trials, Uint minpat, Uint maxpat);
 
 #endif

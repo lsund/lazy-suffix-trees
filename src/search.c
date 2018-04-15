@@ -71,7 +71,7 @@ static bool sample_random_pattern(Uchar *pattern, Uint patternlen)
 
 // Randomly sampling patterns from the text, reversing every second to simulate
 // the case where a pattern does not exist.
-static void iterate_search_patterns(Uint trials, Uint minlen, Uint maxlen)
+static void search_random_patterns(Uint trials, Uint minlen, Uint maxlen)
 {
     Uint patternlen;
 
@@ -98,7 +98,9 @@ static void iterate_search_patterns(Uint trials, Uint minlen, Uint maxlen)
 ///////////////////////////////////////////////////////////////////////////////
 // Public API
 
-bool search_pattern(char *current_pattern, Uint patternlen)
+
+// Search for one pattern in the tree
+bool try_search(char *current_pattern, Uint patternlen)
 {
 
     Uchar pattern[MAXPATTERNLEN + 1];
@@ -113,13 +115,9 @@ bool search_pattern(char *current_pattern, Uint patternlen)
 }
 
 
-
-void search_patterns(const char *path, int npatterns, char ***patterns_ptr)
+// Search for many patterns in the tree
+void try_search_patterns(const char *path, int npatterns, char ***patterns_ptr)
 {
-
-    inittree();
-    initclock();
-
     int noccurs     = 0;
     char **patterns = *patterns_ptr;
     FILE *fp        = open_append(path);
@@ -129,7 +127,7 @@ void search_patterns(const char *path, int npatterns, char ***patterns_ptr)
         char *current_pattern = patterns[j];
         Uint patternlen = strlen(current_pattern);
 
-        bool exists = search_pattern(current_pattern, patternlen);
+        bool exists = try_search(current_pattern, patternlen);
 
         if (exists) {
             fprintf(fp, "%s\n", patterns[j]);
@@ -144,17 +142,14 @@ void search_patterns(const char *path, int npatterns, char ***patterns_ptr)
 }
 
 
-void search_benchmark(const char *path, Uint trials, Uint minpat, Uint maxpat)
+// Sample random patterns and serch for them
+void try_search_random_patterns(const char *path, Uint trials, Uint minpat, Uint maxpat)
 {
-
-    inittree();
-    initclock();
-
     if (maxpat > textlen) {
         ERROR("Max pattern length must be smaller than the text length");
     }
 
-    iterate_search_patterns(trials, minpat, maxpat);
+    search_random_patterns(trials, minpat, maxpat);
 
     FILE *fp = open_append(path);
     print_statistics(fp, trials);

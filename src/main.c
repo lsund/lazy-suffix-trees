@@ -44,16 +44,19 @@ int main(int argc,char *argv[])
 
     const char *path = "data/out.txt";
 
+    inittree();
+    initclock();
+
     if (strcmp(argv[3], "bench") == 0) {
 
         int minpat = 500;
         int maxpat = 1000;
 
-        search_benchmark(path, 100000, minpat, maxpat);
+        try_search_random_patterns(path, 100000, minpat, maxpat);
 
     } else {
 
-        search_patterns(path, npatterns, &patterns);
+        try_search_patterns(path, npatterns, &patterns);
 
     }
 
