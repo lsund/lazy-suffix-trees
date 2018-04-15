@@ -128,7 +128,6 @@ void search_patterns(const char *path, int npatterns, char ***patterns_ptr)
 
         char *current_pattern = patterns[j];
         Uint patternlen = strlen(current_pattern);
-        printf("%lu\n", patternlen);
 
         Bool exists = search_pattern(current_pattern, patternlen);
 

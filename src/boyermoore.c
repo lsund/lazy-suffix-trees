@@ -25,11 +25,13 @@ Bool naive_search(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright
 {
     Uint m = (Uint) (patternright - pattern);
     Uint j = 0;
+    Uint k;
 
     for (Uint i = 0; i < textlen; i++) {
+        k = i;
         for (j = 0; j < m; j++) {
-            if (pattern[j] == text[i]) {
-                i++;
+            if (pattern[j] == text[k]) {
+                k++;
             } else {
                 break;
             }

@@ -3,21 +3,21 @@
 extern Uchar *text;
 extern Uint textlen;
 
-char *utest_search()
+static Uint min(const Uint a, const Uint b)
+{
+    return a < b ? a : b;
+}
+
+
+char *utest_search_for(char *patternfile, char *textfile)
 {
     Uint patternslen;
-    /* char *patternfile = "data/test-patterns.txt"; */
-    /* char *textfile = "data/dataset/005.txt"; */
-    char *patternfile = "data/existing.txt";
-    char *textfile = "data/data.xml";
-
     text = (Uchar *) file2String(textfile, &textlen);
     Uint size = 1001;
     char **patterns = (char **) malloc(sizeof(Uchar *) * size);
     Uint npatterns   = file2Array(patternfile, &patternslen, size, &patterns);
-    search_patterns("data/out.txt", npatterns, &patterns);
     inittree();
-    for (Uint j = 0; j < npatterns; j++) {
+    for (Uint j = 0; j < min(npatterns, 100); j++) {
 
         char *current_pattern = patterns[j];
         Uint patternlen = strlen(current_pattern);
@@ -28,10 +28,31 @@ char *utest_search()
                                 ((Uchar *) current_pattern) + patternlen
                              );
 
-        /* printf("%s\n", current_pattern); */
         Bool exists = search_pattern(current_pattern, patternlen);
-        printf("%d %d\n", really_exists, exists);
+        if (really_exists != exists) {
+            printf("%d %d\n", really_exists, exists);
+            printf("%s\n", patterns[j]);
+        }
+        mu_assert(
+            "Naive and suffix tree sourch should be the same.",
+            really_exists == exists
+        );
+        /* printf("%lu\n", j); */
     }
+    return NULL;
+}
+
+char *utest_search()
+{
+
+    char *error;
+
+    error = utest_search_for("data/10000.txt", "data/data.xml");
+    if (error) return error;
+    error = utest_search_for("data/test-patterns.txt", "data/dataset/005.txt");
+    if (error) return error;
+    error = utest_search_for("data/random-patterns.txt", "data/dataset/005.txt");
+    if (error) return error;
 
     return NULL;
 }
