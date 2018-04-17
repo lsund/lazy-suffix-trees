@@ -26,7 +26,7 @@
 // Functions
 
 
-bool try_search(char *current_pattern, Uint patternlen);
+bool try_search(wchar_t *current_pattern, Uint patternlen);
 
 void try_search_patterns(const char *path, int npatterns, char ***o_patterns);
 

@@ -33,7 +33,12 @@ void get_characters(wchar_t *alpha, Uint *alphasize)
     Uint counts[MAX_CHARS + 1] = {0};
     wchar_t *text_probe;
 
+    Uint max = 0;
     for (text_probe = wtext; text_probe < wtext + textlen; text_probe++) {
+        if ((Uint) *text_probe > max) {
+            max = *text_probe;
+            printf("%lu\n", max);
+        }
         counts[(Uint) *text_probe]++;
     }
 

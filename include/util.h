@@ -15,6 +15,8 @@ void printtime();
 
 Uint randlen(Uint m_min, Uint m_max);
 
+size_t strlenw(wchar_t *s);
+
 // Macros for checking argument numbers
 
 // Check if the number of arguments is exactly N

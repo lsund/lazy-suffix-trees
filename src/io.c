@@ -192,9 +192,9 @@ caddr_t file2String(char *name, Uint *textlen)
     return fileParts(fd, 0, *textlen, false);
 }
 
-int file2Array(char *name, Uint *textlen, int size, char ***wordsp)
+int file2Array(char *name, Uint *textlen, int size, wchar_t ***wordsp)
 {
-    char **words = *wordsp;
+    wchar_t **words = *wordsp;
     int fd = fileOpen(name, textlen, false);
     if (fd < 0) {
         return -1;
@@ -226,7 +226,7 @@ int file2Array(char *name, Uint *textlen, int size, char ***wordsp)
 
             /* Double our allocation and re-allocate */
             new_size = size * 2;
-            words = (char **) realloc(words,sizeof(char*) * new_size);
+            words = (wchar_t **) realloc(words,sizeof(wchar_t*) * new_size);
             if (!words)
             {
                 fprintf(stderr,"Out of memory.\n");
@@ -244,12 +244,12 @@ int file2Array(char *name, Uint *textlen, int size, char ***wordsp)
             exit(4);
         }
 
-        if (!fgets(words[i], max_line_len - 1, fp)) {
+        if (!fgetws(words[i], max_line_len - 1, fp)) {
             break;
         }
 
         /* Get rid of CR or LF at end of line */
-        for (j=strlen(words[i])-1; j>=0 && (words[i][j]=='\n' || words[i][j]=='\r'); j--) {
+        for (j=strlenw(words[i])-1; j>=0 && (words[i][j]=='\n' || words[i][j]=='\r'); j--) {
             ;
         }
         words[i][j + 1]='\0';

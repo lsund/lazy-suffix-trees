@@ -18,3 +18,12 @@ Uint randlen(Uint m_min, Uint m_max)
 }
 
 
+size_t strlenw(wchar_t *s)
+{
+    size_t i = 0;
+    while (s[i]) {
+        i++;
+    }
+    return i;
+}
+

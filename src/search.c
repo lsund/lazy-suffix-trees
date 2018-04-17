@@ -31,7 +31,7 @@ static void print_statistics(FILE *fp, int trials)
 }
 
 
-static bool copy_pattern(wchar_t *pattern, char *current_pattern, Uint len)
+static bool copy_pattern(wchar_t *pattern, wchar_t *current_pattern, Uint len)
 {
     *(pattern + len) = '\0';
     for(Uint i = 0; i < len; i++) {
@@ -101,7 +101,7 @@ static void search_random_patterns(Uint trials, Uint minlen, Uint maxlen)
 
 
 // Search for one pattern in the tree
-bool try_search(char *current_pattern, Uint patternlen)
+bool try_search(wchar_t *current_pattern, Uint patternlen)
 {
 
     wchar_t pattern[MAXPATTERNLEN + 1];
