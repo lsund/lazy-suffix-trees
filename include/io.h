@@ -55,7 +55,7 @@ typedef struct filehandle {
 
 caddr_t fileParts(int fd,Uint offset,Uint len,bool writemap);
 
-void freetextspace(Uchar *text, Uint textlen);
+void freetextspace();
 
 caddr_t genfile2String(char *name, Uint *textlen,
                                   bool writefile, bool writemap);

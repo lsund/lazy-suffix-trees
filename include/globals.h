@@ -12,7 +12,7 @@
 extern Uchar *text;
 
 // points to input string `t` of length `n`
-extern Uchar *wtext;
+extern wchar_t *wtext;
 
 // Maximal codepoint value of `t`
 extern Uint max_codepoint;

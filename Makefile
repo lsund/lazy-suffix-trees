@@ -35,7 +35,6 @@ OBJ= obj/boyermoore.o\
      obj/seterror.o\
      obj/get_alpha.o \
      obj/spaceman.o\
-	 obj/debug.o\
 	 obj/util.o\
      obj/sort.o\
      obj/lcp.o\

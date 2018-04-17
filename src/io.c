@@ -19,6 +19,8 @@
 
 #include "io.h"
 
+wchar_t *wtext;
+
 // The table of filehandles
 static Filehandle *filehandle = NULL;
 
@@ -38,8 +40,6 @@ static Uint filedesc(
         FILE *fp
     )
 {
-
-    FUNCTIONCALL;
 
     Filedesctype fd;
     fd = fileno(fp);
@@ -118,15 +118,12 @@ FILE *createfilehandle(char *file, Uint line, char *path, char *mode)
 {
     FILE *fp;
 
-    FUNCTIONCALL;
     fp = fopen(path, mode);
 
     if (fp == NULL) {
         ERROR2("cannot open file \"%s\": %s", path, strerror(errno));
         return NULL;
     }
-
-    setinfo(file, line, filedesc(file,line,false,fp), path, mode);
 
     return fp;
 }
@@ -176,8 +173,9 @@ caddr_t fileParts(int fd, Uint offset, Uint len, bool writemap)
 
 
 // Frees the text specified
-void freetextspace(Uchar *text, Uint textlen) {
-  (void) munmap((caddr_t) text,(size_t) textlen);
+void freetextspace()
+{
+  (void) munmap((caddr_t) wtext,(size_t) textlen);
 }
 
 

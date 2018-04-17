@@ -9,7 +9,6 @@ int main(int argc,char *argv[])
     Uint patternslen;
 
     CHECKARGNUM(4, "filename patternfile (bench|run)");
-    DEBUGLEVELSET;
 
     filename = argv[1];
 
@@ -28,6 +27,7 @@ int main(int argc,char *argv[])
 
     textlen = 0;
     text = (Uchar *) file2String(filename, &textlen);
+    printf("%lu\n", textlen);
 
     if(text == NULL) {
         ERROR("Cannot open file");
@@ -60,7 +60,7 @@ int main(int argc,char *argv[])
 
     }
 
-    freetextspace(text, textlen);
+    freetextspace();
 
     for (; npatterns >= 0; npatterns--) {
         free(patterns[npatterns]);
