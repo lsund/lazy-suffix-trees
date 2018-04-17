@@ -1,7 +1,7 @@
 #include "test.h"
 
-extern Uchar *text;
-extern Uint textlen;
+wchar_t *wtext;
+Uint textlen;
 
 static Uint min(const Uint a, const Uint b)
 {
@@ -12,7 +12,7 @@ static Uint min(const Uint a, const Uint b)
 char *utest_search_for(char *patternfile, char *textfile)
 {
     Uint patternslen;
-    text = (Uchar *) file2String(textfile, &textlen);
+    wtext = (wchar_t *) file2String(textfile, &textlen);
     Uint size = 1001;
     char **patterns = (char **) malloc(sizeof(Uchar *) * size);
     Uint npatterns   = file2Array(patternfile, &patternslen, size, &patterns);
@@ -22,10 +22,8 @@ char *utest_search_for(char *patternfile, char *textfile)
         char *current_pattern = patterns[j];
         Uint patternlen = strlen(current_pattern);
         bool really_exists = naive_search(
-                                text,
-                                textlen,
-                                (Uchar *) current_pattern,
-                                ((Uchar *) current_pattern) + patternlen
+                                (wchar_t *) current_pattern,
+                                ((wchar_t *) current_pattern) + patternlen
                              );
 
         bool exists = try_search(current_pattern, patternlen);

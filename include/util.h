@@ -7,10 +7,6 @@
 #include "init.h"
 #include "eval.h"
 
-wchar_t *sentinel, *text, characters[UCHAR_MAX + 1];
-
-Uint textlen, alphasize;
-
 void showstring(Uchar *left, Uchar *right);
 
 void showpattern(Uchar *w, Uint wlen);

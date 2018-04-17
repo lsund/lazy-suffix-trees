@@ -26,7 +26,7 @@ typedef struct pattern {
 #define CHECK_A_EDGE\
     {\
         if(IS_LEAF(&rootchild)) {\
-            text_probe = text + (rootchild & ~LEAFBIT);\
+            text_probe = wtext + (rootchild & ~LEAFBIT);\
             Uint prefix = lcp(patt_probe + 1, patt_end, text_probe + 1, sentinel - 1);\
             if ((Uint) (patt_end - patt_probe) == prefix)\
             {\

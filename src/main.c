@@ -25,11 +25,7 @@ int main(int argc,char *argv[])
     max_codepoint = get_max(wtext, textlen);
     fclose(in);
 
-    textlen = 0;
-    text = (wchar_t *) file2String(filename, &textlen);
-    printf("%lu\n", textlen);
-
-    if(text == NULL) {
+    if(wtext == NULL) {
         ERROR("Cannot open file");
     }
 

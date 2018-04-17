@@ -1,10 +1,10 @@
 
 #include "init.h"
 
-wchar_t   *text,
-        *sentinel,
-        characters[UCHAR_MAX + 1],
-        **suffixes;
+wchar_t   *wtext,
+           *sentinel,
+           characters[UCHAR_MAX + 1],
+           **suffixes;
 
 Uint    textlen,
         alphasize,
@@ -23,7 +23,7 @@ void inittree(void)
 {
     Uint i;
 
-    sentinel  = text + textlen;
+    sentinel  = wtext + textlen;
     streesize = BRANCHWIDTH;
 
     get_characters(wtext, textlen, characters, &alphasize);
