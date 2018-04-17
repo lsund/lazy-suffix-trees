@@ -28,7 +28,7 @@
 
 bool try_search(wchar_t *current_pattern, Uint patternlen);
 
-void try_search_patterns(const char *path, int npatterns, char ***o_patterns);
+void try_search_patterns(const char *path, int npatterns, wchar_t ***o_patterns);
 
 void try_search_random_patterns(const char *path, Uint trials, Uint minpat, Uint maxpat);
 

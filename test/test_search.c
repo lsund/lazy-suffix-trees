@@ -16,16 +16,16 @@ char *utest_search_for(char *patternfile, char *textfile)
     FILE *in = fopen(textfile, "r");
     wtext = malloc(sizeof(wchar_t) * MAXTEXTLEN);
     wint_t c;
+    textlen = 0;
     while ((c = fgetwc(in)) != WEOF) {
         wtext[textlen] = c;
         textlen++;
     }
     wtext[textlen + 1] = '\0';
-    printf("%lu\n", textlen);
     max_codepoint = get_max(wtext, textlen);
     fclose(in);
     Uint size = 1001;
-    wchar_t **patterns = (wchar_t **) malloc(sizeof(Uchar *) * size);
+    wchar_t **patterns = (wchar_t **) malloc(sizeof(wchar_t *) * size);
     Uint npatterns   = file2Array(patternfile, &patternslen, size, &patterns);
     inittree();
     for (Uint j = 0; j < min(npatterns, 100); j++) {
@@ -40,7 +40,7 @@ char *utest_search_for(char *patternfile, char *textfile)
         bool exists = try_search(current_pattern, patternlen);
         if (really_exists != exists) {
             printf("%d %d\n", really_exists, exists);
-            printf("%ls\n", patterns[j]);
+            printf("Fail on: %ls\n", patterns[j]);
         }
         mu_assert(
             "Naive and suffix tree sourch should be the same.",
@@ -56,9 +56,9 @@ char *utest_search()
 
     char *error;
 
-    /* mu_message(DATA, "Akz patterns\n"); */
-    /* error = utest_search_for("data/10000.txt", "data/data.xml"); */
-    /* if (error) return error; */
+    mu_message(DATA, "Trivial\n");
+    error = utest_search_for("data/small.txt", "data/small-patt.txt");
+    if (error) return error;
 
     mu_message(DATA, "Easy test patterns\n");
     error = utest_search_for("data/test-patterns.txt", "data/dataset/005.txt");
@@ -73,7 +73,12 @@ char *utest_search()
     /*             "data/random-patterns-non-existing.txt", */
     /*             "data/dataset/005.txt" */
             /* ); */
-    if (error) return error;
+    /* if (error) return error; */
+
+    /* mu_message(DATA, "Akz patterns\n"); */
+    /* error = utest_search_for("data/10000.txt", "data/data.xml"); */
+    /* if (error) return error; */
+
 
     return NULL;
 }

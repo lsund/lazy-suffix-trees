@@ -3,7 +3,7 @@
 
 Uint textlen;
 
-Uchar *wtext;
+wchar_t *wtext;
 
 bool bmhsearch(Uchar *pattern, Uchar *patternright)
 {

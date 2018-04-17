@@ -117,21 +117,21 @@ bool try_search(wchar_t *current_pattern, Uint patternlen)
 
 
 // Search for many patterns in the tree
-void try_search_patterns(const char *path, int npatterns, char ***patterns_ptr)
+void try_search_patterns(const char *path, int npatterns, wchar_t ***patterns_ptr)
 {
     int noccurs     = 0;
-    char **patterns = *patterns_ptr;
+    wchar_t **patterns = *patterns_ptr;
     FILE *fp        = open_append(path);
 
     for(int j = 0; j < npatterns; j++) {
 
-        char *current_pattern = patterns[j];
-        Uint patternlen = strlen(current_pattern);
+        wchar_t *current_pattern = patterns[j];
+        Uint patternlen = strlenw(current_pattern);
 
         bool exists = try_search(current_pattern, patternlen);
 
         if (exists) {
-            fprintf(fp, "%s\n", patterns[j]);
+            fprintf(fp, "%ls\n", patterns[j]);
             noccurs++;
         }
     }

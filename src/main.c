@@ -9,7 +9,6 @@ int main(int argc,char *argv[])
     Uint patternslen;
 
     if (argc == 1) {
-        printf("Sure.\n");
         filename = "data/small.txt";
         patternfile = "data/small-patt.txt";
         mode = "run";
@@ -31,7 +30,6 @@ int main(int argc,char *argv[])
         textlen++;
     }
     wtext[textlen + 1] = '\0';
-    printf("%lu\n", textlen);
     max_codepoint = get_max(wtext, textlen);
     fclose(in);
 
@@ -40,7 +38,7 @@ int main(int argc,char *argv[])
     }
 
     int size        = 128;
-    char **patterns = (char **) malloc(sizeof(char *) * size);
+    wchar_t **patterns = (wchar_t **) malloc(sizeof(char *) * size);
     int npatterns  = file2Array(patternfile, &patternslen, size, &patterns);
 
     if(textlen > MAXTEXTLEN) {
