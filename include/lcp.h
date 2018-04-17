@@ -3,10 +3,8 @@
 
 #include "types.h"
 
-extern Uchar *sentinel;
+Uint lcp(wchar_t *start1, wchar_t *end1, wchar_t *start2, wchar_t *end2);
 
-Uint lcp(Uchar *start1, Uchar *end1, Uchar *start2, Uchar *end2);
-
-Uint grouplcp(Uchar **left, Uchar **right);
+Uint grouplcp(wchar_t **left, wchar_t **right);
 
 #endif

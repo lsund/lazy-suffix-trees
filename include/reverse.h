@@ -3,11 +3,7 @@
 
 #include "types.h"
 
-void reverse(Uchar *s,Uint len);
-
-void reversecomplement(Uchar *s,Uint len);
-
-void complement(Uchar *s,Uint len);
+void reverse(wchar_t *s,Uint len);
 
 void reversestring(char *s, Uint m, char *sreverse);
 

@@ -4,7 +4,6 @@
 
 #include <string.h>
 #include "types.h"
-#include "debug.h"
 #include "basedef.h"
 #include "stree.h"
 
@@ -53,7 +52,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Functions
 
-Uchar **get_sortbuffer(Uchar **left, Uchar **right);
+wchar_t **get_sortbuffer(wchar_t **left, wchar_t **right);
 
 void allocstree(void);
 

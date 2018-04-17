@@ -31,7 +31,7 @@ static void print_statistics(FILE *fp, int trials)
 }
 
 
-static bool copy_pattern(Uchar *pattern, char *current_pattern, Uint len)
+static bool copy_pattern(wchar_t *pattern, char *current_pattern, Uint len)
 {
     *(pattern + len) = '\0';
     for(Uint i = 0; i < len; i++) {
@@ -47,7 +47,7 @@ static bool copy_pattern(Uchar *pattern, char *current_pattern, Uint len)
 }
 
 
-static bool sample_random_pattern(Uchar *pattern, Uint patternlen)
+static bool sample_random_pattern(wchar_t *pattern, Uint patternlen)
 {
     Uint start = (Uint) (drand48() * (double) (textlen - patternlen));
 
@@ -58,7 +58,8 @@ static bool sample_random_pattern(Uchar *pattern, Uint patternlen)
 
     for(Uint j = 0; j < patternlen; j++) {
 
-        pattern[j] = text[start + j];
+        /* pattern[j] = text[start + j]; */
+        pattern[j] = wtext[start + j];
 
         if(ISSPECIAL(pattern[j])) {
             return true;
@@ -80,7 +81,7 @@ static void search_random_patterns(Uint trials, Uint minlen, Uint maxlen)
 
     for(Uint i = 0; i < trials; i++) {
 
-        Uchar pattern[MAXPATTERNLEN + 1];
+        wchar_t pattern[MAXPATTERNLEN + 1];
         patternlen = randlen(minlen, maxlen);
 
         bool special = sample_random_pattern(pattern, patternlen);
@@ -103,7 +104,7 @@ static void search_random_patterns(Uint trials, Uint minlen, Uint maxlen)
 bool try_search(char *current_pattern, Uint patternlen)
 {
 
-    Uchar pattern[MAXPATTERNLEN + 1];
+    wchar_t pattern[MAXPATTERNLEN + 1];
     bool special = copy_pattern(pattern, current_pattern, patternlen);
 
     if (special) {

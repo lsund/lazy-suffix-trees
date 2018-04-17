@@ -1,6 +1,11 @@
 
 #include "sort.h"
 
+Uint occurrence[UCHAR_MAX + 1];
+wchar_t characters[UCHAR_MAX + 1];
+Uint suffixhead_count[UCHAR_MAX + 1];
+wchar_t **current_sortbuffer;
+
 // Increases the count for this particular character
 
 static void increase_count(Uint codepoint)
@@ -13,9 +18,9 @@ static void increase_count(Uint codepoint)
 // This array points to a list of suffixes
 
 // Determine size for each group
-static void get_count(Uchar **left, Uchar **right, Uint prefixlen)
+static void get_count(wchar_t **left, wchar_t **right, Uint prefixlen)
 {
-    Uchar **suffix_probe;
+    wchar_t **suffix_probe;
     for (suffix_probe = left; suffix_probe <= right; suffix_probe++) {
         // drop the common prefix
         *suffix_probe += prefixlen;
@@ -29,12 +34,12 @@ static void get_count(Uchar **left, Uchar **right, Uint prefixlen)
 }
 
 
-static void set_group_bounds(Uchar **left, Uchar **right, Uchar ***upper_bounds)
+static void set_group_bounds(wchar_t **left, wchar_t **right, wchar_t ***upper_bounds)
 {
     // `current_sortbuffer` is already allocated, a sufficiently large memory
     // block for all suffix pointers.
-    Uchar **lower_bound = current_sortbuffer;
-    Uchar **suffix_probe;
+    wchar_t **lower_bound = current_sortbuffer;
+    wchar_t **suffix_probe;
 
     for (suffix_probe = left; suffix_probe <= right; suffix_probe++) {
 
@@ -52,9 +57,9 @@ static void set_group_bounds(Uchar **left, Uchar **right, Uchar ***upper_bounds)
 }
 
 
-static void insert_suffixes(Uchar **left, Uchar **right, Uchar ***upper_bounds)
+static void insert_suffixes(wchar_t **left, wchar_t **right, wchar_t ***upper_bounds)
 {
-    Uchar **suffix_probe;
+    wchar_t **suffix_probe;
     for (suffix_probe = right; suffix_probe >= left; suffix_probe--) {
         // Decrement the pointer to bounds for this specific character,
         // then insert the suffix pointed to by c.
@@ -67,9 +72,9 @@ static void insert_suffixes(Uchar **left, Uchar **right, Uchar ***upper_bounds)
 }
 
 
-void counting_sort(Uchar **left, Uchar **right, Uint prefixlen)
+void counting_sort(wchar_t **left, wchar_t **right, Uint prefixlen)
 {
-    Uchar **upper_bounds[UCHAR_MAX + 1];
+    wchar_t **upper_bounds[UCHAR_MAX + 1];
 
     // Shortest suffix is sentinel, skip
     if (*right + prefixlen == sentinel) {
@@ -86,8 +91,8 @@ void counting_sort(Uchar **left, Uchar **right, Uint prefixlen)
     // Create buffer
     insert_suffixes(left, right, upper_bounds);
 
-    Uchar **suffix_probe = left;
-    Uchar **buffer_probe = current_sortbuffer;
+    wchar_t **suffix_probe = left;
+    wchar_t **buffer_probe = current_sortbuffer;
 
     // copy grouped suffixes back from buffer
     while (suffix_probe <= right) {
@@ -101,13 +106,13 @@ void counting_sort(Uchar **left, Uchar **right, Uint prefixlen)
 
 void create_suffix_groups(void)
 {
-    Uchar *c, **nextFree = suffixes;
+    wchar_t *c, **nextFree = suffixes;
     Uint a;
 
-    Uchar **upper_bounds[UCHAR_MAX + 1];
+    wchar_t **upper_bounds[UCHAR_MAX + 1];
 
     // determine size for each group
-    for (c = text; c < text + textlen; c++) {
+    for (c = wtext; c < wtext + textlen; c++) {
         suffixhead_count[(Uint) *c]++;
     }
 
@@ -119,7 +124,7 @@ void create_suffix_groups(void)
     }
 
     // insert suffixes into array
-    for (c = text + textlen - 1; c >= text; c--) {
+    for (c = wtext + textlen - 1; c >= wtext; c--) {
         *(upper_bounds[(Uint) *c]--) = c;
     }
 

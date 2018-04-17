@@ -20,6 +20,7 @@
 #include "io.h"
 
 wchar_t *wtext;
+Uint textlen;
 
 // The table of filehandles
 static Filehandle *filehandle = NULL;

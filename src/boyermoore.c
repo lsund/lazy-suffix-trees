@@ -1,7 +1,11 @@
 
 #include "boyermoore.h"
 
-bool bmhsearch(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright)
+Uint textlen;
+
+Uchar *wtext;
+
+bool bmhsearch(Uchar *pattern, Uchar *patternright)
 {
     Uint m, i, j, rmostocc[UCHAR_MAX+1] = {0};
     Sint k;
@@ -11,8 +15,8 @@ bool bmhsearch(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright)
         printf("%c\n", pattern[i]);
         rmostocc[(Uint) pattern[i]] = i + 1;
     }
-    for(j = 0; j <= textlen - m; j += m - rmostocc[(Uint) text[j + m - 1]]) {
-        for(k = (Sint) (m - 1); k >= 0 && pattern[k] == text[j + k]; k--)
+    for(j = 0; j <= textlen - m; j += m - rmostocc[(Uint) wtext[j + m - 1]]) {
+        for(k = (Sint) (m - 1); k >= 0 && pattern[k] == wtext[j + k]; k--)
             if (k < 0) {
                 return true;
             }
@@ -21,7 +25,7 @@ bool bmhsearch(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright)
 }
 
 
-bool naive_search(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright)
+bool naive_search(wchar_t *pattern, wchar_t *patternright)
 {
     Uint m = (Uint) (patternright - pattern);
     Uint j = 0;
@@ -30,7 +34,7 @@ bool naive_search(Uchar *text, Uint textlen, Uchar *pattern, Uchar *patternright
     for (Uint i = 0; i < textlen; i++) {
         k = i;
         for (j = 0; j < m; j++) {
-            if (pattern[j] == text[k]) {
+            if (pattern[j] == wtext[k]) {
                 k++;
             } else {
                 break;

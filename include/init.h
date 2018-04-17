@@ -3,7 +3,6 @@
 
 #include "globals.h"
 #include "types.h"
-#include "debug.h"
 #include "spaceman.h"
 #include "io.h"
 #include "get_alpha.h"

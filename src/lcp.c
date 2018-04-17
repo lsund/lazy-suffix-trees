@@ -21,10 +21,12 @@
 
 #include "lcp.h"
 
+wchar_t *sentinel;
 
-Uint lcp(Uchar *start1, Uchar *end1, Uchar *start2, Uchar *end2) {
 
-    Uchar *probe1 = start1, *probe2 = start2;
+Uint lcp(wchar_t *start1, wchar_t *end1, wchar_t *start2, wchar_t *end2) {
+
+    wchar_t *probe1 = start1, *probe2 = start2;
 
     while(probe1 <= end1 && probe2 <= end2 && *probe1 == *probe2)
     {
@@ -36,9 +38,9 @@ Uint lcp(Uchar *start1, Uchar *end1, Uchar *start2, Uchar *end2) {
 }
 
 
-Uint grouplcp(Uchar **left, Uchar **right) {
+Uint grouplcp(wchar_t **left, wchar_t **right) {
 
-    Uchar cmpchar, **i;
+    wchar_t cmpchar, **i;
     Uint j = UintConst(1);
 
     while (true) {

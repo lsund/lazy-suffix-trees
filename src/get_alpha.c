@@ -24,10 +24,10 @@
 // Iterate over the text and store the counts of each character. Then iterate
 // over 1->256 (all uchars) and store them in the `alpha` parameter, if the
 // occurence is greater than 0.
-void get_characters(Uchar *text, Uint textlen, Uchar *alpha, Uint *alphasize)
+void get_characters(wchar_t *text, Uint textlen, wchar_t *alpha, Uint *alphasize)
 {
     Uint counts[MAX_CHARS + 1] = {0};
-    Uchar *text_probe;
+    wchar_t *text_probe;
 
     for (text_probe = text; text_probe < text + textlen; text_probe++) {
         counts[(Uint) *text_probe]++;
@@ -36,7 +36,7 @@ void get_characters(Uchar *text, Uint textlen, Uchar *alpha, Uint *alphasize)
     Uint i, j;
     for (j = 0, i = 0; i <= MAX_CHARS; i++) {
         if (counts[i] > 0) {
-            alpha[j++] = (Uchar) i;
+            alpha[j++] = (wchar_t) i;
         }
     }
     *alphasize = j;

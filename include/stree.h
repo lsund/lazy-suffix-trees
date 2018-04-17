@@ -26,7 +26,7 @@
 #define FIRST_CHILD(P)        (*((P) + 1))
 
 // startposition of suffix
-#define SUFFIXNUMBER(L)         ((Uint) (*(L) - text))
+#define SUFFIXNUMBER(L)         ((Uint) (*(L) - wtext))
 
 // The left boundry of the remaining suffixes
 #define GETLEFTBOUNDARY(P)      (suffixes + *(P))

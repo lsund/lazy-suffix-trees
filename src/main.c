@@ -1,6 +1,6 @@
 #include "search.h"
 
-Uchar *text;
+/* Uchar *text; */
 Uint textlen, max_codepoint;
 
 int main(int argc,char *argv[])
@@ -26,7 +26,7 @@ int main(int argc,char *argv[])
     fclose(in);
 
     textlen = 0;
-    text = (Uchar *) file2String(filename, &textlen);
+    text = (wchar_t *) file2String(filename, &textlen);
     printf("%lu\n", textlen);
 
     if(text == NULL) {

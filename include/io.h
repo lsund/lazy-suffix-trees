@@ -14,7 +14,6 @@
 #include <string.h>
 #include "spaceman.h"
 #include "types.h"
-#include "debug.h"
 #include "error.h"
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -34,7 +34,7 @@
 // Functions
 
 
-Uint evalrootsuccedges(Uchar **left,Uchar **right);
+Uint evalrootsuccedges(wchar_t **left,wchar_t **right);
 
 void eval_node(Uint node);
 

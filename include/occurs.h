@@ -12,9 +12,9 @@
 
 
 typedef struct pattern {
-    Uchar head;
-    Uchar *probe;
-    Uchar *end;
+    wchar_t head;
+    wchar_t *probe;
+    wchar_t *end;
 } Pattern;
 
 
@@ -62,6 +62,6 @@ typedef struct pattern {
 // Functions
 
 
-bool search(Uchar *left, Uchar *patt_end);
+bool search(wchar_t *left, wchar_t *patt_end);
 
 #endif

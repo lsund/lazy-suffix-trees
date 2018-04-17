@@ -1,7 +1,7 @@
 
 #include "spaceman.h"
 
-Uchar **suffixes, **sortbuffer;
+wchar_t **suffixes, **sortbuffer;
 
 Uint    sortbufferwidth,
         max_sortbufferwidth,
@@ -11,20 +11,20 @@ Uint    sortbufferwidth,
         textlen;
 
 
-Uchar **get_sortbuffer(Uchar **left, Uchar **right) {
+wchar_t **get_sortbuffer(wchar_t **left, wchar_t **right) {
 
     Uint width = (Uint) (right - left + 1);
 
     if(sortbufferwidth > max_sortbufferwidth && max_sortbufferwidth > width) {
 
         sortbufferwidth = max_sortbufferwidth;
-        ALLOC(sortbuffer, sortbuffer, Uchar *, sortbufferwidth);
+        ALLOC(sortbuffer, sortbuffer, wchar_t *, sortbufferwidth);
 
     } else {
 
         if(width > sortbufferwidth) {
             sortbufferwidth = width;
-            ALLOC(sortbuffer, sortbuffer, Uchar *, sortbufferwidth);
+            ALLOC(sortbuffer, sortbuffer, wchar_t *, sortbufferwidth);
         }
 
     }

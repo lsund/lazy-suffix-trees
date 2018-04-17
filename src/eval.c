@@ -1,12 +1,12 @@
 
 #include "eval.h"
 
-Uchar   *text, *sentinel, **current_sortbuffer;
+wchar_t   *wtext, *sentinel, **current_sortbuffer;
 
 Uint    *next_free, root_children[UCHAR_MAX + 1];
 
 
-static bool skip_sentinel(Uchar ***right)
+static bool skip_sentinel(wchar_t ***right)
 {
     if(**right == sentinel) {
         right--;
@@ -15,7 +15,7 @@ static bool skip_sentinel(Uchar ***right)
     return false;
 }
 
-static void create_inner_vertex(Uint *firstbranch, Uchar **l, Uchar **r)
+static void create_inner_vertex(Uint *firstbranch, wchar_t **l, wchar_t **r)
 {
     if(*firstbranch == UNDEFREFERENCE) {
         *firstbranch = INDEX(next_free);
@@ -25,7 +25,7 @@ static void create_inner_vertex(Uint *firstbranch, Uchar **l, Uchar **r)
     next_free += BRANCHWIDTH;
 }
 
-static Uint create_leaf_vertex(Uchar **l)
+static Uint create_leaf_vertex(wchar_t **l)
 {
     Uint leafnum = SUFFIXNUMBER(l);
     SETLEAF(next_free, leafnum);
@@ -34,7 +34,7 @@ static Uint create_leaf_vertex(Uchar **l)
 }
 
 
-static Uint create_sentinel_vertex(Uchar **right, Uint **previousnode)
+static Uint create_sentinel_vertex(wchar_t **right, Uint **previousnode)
 {
     Uint leafnum = create_leaf_vertex(right + 1);
     *previousnode = next_free;
@@ -42,9 +42,9 @@ static Uint create_sentinel_vertex(Uchar **right, Uint **previousnode)
 }
 
 
-static void get_bound(Uchar ***bound_ptr, Uchar **probe, Uchar **right, Uchar firstchar)
+static void get_bound(wchar_t ***bound_ptr, wchar_t **probe, wchar_t **right, wchar_t firstchar)
 {
-    Uchar **bound;
+    wchar_t **bound;
     for(bound = probe; bound < right && **(bound + 1) == firstchar; bound++) {
         ;
     }
@@ -52,9 +52,9 @@ static void get_bound(Uchar ***bound_ptr, Uchar **probe, Uchar **right, Uchar fi
 }
 
 
-static Uint evalsuccedges(Uchar **left, Uchar **right)
+static Uint evalsuccedges(wchar_t **left, wchar_t **right)
 {
-    Uchar firstchar, **bound, **probe;
+    wchar_t firstchar, **bound, **probe;
     Uint firstbranch = UNDEFREFERENCE, *previousnode = NULL;
 
     allocstree();
@@ -85,9 +85,9 @@ static Uint evalsuccedges(Uchar **left, Uchar **right)
 
 // Evaluates all outgoing edges from the root. This is a specialization of
 // `evaledges`, and in addition it initialized `root_children`
-Uint evalrootsuccedges(Uchar **left, Uchar **right)
+Uint evalrootsuccedges(wchar_t **left, wchar_t **right)
 {
-    Uchar firstchar, **r, **l;
+    wchar_t firstchar, **r, **l;
     Uint *rptr, leafnum, firstbranch = UNDEFREFERENCE;
 
     for(rptr = root_children; rptr <= root_children + UCHAR_MAX; rptr++) {
@@ -124,7 +124,7 @@ Uint evalrootsuccedges(Uchar **left, Uchar **right)
 void eval_node(Uint node)
 {
     Uint prefixlen, *vertex;
-    Uchar **left, **right;
+    wchar_t **left, **right;
 
     vertex = stree + node;
     left   = GETLEFTBOUNDARY(vertex);

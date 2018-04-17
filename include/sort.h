@@ -3,15 +3,13 @@
 #define COUNTING_SORT_H
 
 #include "types.h"
-#include "debug.h"
+#include "spaceman.h"
 
-extern Uint occurrence[UCHAR_MAX + 1];
-extern Uchar characters[UCHAR_MAX + 1];
 
-extern Uchar *text, *sentinel, **sbuffer, **suffixes;
-extern Uint textlen, alphasize;
+wchar_t *wtext, *sentinel, **sbuffer, **suffixes;
+Uint textlen, alphasize;
 
-void counting_sort(Uchar **left,Uchar **right, Uint prefixlen);
+void counting_sort(wchar_t **left, wchar_t **right, Uint prefixlen);
 
 // Determines the groups for all suffixes of the input string
 //
