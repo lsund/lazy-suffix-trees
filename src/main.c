@@ -5,16 +5,26 @@ Uint textlen, max_codepoint;
 
 int main(int argc,char *argv[])
 {
-    char *filename, *patternfile;
+    char *filename, *patternfile, *mode;
     Uint patternslen;
 
-    CHECKARGNUM(4, "filename patternfile (bench|run)");
+    if (argc == 1) {
+        printf("Sure.\n");
+        filename = "data/small.txt";
+        patternfile = "data/small-patt.txt";
+        mode = "run";
+    } else {
+        CHECKARGNUM(4, "filename patternfile (bench|run)");
 
-    filename = argv[1];
+        filename = argv[1];
+        patternfile     = argv[2];
+        mode = argv[3];
+    }
+
 
     setlocale(LC_ALL, "en_US.utf8");
     FILE *in = fopen(filename, "r");
-    wchar_t *wtext = malloc(sizeof(wchar_t) * MAXTEXTLEN);
+    wtext = malloc(sizeof(wchar_t) * MAXTEXTLEN);
     wint_t c;
     while ((c = fgetwc(in)) != WEOF) {
         wtext[textlen] = c;
@@ -29,7 +39,6 @@ int main(int argc,char *argv[])
         ERROR("Cannot open file");
     }
 
-    patternfile     = argv[2];
     int size        = 128;
     char **patterns = (char **) malloc(sizeof(char *) * size);
     int npatterns  = file2Array(patternfile, &patternslen, size, &patterns);
@@ -43,7 +52,7 @@ int main(int argc,char *argv[])
     inittree();
     initclock();
 
-    if (strcmp(argv[3], "bench") == 0) {
+    if (strcmp(mode, "bench") == 0) {
 
         int minpat = 500;
         int maxpat = 1000;

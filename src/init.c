@@ -26,7 +26,7 @@ void inittree(void)
     sentinel  = wtext + textlen;
     streesize = BRANCHWIDTH;
 
-    get_characters(wtext, textlen, characters, &alphasize);
+    get_characters(characters, &alphasize);
 
     ALLOC(stree, stree, Uint, streesize + MAXSUCCSPACE);
     next_free     = stree;

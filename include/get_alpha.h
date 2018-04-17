@@ -11,8 +11,9 @@
 
 #include "types.h"
 #include "basedef.h"
+#include "globals.h"
 
-void get_characters(wchar_t *text, Uint textlen, wchar_t *alpha, Uint *alphasize);
+void get_characters(wchar_t *alpha, Uint *alphasize);
 
 Uint get_max(wchar_t *text, Uint textlen);
 
