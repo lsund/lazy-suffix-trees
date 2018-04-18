@@ -42,8 +42,6 @@ typedef signed   long  Slong;
 
 typedef int Ctypeargumenttype;      // \Typedef{Ctypeargumenttype}
 
-typedef int Filedesctype;           // \Typedef{Filedesctype}
-
 typedef int Qsortcomparereturntype; // \Typedef{Qsortcomparefunction}
 
 typedef int Fieldwidthtype;         // \Typedef{Fieldwidthtype}

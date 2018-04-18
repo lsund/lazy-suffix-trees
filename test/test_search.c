@@ -24,9 +24,9 @@ char *utest_search_for(char *patternfile, char *textfile)
     wtext[textlen + 1] = '\0';
     max_codepoint = get_max(wtext, textlen);
     fclose(in);
-    Uint size = 1000;
-    wchar_t **patterns = (wchar_t **) malloc(sizeof(wchar_t *) * size);
-    int npatterns  = file2Array(patternfile, &patternslen, size, &patterns);
+    Uint nlines = 1000;
+    wchar_t **patterns = (wchar_t **) malloc(sizeof(wchar_t *) * nlines);
+    int npatterns  = file_to_strings(patternfile, &patternslen, nlines, &patterns);
     inittree();
     for (Uint j = 0; j < min(npatterns, 100); j++) {
 

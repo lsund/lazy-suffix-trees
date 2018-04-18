@@ -65,8 +65,7 @@ void showmemsize(void);
 void addspace(Uint);
 void subtractspace(Uint);
 
-Filedesctype simplefileOpen(char *file,Uint line,
-                            char *filename,Uint *numofbytes);
+int simplefileOpen(char *file,Uint line, char *filename,Uint *numofbytes);
 
 Sint deletememorymap(char *file,Uint line,void *mappedfile);
 void mmcheckspaceleak(void);

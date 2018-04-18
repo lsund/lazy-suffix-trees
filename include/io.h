@@ -53,18 +53,9 @@ typedef struct filehandle {
 // Functions
 
 
-caddr_t fileParts(int fd,Uint offset,Uint len,bool writemap);
+Uint file_to_strings(char *name, Uint *textlen, Uint nlines, wchar_t ***words);
 
 void freetextspace();
-
-caddr_t genfile2String(char *name, Uint *textlen,
-                                  bool writefile, bool writemap);
-
-caddr_t file2String(char *name, Uint *textlen);
-
-Uint file2Array(char *name, Uint *textlen, int nlines, wchar_t ***words);
-
-FILE *createfilehandle(char *file, Uint line, char *path, char *mode);
 
 // Opens the path for appending, erasing any prior content of the same file
 FILE *open_append(const char *path);

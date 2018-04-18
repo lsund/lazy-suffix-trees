@@ -39,7 +39,7 @@ int main(int argc,char *argv[])
 
     int size        = 128;
     wchar_t **patterns = (wchar_t **) malloc(sizeof(char *) * size);
-    int npatterns  = file2Array(patternfile, &patternslen, size, &patterns);
+    int npatterns  = file_to_strings(patternfile, &patternslen, size, &patterns);
 
     if(textlen > MAXTEXTLEN) {
         ERROR("Text too large, see MAXTEXTLEN");
