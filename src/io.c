@@ -192,73 +192,53 @@ caddr_t file2String(char *name, Uint *textlen)
     return fileParts(fd, 0, *textlen, false);
 }
 
-int file2Array(char *name, Uint *textlen, int size, wchar_t ***wordsp)
+Uint file2Array(char *name, Uint *textlen, int size, wchar_t ***wordsp)
 {
     wchar_t **words = *wordsp;
     int fd = fileOpen(name, textlen, false);
+
     if (fd < 0) {
         return -1;
     }
     int max_line_len = 1001;
 
-    /* Allocate lines of text */
-    if (words == NULL) {
-        fprintf(stderr,"Out of memory (1).\n");
-        exit(1);
-    }
-
     FILE *fp = fopen(name, "r");
-    if (fp == NULL)
-    {
+    if (fp == NULL) {
         fprintf(stderr,"Error opening file.\n");
         exit(EXIT_FAILURE);
     }
 
-    int i;
-    for (i = 0; 1; i++)
+    Uint i;
+    for (i = 0; i < 999; i++)
     {
-        int j;
-
-        /* Have we gone over our line allocation? */
-        if (i >= size)
-        {
-            int new_size;
-
-            /* Double our allocation and re-allocate */
-            new_size = size * 2;
-            words = (wchar_t **) realloc(words,sizeof(wchar_t*) * new_size);
-            if (!words)
-            {
-                fprintf(stderr,"Out of memory.\n");
-                exit(3);
-            }
-            size = new_size;
-        }
+        Uint j;
 
         /* Allocate space for the next line */
-        words[i] = malloc(max_line_len);
+        words[i] = (wchar_t *) malloc(max_line_len * sizeof(wchar_t));
 
-        if (words[i] == NULL)
-        {
+        if (words[i] == NULL) {
             fprintf(stderr,"Out of memory (3).\n");
             exit(4);
         }
 
-        if (!fgetws(words[i], max_line_len - 1, fp)) {
-            break;
-        }
+        wint_t c;
+        j = 0;
+        do  {
+            c = fgetwc(fp);
+            if (c == WEOF) {
 
-        /* Get rid of CR or LF at end of line */
-        for (j=strlenw(words[i])-1; j>=0 && (words[i][j]=='\n' || words[i][j]=='\r'); j--) {
-            ;
-        }
-        words[i][j + 1]='\0';
+                *wordsp = words;
+                fclose(fp);
+                return i;
+            }
+            words[i][j] = c;
+            j++;
+        } while (c != 10);
+
+        words[i][j - 1] = 0;
     }
-
     *wordsp = words;
-
     fclose(fp);
-
     return i;
 }
 

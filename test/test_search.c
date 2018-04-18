@@ -24,9 +24,9 @@ char *utest_search_for(char *patternfile, char *textfile)
     wtext[textlen + 1] = '\0';
     max_codepoint = get_max(wtext, textlen);
     fclose(in);
-    Uint size = 1001;
+    Uint size = 1000;
     wchar_t **patterns = (wchar_t **) malloc(sizeof(wchar_t *) * size);
-    Uint npatterns   = file2Array(patternfile, &patternslen, size, &patterns);
+    int npatterns  = file2Array(patternfile, &patternslen, size, &patterns);
     inittree();
     for (Uint j = 0; j < min(npatterns, 100); j++) {
 
@@ -36,7 +36,6 @@ char *utest_search_for(char *patternfile, char *textfile)
                                 (wchar_t *) current_pattern,
                                 ((wchar_t *) current_pattern) + patternlen
                              );
-
         bool exists = try_search(current_pattern, patternlen);
         if (really_exists != exists) {
             printf("%d %d\n", really_exists, exists);
@@ -46,8 +45,11 @@ char *utest_search_for(char *patternfile, char *textfile)
             "Naive and suffix tree sourch should be the same.",
             really_exists == exists
         );
-        /* printf("%lu\n", j); */
     }
+    for (int i = npatterns - 1; i >= 0; i--) {
+        free(patterns[i]);
+    }
+    free(patterns);
     return NULL;
 }
 
@@ -57,23 +59,23 @@ char *utest_search()
     char *error;
 
     mu_message(DATA, "Trivial\n");
-    error = utest_search_for("data/small.txt", "data/small-patt.txt");
+    error = utest_search_for("data/small-patt.txt", "data/small.txt");
     if (error) return error;
 
     mu_message(DATA, "Easy test patterns\n");
     error = utest_search_for("data/test-patterns.txt", "data/dataset/005.txt");
     if (error) return error;
 
-    /* mu_message(DATA, "Random exiting patterns\n"); */
-    /* error = utest_search_for("data/random-patterns.txt", "data/dataset/005.txt"); */
-    /* if (error) return error; */
+    mu_message(DATA, "Random existing patterns\n");
+    error = utest_search_for("data/random-patterns.txt", "data/dataset/005.txt");
+    if (error) return error;
 
-    /* mu_message(DATA, "Random non-existing patterns\n"); */
-    /* error = utest_search_for( */
-    /*             "data/random-patterns-non-existing.txt", */
-    /*             "data/dataset/005.txt" */
-            /* ); */
-    /* if (error) return error; */
+    mu_message(DATA, "Random non-existing patterns\n");
+    error = utest_search_for(
+                "data/random-patterns-non-existing.txt",
+                "data/dataset/005.txt"
+            );
+    if (error) return error;
 
     /* mu_message(DATA, "Akz patterns\n"); */
     /* error = utest_search_for("data/10000.txt", "data/data.xml"); */

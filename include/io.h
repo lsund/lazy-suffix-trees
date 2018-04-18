@@ -62,7 +62,7 @@ caddr_t genfile2String(char *name, Uint *textlen,
 
 caddr_t file2String(char *name, Uint *textlen);
 
-int file2Array(char *name, Uint *textlen, int nlines, wchar_t ***words);
+Uint file2Array(char *name, Uint *textlen, int nlines, wchar_t ***words);
 
 FILE *createfilehandle(char *file, Uint line, char *path, char *mode);
 
