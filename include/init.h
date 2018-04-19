@@ -1,7 +1,7 @@
 #ifndef INIT_H
 #define INIT_H
 
-#include "globals.h"
+#include "externs.h"
 #include "types.h"
 #include "spaceman.h"
 #include "io.h"

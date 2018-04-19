@@ -11,7 +11,7 @@
 
 #include "types.h"
 #include "basedef.h"
-#include "globals.h"
+#include "externs.h"
 
 void get_characters(wchar_t *alpha, Uint *alphasize);
 

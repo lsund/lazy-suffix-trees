@@ -28,7 +28,7 @@ void inittree(void)
     get_characters(characters, &alphasize);
 
     ALLOC(stree, stree, Uint, streesize + MAXSUCCSPACE);
-    next_free     = stree;
+    next_free = stree;
 
     ALLOC(suffixes, NULL, wchar_t *, textlen + 1);
     sort_bufferwidth = 0;
