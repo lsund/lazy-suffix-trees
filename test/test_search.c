@@ -76,9 +76,9 @@ char *utest_search()
             );
     if (error) return error;
 
-/*     mu_message(DATA, "Akz patterns\n"); */
-/*     error = utest_search_for("data/10000.txt", "data/data.xml"); */
-/*     if (error) return error; */
+    mu_message(DATA, "Akz patterns\n");
+    error = utest_search_for("data/10000.txt", "data/data.xml");
+    if (error) return error;
 
 
     return NULL;

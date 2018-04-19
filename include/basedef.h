@@ -22,7 +22,7 @@
 // Transform bytes into megabytes
 #define MEGABYTES(V)            ((double) (V)/((UintConst(1) << 20) - 1))
 
-#define MAX_CHARS               255
+#define MAX_CHARS               10000
 
 // Is a character larger than 255
 #define ISSPECIAL(C)    ((C) >= (Uchar) UCHAR_MAX)
