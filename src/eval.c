@@ -57,7 +57,7 @@ static Uint evalsuccedges(wchar_t **left, wchar_t **right)
     wchar_t firstchar, **bound, **probe;
     Uint firstbranch = UNDEFREFERENCE, *previousnode = NULL;
 
-    alloc_stree();
+    alloc_extend_stree();
     bool sentineledge = skip_sentinel(&right);
 
 

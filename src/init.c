@@ -23,11 +23,11 @@ void inittree(void)
     Uint i;
 
     sentinel  = wtext + textlen;
-    streesize = BRANCHWIDTH;
+    streesize = EXTENSION_SIZE;
 
     get_characters(characters, &alphasize);
 
-    ALLOC(stree, stree, Uint, streesize + MAXSUCCSPACE);
+    ALLOC(stree, stree, Uint, streesize + EXTENSION_SIZE);
     next_free = stree;
 
     ALLOC(suffixes, NULL, wchar_t *, textlen + 1);

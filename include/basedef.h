@@ -7,6 +7,7 @@
 
 #define ITER                    1
 
+// Each branching vertex requires two integers
 #define BRANCHWIDTH             UintConst(2)
 
 #define MAXTEXTLEN              UintConst(715827882)
