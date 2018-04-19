@@ -1,4 +1,4 @@
-#include "search.h"
+#include "pattern_searcher.h"
 #include "sampler.h"
 
 Uint textlen, max_codepoint;
@@ -62,7 +62,7 @@ int main(int argc,char *argv[])
 
     } else {
         printf("npatterns: %d\n", npatterns);
-        try_search_patterns(path, npatterns, &patterns);
+        search_patterns(path, npatterns, &patterns);
 
     }
 

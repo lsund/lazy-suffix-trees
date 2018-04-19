@@ -17,7 +17,7 @@
  */
 
 
-#include "search.h"
+#include "pattern_searcher.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -42,7 +42,7 @@ static bool copy_pattern(wchar_t *pattern, wchar_t *current_pattern, Uint len)
 
 
 // Search for one pattern in the tree
-bool try_search(wchar_t *current_pattern, Uint patternlen)
+bool search_pattern(wchar_t *current_pattern, Uint patternlen)
 {
 
     wchar_t pattern[MAXPATTERNLEN + 1];
@@ -54,7 +54,7 @@ bool try_search(wchar_t *current_pattern, Uint patternlen)
 
 
 // Search for many patterns in the tree
-void try_search_patterns(const char *path, int npatterns, wchar_t ***patterns_ptr)
+void search_patterns(const char *path, int npatterns, wchar_t ***patterns_ptr)
 {
     int noccurs     = 0;
     wchar_t **patterns = *patterns_ptr;
@@ -65,7 +65,7 @@ void try_search_patterns(const char *path, int npatterns, wchar_t ***patterns_pt
         wchar_t *current_pattern = patterns[j];
         Uint patternlen = strlenw(current_pattern);
 
-        bool exists = try_search(current_pattern, patternlen);
+        bool exists = search_pattern(current_pattern, patternlen);
 
         if (exists) {
             fprintf(fp, "%ls\n", patterns[j]);

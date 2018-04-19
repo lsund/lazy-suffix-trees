@@ -38,7 +38,7 @@ OBJ= obj/naive_search.o\
 	 obj/util.o\
      obj/sort.o\
      obj/lcp.o\
-     obj/search.o\
+     obj/pattern_searcher.o\
 	 obj/eval.o\
 	 obj/occurs.o\
 	 obj/init.o

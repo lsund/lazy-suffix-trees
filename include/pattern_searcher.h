@@ -17,7 +17,6 @@
 #include "spaceman.h"
 #include "lcp.h"
 #include "occurs.h"
-#include "search.h"
 #include "clock.h"
 #include "reverse.h"
 
@@ -25,8 +24,8 @@
 // Functions
 
 
-bool try_search(wchar_t *current_pattern, Uint patternlen);
+bool search_pattern(wchar_t *current_pattern, Uint patternlen);
 
-void try_search_patterns(const char *path, int npatterns, wchar_t ***o_patterns);
+void search_patterns(const char *path, int npatterns, wchar_t ***o_patterns);
 
 #endif
