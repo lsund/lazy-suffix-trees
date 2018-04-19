@@ -18,7 +18,6 @@
  *
  */
 
-
 #include "lcp.h"
 
 wchar_t *sentinel;

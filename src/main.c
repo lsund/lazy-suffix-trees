@@ -1,6 +1,5 @@
 #include "search.h"
 
-/* Uchar *text; */
 Uint textlen, max_codepoint;
 
 int main(int argc,char *argv[])
@@ -9,10 +8,13 @@ int main(int argc,char *argv[])
     Uint patternslen;
 
     if (argc == 1) {
+
         filename = "data/small.txt";
         patternfile = "data/small-patt.txt";
         mode = "run";
+
     } else {
+
         CHECKARGNUM(4, "filename patternfile (bench|run)");
 
         filename = argv[1];

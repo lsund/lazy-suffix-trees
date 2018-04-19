@@ -5,9 +5,13 @@ Uint textlen;
 
 wchar_t *wtext;
 
-bool naive_search(wchar_t *pattern, wchar_t *patternright)
+
+// Naively search `wtext` for the pattern beginning at address `start`, ending
+// at address `end`.
+bool naive_search(wchar_t *start, wchar_t *end)
 {
-    Uint m = (Uint) (patternright - pattern);
+    Uint m = (Uint) (end - start);
+    wchar_t *pattern = start;
     Uint j = 0;
     Uint k;
 

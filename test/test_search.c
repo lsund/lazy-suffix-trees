@@ -32,11 +32,10 @@ char *utest_search_for(char *patternfile, char *textfile)
 
         wchar_t *current_pattern = patterns[j];
         Uint patternlen = strlenw(current_pattern);
-        bool really_exists = naive_search(
-                                (wchar_t *) current_pattern,
-                                ((wchar_t *) current_pattern) + patternlen
-                             );
+        wchar_t *end = current_pattern + patternlen;
+
         bool exists = try_search(current_pattern, patternlen);
+        bool really_exists = naive_search(current_pattern, end);
         if (really_exists != exists) {
             printf("%d %d\n", really_exists, exists);
             printf("Fail on: %ls\n", patterns[j]);
