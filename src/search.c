@@ -38,9 +38,6 @@ static bool copy_pattern(wchar_t *pattern, wchar_t *current_pattern, Uint len)
 
         pattern[i] = current_pattern[i];
 
-        /* if (ISSPECIAL(pattern[i])) { */
-        /*     return true; */
-        /* } */
     }
 
     return false;
@@ -57,14 +54,9 @@ static bool sample_random_pattern(wchar_t *pattern, Uint patternlen)
     }
 
     for(Uint j = 0; j < patternlen; j++) {
-
-        /* pattern[j] = text[start + j]; */
         pattern[j] = wtext[start + j];
-
-        if(ISSPECIAL(pattern[j])) {
-            return true;
-        }
     }
+
     pattern[patternlen] = '\0';
     return false;
 }
@@ -84,14 +76,12 @@ static void search_random_patterns(Uint trials, Uint minlen, Uint maxlen)
         wchar_t pattern[MAXPATTERNLEN + 1];
         patternlen = randlen(minlen, maxlen);
 
-        bool special = sample_random_pattern(pattern, patternlen);
+        sample_random_pattern(pattern, patternlen);
 
-        if (!special) {
-            if (i & 1) {
-                reverse(pattern, patternlen);
-            }
-            search(pattern, pattern + patternlen - 1);
+        if (i & 1) {
+            reverse(pattern, patternlen);
         }
+        search(pattern, pattern + patternlen - 1);
     }
 }
 
@@ -105,11 +95,7 @@ bool try_search(wchar_t *current_pattern, Uint patternlen)
 {
 
     wchar_t pattern[MAXPATTERNLEN + 1];
-    bool special = copy_pattern(pattern, current_pattern, patternlen);
-
-    /* if (special) { */
-    /*     fprintf(stderr, "Found an unparsable pattern\n"); */
-    /* } */
+    copy_pattern(pattern, current_pattern, patternlen);
 
     return search(pattern, pattern + patternlen - 1);
 
