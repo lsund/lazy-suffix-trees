@@ -12,7 +12,7 @@
 // Macros
 
 
-#define MAXSUCCSPACE            (BRANCHWIDTH * (UCHAR_MAX+1) + 1)
+#define MAXSUCCSPACE            (BRANCHWIDTH * (MAX_CHARS + 1) + 1)
 
 
 // Simplify calls to space managing functions

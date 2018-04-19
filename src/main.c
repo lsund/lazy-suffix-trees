@@ -67,8 +67,8 @@ int main(int argc,char *argv[])
 
     freetextspace();
 
-    for (; npatterns >= 0; npatterns--) {
-        free(patterns[npatterns]);
+    for (int i = npatterns - 1; i >= 0; i--) {
+        free(patterns[i]);
     }
     free(patterns);
 

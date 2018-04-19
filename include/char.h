@@ -21,24 +21,8 @@
 #define CHAR_H
 #include <limits.h>
 
-
-// separator symbol in multiple seq
-#define SEPARATOR       UCHAR_MAX
-
-
-// wildcard symbol in multiple seq
-#define WILDCARD        (SEPARATOR - 1)
-
-
-// undefined character in multiple seq
-#define UNDEFCHAR       (SEPARATOR - 2)
-
-
 // either WILDCARD or SEPARATOR
-#define ISSPECIAL(C)    ((C) >= (Uchar) WILDCARD)
+#define ISSPECIAL(C)    ((C) >= (Uchar) UCHAR_MAX)
 
-
-// neither WILDCARD nor SEPARATOR
-#define ISNOTSPECIAL(C) ((C) < (Uchar) WILDCARD)
 
 #endif

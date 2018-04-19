@@ -102,7 +102,7 @@ FILE *open_append(const char *path)
 // Frees the text specified
 void freetextspace()
 {
-  (void) munmap((caddr_t) wtext,(size_t) textlen);
+  (void) munmap((caddr_t) wtext, (size_t) textlen);
 }
 
 
