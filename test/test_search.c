@@ -28,7 +28,7 @@ char *utest_search_for(char *patternfile, char *textfile)
     wchar_t **patterns = (wchar_t **) malloc(sizeof(wchar_t *) * nlines);
     int npatterns  = file_to_strings(patternfile, &patternslen, nlines, &patterns);
     inittree();
-    for (Uint j = 0; j < min(npatterns, 10); j++) {
+    for (Uint j = 0; j < min(npatterns, 50); j++) {
 
         wchar_t *current_pattern = patterns[j];
         Uint patternlen = strlenw(current_pattern);

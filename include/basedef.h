@@ -24,4 +24,7 @@
 
 #define MAX_CHARS               UCHAR_MAX
 
+// Is a character larger than 258
+#define ISSPECIAL(C)    ((C) >= (Uchar) UCHAR_MAX)
+
 #endif
