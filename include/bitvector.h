@@ -10,9 +10,6 @@
  * The commercial usage and distribution of this file is prohibited
  * Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
  *
- */
-
-/*
  * Modified by Ludvig Sundström 2018 with permission from Stefan Kurtz
  * For full source control tree, see https://github.com/lsund/wotd
  *
