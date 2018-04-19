@@ -8,8 +8,11 @@
 #include "sort.h"
 #include "eval.h"
 #include "array.h"
-#include "result.h"
 
+typedef struct result {
+    bool def;
+    bool val;
+} Result;
 
 typedef struct pattern {
     wchar_t head;
