@@ -24,7 +24,7 @@ wchar_t *wtext,
         *sentinel,
         **suffixes;
 
-Uint *stree, root_children[UCHAR_MAX + 1];
+Uint *stree, root_children[MAX_CHARS + 1];
 
 bool root_evaluated;
 

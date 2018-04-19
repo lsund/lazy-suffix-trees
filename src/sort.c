@@ -1,9 +1,9 @@
 
 #include "sort.h"
 
-Uint occurrence[UCHAR_MAX + 1];
-wchar_t characters[UCHAR_MAX + 1];
-Uint suffixhead_count[UCHAR_MAX + 1];
+Uint occurrence[MAX_CHARS + 1];
+wchar_t characters[MAX_CHARS + 1];
+Uint suffixhead_count[MAX_CHARS + 1];
 wchar_t **current_sortbuffer;
 
 // Increases the count for this particular character
@@ -74,7 +74,7 @@ static void insert_suffixes(wchar_t **left, wchar_t **right, wchar_t ***upper_bo
 
 void counting_sort(wchar_t **left, wchar_t **right, Uint prefixlen)
 {
-    wchar_t **upper_bounds[UCHAR_MAX + 1];
+    wchar_t **upper_bounds[MAX_CHARS + 1];
 
     // Shortest suffix is sentinel, skip
     if (*right + prefixlen == sentinel) {
@@ -109,7 +109,7 @@ void create_suffix_groups(void)
     wchar_t *c, **nextFree = suffixes;
     Uint a;
 
-    wchar_t **upper_bounds[UCHAR_MAX + 1];
+    wchar_t **upper_bounds[MAX_CHARS + 1];
 
     // determine size for each group
     for (c = wtext; c < wtext + textlen; c++) {

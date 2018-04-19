@@ -3,7 +3,7 @@
 
 wchar_t     *wtext,
             *sentinel,
-            characters[UCHAR_MAX + 1],
+            characters[MAX_CHARS + 1],
             **suffixes;
 
 Uint        textlen,
@@ -13,7 +13,7 @@ Uint        textlen,
             *next_free,
             sort_bufferwidth,
             max_sortbufferwidth,
-            suffixhead_count[UCHAR_MAX + 1];
+            suffixhead_count[MAX_CHARS + 1];
 
 
 bool    root_evaluated;
@@ -35,7 +35,7 @@ void inittree(void)
     max_sortbufferwidth  = textlen >> 8;
     root_evaluated    = false;
 
-    for (i = 0; i <= UCHAR_MAX; i++) {
+    for (i = 0; i <= MAX_CHARS; i++) {
         suffixhead_count[i] = 0;
     }
 }

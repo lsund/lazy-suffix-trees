@@ -3,7 +3,7 @@
 
 wchar_t   *wtext, *sentinel, **current_sortbuffer;
 
-Uint    *next_free, root_children[UCHAR_MAX + 1];
+Uint    *next_free, root_children[MAX_CHARS + 1];
 
 
 static bool skip_sentinel(wchar_t ***right)
@@ -90,7 +90,7 @@ Uint evalrootsuccedges(wchar_t **left, wchar_t **right)
     wchar_t firstchar, **r, **l;
     Uint *rptr, leafnum, firstbranch = UNDEFREFERENCE;
 
-    for(rptr = root_children; rptr <= root_children + UCHAR_MAX; rptr++) {
+    for(rptr = root_children; rptr <= root_children + MAX_CHARS; rptr++) {
         *rptr = UNDEFINEDSUCC;
     }
     for(l = left; l <= right; l = r + 1) {
