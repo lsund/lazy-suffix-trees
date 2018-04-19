@@ -1,4 +1,5 @@
 #include "search.h"
+#include "sampler.h"
 
 Uint textlen, max_codepoint;
 
@@ -57,7 +58,7 @@ int main(int argc,char *argv[])
         int minpat = 500;
         int maxpat = 1000;
 
-        try_search_random_patterns(path, 100000, minpat, maxpat);
+        search_samples(path, 100000, minpat, maxpat);
 
     } else {
         printf("npatterns: %d\n", npatterns);
