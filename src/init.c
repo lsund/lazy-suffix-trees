@@ -1,20 +1,19 @@
 
 #include "init.h"
 
-wchar_t   *wtext,
-           *sentinel,
-           characters[UCHAR_MAX + 1],
-           **suffixes;
+wchar_t     *wtext,
+            *sentinel,
+            characters[UCHAR_MAX + 1],
+            **suffixes;
 
-Uint    textlen,
-        alphasize,
-        *stree,
-        leafcount,
-        streesize,
-        *next_free,
-        sort_bufferwidth,
-        max_sortbufferwidth,
-        suffixhead_count[UCHAR_MAX + 1];
+Uint        textlen,
+            alphasize,
+            *stree,
+            streesize,
+            *next_free,
+            sort_bufferwidth,
+            max_sortbufferwidth,
+            suffixhead_count[UCHAR_MAX + 1];
 
 
 bool    root_evaluated;

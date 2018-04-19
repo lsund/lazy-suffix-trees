@@ -1,5 +1,5 @@
 /*
-  Copyright by Stefan Kurtz (C) 1995-2003
+  Copyright by Stefan Kurtz (C) 1999-2003
   =====================================
   You may use, copy and distribute this file freely as long as you
    - do not change the file,
@@ -11,59 +11,38 @@
   Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
 */
 
-//\Ignore{
-
-#ifdef HAVE_CONFIG_H
-#include <config.h>
-#endif /* HAVE_CONFIG_H */
+/*
+ * Modified by Ludvig Sundström 2018 with permission from Stefan Kurtz.
+ * For full source control tree, see https://github.com/lsund/wotd
+ */
 
 #include <stdio.h>
 #include <time.h>
 #include "types.h"
 
-//}
 
-/*
-  This module implements function to measures the running time
-  of programs or program parts.
-*/
+// Start and stoptime
+static clock_t startclock, stopclock;
 
-/*
-  The following values store the the clockticks at start time
-  and stop time of the clock.
-*/
 
-static clock_t startclock,
-               stopclock;
-
-/*EE
-  The following function initializes the clock.
-*/
-
+// Initialize the clock
 void initclock(void)
 {
   startclock = clock();
 }
 
-/*EE
-  The following function delivers the time since the
-  clock was initialized. The time is reported in seconds
-  as a floating point value.
-*/
 
+// The time since th clock was initialized
 double getruntime(void)
 {
    stopclock = clock();
-   return (double) (stopclock-startclock) / (double) CLOCKS_PER_SEC;
+   return (double) (stopclock - startclock) / (double) CLOCKS_PER_SEC;
 }
 
-/*EE
-  The following function delivers the clock ticks betwenn
-  \texttt{startclock} to \texttt{stopclock}.
-*/
 
+// The clockticks since the clock was initialized
 Uint getclockticks(void)
 {
    stopclock = clock();
-   return (Uint) (stopclock-startclock);
+   return (Uint) (stopclock - startclock);
 }
