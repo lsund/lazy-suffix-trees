@@ -27,14 +27,3 @@ void reverse(wchar_t *s,Uint len)
     *back = tmp;
   }
 }
-
-void reversestring(char *s, Uint m, char *sreverse)
-{
-  char *sp;
-
-  for(sreverse += m-1, *(sreverse+1) = '\0', sp = s;
-      *sp != '\0';
-      *sreverse-- = *sp++)
-    /*NOTHING*/;
-  sreverse++;
-}

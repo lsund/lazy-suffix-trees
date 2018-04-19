@@ -28,7 +28,7 @@ CFLAGS+=-m64 -DSIXTYFOURBITS $(INCLUDE)
 CFLAGS+=-DDEBUG
 CFLAGS+=-g
 
-OBJ= obj/boyermoore.o\
+OBJ= obj/naive_search.o\
      obj/reverse.o\
      obj/clock.o\
      obj/io.o\

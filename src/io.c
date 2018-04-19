@@ -22,12 +22,6 @@
 wchar_t *wtext;
 Uint textlen;
 
-// The table of filehandles
-static Filehandle *filehandle = NULL;
-
-// Number of allocated filehandles
-static Uint allocatedFilehandle = 0;
-
 // Open file in readmode, return file descriptor. The length of the file is
 // stored in `textlen`. If `writefile` is true if the file should also be
 // opened for triting.

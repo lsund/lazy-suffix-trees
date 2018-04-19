@@ -5,6 +5,4 @@
 
 void reverse(wchar_t *s,Uint len);
 
-void reversestring(char *s, Uint m, char *sreverse);
-
 #endif
