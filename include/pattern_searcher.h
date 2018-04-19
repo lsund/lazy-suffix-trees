@@ -1,5 +1,5 @@
-#ifndef SEARCH_H
-#define SEARCH_H
+#ifndef PATTERN_SEARCHER_H
+#define PATTERN_SEARCHER_H
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -16,7 +16,7 @@
 #include "util.h"
 #include "spaceman.h"
 #include "lcp.h"
-#include "occurs.h"
+#include "search.h"
 #include "clock.h"
 #include "reverse.h"
 

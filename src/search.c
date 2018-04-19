@@ -18,7 +18,7 @@
  *
  */
 
-#include "occurs.h"
+#include "search.h"
 
 wchar_t *wtext,
         *sentinel,

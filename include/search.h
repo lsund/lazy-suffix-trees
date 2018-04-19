@@ -1,5 +1,5 @@
-#ifndef OCCURS_H
-#define OCCURS_H
+#ifndef SEARCH_H
+#define SEARCH_H
 
 #include "stree.h"
 #include "types.h"
