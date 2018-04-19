@@ -32,7 +32,6 @@ OBJ= obj/naive_search.o\
      obj/reverse.o\
      obj/clock.o\
      obj/io.o\
-     obj/seterror.o\
      obj/get_alpha.o \
      obj/spaceman.o\
 	 obj/util.o\
@@ -63,9 +62,9 @@ bench: clean all
 	./bin/wotd data/dataset/005.txt data/random-patterns.txt bench
 
 run: clean all
-	# ./bin/wotd data/data.xml data/10000.txt run
+	./bin/wotd data/data.xml data/10000.txt run
 	# ./bin/wotd data/dataset/005.txt data/test-patterns.txt run
-	./bin/wotd data/dataset/005.txt data/random-patterns.txt run
+	# ./bin/wotd data/dataset/005.txt data/random-patterns.txt run
 	# ./bin/wotd
 
 runtest: clean test

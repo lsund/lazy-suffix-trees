@@ -38,9 +38,9 @@ static bool copy_pattern(wchar_t *pattern, wchar_t *current_pattern, Uint len)
 
         pattern[i] = current_pattern[i];
 
-        if (ISSPECIAL(pattern[i])) {
-            return true;
-        }
+        /* if (ISSPECIAL(pattern[i])) { */
+        /*     return true; */
+        /* } */
     }
 
     return false;
@@ -107,9 +107,9 @@ bool try_search(wchar_t *current_pattern, Uint patternlen)
     wchar_t pattern[MAXPATTERNLEN + 1];
     bool special = copy_pattern(pattern, current_pattern, patternlen);
 
-    if (special) {
-        ERROR("Found an unparsable pattern");
-    }
+    /* if (special) { */
+    /*     fprintf(stderr, "Found an unparsable pattern\n"); */
+    /* } */
 
     return search(pattern, pattern + patternlen - 1);
 
@@ -147,7 +147,7 @@ void try_search_patterns(const char *path, int npatterns, wchar_t ***patterns_pt
 void try_search_random_patterns(const char *path, Uint trials, Uint minpat, Uint maxpat)
 {
     if (maxpat > textlen) {
-        ERROR("Max pattern length must be smaller than the text length");
+        fprintf(stderr, "Max pattern length must be smaller than the text length");
     }
 
     search_random_patterns(trials, minpat, maxpat);

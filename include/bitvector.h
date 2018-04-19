@@ -1,17 +1,22 @@
 /*
-  Copyright by Stefan Kurtz (C) 1997-2003
-  =====================================
-  You may use, copy and distribute this file freely as long as you
-   - do not change the file,
-   - leave this copyright notice in the file,
-   - do not make any profit with the distribution of this file
-   - give credit where credit is due
-  You are not allowed to copy or distribute this file otherwise
-  The commercial usage and distribution of this file is prohibited
-  Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
-*/
+ * Copyright by Stefan Kurtz (C) 1999-2003
+ * =====================================
+ * You may use, copy and distribute this file freely as long as you
+ * - do not change the file,
+ * - leave this copyright notice in the file,
+ * - do not make any profit with the distribution of this file
+ * - give credit where credit is due
+ * You are not allowed to copy or distribute this file otherwise
+ * The commercial usage and distribution of this file is prohibited
+ * Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
+ *
+ */
 
-//\IgnoreLatex{
+/*
+ * Modified by Ludvig Sundström 2018 with permission from Stefan Kurtz
+ * For full source control tree, see https://github.com/lsund/wotd
+ *
+ */
 
 #ifndef BITVECTOR_H
 #define BITVECTOR_H
@@ -19,16 +24,10 @@
 #include "types.h"
 #include "spaceman.h"
 
-//}
+// Modulef for manipulating bitvectors, represented by an unsigned integer.
 
-/*
-  This file contains some definitions manipulating bitvectors represented
-  by a \texttt{Uint}. In the comment lines we use $w$ for the word size
-  and \texttt{\symbol{94}} for exponentiation of the previous character.
-*/
-
-#define INTWORDSIZE\
-        (UintConst(1) << LOGWORDSIZE)     // # of bits in Uint = w
+// Number of bits in in integer
+#define INTWORDSIZE (UintConst(1) << LOGWORDSIZE)
 #define FIRSTBIT\
         (UintConst(1) << (INTWORDSIZE - 1)) // \(10^{w-1}\)
 #define ISBITSET(S,I)\

@@ -30,12 +30,12 @@ static int fileOpen(char *name, Uint *textlen, bool writefile)
     int fd;
     struct stat buf;
 
-    if((fd = open(name,(writefile) ? O_RDWR : O_RDONLY)) == -1) {
-        ERROR1("fileOpen: Cannot open \"%s\"", name);
+    if ((fd = open(name,(writefile) ? O_RDWR : O_RDONLY)) == -1) {
+        fprintf(stderr, "fileOpen: Cannot open \"%s\"", name);
         return -1;
     }
-    if(fstat(fd,&buf) == -1) {
-        ERROR2("file \"%s\": fstat(fd = %d) failed",name,fd);
+    if (fstat(fd,&buf) == -1) {
+        fprintf(stderr, "file \"%s\": fstat(fd = %d) failed",name,fd);
         return -2;
     }
     *textlen = (Uint) buf.st_size;
@@ -87,6 +87,7 @@ Uint file_to_strings(char *name, Uint *textlen, Uint nlines, wchar_t ***wordsp)
 
         words[i][j - 1] = 0;
     }
+    fprintf(stderr, "Warning, not all patterns were read\n");
     *wordsp = words;
     fclose(fp);
     return i;

@@ -33,18 +33,18 @@ int main(int argc,char *argv[])
     }
     wtext[textlen + 1] = '\0';
     max_codepoint = get_max(wtext, textlen);
+    printf("max character value: %lu\n", max_codepoint);
     fclose(in);
 
     if(wtext == NULL) {
-        ERROR("Cannot open file");
+        fprintf(stderr, "Cannot open file");
     }
 
-    int size        = 128;
-    wchar_t **patterns = (wchar_t **) malloc(sizeof(char *) * size);
-    int npatterns  = file_to_strings(patternfile, &patternslen, size, &patterns);
+    wchar_t **patterns = (wchar_t **) malloc(sizeof(char *) * MAX_PATTERNS);
+    int npatterns  = file_to_strings(patternfile, &patternslen, MAX_PATTERNS, &patterns);
 
     if(textlen > MAXTEXTLEN) {
-        ERROR("Text too large, see MAXTEXTLEN");
+        fprintf(stderr, "Text too large, see MAXTEXTLEN");
     }
 
     const char *path = "data/out.txt";
@@ -60,7 +60,7 @@ int main(int argc,char *argv[])
         try_search_random_patterns(path, 100000, minpat, maxpat);
 
     } else {
-
+        printf("npatterns: %d\n", npatterns);
         try_search_patterns(path, npatterns, &patterns);
 
     }

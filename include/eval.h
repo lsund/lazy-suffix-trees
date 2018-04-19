@@ -2,7 +2,6 @@
 #define EVAL_H
 
 #include "externs.h"
-#include "error.h"
 #include "bitvector.h"
 #include "types.h"
 #include "basedef.h"

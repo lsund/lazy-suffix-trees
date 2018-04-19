@@ -13,6 +13,8 @@
 
 #define MAXPATTERNLEN           1024
 
+#define MAX_PATTERNS            15000
+
 // undefined reference
 #define UNDEFREFERENCE          UINT_MAX
 
