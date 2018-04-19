@@ -11,7 +11,7 @@ Uint    sortbufferwidth,
         textlen;
 
 
-wchar_t **get_sortbuffer(wchar_t **left, wchar_t **right) {
+wchar_t **alloc_sortbuffer(wchar_t **left, wchar_t **right) {
 
     Uint width = (Uint) (right - left + 1);
 
@@ -32,14 +32,16 @@ wchar_t **get_sortbuffer(wchar_t **left, wchar_t **right) {
 }
 
 
-void allocstree(void)
+void alloc_stree(void)
 {
-    Uint tmpindex = INDEX(next_free);
-    if(tmpindex >= streesize) {
+    Uint next_free_index = INDEX(next_free);
+
+    if(next_free_index >= streesize) {
+
         streesize += (textlen / 10);
         ALLOC(stree, stree, Uint, streesize + MAXSUCCSPACE);
-        // update necessary, since stree may have been moved.
-        next_free = stree + tmpindex;
+        next_free = stree + next_free_index;
+
     }
 }
 

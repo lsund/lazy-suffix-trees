@@ -43,34 +43,11 @@
 #define DYNAMICSTRDUP(S)\
         strdup(S)
 
-//\IgnoreLatex{
-
-#define SPACEBLOCKINFO(SP)\
-        spaceblockinfo(__FILE__,(Uint) __LINE__,(void *) SP)
-
-
 ///////////////////////////////////////////////////////////////////////////////
 // Functions
 
-wchar_t **get_sortbuffer(wchar_t **left, wchar_t **right);
+wchar_t **alloc_sortbuffer(wchar_t **left, wchar_t **right);
 
-void allocstree(void);
-
-Sint checkenvvaronoff(char *varname);
-void spaceblockinfo(char *file,Uint linenum,void *ptr);
-void activeblocks(void);
-void checkspaceleak(void);
-void showspace(void);
-void showmemsize(void);
-void addspace(Uint);
-void subtractspace(Uint);
-
-int simplefileOpen(char *file,Uint line, char *filename,Uint *numofbytes);
-
-Sint deletememorymap(char *file,Uint line,void *mappedfile);
-void mmcheckspaceleak(void);
-void mmshowspace(void);
-Sint setlocalpagesize(void);
-
+void alloc_stree(void);
 
 #endif

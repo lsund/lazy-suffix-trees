@@ -57,7 +57,7 @@ static Uint evalsuccedges(wchar_t **left, wchar_t **right)
     wchar_t firstchar, **bound, **probe;
     Uint firstbranch = UNDEFREFERENCE, *previousnode = NULL;
 
-    allocstree();
+    alloc_stree();
     bool sentineledge = skip_sentinel(&right);
 
 
@@ -132,7 +132,7 @@ void eval_node(Uint node)
     SETLP(vertex,SUFFIXNUMBER(left));
     SETFIRSTCHILD(vertex,INDEX(next_free));
 
-    current_sortbuffer = get_sortbuffer(left, right);
+    current_sortbuffer = alloc_sortbuffer(left, right);
     prefixlen = grouplcp(left,right);
     counting_sort(left,right,prefixlen);
     (void) evalsuccedges(left,right);
