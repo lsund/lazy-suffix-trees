@@ -26,7 +26,6 @@
 #include "bitvector.h"
 #include "sort.h"
 #include "eval.h"
-#include "array.h"
 
 typedef struct result {
     bool def;
