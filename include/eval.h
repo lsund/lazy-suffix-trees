@@ -21,7 +21,6 @@
 #define EVAL_H
 
 #include "externs.h"
-#include "bitvector.h"
 #include "types.h"
 #include "basedef.h"
 #include "spaceman.h"

@@ -23,7 +23,6 @@
 #include "stree.h"
 #include "types.h"
 #include "basedef.h"
-#include "bitvector.h"
 #include "sort.h"
 #include "eval.h"
 

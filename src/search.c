@@ -41,7 +41,7 @@ static Pattern init_pattern(wchar_t *patt_start, wchar_t *patt_end)
 
 static Uint first_child_lp(Uint *vertex)
 {
-    Uint *child = stree + FIRST_CHILD(vertex);
+    Uint *child = stree + GET_FIRSTCHILD(vertex);
 
     if (!IS_LEAF(child) && IS_UNEVALUATED(child)) {
         return GET_LP_UNEVAL(child);
@@ -205,7 +205,7 @@ bool search(wchar_t *patt_start, wchar_t *patt_end)
     while(!empty_pattern(patt)) {
 
         patt.head = *patt.probe;
-        vertex    = stree + FIRST_CHILD(vertex);
+        vertex    = stree + GET_FIRSTCHILD(vertex);
 
 
         while(true) {

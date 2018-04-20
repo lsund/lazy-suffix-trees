@@ -30,7 +30,6 @@
 #include "basedef.h"
 #include "types.h"
 #include "spaceman.h"
-#include "bitvector.h"
 #include "io.h"
 #include "util.h"
 #include "spaceman.h"

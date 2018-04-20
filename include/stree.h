@@ -21,53 +21,61 @@
 #define STREE_H
 
 #include "types.h"
-#include "bitvector.h"
-
-///////////////////////////////////////////////////////////////////////////////
-// Getters
 
 #define INDEX(N)            ((Uint) ((N) - stree))
 
-// Bit determining if leaf
+///////////////////////////////////////////////////////////////////////////////
+// Info About vertices
+
+// Instead of storing seperately if a vertex is a leaf, a rightmostchild or
+// unevaluated
+
+// Bit determining if the vertex is a leaf
 #define LEAFBIT                 FIRSTBIT
 
-// right most child of succ list
+// Bit determining if the inner node is unevaluated
+#define UNEVALUATEDBIT          FIRSTBIT
+
+// Bit determining if the node is the rightmost child of its parent
 #define RIGHTMOSTCHILDBIT       SECONDBIT
 
-// unevaluated branching node
-#define UNEVALUATEDBIT          FIRSTBIT
+///////////////////////////////////////////////////////////////////////////////
+// Getters
 
 // LP is the leaf set of on edge plus the length of the string leading up to it
 #define GET_LP(P)                ((*(P)) & ~(LEAFBIT | RIGHTMOSTCHILDBIT))
 
 // The number for the first child of the vertex pointer
-#define FIRST_CHILD(P)        (*((P) + 1))
-
-// startposition of suffix
-#define SUFFIXNUMBER(L)         ((Uint) (*(L) - wtext))
+#define GET_FIRSTCHILD(P)        (*((P) + 1))
 
 // The left boundry of the remaining suffixes
-#define GETLEFTBOUNDARY(P)      (suffixes + *(P))
+#define GET_LEFTBOUNDARY(P)      (suffixes + *(P))
 
 // The right boundry of the remaining suffixes
-#define GETRIGHTBOUNDARY(P)     (suffixes + ((*((P) + 1)) & ~UNEVALUATEDBIT))
+#define GET_RIGHTBOUNDARY(P)     (suffixes + ((*((P) + 1)) & ~UNEVALUATEDBIT))
 
 // The lp number of an unevaluated vertex
-#define GET_LP_UNEVAL(N)          SUFFIXNUMBER(GETLEFTBOUNDARY(N))
+#define GET_LP_UNEVAL(N)          SUFFIX_STARTINDEX(GET_LEFTBOUNDARY(N))
+
+// startposition of suffix
+#define SUFFIX_STARTINDEX(L)         ((Uint) (*(L) - wtext))
 
 ///////////////////////////////////////////////////////////////////////////////
 // Setters
 
-#define SETLP(P, LP)             *(P) = (*(P) & RIGHTMOSTCHILDBIT) | (LP)
+#define SET_LP(P, LP)             *(P) = (*(P) & RIGHTMOSTCHILDBIT) | (LP)
 
-#define SETFIRSTCHILD(P,C)      *((P)+1) = C
+#define SET_FIRSTCHILD(P,C)      *((P) + 1) = C
 
-#define SETLEAF(P,L)            *(P) = (L) | LEAFBIT
+#define SET_LEAF(P,L)            *(P) = (L) | LEAFBIT
 
-// Store the left and right boundaries for the remaining suffixes
-#define STOREBOUNDARIES(P,L,R)  *(P) = (Uint) ((L) - suffixes);\
-                                *((P)+1) = ((R) - suffixes) | UNEVALUATEDBIT
-
+// Create a new vertex
+//
+// Each vertex needs two integers allocated for it, one for its left suffix
+// boundary and one for its left suffix boundary. This macro sets the left and
+// the right boundary for the two following positions in P.
+#define STORE_SUFFIX_BOUNDARIES(P, L, R)  *(P) = (Uint) ((L) - suffixes);\
+                                 *((P) + 1) = ((R) - suffixes) | UNEVALUATEDBIT
 
 ///////////////////////////////////////////////////////////////////////////////
 // Queries

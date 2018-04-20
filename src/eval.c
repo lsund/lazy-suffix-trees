@@ -20,15 +20,45 @@ static void create_inner_vertex(Uint *firstbranch, wchar_t **l, wchar_t **r)
     if(*firstbranch == UNDEFREFERENCE) {
         *firstbranch = INDEX(next_free);
     }
-    STOREBOUNDARIES(next_free, l, r);
+    STORE_SUFFIX_BOUNDARIES(next_free, l, r);
     // store l and r. resume later with this unevaluated node
     next_free += BRANCHWIDTH;
 }
 
+
+static Uint create_root_child(
+        Uint firstbranch,
+        wchar_t firstchar,
+        wchar_t **l,
+        wchar_t **r
+    )
+{
+    if(firstbranch == UNDEFREFERENCE) {
+        firstbranch = INDEX(next_free);
+    }
+
+    STORE_SUFFIX_BOUNDARIES(next_free, l, r);
+    // store l and r. resume later with this unevaluated branch node
+    root_children[firstchar] = INDEX(next_free);
+    next_free += BRANCHWIDTH;
+
+    return firstbranch;
+}
+
+
+static void create_root_leaf(wchar_t firstchar, wchar_t **l)
+{
+    Uint leafnum = SUFFIX_STARTINDEX(l);
+    SET_LEAF(next_free, leafnum);
+    root_children[firstchar] = leafnum | LEAFBIT;
+    next_free++;
+}
+
+
 static Uint create_leaf_vertex(wchar_t **l)
 {
-    Uint leafnum = SUFFIXNUMBER(l);
-    SETLEAF(next_free, leafnum);
+    Uint leafnum = SUFFIX_STARTINDEX(l);
+    SET_LEAF(next_free, leafnum);
     next_free++;
     return leafnum;
 }
@@ -54,21 +84,21 @@ static void get_bound(wchar_t ***bound_ptr, wchar_t **probe, wchar_t **right, wc
 
 static Uint evalsuccedges(wchar_t **left, wchar_t **right)
 {
-    wchar_t firstchar, **bound, **probe;
+    wchar_t firstchar, **rightbound, **probe;
     Uint firstbranch = UNDEFREFERENCE, *previousnode = NULL;
 
     alloc_extend_stree();
     bool sentineledge = skip_sentinel(&right);
 
 
-    for (probe = left; probe <= right; probe = bound + 1) {
+    for (probe = left; probe <= right; probe = rightbound + 1) {
 
         firstchar = **probe;
-        get_bound(&bound, probe, right, firstchar);
+        get_bound(&rightbound, probe, right, firstchar);
         previousnode = next_free;
 
-        if(bound > probe) {
-            create_inner_vertex(&firstbranch, probe, bound);
+        if(rightbound > probe) {
+            create_inner_vertex(&firstbranch, probe, rightbound);
         } else {
             create_leaf_vertex(probe);
         }
@@ -88,7 +118,7 @@ static Uint evalsuccedges(wchar_t **left, wchar_t **right)
 Uint evalrootsuccedges(wchar_t **left, wchar_t **right)
 {
     wchar_t firstchar, **r, **l;
-    Uint *rptr, leafnum, firstbranch = UNDEFREFERENCE;
+    Uint *rptr, firstbranch = UNDEFREFERENCE;
 
     for(rptr = root_children; rptr <= root_children + MAX_CHARS; rptr++) {
         *rptr = UNDEFINEDSUCC;
@@ -100,23 +130,12 @@ Uint evalrootsuccedges(wchar_t **left, wchar_t **right)
             ;
         }
         if(r > l) {
-            // Create branching node
-            if(firstbranch == UNDEFREFERENCE) {
-                firstbranch = INDEX(next_free);
-            }
-            STOREBOUNDARIES(next_free, l, r);
-            // store l and r. resume later with this unevaluated branch node
-            root_children[firstchar] = INDEX(next_free);
-            next_free += BRANCHWIDTH;
+            firstbranch = create_root_child(firstbranch, firstchar, l, r);
         } else {
-            // Create leaf
-            leafnum = SUFFIXNUMBER(l);
-            SETLEAF(next_free,leafnum);
-            root_children[firstchar] = leafnum | LEAFBIT;
-            next_free++;
+            create_root_leaf(firstchar, l);
         }
     }
-    SETLEAF(next_free,textlen | RIGHTMOSTCHILDBIT);
+    SET_LEAF(next_free,textlen | RIGHTMOSTCHILDBIT);
     next_free++;
     return firstbranch;
 }
@@ -127,10 +146,10 @@ void eval_node(Uint node)
     wchar_t **left, **right;
 
     vertex = stree + node;
-    left   = GETLEFTBOUNDARY(vertex);
-    right  = GETRIGHTBOUNDARY(vertex);
-    SETLP(vertex,SUFFIXNUMBER(left));
-    SETFIRSTCHILD(vertex,INDEX(next_free));
+    left   = GET_LEFTBOUNDARY(vertex);
+    right  = GET_RIGHTBOUNDARY(vertex);
+    SET_LP(vertex, SUFFIX_STARTINDEX(left));
+    SET_FIRSTCHILD(vertex, INDEX(next_free));
 
     current_sortbuffer = alloc_sortbuffer(left, right);
     prefixlen = grouplcp(left,right);
