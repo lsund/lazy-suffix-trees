@@ -92,19 +92,19 @@
 #define IS_UNEVALUATED(P)       ((*((P)+1)) & UNEVALUATEDBIT)
 
 
-void create_root_leaf(wchar_t firstchar, wchar_t **left);
+void create_root_leaf(Wchar firstchar, Wchar **left);
 
 void create_inner_vertex(
         Uint *firstbranch,
-        wchar_t firstchar,
-        wchar_t **left,
-        wchar_t **right,
+        Wchar firstchar,
+        Wchar **left,
+        Wchar **right,
         bool root
     );
 
-Uint create_leaf_vertex(wchar_t firstchar, wchar_t **left, bool root);
+Uint create_leaf_vertex(Wchar firstchar, Wchar **left, bool root);
 
-Uint create_sentinel_vertex(wchar_t **right, Uint **previousnode);
+Uint create_sentinel_vertex(Wchar **right, Uint **previousnode);
 
 void init_root_children();
 

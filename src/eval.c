@@ -1,12 +1,12 @@
 
 #include "eval.h"
 
-wchar_t   *wtext, *sentinel;
+Wchar   *wtext, *sentinel;
 
 Uint    *next_free, root_children[MAX_CHARS + 1];
 
 
-static bool skip_sentinel(wchar_t ***rightb)
+static bool skip_sentinel(Wchar ***rightb)
 {
     if(**rightb == sentinel) {
         rightb--;
@@ -16,37 +16,32 @@ static bool skip_sentinel(wchar_t ***rightb)
 }
 
 
-static void get_bound(
-                wchar_t ***bound_ptr,
-                wchar_t **current,
-                wchar_t **rightb,
-                wchar_t firstchar
-            )
+static void get_bound(Wchar ***ret, Wchar **curr, Wchar **rightb, Wchar first)
 {
-    wchar_t **probe;
-    for(probe = current; probe < rightb && **(probe + 1) == firstchar; probe++) {
-        ;
+    Wchar **probe = curr;
+    while (probe < rightb && **(probe + 1) == first) {
+        probe++;
     }
-    *bound_ptr = probe;
+    *ret = probe;
 }
 
 
-static Uint create_edges(wchar_t **leftb, wchar_t **rightb, Uint **previous, bool isroot)
+static Uint create_edges(Wchar **leftb, Wchar **rightb, Uint **previous, bool isroot)
 {
     Uint firstchild     = UNDEFREFERENCE;
-    wchar_t **rightbound = NULL;
-    wchar_t **probe      = NULL;
+    Wchar **rightbound = NULL;
+    Wchar **probe      = NULL;
 
     for (probe = leftb; probe <= rightb; probe = rightbound + 1) {
 
-        wchar_t firstchar = **probe;
+        Wchar first = **probe;
         get_bound(&rightbound, probe, rightb, **probe);
         *previous = next_free;
 
         if (rightbound > probe) {
-            create_inner_vertex(&firstchild, firstchar, probe, rightbound, isroot);
+            create_inner_vertex(&firstchild, first, probe, rightbound, isroot);
         } else {
-            create_leaf_vertex(firstchar, probe, isroot);
+            create_leaf_vertex(first, probe, isroot);
         }
     }
 
@@ -54,7 +49,7 @@ static Uint create_edges(wchar_t **leftb, wchar_t **rightb, Uint **previous, boo
 }
 
 
-static Uint eval_edges(wchar_t **leftb, wchar_t **rightb, bool isroot)
+static Uint eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
 {
     bool sentineledge    = skip_sentinel(&rightb);
 
@@ -96,8 +91,8 @@ void eval_node(Uint node)
 {
     Uint *vertex = stree + node;
 
-    wchar_t **leftb   = GET_LEFTBOUNDARY(vertex);
-    wchar_t **rightb  = GET_RIGHTBOUNDARY(vertex);
+    Wchar **leftb   = GET_LEFTBOUNDARY(vertex);
+    Wchar **rightb  = GET_RIGHTBOUNDARY(vertex);
 
     SET_LP(vertex, SUFFIX_STARTINDEX(leftb));
     SET_FIRSTCHILD(vertex, INDEX(next_free));

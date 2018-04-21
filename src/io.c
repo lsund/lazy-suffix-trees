@@ -19,7 +19,7 @@
 
 #include "io.h"
 
-wchar_t *wtext;
+Wchar *wtext;
 Uint textlen;
 
 // Open file in readmode, return file descriptor. The length of the file is
@@ -42,9 +42,9 @@ static int fileOpen(char *name, Uint *textlen, bool writefile)
     return fd;
 }
 
-Uint file_to_strings(char *name, Uint *textlen, Uint nlines, wchar_t ***wordsp)
+Uint file_to_strings(char *name, Uint *textlen, Uint nlines, Wchar ***wordsp)
 {
-    wchar_t **words = *wordsp;
+    Wchar **words = *wordsp;
     int fd = fileOpen(name, textlen, false);
 
     if (fd < 0) {
@@ -64,7 +64,7 @@ Uint file_to_strings(char *name, Uint *textlen, Uint nlines, wchar_t ***wordsp)
         Uint j;
 
         /* Allocate space for the next line */
-        words[i] = (wchar_t *) malloc(max_line_len * sizeof(wchar_t));
+        words[i] = (Wchar *) malloc(max_line_len * sizeof(Wchar));
 
         if (words[i] == NULL) {
             fprintf(stderr,"Out of memory (3).\n");

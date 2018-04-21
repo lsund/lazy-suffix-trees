@@ -23,7 +23,7 @@
 #include "types.h"
 
 
-void reverse(wchar_t *s,Uint len);
+void reverse(Wchar *s,Uint len);
 
 
 #endif

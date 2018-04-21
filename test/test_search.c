@@ -1,6 +1,6 @@
 #include "test.h"
 
-wchar_t *wtext;
+Wchar *wtext;
 Uint textlen, max_codepoint;
 
 static Uint min(const Uint a, const Uint b)
@@ -13,7 +13,7 @@ char *test_count(char *patternfile, char *textfile, Uint count)
     Uint patternslen;
     setlocale(LC_ALL, "en_US.utf8");
     FILE *in = fopen(textfile, "r");
-    wtext = malloc(sizeof(wchar_t) * MAXTEXTLEN);
+    wtext = malloc(sizeof(Wchar) * MAXTEXTLEN);
     wint_t c;
     textlen = 0;
     while ((c = fgetwc(in)) != WEOF) {
@@ -23,14 +23,14 @@ char *test_count(char *patternfile, char *textfile, Uint count)
     wtext[textlen + 1] = '\0';
     max_codepoint = get_max(wtext, textlen);
     fclose(in);
-    wchar_t **patterns = (wchar_t **) malloc(sizeof(wchar_t *) * MAX_PATTERNS);
+    Wchar **patterns = (Wchar **) malloc(sizeof(Wchar *) * MAX_PATTERNS);
     int npatterns  = file_to_strings(patternfile, &patternslen, MAX_PATTERNS, &patterns);
     inittree();
 
     Uint exists_n = 0;
     for (Uint j = 0; j < (Uint) npatterns; j++) {
 
-        wchar_t *current_pattern = patterns[j];
+        Wchar *current_pattern = patterns[j];
         Uint patternlen = strlenw(current_pattern);
 
         bool exists = search_pattern(current_pattern, patternlen);
@@ -55,7 +55,7 @@ char *compare_vs_naive(char *patternfile, char *textfile)
     Uint patternslen;
     setlocale(LC_ALL, "en_US.utf8");
     FILE *in = fopen(textfile, "r");
-    wtext = malloc(sizeof(wchar_t) * MAXTEXTLEN);
+    wtext = malloc(sizeof(Wchar) * MAXTEXTLEN);
     wint_t c;
     textlen = 0;
     while ((c = fgetwc(in)) != WEOF) {
@@ -65,17 +65,17 @@ char *compare_vs_naive(char *patternfile, char *textfile)
     wtext[textlen + 1] = '\0';
     max_codepoint = get_max(wtext, textlen);
     fclose(in);
-    wchar_t **patterns = (wchar_t **) malloc(sizeof(wchar_t *) * MAX_PATTERNS);
+    Wchar **patterns = (Wchar **) malloc(sizeof(Wchar *) * MAX_PATTERNS);
     int npatterns  = file_to_strings(patternfile, &patternslen, MAX_PATTERNS, &patterns);
     inittree();
 
     int exists_n = 0, rexists_n = 0;
     for (Uint j = 0; j < min(npatterns, maxpatterns); j++) {
 
-        wchar_t *current_pattern = patterns[j];
+        Wchar *current_pattern = patterns[j];
         Uint patternlen = strlenw(current_pattern);
 
-        wchar_t *end = current_pattern + patternlen;
+        Wchar *end = current_pattern + patternlen;
 
         bool exists = search_pattern(current_pattern, patternlen);
         bool rexists = naive_search(current_pattern, end);

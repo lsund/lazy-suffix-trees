@@ -20,15 +20,15 @@
 
 #include "lcp.h"
 
-wchar_t *sentinel;
+Wchar *sentinel;
 
 
 // Let x be the string that starts at address `start1` and ends at `end1`
 // Let y be the string that starts at address `start2` and ends at `end2`
 // Then this function returns the longest common prefix of x and y.
-Uint lcp(wchar_t *start1, wchar_t *end1, wchar_t *start2, wchar_t *end2) {
+Uint lcp(Wchar *start1, Wchar *end1, Wchar *start2, Wchar *end2) {
 
-    wchar_t *probe1 = start1, *probe2 = start2;
+    Wchar *probe1 = start1, *probe2 = start2;
 
     while(probe1 <= end1 && probe2 <= end2 && *probe1 == *probe2)
     {
@@ -42,7 +42,7 @@ Uint lcp(wchar_t *start1, wchar_t *end1, wchar_t *start2, wchar_t *end2) {
 
 // The longest common prefix for the group of suffixes, laying between adresses
 // `left` and `right`
-Uint grouplcp(wchar_t **left, wchar_t **right) {
+Uint grouplcp(Wchar **left, Wchar **right) {
 
     Uint j = UintConst(1);
 
@@ -52,8 +52,8 @@ Uint grouplcp(wchar_t **left, wchar_t **right) {
             return j;
         }
 
-        wchar_t cmpchar = *(*left + j);
-        wchar_t **text_probe;
+        Wchar cmpchar = *(*left + j);
+        Wchar **text_probe;
         for(text_probe = left + 1; text_probe <= right; text_probe++) {
 
             if(*(*text_probe + j) != cmpchar) {

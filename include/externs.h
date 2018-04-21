@@ -31,7 +31,7 @@
 // The text
 
 // points to input string `t` of length `n`
-extern wchar_t *wtext;
+extern Wchar *wtext;
 
 // Maximal codepoint value of `t`
 extern Uint max_codepoint;
@@ -40,16 +40,16 @@ extern Uint max_codepoint;
 extern Uint  textlen;
 
 // array of pointers to suffixes of `t`
-extern wchar_t **suffixes;
+extern Wchar **suffixes;
 
 // size of the alphabet `A`
 extern Uint alphasize;
 
 // points to `t[n] = undefined`
-extern wchar_t *sentinel;
+extern Wchar *sentinel;
 
 // characters in `t` in alphabetical order
-extern wchar_t characters[MAX_CHARS + 1];
+extern Wchar characters[MAX_CHARS + 1];
 
 extern Uint indices[MAX_CHARS + 1];
 
@@ -61,7 +61,7 @@ extern Uint suffixhead_count[MAX_CHARS + 1];
 // Buffer for sorting
 
 // space to be used by `sort_buffer`
-extern wchar_t **sortbuffer;
+extern Wchar **sortbuffer;
 
 // number of elements in `sbufferspace`
 extern Uint sortbufferwidth;

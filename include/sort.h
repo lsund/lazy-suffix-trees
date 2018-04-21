@@ -25,7 +25,7 @@
 #include "lcp.h"
 
 
-void counting_sort(wchar_t **left, wchar_t **right);
+void counting_sort(Wchar **left, Wchar **right);
 
 void create_suffix_groups(void);
 

@@ -33,12 +33,12 @@ typedef struct result {
 
 
 typedef struct pattern {
-    wchar_t head;
-    wchar_t *probe;
-    wchar_t *end;
+    Wchar head;
+    Wchar *probe;
+    Wchar *end;
 } Pattern;
 
 
-bool search(wchar_t *left, wchar_t *patt_end);
+bool search(Wchar *left, Wchar *patt_end);
 
 #endif

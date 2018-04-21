@@ -1,7 +1,7 @@
 
 #include "init.h"
 
-wchar_t     *wtext,
+Wchar     *wtext,
             *sentinel,
             characters[MAX_CHARS + 1],
             **suffixes;
@@ -30,7 +30,7 @@ void inittree(void)
     ALLOC(stree, stree, Uint, streesize + EXTENSION_SIZE);
     next_free = stree;
 
-    ALLOC(suffixes, NULL, wchar_t *, textlen + 1);
+    ALLOC(suffixes, NULL, Wchar *, textlen + 1);
     sort_bufferwidth = 0;
     max_sortbufferwidth  = textlen >> 8;
     root_evaluated    = false;

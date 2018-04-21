@@ -33,9 +33,9 @@
 #include "externs.h"
 
 
-void get_characters(wchar_t *alpha, Uint *alphasize);
+void get_characters(Wchar *alpha, Uint *alphasize);
 
-Uint get_max(wchar_t *text, Uint textlen);
+Uint get_max(Wchar *text, Uint textlen);
 
 
 #endif

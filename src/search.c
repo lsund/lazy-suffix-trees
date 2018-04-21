@@ -20,7 +20,7 @@
 
 #include "search.h"
 
-wchar_t *wtext,
+Wchar *wtext,
         *sentinel,
         **suffixes;
 
@@ -29,7 +29,7 @@ Uint *stree, root_children[MAX_CHARS + 1];
 bool root_evaluated;
 
 
-static Pattern init_pattern(wchar_t *patt_start, wchar_t *patt_end)
+static Pattern init_pattern(Wchar *patt_start, Wchar *patt_end)
 {
     Pattern patt;
     patt.head  = *patt_start;
@@ -69,7 +69,7 @@ static bool match_length(Pattern patt, Uint len)
 }
 
 
-static bool match(wchar_t *text_probe, Pattern patt)
+static bool match(Wchar *text_probe, Pattern patt)
 {
     // Changed below to plus 1
     Uint len = lcp(patt.probe + 1, patt.end, text_probe + 1, sentinel - 1);
@@ -85,7 +85,7 @@ static bool is_prefix(Uint prefixlen, Uint edgelen)
 
 static bool match_a_edge(
                 Uint rootchild,
-                wchar_t **text_probe,
+                Wchar **text_probe,
                 Pattern patt
             )
 {
@@ -128,13 +128,13 @@ static void update_lengths(
         Uint *edgelen,
         Uint *prefixlen)
 {
-    wchar_t *text_probe = wtext + GET_LP(vertex);
+    Wchar *text_probe = wtext + GET_LP(vertex);
     *edgelen = edge_length(vertex);
     *prefixlen = lcp(patt.probe+1, patt.end, text_probe+1, text_probe+*edgelen-1);
 }
 
 
-static Result try_match_leaf(wchar_t *text_probe, Pattern patt, Uint *vertex)
+static Result try_match_leaf(Wchar *text_probe, Pattern patt, Uint *vertex)
 {
     Result res;
     res.def = false;
@@ -155,10 +155,10 @@ static Result try_match_leaf(wchar_t *text_probe, Pattern patt, Uint *vertex)
 // Public Interface
 
 
-bool search(wchar_t *patt_start, wchar_t *patt_end)
+bool search(Wchar *patt_start, Wchar *patt_end)
 {
 
-    wchar_t *text_probe;
+    Wchar *text_probe;
     Uint edgelen, prefixlen;
     Uint *vertex;
     Uint vertex_num;
@@ -216,7 +216,7 @@ bool search(wchar_t *patt_start, wchar_t *patt_end)
 
             } else {
 
-                wchar_t edgechar;
+                Wchar edgechar;
                 lp         = get_lp(vertex);
                 text_probe = wtext + lp;
                 edgechar   = *text_probe;

@@ -42,7 +42,7 @@
 #define APPENDMODE "ab"
 
 
-Uint file_to_strings(char *name, Uint *textlen, Uint nlines, wchar_t ***words);
+Uint file_to_strings(char *name, Uint *textlen, Uint nlines, Wchar ***words);
 
 FILE *open_append(const char *path);
 

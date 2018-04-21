@@ -17,9 +17,9 @@
 
 #include "types.h"
 
-void reverse(wchar_t *s,Uint len)
+void reverse(Wchar *s,Uint len)
 {
-  wchar_t *front, *back, tmp;
+  Wchar *front, *back, tmp;
 
   for(front = s, back = s + len - 1; front < back; front++, back--) {
     tmp = *front;

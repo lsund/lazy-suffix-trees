@@ -24,7 +24,7 @@
 // Functions
 
 
-static bool copy_pattern(wchar_t *pattern, wchar_t *current_pattern, Uint len)
+static bool copy_pattern(Wchar *pattern, Wchar *current_pattern, Uint len)
 {
     *(pattern + len) = '\0';
     for(Uint i = 0; i < len; i++) {
@@ -42,10 +42,10 @@ static bool copy_pattern(wchar_t *pattern, wchar_t *current_pattern, Uint len)
 
 
 // Search for one pattern in the tree
-bool search_pattern(wchar_t *current_pattern, Uint patternlen)
+bool search_pattern(Wchar *current_pattern, Uint patternlen)
 {
 
-    wchar_t pattern[MAXPATTERNLEN + 1];
+    Wchar pattern[MAXPATTERNLEN + 1];
     copy_pattern(pattern, current_pattern, patternlen);
 
     return search(pattern, pattern + patternlen - 1);
@@ -54,15 +54,15 @@ bool search_pattern(wchar_t *current_pattern, Uint patternlen)
 
 
 // Search for many patterns in the tree
-void search_patterns(const char *path, int npatterns, wchar_t ***patterns_ptr)
+void search_patterns(const char *path, int npatterns, Wchar ***patterns_ptr)
 {
     int noccurs     = 0;
-    wchar_t **patterns = *patterns_ptr;
+    Wchar **patterns = *patterns_ptr;
     FILE *fp        = open_append(path);
 
     for(int j = 0; j < npatterns; j++) {
 
-        wchar_t *current_pattern = patterns[j];
+        Wchar *current_pattern = patterns[j];
         Uint patternlen = strlenw(current_pattern);
 
         bool exists = search_pattern(current_pattern, patternlen);

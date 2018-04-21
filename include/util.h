@@ -34,6 +34,6 @@ void printtime();
 
 Uint randlen(Uint m_min, Uint m_max);
 
-size_t strlenw(wchar_t *s);
+size_t strlenw(Wchar *s);
 
 #endif

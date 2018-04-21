@@ -23,7 +23,7 @@
 
 #include "types.h"
 
-bool naive_search(wchar_t *pattern, wchar_t *patternright);
+bool naive_search(Wchar *pattern, Wchar *patternright);
 
 
 #endif

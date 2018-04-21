@@ -39,9 +39,9 @@
 #include "reverse.h"
 
 
-bool search_pattern(wchar_t *current_pattern, Uint patternlen);
+bool search_pattern(Wchar *current_pattern, Uint patternlen);
 
-void search_patterns(const char *path, int npatterns, wchar_t ***o_patterns);
+void search_patterns(const char *path, int npatterns, Wchar ***o_patterns);
 
 
 #endif

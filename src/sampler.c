@@ -1,6 +1,6 @@
 #include "sampler.h"
 
-static bool sample(wchar_t *pattern, Uint patternlen)
+static bool sample(Wchar *pattern, Uint patternlen)
 {
     Uint start = (Uint) (drand48() * (double) (textlen - patternlen));
 
@@ -29,7 +29,7 @@ static void sample_search(Uint trials, Uint minlen, Uint maxlen)
 
     for(Uint i = 0; i < trials; i++) {
 
-        wchar_t pattern[MAXPATTERNLEN + 1];
+        Wchar pattern[MAXPATTERNLEN + 1];
         patternlen = randlen(minlen, maxlen);
 
         sample(pattern, patternlen);

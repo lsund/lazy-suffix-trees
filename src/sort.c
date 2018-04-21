@@ -6,7 +6,7 @@
 // Globals
 
 
-wchar_t     *wtext,
+Wchar     *wtext,
             *sentinel,
             **suffixes,
             characters[MAX_CHARS + 1],
@@ -31,9 +31,9 @@ static void increase_count(Uint codepoint)
 
 
 // Determine size for each group
-static void get_count(wchar_t **left, wchar_t **right, Uint prefixlen)
+static void get_count(Wchar **left, Wchar **right, Uint prefixlen)
 {
-    wchar_t **suffix_probe;
+    Wchar **suffix_probe;
     for (suffix_probe = left; suffix_probe <= right; suffix_probe++) {
         // drop the common prefix
         *suffix_probe += prefixlen;
@@ -48,12 +48,12 @@ static void get_count(wchar_t **left, wchar_t **right, Uint prefixlen)
 
 
 // Set the upper and lower bounds for each group, delimited by leaft and right
-static void set_group_bounds(wchar_t **left, wchar_t **right, wchar_t ***upper_bounds)
+static void set_group_bounds(Wchar **left, Wchar **right, Wchar ***upper_bounds)
 {
     // `current_sortbuffer` is already allocated, a sufficiently large memory
     // block for all suffix pointers.
-    wchar_t **lower_bound = current_sortbuffer;
-    wchar_t **suffix_probe;
+    Wchar **lower_bound = current_sortbuffer;
+    Wchar **suffix_probe;
 
     for (suffix_probe = left; suffix_probe <= right; suffix_probe++) {
 
@@ -72,9 +72,9 @@ static void set_group_bounds(wchar_t **left, wchar_t **right, wchar_t ***upper_b
 
 
 // Insert the suffixes into the correct positions, depending on `upper_bonuds`
-static void insert_suffixes(wchar_t **left, wchar_t **right, wchar_t ***upper_bounds)
+static void insert_suffixes(Wchar **left, Wchar **right, Wchar ***upper_bounds)
 {
-    wchar_t **suffix_probe;
+    Wchar **suffix_probe;
     for (suffix_probe = right; suffix_probe >= left; suffix_probe--) {
         // Decrement the pointer to bounds for this specific character,
         // then insert the suffix pointed to by c.
@@ -88,9 +88,9 @@ static void insert_suffixes(wchar_t **left, wchar_t **right, wchar_t ***upper_bo
 
 
 // Sorts the suffixes of a group, bounded between left and right.
-void counting_sort(wchar_t **left, wchar_t **right)
+void counting_sort(Wchar **left, Wchar **right)
 {
-    wchar_t **upper_bounds[MAX_CHARS + 1];
+    Wchar **upper_bounds[MAX_CHARS + 1];
     current_sortbuffer = alloc_sortbuffer(left, right);
 
     // These suffixes belong to the same group, so the common prefix length
@@ -112,8 +112,8 @@ void counting_sort(wchar_t **left, wchar_t **right)
     // Create buffer
     insert_suffixes(left, right, upper_bounds);
 
-    wchar_t **suffix_probe = left;
-    wchar_t **buffer_probe = current_sortbuffer;
+    Wchar **suffix_probe = left;
+    Wchar **buffer_probe = current_sortbuffer;
 
     // copy grouped suffixes back from buffer
     while (suffix_probe <= right) {
@@ -132,10 +132,10 @@ void counting_sort(wchar_t **left, wchar_t **right)
 // suffixes into the array suffixes.
 void create_suffix_groups(void)
 {
-    wchar_t *c, **nextFree = suffixes;
+    Wchar *c, **nextFree = suffixes;
     Uint a;
 
-    wchar_t **upper_bounds[MAX_CHARS + 1];
+    Wchar **upper_bounds[MAX_CHARS + 1];
 
     // determine size for each group
     for (c = wtext; c < wtext + textlen; c++) {

@@ -28,7 +28,7 @@ int main(int argc,char *argv[])
 
     setlocale(LC_ALL, "en_US.utf8");
     FILE *in = fopen(filename, "r");
-    wtext = malloc(sizeof(wchar_t) * MAXTEXTLEN);
+    wtext = malloc(sizeof(Wchar) * MAXTEXTLEN);
     wint_t c;
     while ((c = fgetwc(in)) != WEOF) {
         wtext[textlen] = c;
@@ -44,7 +44,7 @@ int main(int argc,char *argv[])
         fprintf(stderr, "Cannot open file");
     }
 
-    wchar_t **patterns = (wchar_t **) malloc(sizeof(char *) * MAX_PATTERNS);
+    Wchar **patterns = (Wchar **) malloc(sizeof(char *) * MAX_PATTERNS);
     int npatterns  = file_to_strings(patternfile, &patternslen, MAX_PATTERNS, &patterns);
 
     if(textlen > MAXTEXTLEN) {

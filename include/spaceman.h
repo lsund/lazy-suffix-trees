@@ -54,7 +54,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Functions
 
-wchar_t **alloc_sortbuffer(wchar_t **left, wchar_t **right);
+Wchar **alloc_sortbuffer(Wchar **left, Wchar **right);
 
 void alloc_extend_stree(void);
 
