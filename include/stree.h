@@ -95,7 +95,6 @@
 void create_root_leaf(Wchar firstchar, Wchar **left);
 
 void create_inner_vertex(
-        Uint *firstbranch,
         Wchar firstchar,
         Wchar **left,
         Wchar **right,

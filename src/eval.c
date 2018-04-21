@@ -3,7 +3,7 @@
 
 Wchar   *wtext, *sentinel;
 
-Uint    *next_free, root_children[MAX_CHARS + 1];
+Uint    *next_free_cell, root_children[MAX_CHARS + 1];
 
 
 static bool skip_sentinel(Wchar ***rightb)
@@ -26,30 +26,27 @@ static void get_bound(Wchar ***ret, Wchar **curr, Wchar **rightb, Wchar first)
 }
 
 
-static Uint create_edges(Wchar **leftb, Wchar **rightb, Uint **previous, bool isroot)
+static void create_edges(Wchar **leftb, Wchar **rightb, Uint **previous, bool isroot)
 {
-    Uint firstchild     = UNDEFREFERENCE;
-    Wchar **rightbound = NULL;
+    Wchar **curr_rightb = NULL;
     Wchar **probe      = NULL;
 
-    for (probe = leftb; probe <= rightb; probe = rightbound + 1) {
+    for (probe = leftb; probe <= rightb; probe = curr_rightb + 1) {
 
         Wchar first = **probe;
-        get_bound(&rightbound, probe, rightb, **probe);
-        *previous = next_free;
+        get_bound(&curr_rightb, probe, rightb, first);
+        *previous = next_free_cell;
 
-        if (rightbound > probe) {
-            create_inner_vertex(&firstchild, first, probe, rightbound, isroot);
+        if (curr_rightb > probe) {
+            create_inner_vertex(first, probe, curr_rightb, isroot);
         } else {
             create_leaf_vertex(first, probe, isroot);
         }
     }
-
-    return firstchild;
 }
 
 
-static Uint eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
+static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
 {
     bool sentineledge    = skip_sentinel(&rightb);
 
@@ -60,20 +57,18 @@ static Uint eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
     }
 
     Uint *previous       = NULL;
-    Uint firstchild = create_edges(leftb, rightb, &previous, isroot);
+    create_edges(leftb, rightb, &previous, isroot);
 
     if (sentineledge) {
         create_sentinel_vertex(rightb, &previous);
     }
 
     if (isroot) {
-        SET_LEAF(next_free, textlen | RIGHTMOSTCHILDBIT);
-        next_free++;
+        SET_LEAF(next_free_cell, textlen | RIGHTMOSTCHILDBIT);
+        next_free_cell++;
     } else {
         *previous |= RIGHTMOSTCHILDBIT;
     }
-
-    return firstchild;
 }
 
 
@@ -95,7 +90,7 @@ void eval_node(Uint node)
     Wchar **rightb  = GET_RIGHTBOUNDARY(vertex);
 
     SET_LP(vertex, SUFFIX_STARTINDEX(leftb));
-    SET_FIRSTCHILD(vertex, INDEX(next_free));
+    SET_FIRSTCHILD(vertex, INDEX(next_free_cell));
 
     counting_sort(leftb, rightb);
     eval_edges(leftb, rightb, false);
