@@ -25,15 +25,15 @@ Uint create_leaf_vertex(wchar_t firstchar, wchar_t **left, bool root)
 
 
 void create_inner_vertex(
-        Uint *firstbranch,
+        Uint *firstchild,
         wchar_t firstchar,
         wchar_t **left,
         wchar_t **right,
         bool root
     )
 {
-    if(*firstbranch == UNDEFREFERENCE) {
-        *firstbranch = INDEX(next_free);
+    if(*firstchild == UNDEFREFERENCE) {
+        *firstchild = INDEX(next_free);
     }
 
     STORE_SUFFIX_BOUNDARIES(next_free, left, right);
@@ -43,17 +43,6 @@ void create_inner_vertex(
     }
     next_free += BRANCHWIDTH;
 }
-
-
-/* void create_inner_vertex(Uint *firstbranch, wchar_t **l, wchar_t **r) */
-/* { */
-/*     if(*firstbranch == UNDEFREFERENCE) { */
-/*         *firstbranch = INDEX(next_free); */
-/*     } */
-/*     // store l and r. resume later with this unevaluated node */
-/*     STORE_SUFFIX_BOUNDARIES(next_free, l, r); */
-/*     next_free += BRANCHWIDTH; */
-/* } */
 
 
 Uint create_sentinel_vertex(wchar_t **right, Uint **previousnode)

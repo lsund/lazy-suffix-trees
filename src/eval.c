@@ -31,14 +31,31 @@ static void get_bound(
 }
 
 
-static Uint eval_edges(wchar_t **leftb, wchar_t **rightb, bool isroot)
+static Uint create_edges(wchar_t **leftb, wchar_t **rightb, Uint **previous, bool isroot)
 {
+    Uint firstchild     = UNDEFREFERENCE;
     wchar_t **rightbound = NULL;
     wchar_t **probe      = NULL;
 
-    Uint firstbranch     = UNDEFREFERENCE;
-    Uint *previous       = NULL;
+    for (probe = leftb; probe <= rightb; probe = rightbound + 1) {
 
+        wchar_t firstchar = **probe;
+        get_bound(&rightbound, probe, rightb, **probe);
+        *previous = next_free;
+
+        if (rightbound > probe) {
+            create_inner_vertex(&firstchild, firstchar, probe, rightbound, isroot);
+        } else {
+            create_leaf_vertex(firstchar, probe, isroot);
+        }
+    }
+
+    return firstchild;
+}
+
+
+static Uint eval_edges(wchar_t **leftb, wchar_t **rightb, bool isroot)
+{
     bool sentineledge    = skip_sentinel(&rightb);
 
     if (isroot) {
@@ -47,18 +64,8 @@ static Uint eval_edges(wchar_t **leftb, wchar_t **rightb, bool isroot)
         alloc_extend_stree();
     }
 
-    for (probe = leftb; probe <= rightb; probe = rightbound + 1) {
-
-        wchar_t firstchar = **probe;
-        get_bound(&rightbound, probe, rightb, **probe);
-        previous = next_free;
-
-        if (rightbound > probe) {
-            create_inner_vertex(&firstbranch, firstchar, probe, rightbound, isroot);
-        } else {
-            create_leaf_vertex(firstchar, probe, isroot);
-        }
-    }
+    Uint *previous       = NULL;
+    Uint firstchild = create_edges(leftb, rightb, &previous, isroot);
 
     if (sentineledge) {
         create_sentinel_vertex(rightb, &previous);
@@ -71,7 +78,7 @@ static Uint eval_edges(wchar_t **leftb, wchar_t **rightb, bool isroot)
         *previous |= RIGHTMOSTCHILDBIT;
     }
 
-    return firstbranch;
+    return firstchild;
 }
 
 
