@@ -24,11 +24,14 @@
 
 #define INDEX(N)            ((Uint) ((N) - stree))
 
-///////////////////////////////////////////////////////////////////////////////
-// Info About vertices
+// Each branching vertex requires two integers, one for the left boundary and
+// one for the right boundary
+#define BRANCHWIDTH             UintConst(2)
+
 
 // Instead of storing seperately if a vertex is a leaf, a rightmostchild or
-// unevaluated
+// unevaluated, this information is encoded in the MSB and the second MSB of
+// the number.
 
 // Bit determining if the vertex is a leaf
 #define LEAFBIT                 FIRSTBIT
@@ -43,31 +46,31 @@
 // Getters
 
 // LP is the leaf set of on edge plus the length of the string leading up to it
-#define GET_LP(P)                ((*(P)) & ~(LEAFBIT | RIGHTMOSTCHILDBIT))
+#define GET_LP(P)               ((*(P)) & ~(LEAFBIT | RIGHTMOSTCHILDBIT))
 
 // The number for the first child of the vertex pointer
-#define GET_FIRSTCHILD(P)        (*((P) + 1))
+#define GET_FIRSTCHILD(P)       (*((P) + 1))
 
 // The left boundry of the remaining suffixes
-#define GET_LEFTBOUNDARY(P)      (suffixes + *(P))
+#define GET_LEFTBOUNDARY(P)     (suffixes + *(P))
 
 // The right boundry of the remaining suffixes
-#define GET_RIGHTBOUNDARY(P)     (suffixes + ((*((P) + 1)) & ~UNEVALUATEDBIT))
+#define GET_RIGHTBOUNDARY(P)    (suffixes + ((*((P) + 1)) & ~UNEVALUATEDBIT))
 
 // The lp number of an unevaluated vertex
-#define GET_LP_UNEVAL(N)          SUFFIX_STARTINDEX(GET_LEFTBOUNDARY(N))
+#define GET_LP_UNEVAL(N)        SUFFIX_STARTINDEX(GET_LEFTBOUNDARY(N))
 
 // startposition of suffix
-#define SUFFIX_STARTINDEX(L)         ((Uint) (*(L) - wtext))
+#define SUFFIX_STARTINDEX(L)    ((Uint) (*(L) - wtext))
 
 ///////////////////////////////////////////////////////////////////////////////
 // Setters
 
-#define SET_LP(P, LP)             *(P) = (*(P) & RIGHTMOSTCHILDBIT) | (LP)
+#define SET_LP(P, LP)            *(P) = (*(P) & RIGHTMOSTCHILDBIT) | (LP)
 
-#define SET_FIRSTCHILD(P,C)      *((P) + 1) = C
+#define SET_FIRSTCHILD(P, C)      *((P) + 1) = C
 
-#define SET_LEAF(P,L)            *(P) = (L) | LEAFBIT
+#define SET_LEAF(P, L)            *(P) = (L) | LEAFBIT
 
 // Create a new vertex
 //

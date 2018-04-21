@@ -21,10 +21,12 @@
 
 #include "types.h"
 
+
 void initclock(void);
 
 double getruntime(void);
 
 Uint getclockticks(void);
+
 
 #endif

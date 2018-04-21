@@ -34,9 +34,6 @@
 #include "types.h"
 #include "pattern_searcher.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// Macros
-
 // Writing binary mode
 #define WRITEMODE  "wb"
 // Reading binary mode
@@ -44,16 +41,13 @@
 // Appending binary mode
 #define APPENDMODE "ab"
 
-///////////////////////////////////////////////////////////////////////////////
-// Functions
-
 
 Uint file_to_strings(char *name, Uint *textlen, Uint nlines, wchar_t ***words);
 
-// Opens the path for appending, erasing any prior content of the same file
 FILE *open_append(const char *path);
 
 void freetextspace();
+
 
 #endif
 

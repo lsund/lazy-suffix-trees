@@ -22,6 +22,8 @@
 
 #include "types.h"
 
+
 void reverse(wchar_t *s,Uint len);
+
 
 #endif

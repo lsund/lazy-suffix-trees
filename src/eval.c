@@ -1,7 +1,7 @@
 
 #include "eval.h"
 
-wchar_t   *wtext, *sentinel, **current_sortbuffer;
+wchar_t   *wtext, *sentinel;
 
 Uint    *next_free, root_children[MAX_CHARS + 1];
 
@@ -142,7 +142,7 @@ Uint evalrootsuccedges(wchar_t **left, wchar_t **right)
 
 void eval_node(Uint node)
 {
-    Uint prefixlen, *vertex;
+    Uint *vertex;
     wchar_t **left, **right;
 
     vertex = stree + node;
@@ -151,8 +151,7 @@ void eval_node(Uint node)
     SET_LP(vertex, SUFFIX_STARTINDEX(left));
     SET_FIRSTCHILD(vertex, INDEX(next_free));
 
-    current_sortbuffer = alloc_sortbuffer(left, right);
-    prefixlen = grouplcp(left,right);
-    counting_sort(left,right,prefixlen);
+    counting_sort(left, right);
+
     (void) evalsuccedges(left,right);
 }

@@ -38,12 +38,10 @@
 #include "clock.h"
 #include "reverse.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// Functions
-
 
 bool search_pattern(wchar_t *current_pattern, Uint patternlen);
 
 void search_patterns(const char *path, int npatterns, wchar_t ***o_patterns);
+
 
 #endif

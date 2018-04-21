@@ -94,11 +94,13 @@ Uint file_to_strings(char *name, Uint *textlen, Uint nlines, wchar_t ***wordsp)
 }
 
 
+// Opens the path for appending, erasing any prior content of the same file
 FILE *open_append(const char *path)
 {
     fclose(fopen(path, WRITEMODE));
     return fopen(path, APPENDMODE);
 }
+
 
 // Frees the text specified
 void freetextspace()

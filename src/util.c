@@ -8,7 +8,7 @@ void showpattern(Uchar *w, Uint wlen)
 
 void printtime()
 {
-    fprintf(stdout, "time: %.2f\n", getruntime() / (double) ITER);
+    fprintf(stdout, "time: %.2f\n", getruntime());
 }
 
 
@@ -25,5 +25,21 @@ size_t strlenw(wchar_t *s)
         i++;
     }
     return i;
+}
+
+void parse_Uint(char *str, Uint *d)
+{
+    if(sscanf(str,"%ld", d) != 1 || d < 0) {
+        fprintf(stderr, "Could not read int\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+void parse_float(char *str, float *f)
+{
+    if(sscanf(str,"%f", f) != 1 || f < 0) {
+        fprintf(stderr, "Could not read float\n");
+        exit(EXIT_FAILURE);
+    }
 }
 

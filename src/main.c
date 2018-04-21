@@ -14,15 +14,17 @@ int main(int argc,char *argv[])
         patternfile = "data/small-patt.txt";
         mode = "run";
 
-    } else {
-
-        CHECKARGNUM(4, "filename patternfile (bench|run)");
+    } else if (argc == 4) {
 
         filename = argv[1];
         patternfile     = argv[2];
         mode = argv[3];
-    }
+    } else {
 
+        fprintf(stderr, "Wrong amount of arguments supplied");
+        exit(EXIT_FAILURE);
+
+    }
 
     setlocale(LC_ALL, "en_US.utf8");
     FILE *in = fopen(filename, "r");
@@ -33,6 +35,7 @@ int main(int argc,char *argv[])
         textlen++;
     }
     wtext[textlen + 1] = '\0';
+
     max_codepoint = get_max(wtext, textlen);
     printf("max character value: %lu\n", max_codepoint);
     fclose(in);

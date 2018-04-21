@@ -52,8 +52,6 @@ void search_samples(const char *path, Uint trials, Uint minpat, Uint maxpat)
     sample_search(trials, minpat, maxpat);
 
     FILE *fp = open_append(path);
-    fprintf(fp, "%lu ", (Ulong) trials);
-    fprintf(fp, "%.2f\n", getruntime()/(double) ITER);
     printtime();
 
     fclose(fp);

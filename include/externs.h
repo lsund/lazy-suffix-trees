@@ -23,11 +23,12 @@
 #include "types.h"
 #include "basedef.h"
 
+
+// This module contains global variables that span more than one source file.
+
+
 ///////////////////////////////////////////////////////////////////////////////
 // The text
-
-// points to input string `t` of length `n`
-/* extern Uchar *text; */
 
 // points to input string `t` of length `n`
 extern wchar_t *wtext;
@@ -55,11 +56,9 @@ extern Uint indices[MAX_CHARS + 1];
 // number of occurrences for the first character of the current suffixes
 extern Uint suffixhead_count[MAX_CHARS + 1];
 
-///////////////////////////////////////////////////////////////////////////////
-// Sorting Buffer
 
-// buffer for sorting suffixes in `src/sort.c`
-extern wchar_t **current_sortbuffer;
+///////////////////////////////////////////////////////////////////////////////
+// Buffer for sorting
 
 // space to be used by `sort_buffer`
 extern wchar_t **sortbuffer;
@@ -71,7 +70,7 @@ extern Uint sortbufferwidth;
 extern Uint max_sortbufferwidth;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Suffix tree representation
+// Suffix Tree
 
 //  Tree representation
 extern Uint *stree;

@@ -20,15 +20,6 @@
 #ifndef PREPROCDEF_H
 #define PREPROCDEF_H
 
-
-///////////////////////////////////////////////////////////////////////////////
-// Fields
-
-#define ITER                    1
-
-// Each branching vertex requires two integers
-#define BRANCHWIDTH             UintConst(2)
-
 #define MAXTEXTLEN              UintConst(715827882)
 
 #define MAXPATTERNLEN           1024
@@ -44,11 +35,12 @@
 // Transform bytes into megabytes
 #define MEGABYTES(V)            ((double) (V)/((UintConst(1) << 20) - 1))
 
+// The maximum number of distinct characters allowed in the text. Arrays of
+// this size will be repeatedly allocated.
 #define MAX_CHARS               10000
 
 // Is a character larger than 255
 #define ISSPECIAL(C)    ((C) >= (Uchar) UCHAR_MAX)
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // Bitvector

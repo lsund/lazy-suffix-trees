@@ -27,9 +27,8 @@
 #include "get_alpha.h"
 #include "pattern_searcher.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// Functions
 
 void inittree(void);
+
 
 #endif
