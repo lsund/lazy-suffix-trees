@@ -51,16 +51,6 @@ static Uint first_child_lp(Uint *vertex)
 }
 
 
-static void evaluate_root_lazy()
-{
-    if(!root_evaluated) {
-        create_suffix_groups();
-        evalrootsuccedges(suffixes, suffixes + textlen - 1);
-        root_evaluated = true;
-    }
-}
-
-
 static bool no_root_edge(Pattern patt)
 {
     return (root_children[patt.head]) == UNDEFINEDSUCC;

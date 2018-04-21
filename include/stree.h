@@ -94,17 +94,18 @@
 
 void create_root_leaf(wchar_t firstchar, wchar_t **left);
 
-Uint create_root_child(
-        Uint firstbranch,
+void create_inner_vertex(
+        Uint *firstbranch,
         wchar_t firstchar,
         wchar_t **left,
-        wchar_t **right
+        wchar_t **right,
+        bool root
     );
 
-Uint create_leaf_vertex(wchar_t **left);
-
-void create_inner_vertex(Uint *firstbranch, wchar_t **l, wchar_t **r);
+Uint create_leaf_vertex(wchar_t firstchar, wchar_t **left, bool root);
 
 Uint create_sentinel_vertex(wchar_t **right, Uint **previousnode);
+
+void init_root_children();
 
 #endif

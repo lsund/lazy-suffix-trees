@@ -28,12 +28,9 @@
 #include "sort.h"
 #include "stree.h"
 
-
-Uint evalrootsuccedges(wchar_t **left,wchar_t **right);
+void evaluate_root_lazy();
 
 void eval_node(Uint node);
-
-void evaluateeager(void);
 
 
 #endif
