@@ -1,25 +1,21 @@
 # WOTD
 
-This repository is an implementation of lazy suffix tree construction, according to the
-following :
+This implements lazy suffix tree construction, inspired by the following:
 
 ```
-@ARTICLE{GIE:KUR:STO:2003,
-author =        "Giegerich, R. and Kurtz, S. and Stoye, J.",
-title =         {{Efficient Implementation of Lazy Suffix Trees}},
-journal =       {Software---Practice and Experience},
-volume =        {{33}},
-number =        {{11}},
-pages =         {{1035-1049}},
-year =          2003
-}
+Giegerich, R. and Kurtz, S. and Stoye, J.
+Efficient Implementation of Lazy Suffix Trees,
+Software-Practice and Experience
+33(11):1035-1049, 2003
 ```
 
-The goal of this reimplementation is to make the algorithm work for unicode.
-This is a work in progress.
+In contrast to the implementations of Kurtz. et. al, this algorithm works for
+UTF-8 encoded documents.
 
 # Credits
 
-The initial program is credited [Stefan Kurtz](https://www.biologie.uni-hamburg.de/service/wissenschaftsservice/mitarbeiter/professoren-promotionsverfahren/skurtz.html) is specified under `fd3d0c8769696459a0957dc62604ab974f097866 "Initial Commit"`.
+The repository is based on a program by [Stefan
+Kurtz](https://www.biologie.uni-hamburg.de/service/wissenschaftsservice/mitarbeiter/professoren-promotionsverfahren/skurtz.html).
+This is exactly `fd3d0c8769696459a0957dc62604ab974f097866 "Initial Commit"`.
 
 All Later modifications were made under permission by by Stefan Kurz.
