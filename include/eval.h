@@ -26,6 +26,7 @@
 #include "spaceman.h"
 #include "lcp.h"
 #include "sort.h"
+#include "stree.h"
 
 
 Uint evalrootsuccedges(wchar_t **left,wchar_t **right);

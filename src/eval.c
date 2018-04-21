@@ -15,77 +15,26 @@ static bool skip_sentinel(wchar_t ***right)
     return false;
 }
 
-static void create_inner_vertex(Uint *firstbranch, wchar_t **l, wchar_t **r)
+
+static void get_bound(
+                wchar_t ***bound_ptr,
+                wchar_t **current,
+                wchar_t **right,
+                wchar_t firstchar
+            )
 {
-    if(*firstbranch == UNDEFREFERENCE) {
-        *firstbranch = INDEX(next_free);
-    }
-    STORE_SUFFIX_BOUNDARIES(next_free, l, r);
-    // store l and r. resume later with this unevaluated node
-    next_free += BRANCHWIDTH;
-}
-
-
-static Uint create_root_child(
-        Uint firstbranch,
-        wchar_t firstchar,
-        wchar_t **l,
-        wchar_t **r
-    )
-{
-    if(firstbranch == UNDEFREFERENCE) {
-        firstbranch = INDEX(next_free);
-    }
-
-    STORE_SUFFIX_BOUNDARIES(next_free, l, r);
-    // store l and r. resume later with this unevaluated branch node
-    root_children[firstchar] = INDEX(next_free);
-    next_free += BRANCHWIDTH;
-
-    return firstbranch;
-}
-
-
-static void create_root_leaf(wchar_t firstchar, wchar_t **l)
-{
-    Uint leafnum = SUFFIX_STARTINDEX(l);
-    SET_LEAF(next_free, leafnum);
-    root_children[firstchar] = leafnum | LEAFBIT;
-    next_free++;
-}
-
-
-static Uint create_leaf_vertex(wchar_t **l)
-{
-    Uint leafnum = SUFFIX_STARTINDEX(l);
-    SET_LEAF(next_free, leafnum);
-    next_free++;
-    return leafnum;
-}
-
-
-static Uint create_sentinel_vertex(wchar_t **right, Uint **previousnode)
-{
-    Uint leafnum = create_leaf_vertex(right + 1);
-    *previousnode = next_free;
-    return leafnum;
-}
-
-
-static void get_bound(wchar_t ***bound_ptr, wchar_t **probe, wchar_t **right, wchar_t firstchar)
-{
-    wchar_t **bound;
-    for(bound = probe; bound < right && **(bound + 1) == firstchar; bound++) {
+    wchar_t **probe;
+    for(probe = current; probe < right && **(probe + 1) == firstchar; probe++) {
         ;
     }
-    *bound_ptr = bound;
+    *bound_ptr = probe;
 }
 
 
 static Uint evalsuccedges(wchar_t **left, wchar_t **right)
 {
-    wchar_t firstchar, **rightbound, **probe;
-    Uint firstbranch = UNDEFREFERENCE, *previousnode = NULL;
+    wchar_t **rightbound, **probe;
+    Uint firstbranch = UNDEFREFERENCE, *previous = NULL;
 
     alloc_extend_stree();
     bool sentineledge = skip_sentinel(&right);
@@ -93,9 +42,8 @@ static Uint evalsuccedges(wchar_t **left, wchar_t **right)
 
     for (probe = left; probe <= right; probe = rightbound + 1) {
 
-        firstchar = **probe;
-        get_bound(&rightbound, probe, right, firstchar);
-        previousnode = next_free;
+        get_bound(&rightbound, probe, right, **probe);
+        previous = next_free;
 
         if(rightbound > probe) {
             create_inner_vertex(&firstbranch, probe, rightbound);
@@ -105,9 +53,9 @@ static Uint evalsuccedges(wchar_t **left, wchar_t **right)
     }
 
     if (sentineledge) {
-        create_sentinel_vertex(right, &previousnode);
+        create_sentinel_vertex(right, &previous);
     }
-    *previousnode |= RIGHTMOSTCHILDBIT;
+    *previous |= RIGHTMOSTCHILDBIT;
 
     return firstbranch;
 }
