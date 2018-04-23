@@ -35,6 +35,7 @@ int main(int argc,char *argv[])
         textlen++;
     }
     wtext[textlen + 1] = '\0';
+    sentinel  = wtext + textlen;
 
     max_codepoint = get_max(wtext, textlen);
     printf("max character value: %lu\n", max_codepoint);
@@ -53,7 +54,7 @@ int main(int argc,char *argv[])
 
     const char *path = "data/out.txt";
 
-    inittree();
+    init();
     initclock();
 
     if (strcmp(mode, "bench") == 0) {

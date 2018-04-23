@@ -10,7 +10,7 @@ Uint        textlen,
             alphasize,
             *stree,
             streesize,
-            *next_free_cell,
+            *next_element,
             sort_bufferwidth,
             max_sortbufferwidth,
             suffixhead_count[MAX_CHARS + 1];
@@ -18,25 +18,38 @@ Uint        textlen,
 
 bool    root_evaluated;
 
-void inittree(void)
+
+static void init_alphabet()
 {
     Uint i;
-
-    sentinel  = wtext + textlen;
-    streesize = EXTENSION_SIZE;
-
     get_characters(characters, &alphasize);
-
-    ALLOC(stree, stree, Uint, streesize + EXTENSION_SIZE);
-    next_free_cell = stree;
-
-    ALLOC(suffixes, NULL, Wchar *, textlen + 1);
-    sort_bufferwidth = 0;
-    max_sortbufferwidth  = textlen >> 8;
-    root_evaluated    = false;
-
     for (i = 0; i <= MAX_CHARS; i++) {
         suffixhead_count[i] = 0;
     }
+}
+
+
+static void init_stree()
+{
+    root_evaluated = false;
+    streesize      = EXTENSION_SIZE;
+    ALLOC(stree, stree, Uint, streesize);
+    ALLOC(suffixes, NULL, Wchar *, textlen + 1);
+    next_element   = stree;
+}
+
+
+static void init_sortbuffer()
+{
+    sort_bufferwidth    = 0;
+    max_sortbufferwidth = textlen >> 8;
+}
+
+
+void init()
+{
+    init_alphabet();
+    init_sortbuffer();
+    init_stree();
 }
 

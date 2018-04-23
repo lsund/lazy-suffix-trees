@@ -28,9 +28,8 @@
 #include "sort.h"
 #include "stree.h"
 
-void evaluate_root_lazy();
+void evaluate_root();
 
 void eval_node(Uint node);
-
 
 #endif

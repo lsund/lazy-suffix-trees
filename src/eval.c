@@ -3,7 +3,7 @@
 
 Wchar   *wtext, *sentinel;
 
-Uint    *next_free_cell, root_children[MAX_CHARS + 1];
+Uint    *next_element, root_children[MAX_CHARS + 1];
 
 
 static bool skip_sentinel(Wchar ***rightb)
@@ -35,7 +35,7 @@ static void create_edges(Wchar **leftb, Wchar **rightb, Uint **previous, bool is
 
         Wchar first = **probe;
         get_bound(&curr_rightb, probe, rightb, first);
-        *previous = next_free_cell;
+        *previous = next_element;
 
         if (curr_rightb > probe) {
             create_inner_vertex(first, probe, curr_rightb, isroot);
@@ -64,15 +64,15 @@ static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
     }
 
     if (isroot) {
-        SET_LEAF(next_free_cell, textlen | RIGHTMOSTCHILDBIT);
-        next_free_cell++;
+        SET_LEAF(next_element, textlen | RIGHTMOSTCHILDBIT);
+        next_element++;
     } else {
         *previous |= RIGHTMOSTCHILDBIT;
     }
 }
 
 
-void evaluate_root_lazy()
+void evaluate_root()
 {
     if (!root_evaluated) {
         create_suffix_groups();
@@ -86,11 +86,11 @@ void eval_node(Uint node)
 {
     Uint *vertex = stree + node;
 
-    Wchar **leftb   = GET_LEFTBOUNDARY(vertex);
-    Wchar **rightb  = GET_RIGHTBOUNDARY(vertex);
+    Wchar **leftb   = GET_LEFTB(vertex);
+    Wchar **rightb  = GET_RIGHTB(vertex);
 
-    SET_LP(vertex, SUFFIX_STARTINDEX(leftb));
-    SET_FIRSTCHILD(vertex, INDEX(next_free_cell));
+    SET_LP(vertex, SUFFIX_INDEX(leftb));
+    SET_FIRSTCHILD(vertex, INDEX(next_element));
 
     counting_sort(leftb, rightb);
 

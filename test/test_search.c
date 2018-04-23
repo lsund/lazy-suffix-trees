@@ -25,7 +25,7 @@ char *test_count(char *patternfile, char *textfile, Uint count)
     fclose(in);
     Wchar **patterns = (Wchar **) malloc(sizeof(Wchar *) * MAX_PATTERNS);
     int npatterns  = file_to_strings(patternfile, &patternslen, MAX_PATTERNS, &patterns);
-    inittree();
+    init();
 
     Uint exists_n = 0;
     for (Uint j = 0; j < (Uint) npatterns; j++) {
@@ -67,7 +67,7 @@ char *compare_vs_naive(char *patternfile, char *textfile)
     fclose(in);
     Wchar **patterns = (Wchar **) malloc(sizeof(Wchar *) * MAX_PATTERNS);
     int npatterns  = file_to_strings(patternfile, &patternslen, MAX_PATTERNS, &patterns);
-    inittree();
+    init();
 
     int exists_n = 0, rexists_n = 0;
     for (Uint j = 0; j < min(npatterns, maxpatterns); j++) {

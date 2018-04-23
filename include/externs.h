@@ -79,7 +79,7 @@ extern Uint *stree;
 extern Uint streesize;
 
 // pointer to next unused element in `stree`
-extern Uint *next_free_cell;
+extern Uint *next_element;
 
 // constant time access to successors of `root`
 extern Uint root_children[MAX_CHARS + 1];

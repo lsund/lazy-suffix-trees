@@ -26,11 +26,6 @@
 
 #define INDEX(N)            ((Uint) ((N) - stree))
 
-// Each branching vertex requires two integers, one for the left boundary and
-// one for the right boundary
-#define BRANCHWIDTH             UintConst(2)
-
-
 // Instead of storing seperately if a vertex is a leaf, a rightmostchild or
 // unevaluated, this information is encoded in the MSB and the second MSB of
 // the number.
@@ -61,44 +56,39 @@
 #define GET_FIRSTCHILD(P)       (*((P) + 1))
 
 // The left boundry of the remaining suffixes
-#define GET_LEFTBOUNDARY(P)     (suffixes + *(P))
+#define GET_LEFTB(P)            (suffixes + *(P))
 
 // The right boundry of the remaining suffixes
-#define GET_RIGHTBOUNDARY(P)    (suffixes + ((*((P) + 1)) & ~UNEVALUATEDBIT))
-
-// The lp number of an unevaluated vertex
-#define GET_LP_UNEVAL(N)        SUFFIX_STARTINDEX(GET_LEFTBOUNDARY(N))
+#define GET_RIGHTB(P)           (suffixes + ((*((P) + 1)) & ~UNEVALUATEDBIT))
 
 // startposition of suffix
-#define SUFFIX_STARTINDEX(L)    ((Uint) (*(L) - wtext))
+#define SUFFIX_INDEX(L)         ((Uint) (*(L) - wtext))
 
-///////////////////////////////////////////////////////////////////////////////
-// Setters
+// The lp number of an unevaluated vertex
+#define GET_LP_UNEVAL(N)        SUFFIX_INDEX(GET_LEFTB(N))
 
-#define SET_LP(P, LP)            *(P) = (*(P) & RIGHTMOSTCHILDBIT) | (LP)
+#define SET_LP(P, LP)           *(P) = (*(P) & RIGHTMOSTCHILDBIT) | (LP)
 
-#define SET_FIRSTCHILD(P, C)      *((P) + 1) = C
+#define SET_FIRSTCHILD(P, C)    *((P) + 1) = C
 
-#define SET_LEAF(P, L)            *(P) = (L) | LEAFBIT
+#define SET_LEAF(P, L)          *(P) = (L) | LEAFBIT
 
-// Create a new vertex
-//
+// Each branching vertex requires two integers, one for the left boundary and
+// one for the right boundary
+#define BRANCHWIDTH             UintConst(2)
+
 // Each vertex needs two integers allocated for it, one for its left suffix
 // boundary and one for its left suffix boundary. This macro sets the left and
 // the right boundary for the two following positions in P.
-#define STORE_SUFFIX_BOUNDARIES(P, L, R)\
+#define SET_BOUNDARIES(P, L, R)\
     *(P) = (Uint) ((L) - suffixes);\
     *((P) + 1) = ((R) - suffixes) | UNEVALUATEDBIT
-
-///////////////////////////////////////////////////////////////////////////////
-// Queries
 
 #define IS_LEAF(P)              ((*(P)) & LEAFBIT)
 
 #define IS_RIGHTMOST(P)         ((*(P)) & RIGHTMOSTCHILDBIT)
 
 #define IS_UNEVALUATED(P)       ((*((P)+1)) & UNEVALUATEDBIT)
-
 
 void create_root_leaf(Wchar firstchar, Wchar **left);
 

@@ -5,7 +5,7 @@ Wchar **suffixes, **sortbuffer;
 
 Uint    sortbufferwidth,
         max_sortbufferwidth,
-        *next_free_cell,
+        *next_element,
         *stree,
         streesize,
         textlen;
@@ -34,13 +34,13 @@ Wchar **alloc_sortbuffer(Wchar **left, Wchar **right) {
 
 void alloc_extend_stree(void)
 {
-    Uint next_free_index = INDEX(next_free_cell);
+    Uint next_free_index = INDEX(next_element);
 
     if(next_free_index >= streesize) {
 
         streesize += (textlen / 10);
         ALLOC(stree, stree, Uint, streesize + EXTENSION_SIZE);
-        next_free_cell = stree + next_free_index;
+        next_element = stree + next_free_index;
 
     }
 }

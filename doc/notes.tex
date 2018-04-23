@@ -121,7 +121,7 @@ Since we have a virtual sentinel character which is different from all possible
 but each of the other edges can lead to a branching node. Hence, to evaluate a
 branching node, we have to enlarge the size of \texttt{stree} by at least
 \texttt{MAXSUCCSPACE} integers. This is done by the function
-\texttt{allocstree}, when \texttt{next_free_cell} reaches the end of the
+\texttt{allocstree}, when \texttt{next_element} reaches the end of the
 block currently allocated for \texttt{stree}.
 
 
@@ -226,7 +226,7 @@ branching. This is of course unevaluated.\\
 
 \section{Initializing the Data Structures}
 
-The function \texttt{inittree} allocates and initializes the data structures.
+The function \texttt{init} allocates and initializes the data structures.
 In particular it inserts the root with depth 0, and the appropriate boundaries.
 The latter are however not necessary, since if the depth is 0, we know them
 anyway.

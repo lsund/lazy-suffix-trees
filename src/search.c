@@ -169,7 +169,7 @@ bool search(Wchar *patt_start, Wchar *patt_end)
         return true;
     }
 
-    evaluate_root_lazy();
+    evaluate_root();
 
     Uint rootchild;
     if (no_root_edge(patt)) {
