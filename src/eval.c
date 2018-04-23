@@ -93,5 +93,6 @@ void eval_node(Uint node)
     SET_FIRSTCHILD(vertex, INDEX(next_free_cell));
 
     counting_sort(leftb, rightb);
+
     eval_edges(leftb, rightb, false);
 }

@@ -1,24 +1,8 @@
-# TODO
-
-Read unicode specification
-ask stackoverflow question on mapping unicode character to integer
-
 # MISC
 
-rho is trialpercentage. Number of trials is (textlen * rho)
+Can assume that file and text are encoded the same way.
 
-export DEBUGLEVEL to enable debugging
-
-some functions like allocandusespaceptr is not implemented
-
-UTF encoding:
-
-ASSUMPTIONS:
-
-1. pattern file and text file are encoded in the same way
-
-
-# OBSERVATIONS:
+# Observations:
 
 1. Only characters in the pattern file needs to be considered, due to lazy
    construction
@@ -28,7 +12,7 @@ ASSUMPTIONS:
    possible to represent all characters. This will however require 4 times as
    much space.
 
-# MEMORY:
+# Memory:
 
 * Memory is allocated for the algorithm in one place:
   `spaceman:get_sortbuffer`. Here, one byte is allocated for each suffix.
@@ -39,8 +23,7 @@ ASSUMPTIONS:
 
 * UTF-8 requires at most 4 bytes per 'character'
 
-
-# IMPLICATIONS:
+# Implications:
 
 1. The suffix tree needs to represent a sequence of codepoints instead of a
 sequence of ascii characters.
@@ -55,26 +38,31 @@ sequence of ascii characters.
    interface. These functions first retrieve the index, then manipulate
    `suffix_heads`.
 
+# Measurements taken
 
-## These global variables need to change
+Change text from `Uchar` -> `Wchar`, ie 4 bytes instead of one. This implies
+changes in almost all functions and datastructures.
 
-* `text`                pointer to Uchar            -> pointer to `wchar_t`
-* `sentinel`            pointer to Uchar            -> pointer to `wchar_t`
-* `suffixes`            pointer to Uchar pointers   -> pointer to `wchar_t` pointers
-* `characters`          array of Uchar              -> hashtable of `wchar_t` -> `wchar_t`
+# The evaluation code
 
-## Functions that needs to change
+## Notation
 
-* `get_characters` Assumes Uchars. The logic is OK, but both loops assume that
-  counts is a static array of size 256. This needs to be a dynamic array that
-  can store arbitrarily many elements.
+`l(v)` = the leaf set for `v`. The leaves are ordered by a total order on their
+number.
 
-### sort.c
+Let `u -> uv` be a vertex. Then the left pointer `lp(uv) = min(l(uv)) + |u|`.
 
-* `get_count`: is fine
+## Remaining suffixes.
 
-* `set_group_bounds`: `lower_bound` and `upper_bounds` need to be a pointer to
-  `wchar_t` pointers.
+* Let `u` be a string in the tree.. The subtree below `u` is represented by all
+  suffixes which has `u` as prefix. Let these be called the _remaining suffixes_
+  of the vertex `u`.
 
-CONTINUE AT INSERT SUFFIXES
+* To evaluate `u`, we need access to its remaining suffixes.
 
+TODO: Why does this exists as an interval in suffixes?
+* The global array `suffixes` points into the text and the remaining suffixes of
+  `u` exists as a interval in `suffixes`.
+
+* For each unevaluated node, there is an interval in suffixes which stores
+  poniters to

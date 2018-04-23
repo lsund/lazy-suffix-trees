@@ -1,6 +1,7 @@
 
 #include "stree.h"
 
+Uint    *next_free_cell, root_children[MAX_CHARS + 1];
 
 void init_root_children()
 {
@@ -24,14 +25,9 @@ Uint create_leaf_vertex(Wchar first, Wchar **left, bool root)
 
 
 
-void create_inner_vertex(
-        Wchar first,
-        Wchar **left,
-        Wchar **right,
-        bool root
-    )
+void create_inner_vertex(Wchar first, Wchar **leftb, Wchar **rightb, bool root)
 {
-    STORE_SUFFIX_BOUNDARIES(next_free_cell, left, right);
+    STORE_SUFFIX_BOUNDARIES(next_free_cell, leftb, rightb);
     // store l and r. resume later with this unevaluated branch node
     if (root) {
         root_children[first] = INDEX(next_free_cell);

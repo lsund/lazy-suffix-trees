@@ -47,10 +47,17 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Getters
 
-// LP is the leaf set of on edge plus the length of the string leading up to it
+// This is the left pointer, defined as the minimum leaf under P, plus the
+// length of the path to its parent.
+// To retrieve the edge labels in constant time, it suffices to store the left
+// pointer for all nodes.
+//
+// A node is referenced by the index(lp(u))
 #define GET_LP(P)               ((*(P)) & ~(LEAFBIT | RIGHTMOSTCHILDBIT))
 
-// The number for the first child of the vertex pointer
+// For each branching vertex, we additionally need constant time access to the
+// child of a vertex with the smallest left pointer. This accesss is provided
+// by the following reference.
 #define GET_FIRSTCHILD(P)       (*((P) + 1))
 
 // The left boundry of the remaining suffixes
@@ -79,8 +86,9 @@
 // Each vertex needs two integers allocated for it, one for its left suffix
 // boundary and one for its left suffix boundary. This macro sets the left and
 // the right boundary for the two following positions in P.
-#define STORE_SUFFIX_BOUNDARIES(P, L, R)  *(P) = (Uint) ((L) - suffixes);\
-                                 *((P) + 1) = ((R) - suffixes) | UNEVALUATEDBIT
+#define STORE_SUFFIX_BOUNDARIES(P, L, R)\
+    *(P) = (Uint) ((L) - suffixes);\
+    *((P) + 1) = ((R) - suffixes) | UNEVALUATEDBIT
 
 ///////////////////////////////////////////////////////////////////////////////
 // Queries
