@@ -35,15 +35,15 @@
 // the number.
 
 // Bit determining if the vertex is a leaf. This is storde in the first
-// integer.
+// integer, ie. its left pointer.
 #define LEAFBIT                 FIRSTBIT
 
 // Bit determining if the node is the rightmost child of its parent. This is
-// stored in the first integer.
+// stored in the first integer, ie its left pointer.
 #define RIGHTMOSTCHILDBIT       SECONDBIT
 
 // Bit determining if the inner node is unevaluated. This is stored in the
-// second integer.
+// second integer of the vertex, ie. its first child.
 #define UNEVALUATEDBIT          FIRSTBIT
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -55,12 +55,17 @@
 //
 // A node is referenced by the index(lp(u)), disregarding the first and second
 // bit.
-#define GET_LP(P)               ((*(P)) & ~(LEAFBIT | RIGHTMOSTCHILDBIT))
+#define GET_LP(V)               ((*(V)) & ~(LEAFBIT | RIGHTMOSTCHILDBIT))
 
 // For each branching vertex, we additionally need constant time access to the
 // child of a vertex with the smallest left pointer. This accesss is provided
 // by the following reference.
-#define GET_FIRSTCHILD(P)       (*((P) + 1))
+//
+// The algorithm only needs access to this child in order to evaluate all
+// children of V. The children are sorted according to first character, and
+// laid out in `stree` sequentially, so the algorithm can iterate over these,
+// setting RIGHTMOSTBIT to the last vertex.
+#define GET_FIRSTCHILD(V)       (*((V) + 1))
 
 // The left boundry of the remaining suffixes
 #define GET_LEFTB(V)            (suffixes + *(V))
@@ -101,11 +106,15 @@
     *(P) = (Uint) ((L) - suffixes);\
     *((P) + 1) = ((R) - suffixes) | UNEVALUATEDBIT
 
-#define IS_LEAF(P)              ((*(P)) & LEAFBIT)
 
-#define IS_RIGHTMOST(P)         ((*(P)) & RIGHTMOSTCHILDBIT)
+// Retrieve the MSB of LP(V)
+#define IS_LEAF(V)              ((*(V)) & LEAFBIT)
 
-#define IS_UNEVALUATED(P)       ((*((P)+1)) & UNEVALUATEDBIT)
+// Retrieve the second MSB of LP(V)
+#define IS_RIGHTMOST(V)         ((*(V)) & RIGHTMOSTCHILDBIT)
+
+// Retrieve the MSB of FIRSTCHILD(V)
+#define IS_UNEVALUATED(V)       ((*((V) + 1)) & UNEVALUATEDBIT)
 
 void create_root_leaf(Wchar firstchar, Wchar **left);
 

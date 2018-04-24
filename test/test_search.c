@@ -105,22 +105,25 @@ char *utest_search()
     char *error;
 
     mu_message(DATA, "Random existing patterns\n");
-    error = compare_vs_naive("data/random-patterns.txt", "data/dataset/005.txt");
+    error = compare_vs_naive(
+                "data/members/random-patterns.txt",
+                "data/members/diffsize/005.txt"
+            );
     if (error) return error;
 
     mu_message(DATA, "Random non-existing patterns\n");
     error = compare_vs_naive(
-                "data/random-patterns-non-existing.txt",
-                "data/dataset/005.txt"
+                "data/members/random-patterns-non-existing.txt",
+                "data/members/diffsize/005.txt"
             );
     if (error) return error;
 
     mu_message(DATA, "Akz patterns\n");
-    error = compare_vs_naive("data/10000.txt", "data/data.xml");
+    error = compare_vs_naive("data/akz/10000.txt", "data/akz/data.xml");
     if (error) return error;
 
     mu_message(DATA, "Count: Akz patterns\n");
-    error = test_count("data/10000.txt", "data/data.xml", 174);
+    error = test_count("data/akz/10000.txt", "data/akz/data.xml", 174);
     if (error) return error;
 
     return NULL;

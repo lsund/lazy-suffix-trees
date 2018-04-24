@@ -61,13 +61,13 @@ test: dirs ${OBJ} ${TEST_OBJ}
 
 bench: clean all
 	# ./bin/wotd data/data.xml data/10000.txt bench
-	./bin/wotd data/dataset/005.txt data/random-patterns.txt bench
+	./bin/wotd data/members/diffsize/005.txt data/members/random-patterns.txt bench
 
 run: clean all
-	./bin/wotd data/data.xml data/10000.txt run
-	# ./bin/wotd data/dataset/005.txt data/test-patterns.txt run
-	# ./bin/wotd data/dataset/005.txt data/random-patterns.txt run
-	# ./bin/wotd
+	./bin/wotd data/akz/data.xml data/akz/10000.txt run
+
+big: clean all
+	./bin/wotd data/doctronic/entscheidungen.xml data/diffsize/00400.txt
 
 runtest: clean test
 	./bin/test
