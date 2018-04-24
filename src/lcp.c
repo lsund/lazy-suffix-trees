@@ -44,7 +44,7 @@ Uint lcp(Wchar *start1, Wchar *end1, Wchar *start2, Wchar *end2) {
 // `left` and `right`
 Uint grouplcp(Wchar **left, Wchar **right) {
 
-    Uint j = UintConst(1);
+    Uint j = UINT(1);
 
     while (true) {
 

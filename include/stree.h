@@ -53,7 +53,8 @@
 // length of the path to its parent.  To retrieve the edge labels in constant
 // time, it suffices to store the left pointer for all nodes.
 //
-// A node is referenced by the index(lp(u))
+// A node is referenced by the index(lp(u)), disregarding the first and second
+// bit.
 #define GET_LP(P)               ((*(P)) & ~(LEAFBIT | RIGHTMOSTCHILDBIT))
 
 // For each branching vertex, we additionally need constant time access to the
@@ -62,26 +63,36 @@
 #define GET_FIRSTCHILD(P)       (*((P) + 1))
 
 // The left boundry of the remaining suffixes
-#define GET_LEFTB(P)            (suffixes + *(P))
+#define GET_LEFTB(V)            (suffixes + *(V))
 
-// The right boundry of the remaining suffixes.
-#define GET_RIGHTB(P)           (suffixes + ((*((P) + 1)) & ~UNEVALUATEDBIT))
+// The right boundry of the remaining suffixes, stripping of the first bit.
+//
+// Note that the right boundry is defined as the adrees starting at suffixes,
+// with the offset of the first child of V.
+#define GET_RIGHTB(V)           (suffixes + (GET_FIRSTCHILD(V) & ~UNEVALUATEDBIT))
 
 // startposition of suffix
 #define SUFFIX_INDEX(L)         ((Uint) (*(L) - wtext))
 
-// The lp number of an unevaluated vertex
-#define GET_LP_UNEVAL(N)        SUFFIX_INDEX(GET_LEFTB(N))
+// The lp number of an unevaluated vertex V. This is just the index for the
+// left-bound of V.
+#define GET_LP_UNEVAL(V)        SUFFIX_INDEX(GET_LEFTB(V))
 
-#define SET_LP(P, LP)           *(P) = (*(P) & RIGHTMOSTCHILDBIT) | (LP)
+// Given a LP value and a vertex V, set the lp-value for V, by ORing the two
+// integers. V is first ANDed with its second bit, to reset all bits except
+// the rightmost one.
+#define SET_LP(V, LP)           *(V) = (*(V) & RIGHTMOSTCHILDBIT) | (LP)
 
-#define SET_FIRSTCHILD(P, C)    *((P) + 1) = C
+// Set the first child of V. C corresponds to an index in the stree table.
+#define SET_FIRSTCHILD(V, C)    GET_FIRSTCHILD(V) = C
 
-#define SET_LEAF(P, L)          *(P) = (L) | LEAFBIT
+// Set the leaf number of V to N. The first bit is also set to 1, since this is
+// a leaf.
+#define SET_LEAF(V, N)          *(V) = (N) | LEAFBIT
 
 // Each branching vertex requires two integers, one for the left boundary and
 // one for the right boundary
-#define BRANCHWIDTH             UintConst(2)
+#define BRANCHWIDTH             UINT(2)
 
 // Each vertex needs two integers allocated for it, one for its left suffix
 // boundary and one for its left suffix boundary. This macro sets the left and

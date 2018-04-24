@@ -39,7 +39,6 @@ typedef unsigned char  Uchar;
 typedef unsigned short Ushort;
 
 typedef unsigned long  Uint;
-typedef signed   long  Sint;
 
 typedef unsigned long  Ulong;
 typedef signed   long  Slong;
@@ -48,7 +47,6 @@ typedef wchar_t Wchar;
 
 #define LOGWORDSIZE    6
 
-#define UintConst(N)   (N##UL)
-#define SintConst(N)   (N##L)
+#define UINT(N)   (N##UL)
 
 #endif

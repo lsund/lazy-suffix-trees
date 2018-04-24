@@ -20,7 +20,7 @@
 #ifndef PREPROCDEF_H
 #define PREPROCDEF_H
 
-#define MAXTEXTLEN              UintConst(715827882)
+#define MAXTEXTLEN              UINT(715827882)
 
 #define MAXPATTERNLEN           1024
 
@@ -33,7 +33,7 @@
 #define UNDEFINEDSUCC           UINT_MAX
 
 // Transform bytes into megabytes
-#define MEGABYTES(V)            ((double) (V)/((UintConst(1) << 20) - 1))
+#define MEGABYTES(V)            ((double) (V)/((UINT(1) << 20) - 1))
 
 // The maximum number of distinct characters allowed in the text. Arrays of
 // this size will be repeatedly allocated.
@@ -46,13 +46,13 @@
 // Bitvector
 
 // Number of bits in in integer
-#define INT_WORDSIZE (UintConst(1) << LOGWORDSIZE)
+#define INT_WORDSIZE (UINT(1) << LOGWORDSIZE)
 
 // The value represented by the most significant bit in the INT_WORDSIZE
 // binary number, for example, INT_WORDSIZE = 64 on a 64 bit architecture.
 // Since it is only the first bit, the value is 2 ^ (64 - 1)
 #define FIRSTBIT\
-        (UintConst(1) << (INT_WORDSIZE - 1))
+        (UINT(1) << (INT_WORDSIZE - 1))
 
 // The value represented by the second most significant bit.
 #define SECONDBIT\
