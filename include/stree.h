@@ -24,28 +24,34 @@
 #include "basedef.h"
 #include "externs.h"
 
-#define INDEX(N)            ((Uint) ((N) - stree))
+
+// Determines the index of a vertex. V is the adress pointing to the vertex's
+// position in the text. By subtracting the adress of the tree, the index is
+// obtained.
+#define INDEX(V)            ((Uint) ((V) - stree))
 
 // Instead of storing seperately if a vertex is a leaf, a rightmostchild or
 // unevaluated, this information is encoded in the MSB and the second MSB of
 // the number.
 
-// Bit determining if the vertex is a leaf
+// Bit determining if the vertex is a leaf. This is storde in the first
+// integer.
 #define LEAFBIT                 FIRSTBIT
 
-// Bit determining if the inner node is unevaluated
-#define UNEVALUATEDBIT          FIRSTBIT
-
-// Bit determining if the node is the rightmost child of its parent
+// Bit determining if the node is the rightmost child of its parent. This is
+// stored in the first integer.
 #define RIGHTMOSTCHILDBIT       SECONDBIT
+
+// Bit determining if the inner node is unevaluated. This is stored in the
+// second integer.
+#define UNEVALUATEDBIT          FIRSTBIT
 
 ///////////////////////////////////////////////////////////////////////////////
 // Getters
 
 // This is the left pointer, defined as the minimum leaf under P, plus the
-// length of the path to its parent.
-// To retrieve the edge labels in constant time, it suffices to store the left
-// pointer for all nodes.
+// length of the path to its parent.  To retrieve the edge labels in constant
+// time, it suffices to store the left pointer for all nodes.
 //
 // A node is referenced by the index(lp(u))
 #define GET_LP(P)               ((*(P)) & ~(LEAFBIT | RIGHTMOSTCHILDBIT))
@@ -58,7 +64,7 @@
 // The left boundry of the remaining suffixes
 #define GET_LEFTB(P)            (suffixes + *(P))
 
-// The right boundry of the remaining suffixes
+// The right boundry of the remaining suffixes.
 #define GET_RIGHTB(P)           (suffixes + ((*((P) + 1)) & ~UNEVALUATEDBIT))
 
 // startposition of suffix
