@@ -40,7 +40,6 @@ int main(int argc,char *argv[])
     max_codepoint = get_max(wtext, textlen);
     printf("max character value: %lu\n", max_codepoint);
     fclose(in);
-    exit(EXIT_SUCCESS);
 
     if(wtext == NULL) {
         fprintf(stderr, "Cannot open file");

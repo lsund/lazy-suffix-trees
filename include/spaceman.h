@@ -39,7 +39,7 @@
         V = (T *) realloc(S, sizeof(T) * (size_t) (N));\
         if((V) == NULL)\
         {\
-            fprintf(stderr, "Colud not allocate enough space");\
+            fprintf(stderr, "Could not allocate enough space\n");\
             exit(EXIT_FAILURE);\
         }
 

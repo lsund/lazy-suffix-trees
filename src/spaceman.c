@@ -39,6 +39,7 @@ void alloc_extend_stree(void)
     if(next_free_index >= streesize) {
 
         streesize += (textlen / 10);
+        printf("Allocating more...");
         ALLOC(stree, stree, Uint, streesize + EXTENSION_SIZE);
         next_element = stree + next_free_index;
 

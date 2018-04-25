@@ -64,10 +64,12 @@ bench: clean all
 	./bin/wotd data/members/diffsize/005.txt data/members/random-patterns.txt bench
 
 run: clean all
-	./bin/wotd data/akz/data.xml data/akz/10000.txt run
+	./bin/wotd data/doctronic/data-diffsize/small.xml data/doctronic/diffsize/12000.txt run
 
 big: clean all
-	./bin/wotd data/doctronic/entscheidungen.xml data/diffsize/00400.txt
+	# ./bin/wotd data/doctronic/entscheidungen.xml data/doctronic/diffsize/00400.txt run
+	./bin/wotd data/doctronic/data-diffsize/quarter.xml data/doctronic/diffsize/12000.txt run
+	# ./bin/wotd data/doctronic/data-diffsize/half.xml data/doctronic/diffsize/12000.txt run
 
 runtest: clean test
 	./bin/test

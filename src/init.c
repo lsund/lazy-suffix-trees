@@ -33,7 +33,10 @@ static void init_stree()
 {
     root_evaluated = false;
     streesize      = EXTENSION_SIZE;
+    printf("streesize: %lu\n", streesize);
+    printf("streealloc: %lu\n", sizeof(Uint) * streesize);
     ALLOC(stree, stree, Uint, streesize);
+    printf("suffixalloc: %lu\n ", sizeof(Wchar *) * textlen + 1);
     ALLOC(suffixes, NULL, Wchar *, textlen + 1);
     next_element   = stree;
 }
