@@ -106,43 +106,43 @@ char *utest_search()
 
     mu_message(DATA, "Random existing patterns\n");
     error = compare_vs_naive(
-                "data/members/random-patterns.txt",
-                "data/members/diffsize/005.txt"
+                "/home/lsund/Data/testdata/members/random-patterns.txt",
+                "/home/lsund/Data/testdata/members/diffsize/005.txt"
             );
     if (error) return error;
 
     mu_message(DATA, "Random non-existing patterns\n");
     error = compare_vs_naive(
-                "data/members/random-patterns-non-existing.txt",
-                "data/members/diffsize/005.txt"
+                "/home/lsund/Data/testdata/members/random-patterns-non-existing.txt",
+                "/home/lsund/Data/testdata/members/diffsize/005.txt"
             );
     if (error) return error;
 
     mu_message(DATA, "Akz patterns\n");
     error = compare_vs_naive(
-                "data/akz/10000.txt",
-                "data/akz/data.xml"
+                "/home/lsund/Data/testdata/akz/10000.txt",
+                "/home/lsund/Data/testdata/akz/data.xml"
             );
     if (error) return error;
 
     mu_message(DATA, "Akz patterns, take 2\n");
     error = compare_vs_naive(
-                "data/doctronic/diffsize/12000.txt",
-                "data/doctronic/data-diffsize/small.xml");
+                "/home/lsund/Data/testdata/doctronic/diffsize/12000.txt",
+                "/home/lsund/Data/testdata/doctronic/data-diffsize/small.xml");
     if (error) return error;
 
     mu_message(DATA, "Count: Akz patterns\n");
     error = test_count(
-                "data/akz/10000.txt",
-                "data/akz/data.xml",
+                "/home/lsund/Data/testdata/akz/10000.txt",
+                "/home/lsund/Data/testdata/akz/data.xml",
                 174
             );
     if (error) return error;
 
     mu_message(DATA, "Count: Akz patterns, take 2\n");
     error = test_count(
-                "data/doctronic/diffsize/12000.txt",
-                "data/doctronic/data-diffsize/small.xml",
+                "/home/lsund/Data/testdata/doctronic/diffsize/12000.txt",
+                "/home/lsund/Data/testdata/doctronic/data-diffsize/small.xml",
                 170
             );
 
