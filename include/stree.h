@@ -24,8 +24,13 @@
 #include "basedef.h"
 #include "externs.h"
 
+typedef Uint Vertex;
+typedef Uint *VertexP;
+
 #define LEAF_VERTEXSIZE  1
 #define INNER_VERTEXSIZE 2
+
+#define WITHOUT_LEAFBIT(V)        ((V) & ~LEAFBIT)
 
 // Determines the index of a vertex. V is the adress pointing to the vertex's
 // position in the text. By subtracting the adress of the tree, the index is

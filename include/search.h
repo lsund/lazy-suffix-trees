@@ -26,15 +26,15 @@
 #include "sort.h"
 #include "eval.h"
 
-typedef struct result {
-    bool def;
-    bool val;
-} Result;
+typedef struct match {
+    bool done;
+    bool success;
+} Match;
 
 
 typedef struct pattern {
     Wchar head;
-    Wchar *probe;
+    Wchar *cursor;
     Wchar *end;
 } Pattern;
 

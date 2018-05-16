@@ -5,9 +5,9 @@ Uint    *next_element, root_children[MAX_CHARS + 1];
 
 void init_root_children()
 {
-    Uint *probe;
-    for(probe = root_children; probe <= root_children + MAX_CHARS; probe++) {
-        *probe = UNDEFINEDSUCC;
+    Uint *cursor;
+    for(cursor = root_children; cursor <= root_children + MAX_CHARS; cursor++) {
+        *cursor = UNDEFINEDSUCC;
     }
 }
 

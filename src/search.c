@@ -33,15 +33,15 @@ static Pattern init_pattern(Wchar *patt_start, Wchar *patt_end)
 {
     Pattern patt;
     patt.head  = *patt_start;
-    patt.probe = patt_start;
+    patt.cursor = patt_start;
     patt.end   = patt_end;
     return patt;
 }
 
 
-static Uint first_child_lp(Uint *vertex)
+static Vertex first_child_lp(VertexP vertex)
 {
-    Uint *child = vertices + CHILD(vertex);
+    VertexP child = vertices + CHILD(vertex);
 
     if (!IS_LEAF(child) && IS_UNEVALUATED(child)) {
         return GET_LP_UNEVAL(child);
@@ -57,25 +57,10 @@ static bool no_root_edge(Pattern patt)
 }
 
 
-static bool empty_pattern(Pattern patt)
+static bool is_empty(Pattern patt)
 {
-    return patt.probe > patt.end;
+    return patt.cursor > patt.end;
 }
-
-
-static bool match_length(Pattern patt, Uint len)
-{
-    return (Uint) (patt.end - patt.probe) == len;
-}
-
-
-static bool match(Wchar *text_probe, Pattern patt)
-{
-    // Changed below to plus 1
-    Uint len = lcp(patt.probe + 1, patt.end, text_probe + 1, sentinel - 1);
-    return match_length(patt, len);
-}
-
 
 static bool is_prefix(Uint prefixlen, Uint edgelen)
 {
@@ -83,25 +68,28 @@ static bool is_prefix(Uint prefixlen, Uint edgelen)
 }
 
 
-static bool match_a_edge(
-                Uint rootchild,
-                Wchar **text_probe,
-                Pattern patt
-            )
+static bool is_matched(Pattern patt, Uint len)
 {
-    *text_probe = wtext + (rootchild & ~LEAFBIT);
-    return match(*text_probe, patt);
+    return (Uint) (patt.end - patt.cursor) == len;
 }
 
 
-static Uint edge_length(Uint *vertex)
+static bool match(Wchar *text_cursor, Pattern patt)
 {
-    Uint lp = GET_LP(vertex);
+    // Changed below to plus 1
+    Uint len = lcp(patt.cursor + 1, patt.end, text_cursor + 1, sentinel - 1);
+    return is_matched(patt, len);
+}
+
+
+static Vertex edge_length(VertexP vertex)
+{
+    Vertex lp = GET_LP(vertex);
     return first_child_lp(vertex) - lp;
 }
 
 
-static Uint get_lp(Uint *vertex)
+static Uint offset(VertexP vertex)
 {
     if(IS_UNEVALUATED(vertex)) {
         return GET_LP_UNEVAL(vertex);
@@ -111,45 +99,37 @@ static Uint get_lp(Uint *vertex)
 }
 
 
-static Uint eval_vertex(Uint **vertex)
+static void eval_vertex(VertexP *vertex)
 {
-    Uint vertex_num;
     if(IS_UNEVALUATED(*vertex)) {
-        vertex_num = INDEX(*vertex);
+        Uint vertex_num = INDEX(*vertex);
         eval_node(vertex_num);
         *vertex = vertices + vertex_num;
     }
-    vertex_num = -1;
-    return vertex_num;
 
 }
 
 
-static void update_lengths(
-        Uint *vertex,
-        Pattern patt,
-        Uint *edgelen,
-        Uint *prefixlen)
+static Uint prefixlen(Uint *vertex, Pattern patt, Uint edgelen)
 {
-    Wchar *text_probe = wtext + GET_LP(vertex);
-    *edgelen = edge_length(vertex);
-    *prefixlen = lcp(patt.probe+1, patt.end, text_probe+1, text_probe+*edgelen-1);
+    Wchar *text_cursor = wtext + GET_LP(vertex);
+    return lcp(patt.cursor + 1, patt.end, text_cursor + 1, text_cursor + edgelen - 1);
 }
 
 
-static Result try_match_leaf(Pattern patt, Uint *vertex)
+static Match try_match_leaf(Pattern patt, Uint *vertex)
 {
-    Wchar *text_probe = wtext + GET_LP(vertex);
-    Result res;
-    res.def = false;
-    res.val = false;
-    if(text_probe == sentinel || IS_RIGHTMOST(vertex)) {
-        res.val = false;
-        res.def = true;
+    Match res;
+    res.done = false;
+    res.success = false;
+    Wchar *text_cursor = wtext + GET_LP(vertex);
+    if(text_cursor == sentinel || IS_RIGHTMOST(vertex)) {
+        res.success = false;
+        res.done = true;
     }
-    if(*text_probe == patt.head) {
-        res.val = match(text_probe, patt);
-        res.def = true;
+    if(*text_cursor == patt.head) {
+        res.success = match(text_cursor, patt);
+        res.done = true;
     }
     return res;
 }
@@ -161,81 +141,76 @@ static Result try_match_leaf(Pattern patt, Uint *vertex)
 
 bool search(Wchar *patt_start, Wchar *patt_end)
 {
-
     Pattern patt = init_pattern(patt_start, patt_end);
 
-    if(empty_pattern(patt)) {
+    if(is_empty(patt)) {
         return true;
     }
 
     evaluate_root();
+
     if (no_root_edge(patt)) {
         return false;
     }
-    Uint rootchild = root_children[patt.head];
 
-    Wchar *text_probe;
+    Vertex rootchild  = root_children[patt.head];
+    Wchar *text_start = wtext + WITHOUT_LEAFBIT(rootchild);
     if (IS_LEAF(&rootchild)) {
-        return match_a_edge(rootchild, &text_probe, patt);
+        return match(text_start, patt);
     }
 
-    Uint *vertex = vertices + rootchild;
-    Uint vertex_num = eval_vertex(&vertex);
+    VertexP cursor  = vertices + rootchild;
 
-    Uint edgelen;
-    Uint prefixlen;
-    update_lengths(vertex, patt, &edgelen, &prefixlen);
+    eval_vertex(&cursor);
+    Uint edgelen = edge_length(cursor);
+    Uint plen    = prefixlen(cursor, patt, edgelen);
 
-    if(is_prefix(prefixlen, edgelen)) {
-        return match_length(patt, prefixlen);
+    if(is_prefix(plen, edgelen)) {
+        return is_matched(patt, plen);
+    } else {
+        patt.cursor += edgelen;
     }
 
-    patt.probe += edgelen;
+    while(!is_empty(patt)) {
 
-    while(!empty_pattern(patt)) {
-
-        patt.head = *patt.probe;
-        vertex    = vertices + CHILD(vertex);
+        patt.head = *patt.cursor;
+        cursor    = vertices + CHILD(cursor);
 
         while(true) {
 
-            if (IS_LEAF(vertex)) {
+            if (IS_LEAF(cursor)) {
 
-                Result match = try_match_leaf(patt, vertex);
+                Match match = try_match_leaf(patt, cursor);
 
-                if (match.def) {
-                    return match.val;
+                if (match.done) {
+                    return match.success;
                 } else {
-                    vertex += LEAF_VERTEXSIZE;
+                    cursor += LEAF_VERTEXSIZE;
                 }
 
             } else {
 
-                Uint lp         = get_lp(vertex);
-                text_probe      = wtext + lp;
-                Wchar firstchar = *text_probe;
-
+                Wchar firstchar = *(wtext + offset(cursor));
                 if(firstchar == patt.head) {
                     break;
                 }
-                if(IS_RIGHTMOST(vertex)) {
+                if(IS_RIGHTMOST(cursor)) {
                     return false;
                 } else {
-                    vertex += INNER_VERTEXSIZE;
+                    cursor += INNER_VERTEXSIZE;
                 }
             }
         }
 
-        vertex_num = eval_vertex(&vertex);
-        update_lengths(vertex, patt, &edgelen, &prefixlen);
+        eval_vertex(&cursor);
+        Uint edgelen = edge_length(cursor);
+        Uint plen    = prefixlen(cursor, patt, edgelen);
 
-        if(is_prefix(prefixlen, edgelen)) {
-            return match_length(patt, prefixlen);
+        if(is_prefix(plen, edgelen)) {
+            return is_matched(patt, plen);
         }
 
-        patt.probe += edgelen;
+        patt.cursor += edgelen;
     }
-
     return true;
 }
-
