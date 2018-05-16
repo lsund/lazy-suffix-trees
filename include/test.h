@@ -23,7 +23,6 @@
 #include <stdio.h>
 #include <stddef.h>
 #include <stdlib.h>
-#include <stdlib.h>
 
 #include "minunit.h"
 #include "pattern_searcher.h"

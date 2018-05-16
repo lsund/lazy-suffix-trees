@@ -25,7 +25,6 @@
 #include <limits.h>
 #include <string.h>
 #include <sys/types.h>
-#include <string.h>
 
 #include "basedef.h"
 #include "types.h"

@@ -30,6 +30,8 @@
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
+#include <wchar.h>
+#include <stdbool.h>
 #include "spaceman.h"
 #include "types.h"
 #include "pattern_searcher.h"

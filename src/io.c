@@ -22,30 +22,56 @@
 Wchar *wtext;
 Uint textlen;
 
-// Open file in readmode, return file descriptor. The length of the file is
-// stored in `textlen`. If `writefile` is true if the file should also be
-// opened for triting.
-static int fileOpen(char *name, Uint *textlen, bool writefile)
+void file_to_string(const char *filename)
 {
-    int fd;
-    struct stat buf;
+    FILE *in = fopen(filename, "r");
+    wtext = malloc(sizeof(wchar_t) * MAXTEXTLEN);
 
-    if ((fd = open(name,(writefile) ? O_RDWR : O_RDONLY)) == -1) {
+    if(wtext == NULL) {
+        fprintf(stderr,"Cannot open file %s\n", filename);
+        exit(EXIT_FAILURE);
+    }
+
+    Uint c;
+    textlen = 0;
+    while ((c = fgetwc(in)) != WEOF) {
+        wtext[textlen] = c;
+        textlen++;
+    }
+    wtext[textlen + 1] = '\0';
+
+    if(textlen == 0) {
+        fprintf(stderr,"file \"%s\" is empty\n", filename);
+        exit(EXIT_FAILURE);
+    }
+}
+
+
+static int open_file(char *name, Uint *textlen, bool writefile)
+{
+    struct stat buf;
+    int fd = open(name,(writefile) ? O_RDWR : O_RDONLY);
+
+    if (fd == -1) {
         fprintf(stderr, "fileOpen: Cannot open \"%s\"", name);
-        return -1;
+        return EXIT_FAILURE;
     }
-    if (fstat(fd,&buf) == -1) {
-        fprintf(stderr, "file \"%s\": fstat(fd = %d) failed",name,fd);
-        return -2;
+
+    int statres = fstat(fd,&buf);
+    if (statres == -1) {
+        fprintf(stderr, "fstat(fd = %d) failed", fd);
+        return EXIT_FAILURE;
     }
+
     *textlen = (Uint) buf.st_size;
     return fd;
 }
 
+
 Uint file_to_strings(char *name, Uint *textlen, Uint nlines, Wchar ***wordsp)
 {
     Wchar **words = *wordsp;
-    int fd = fileOpen(name, textlen, false);
+    int fd = open_file(name, textlen, false);
 
     if (fd < 0) {
         return -1;
