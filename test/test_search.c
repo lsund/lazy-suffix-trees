@@ -104,6 +104,13 @@ char *utest_search()
 
     char *error;
 
+    mu_message(DATA, "Trivial patterns\n");
+    error = compare_vs_naive(
+                "data/mini/patt.txt",
+                "data/mini/text.txt"
+            );
+    if (error) return error;
+
     mu_message(DATA, "Random existing patterns\n");
     error = compare_vs_naive(
                 "/home/lsund/Data/testdata/members/random-patterns.txt",

@@ -25,12 +25,7 @@
 #include "basedef.h"
 #include "sort.h"
 #include "eval.h"
-
-typedef struct match {
-    bool done;
-    bool success;
-} Match;
-
+#include "match.h"
 
 typedef struct pattern {
     Wchar head;
