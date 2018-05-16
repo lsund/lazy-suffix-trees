@@ -33,7 +33,6 @@
 // size(Ushort) = 2
 // size(Sshort) = 2
 
-
 // Primitives
 typedef unsigned char  Uchar;
 typedef unsigned short Ushort;
@@ -44,6 +43,9 @@ typedef unsigned long  Ulong;
 typedef signed   long  Slong;
 
 typedef wchar_t Wchar;
+
+typedef Uint Vertex;
+typedef Uint *VertexP;
 
 #define LOGWORDSIZE    6
 

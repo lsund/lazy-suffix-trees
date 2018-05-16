@@ -101,7 +101,7 @@ static Uint offset(VertexP vertex)
 static void eval_vertex(VertexP *vertex)
 {
     if(IS_UNEVALUATED(*vertex)) {
-        Uint vertex_num = INDEX(*vertex);
+        Uint vertex_num = REF_TO_INDEX(*vertex);
         eval_node(vertex_num);
         *vertex = vertices + vertex_num;
     }

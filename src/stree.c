@@ -29,7 +29,7 @@ void create_inner_vertex(Wchar first, Wchar **leftb, Wchar **rightb, bool root)
 {
     SET_BOUNDARIES(next_element, leftb, rightb);
     if (root) {
-        root_children[first] = INDEX(next_element);
+        root_children[first] = REF_TO_INDEX(next_element);
     }
     next_element += INNER_VERTEXSIZE;
 }

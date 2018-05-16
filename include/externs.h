@@ -79,7 +79,7 @@ extern Uint *vertices;
 extern Uint streesize;
 
 // pointer to next unused element in `stree`
-extern Uint *next_element;
+extern VertexP next_element;
 
 // constant time access to successors of `root`
 extern Uint root_children[MAX_CHARS + 1];

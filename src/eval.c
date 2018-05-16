@@ -64,10 +64,10 @@ static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
     }
 
     if (isroot) {
-        SET_LEAF(next_element, textlen | RIGHTMOSTCHILDBIT);
-        next_element++;
+        SET_LEAF(next_element, WITH_LASTCHILDBIT(textlen));
+        next_element += LEAF_VERTEXSIZE;
     } else {
-        *previous |= RIGHTMOSTCHILDBIT;
+        *previous = WITH_LASTCHILDBIT(*previous);
     }
 }
 
@@ -90,7 +90,7 @@ void eval_node(Uint node)
     Wchar **rightb  = GET_RIGHTB(vertex);
 
     SET_LP(vertex, SUFFIX_INDEX(leftb));
-    CHILD(vertex) =  INDEX(next_element);
+    CHILD(vertex) =  REF_TO_INDEX(next_element);
 
     counting_sort(leftb, rightb);
 

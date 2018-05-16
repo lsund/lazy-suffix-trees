@@ -24,34 +24,28 @@
 #include "basedef.h"
 #include "externs.h"
 
-typedef Uint Vertex;
-typedef Uint *VertexP;
-
 #define LEAF_VERTEXSIZE  1
 #define INNER_VERTEXSIZE 2
 
+#define ROOT vertices
+
 #define WITHOUT_LEAFBIT(V)        ((V) & ~LEAFBIT)
 
-// Determines the index of a vertex. V is the adress pointing to the vertex's
-// position in the text. By subtracting the adress of the tree, the index is
-// obtained.
-#define INDEX(V)            ((Uint) ((V) - vertices))
+///////////////////////////////////////////////////////////////////////////////
+// Vertices
+#define REF_TO_INDEX(P)            ((Uint) ((P) - ROOT))
 
-// Instead of storing seperately if a vertex is a leaf, a rightmostchild or
-// unevaluated, this information is encoded in the MSB and the second MSB of
-// the number.
-
-// Bit determining if the vertex is a leaf. This is storde in the first
-// integer, ie. its left pointer.
 #define LEAFBIT                 FIRSTBIT
 
 // Bit determining if the node is the rightmost child of its parent. This is
 // stored in the first integer, ie its left pointer.
-#define RIGHTMOSTCHILDBIT       SECONDBIT
+#define LASTCHILDBIT       SECONDBIT
 
 // Bit determining if the inner node is unevaluated. This is stored in the
 // second integer of the vertex, ie. its first child.
 #define UNEVALUATEDBIT          FIRSTBIT
+
+#define WITH_LASTCHILDBIT(V)    ((V) | LASTCHILDBIT)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Getters
@@ -62,7 +56,7 @@ typedef Uint *VertexP;
 //
 // A node is referenced by the index(lp(u)), disregarding the first and second
 // bit.
-#define GET_LP(V)               ((*(V)) & ~(LEAFBIT | RIGHTMOSTCHILDBIT))
+#define GET_LP(V)               ((*(V)) & ~(LEAFBIT | LASTCHILDBIT))
 
 // For each branching vertex, we additionally need constant time access to the
 // child of a vertex with the smallest left pointer. This accesss is provided
@@ -93,7 +87,7 @@ typedef Uint *VertexP;
 // Given a LP value and a vertex V, set the lp-value for V, by ORing the two
 // integers. V is first ANDed with its second bit, to reset all bits except
 // the rightmost one.
-#define SET_LP(V, LP)           *(V) = (*(V) & RIGHTMOSTCHILDBIT) | (LP)
+#define SET_LP(V, LP)           *(V) = (*(V) & LASTCHILDBIT) | (LP)
 
 // Set the leaf number of V to N. The first bit is also set to 1, since this is
 // a leaf.
@@ -111,7 +105,7 @@ typedef Uint *VertexP;
 #define IS_LEAF(V)              ((*(V)) & LEAFBIT)
 
 // Retrieve the second MSB of LP(V)
-#define IS_RIGHTMOST(V)         ((*(V)) & RIGHTMOSTCHILDBIT)
+#define IS_RIGHTMOST(V)         ((*(V)) & LASTCHILDBIT)
 
 // Retrieve the MSB of FIRSTCHILD(V)
 #define IS_UNEVALUATED(V)       ((*((V) + 1)) & UNEVALUATEDBIT)
