@@ -6,7 +6,7 @@ Wchar **suffixes, **sortbuffer;
 Uint    sortbufferwidth,
         max_sortbufferwidth,
         *next_element,
-        *stree,
+        *vertices,
         streesize,
         textlen;
 
@@ -40,8 +40,8 @@ void alloc_extend_stree(void)
 
         streesize += (textlen / 10);
         printf("Allocating more...");
-        ALLOC(stree, stree, Uint, streesize + EXTENSION_SIZE);
-        next_element = stree + next_free_index;
+        ALLOC(vertices, vertices, Uint, streesize + EXTENSION_SIZE);
+        next_element = vertices + next_free_index;
 
     }
 }

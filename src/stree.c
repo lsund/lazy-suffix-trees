@@ -19,7 +19,7 @@ Uint create_leaf_vertex(Wchar first, Wchar **left, bool root)
     if (root) {
         root_children[first] = leafnum | LEAFBIT;
     }
-    next_element++;
+    next_element += LEAF_VERTEXSIZE;
     return leafnum;
 }
 
@@ -31,7 +31,7 @@ void create_inner_vertex(Wchar first, Wchar **leftb, Wchar **rightb, bool root)
     if (root) {
         root_children[first] = INDEX(next_element);
     }
-    next_element += BRANCHWIDTH;
+    next_element += INNER_VERTEXSIZE;
 }
 
 

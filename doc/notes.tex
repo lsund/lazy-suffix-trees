@@ -22,8 +22,8 @@ the blocks are referred to. The \texttt{stack}-block is only used for
 eager evaluation.\\
 
 Each branching node requires 2 unsigned integers. Hence the macro
-\texttt{BRANCHWIDTH}. If additional information has to be stored for a
-branching node, then \texttt{BRANCHWIDTH} must be redefined accordingly.\\
+\texttt{INNER_VERTEXSIZE}. If additional information has to be stored for a
+branching node, then \texttt{INNER_VERTEXSIZE} must be redefined accordingly.\\
 
 The suffix tree is stored in a table \texttt{stree}, called \(T\) in the
 paper. Given a pointer into \texttt{stree}, we can determine the index the

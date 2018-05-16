@@ -8,7 +8,7 @@ Wchar     *wtext,
 
 Uint        textlen,
             alphasize,
-            *stree,
+            *vertices,
             streesize,
             *next_element,
             sort_bufferwidth,
@@ -35,10 +35,10 @@ static void init_stree()
     streesize      = EXTENSION_SIZE;
     printf("streesize: %lu\n", streesize);
     printf("streealloc: %lu\n", sizeof(Uint) * streesize);
-    ALLOC(stree, stree, Uint, streesize);
+    ALLOC(vertices, vertices, Uint, streesize);
     printf("suffixalloc: %lu\n ", sizeof(Wchar *) * textlen + 1);
     ALLOC(suffixes, NULL, Wchar *, textlen + 1);
-    next_element   = stree;
+    next_element   = vertices;
 }
 
 

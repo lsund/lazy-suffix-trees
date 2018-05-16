@@ -73,7 +73,7 @@ extern Uint max_sortbufferwidth;
 // Suffix Tree
 
 //  Tree representation
-extern Uint *stree;
+extern Uint *vertices;
 
 // number of integers in `stree` allocated
 extern Uint streesize;

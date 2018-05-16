@@ -24,7 +24,7 @@ Wchar *wtext,
         *sentinel,
         **suffixes;
 
-Uint *stree, root_children[MAX_CHARS + 1];
+Uint *vertices, root_children[MAX_CHARS + 1];
 
 bool root_evaluated;
 
@@ -41,7 +41,7 @@ static Pattern init_pattern(Wchar *patt_start, Wchar *patt_end)
 
 static Uint first_child_lp(Uint *vertex)
 {
-    Uint *child = stree + GET_FIRSTCHILD(vertex);
+    Uint *child = vertices + CHILD(vertex);
 
     if (!IS_LEAF(child) && IS_UNEVALUATED(child)) {
         return GET_LP_UNEVAL(child);
@@ -111,13 +111,16 @@ static Uint get_lp(Uint *vertex)
 }
 
 
-static void eval_if_need(Uint **vertex, Uint *vertex_num)
+static Uint eval_vertex(Uint **vertex)
 {
+    Uint vertex_num;
     if(IS_UNEVALUATED(*vertex)) {
-        *vertex_num = INDEX(*vertex);
-        eval_node(*vertex_num);
-        *vertex = stree + *vertex_num;
+        vertex_num = INDEX(*vertex);
+        eval_node(vertex_num);
+        *vertex = vertices + vertex_num;
     }
+    vertex_num = -1;
+    return vertex_num;
 
 }
 
@@ -134,8 +137,9 @@ static void update_lengths(
 }
 
 
-static Result try_match_leaf(Wchar *text_probe, Pattern patt, Uint *vertex)
+static Result try_match_leaf(Pattern patt, Uint *vertex)
 {
+    Wchar *text_probe = wtext + GET_LP(vertex);
     Result res;
     res.def = false;
     res.val = false;
@@ -158,11 +162,6 @@ static Result try_match_leaf(Wchar *text_probe, Pattern patt, Uint *vertex)
 bool search(Wchar *patt_start, Wchar *patt_end)
 {
 
-    Wchar *text_probe;
-    Uint edgelen, prefixlen;
-    Uint *vertex;
-    Uint vertex_num;
-
     Pattern patt = init_pattern(patt_start, patt_end);
 
     if(empty_pattern(patt)) {
@@ -170,20 +169,21 @@ bool search(Wchar *patt_start, Wchar *patt_end)
     }
 
     evaluate_root();
-
-    Uint rootchild;
     if (no_root_edge(patt)) {
         return false;
-    } else {
-        rootchild = root_children[patt.head];
     }
+    Uint rootchild = root_children[patt.head];
 
+    Wchar *text_probe;
     if (IS_LEAF(&rootchild)) {
         return match_a_edge(rootchild, &text_probe, patt);
     }
 
-    vertex = stree + rootchild;
-    eval_if_need(&vertex, &vertex_num);
+    Uint *vertex = vertices + rootchild;
+    Uint vertex_num = eval_vertex(&vertex);
+
+    Uint edgelen;
+    Uint prefixlen;
     update_lengths(vertex, patt, &edgelen, &prefixlen);
 
     if(is_prefix(prefixlen, edgelen)) {
@@ -195,44 +195,38 @@ bool search(Wchar *patt_start, Wchar *patt_end)
     while(!empty_pattern(patt)) {
 
         patt.head = *patt.probe;
-        vertex    = stree + GET_FIRSTCHILD(vertex);
-
+        vertex    = vertices + CHILD(vertex);
 
         while(true) {
 
-            Uint lp;
-
             if (IS_LEAF(vertex)) {
 
-                text_probe = wtext + GET_LP(vertex);
+                Result match = try_match_leaf(patt, vertex);
 
-                Result leaf_matched = try_match_leaf(text_probe, patt, vertex);
-
-                if (leaf_matched.def == true) {
-                    return leaf_matched.val;
+                if (match.def) {
+                    return match.val;
+                } else {
+                    vertex += LEAF_VERTEXSIZE;
                 }
-
-                vertex++;
 
             } else {
 
-                Wchar edgechar;
-                lp         = get_lp(vertex);
-                text_probe = wtext + lp;
-                edgechar   = *text_probe;
+                Uint lp         = get_lp(vertex);
+                text_probe      = wtext + lp;
+                Wchar firstchar = *text_probe;
 
-                if(edgechar == patt.head) {
+                if(firstchar == patt.head) {
                     break;
                 }
-
                 if(IS_RIGHTMOST(vertex)) {
                     return false;
+                } else {
+                    vertex += INNER_VERTEXSIZE;
                 }
-                vertex += BRANCHWIDTH;
             }
         }
 
-        eval_if_need(&vertex, &vertex_num);
+        vertex_num = eval_vertex(&vertex);
         update_lengths(vertex, patt, &edgelen, &prefixlen);
 
         if(is_prefix(prefixlen, edgelen)) {

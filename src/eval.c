@@ -84,13 +84,13 @@ void evaluate_root()
 
 void eval_node(Uint node)
 {
-    Uint *vertex = stree + node;
+    Uint *vertex = vertices + node;
 
     Wchar **leftb   = GET_LEFTB(vertex);
     Wchar **rightb  = GET_RIGHTB(vertex);
 
     SET_LP(vertex, SUFFIX_INDEX(leftb));
-    SET_FIRSTCHILD(vertex, INDEX(next_element));
+    CHILD(vertex) =  INDEX(next_element);
 
     counting_sort(leftb, rightb);
 

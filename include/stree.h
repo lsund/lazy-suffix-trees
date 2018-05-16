@@ -24,11 +24,13 @@
 #include "basedef.h"
 #include "externs.h"
 
+#define LEAF_VERTEXSIZE  1
+#define INNER_VERTEXSIZE 2
 
 // Determines the index of a vertex. V is the adress pointing to the vertex's
 // position in the text. By subtracting the adress of the tree, the index is
 // obtained.
-#define INDEX(V)            ((Uint) ((V) - stree))
+#define INDEX(V)            ((Uint) ((V) - vertices))
 
 // Instead of storing seperately if a vertex is a leaf, a rightmostchild or
 // unevaluated, this information is encoded in the MSB and the second MSB of
@@ -63,9 +65,9 @@
 //
 // The algorithm only needs access to this child in order to evaluate all
 // children of V. The children are sorted according to first character, and
-// laid out in `stree` sequentially, so the algorithm can iterate over these,
+// laid out in `vertices` sequentially, so the algorithm can iterate over these,
 // setting RIGHTMOSTBIT to the last vertex.
-#define GET_FIRSTCHILD(V)       (*((V) + 1))
+#define CHILD(V)       (*((V) + 1))
 
 // The left boundry of the remaining suffixes
 #define GET_LEFTB(V)            (suffixes + *(V))
@@ -74,7 +76,7 @@
 //
 // Note that the right boundry is defined as the adrees starting at suffixes,
 // with the offset of the first child of V.
-#define GET_RIGHTB(V)           (suffixes + (GET_FIRSTCHILD(V) & ~UNEVALUATEDBIT))
+#define GET_RIGHTB(V)           (suffixes + (CHILD(V) & ~UNEVALUATEDBIT))
 
 // startposition of suffix
 #define SUFFIX_INDEX(L)         ((Uint) (*(L) - wtext))
@@ -88,16 +90,9 @@
 // the rightmost one.
 #define SET_LP(V, LP)           *(V) = (*(V) & RIGHTMOSTCHILDBIT) | (LP)
 
-// Set the first child of V. C corresponds to an index in the stree table.
-#define SET_FIRSTCHILD(V, C)    GET_FIRSTCHILD(V) = C
-
 // Set the leaf number of V to N. The first bit is also set to 1, since this is
 // a leaf.
 #define SET_LEAF(V, N)          *(V) = (N) | LEAFBIT
-
-// Each branching vertex requires two integers, one for the left boundary and
-// one for the right boundary
-#define BRANCHWIDTH             UINT(2)
 
 // Each vertex needs two integers allocated for it, one for its left suffix
 // boundary and one for its left suffix boundary. This macro sets the left and
