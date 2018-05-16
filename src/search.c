@@ -43,9 +43,9 @@ static Vertex first_child_lp(VertexP vertex)
     VertexP child = vertices + CHILD(vertex);
 
     if (!IS_LEAF(child) && IS_UNEVALUATED(child)) {
-        return GET_LP_UNEVAL(child);
+        return OFFSET_UNEVAL(child);
     } else {
-        return GET_LP(child);
+        return OFFSET(child);
     }
 }
 
@@ -83,7 +83,7 @@ static bool match(Wchar *text_cursor, Pattern patt)
 
 static Vertex edge_length(VertexP vertex)
 {
-    Vertex lp = GET_LP(vertex);
+    Uint lp = OFFSET(vertex);
     return first_child_lp(vertex) - lp;
 }
 
@@ -91,9 +91,9 @@ static Vertex edge_length(VertexP vertex)
 static Uint offset(VertexP vertex)
 {
     if(IS_UNEVALUATED(vertex)) {
-        return GET_LP_UNEVAL(vertex);
+        return OFFSET_UNEVAL(vertex);
     } else {
-        return GET_LP(vertex);
+        return OFFSET(vertex);
     }
 }
 
@@ -101,7 +101,7 @@ static Uint offset(VertexP vertex)
 static void eval_vertex(VertexP *vertex)
 {
     if(IS_UNEVALUATED(*vertex)) {
-        Uint vertex_num = REF_TO_INDEX(*vertex);
+        Uint vertex_num = INDEX(*vertex);
         eval_node(vertex_num);
         *vertex = vertices + vertex_num;
     }
@@ -111,18 +111,18 @@ static void eval_vertex(VertexP *vertex)
 
 static Uint prefixlen(Uint *vertex, Pattern patt, Uint edgelen)
 {
-    Wchar *text_cursor = wtext + GET_LP(vertex);
+    Wchar *text_cursor = wtext + OFFSET(vertex);
     return lcp(patt.cursor + 1, patt.end, text_cursor + 1, text_cursor + edgelen - 1);
 }
 
 
 static Match try_match_leaf(Pattern patt, Uint *vertex)
 {
-    Wchar *text_cursor = wtext + GET_LP(vertex);
+    Wchar *text_cursor = wtext + OFFSET(vertex);
     if(*text_cursor == patt.head) {
         return make_match(match(text_cursor, patt));
     }
-    if(text_cursor == sentinel || IS_RIGHTMOST(vertex)) {
+    if(text_cursor == sentinel || IS_LASTCHILD(vertex)) {
         return unsuccessful_match();
     }
     return incomplete_match();
@@ -203,7 +203,7 @@ bool search(Wchar *patt_start, Wchar *patt_end)
                 if(firstchar == patt.head) {
                     break;
                 }
-                if(IS_RIGHTMOST(cursor)) {
+                if(IS_LASTCHILD(cursor)) {
                     return false;
                 } else {
                     cursor += INNER_VERTEXSIZE;

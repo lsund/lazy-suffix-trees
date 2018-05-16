@@ -15,7 +15,7 @@ void init_root_children()
 Uint create_leaf_vertex(Wchar first, Wchar **left, bool root)
 {
     Uint leafnum = SUFFIX_INDEX(left);
-    SET_LEAF(next_element, leafnum);
+    *next_element = WITH_LEAFBIT(leafnum);
     if (root) {
         root_children[first] = leafnum | LEAFBIT;
     }
@@ -29,7 +29,7 @@ void create_inner_vertex(Wchar first, Wchar **leftb, Wchar **rightb, bool root)
 {
     SET_BOUNDARIES(next_element, leftb, rightb);
     if (root) {
-        root_children[first] = REF_TO_INDEX(next_element);
+        root_children[first] = INDEX(next_element);
     }
     next_element += INNER_VERTEXSIZE;
 }
