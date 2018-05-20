@@ -72,7 +72,7 @@ static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
 }
 
 
-void evaluate_root()
+void eval_root()
 {
     if (!root_evaluated) {
         create_suffix_groups();
@@ -82,14 +82,14 @@ void evaluate_root()
 }
 
 
-void eval_node(Vertex vertex_val)
+void eval_vertex(Vertex vertex_val)
 {
     VertexP vertex = vertices + vertex_val;
 
-    Wchar **leftb   = LEFT_BOUNDARY(vertex);
-    Wchar **rightb  = RIGHT_BOUNDARY(vertex);
+    Wchar **leftb   = LEFT_BOUND(vertex);
+    Wchar **rightb  = RIGHT_BOUND(vertex);
 
-    SET_LP(vertex, SUFFIX_INDEX(leftb));
+    SET_OFFSET(vertex, SUFFIX_INDEX(leftb));
     CHILD(vertex) =  INDEX(next_element);
 
     counting_sort(leftb, rightb);

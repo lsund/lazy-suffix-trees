@@ -28,8 +28,8 @@
 #include "sort.h"
 #include "stree.h"
 
-void evaluate_root();
+void eval_root();
 
-void eval_node(Uint node);
+void eval_vertex(Vertex node);
 
 #endif

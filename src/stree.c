@@ -27,7 +27,9 @@ Uint create_leaf_vertex(Wchar first, Wchar **left, bool root)
 
 void create_inner_vertex(Wchar first, Wchar **leftb, Wchar **rightb, bool root)
 {
-    SET_BOUNDARIES(next_element, leftb, rightb);
+    *next_element = leftb - suffixes;
+    CHILD(next_element) = WITH_UNEVALBIT(rightb - suffixes);
+
     if (root) {
         root_children[first] = INDEX(next_element);
     }

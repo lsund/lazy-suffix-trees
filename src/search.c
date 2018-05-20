@@ -98,11 +98,11 @@ static Uint offset(VertexP vertex)
 }
 
 
-static void eval_vertex(VertexP *vertex)
+static void eval_vertexp(VertexP *vertex)
 {
     if(IS_UNEVALUATED(*vertex)) {
         Uint vertex_num = INDEX(*vertex);
-        eval_node(vertex_num);
+        eval_vertex(vertex_num);
         *vertex = vertices + vertex_num;
     }
 
@@ -138,7 +138,7 @@ static Match match_rootedge(Pattern *patt, VertexP *cursor)
         return successful_match();
     }
 
-    evaluate_root();
+    eval_root();
 
     if (no_root_edge(*patt)) {
         return unsuccessful_match();
@@ -152,7 +152,7 @@ static Match match_rootedge(Pattern *patt, VertexP *cursor)
 
     *cursor  = vertices + rootchild;
 
-    eval_vertex(cursor);
+    eval_vertexp(cursor);
     Uint edgelen = edge_length(*cursor);
     Uint plen    = prefixlen(*cursor, *patt, edgelen);
 
@@ -211,7 +211,7 @@ bool search(Wchar *patt_start, Wchar *patt_end)
             }
         }
 
-        eval_vertex(&cursor);
+        eval_vertexp(&cursor);
         Uint edgelen = edge_length(cursor);
         Uint plen    = prefixlen(cursor, patt, edgelen);
 

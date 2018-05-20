@@ -50,10 +50,17 @@
 
 #define WITHOUT_LEAFBIT(V)              ((V) & ~LEAFBIT)
 
-// Offset from suffixes
+
+// Evaluated vertices
 #define OFFSET(P)                       ((*(P)) & ~(LEAFBIT | LASTCHILDBIT))
-#define CHILD(P)                        (*((P) + 1))
-#define OFFSET_UNEVAL(V)                SUFFIX_INDEX(LEFT_BOUNDARY(V))
+#define CHILD(P)                        (*((P) + 1))    // AKA right bound
+#define OFFSET_UNEVAL(V)                SUFFIX_INDEX(LEFT_BOUND(V))
+
+#define SET_OFFSET(V, O)                *(V) = (*(V) & LASTCHILDBIT) | (O)
+
+// Unevaluated vertices
+#define LEFT_BOUND(P)            (suffixes + OFFSET(P))
+#define RIGHT_BOUND(P)           (suffixes + (CHILD(P) & ~UNEVALUATEDBIT))
 
 ///////////////////////////////////////////////////////////////////////////////
 // Queries
@@ -69,25 +76,8 @@
 // length of the path to its parent.  To retrieve the edge labels in constant
 // time, it suffices to store the left pointer for all nodes.
 
-// The left boundry of the remaining suffixes
-#define LEFT_BOUNDARY(P)            (suffixes + OFFSET(P))
-#define RIGHT_BOUNDARY(P)           (suffixes + (CHILD(P) & ~UNEVALUATEDBIT))
 // startposition of suffix
-#define SUFFIX_INDEX(P)             ((Uint) (*(P) - wtext))
-
-
-// Given a LP value and a vertex V, set the lp-value for V, by ORing the two
-// integers. V is first ANDed with its second bit, to reset all bits except
-// the rightmost one.
-#define SET_LP(V, LP)           *(V) = (*(V) & LASTCHILDBIT) | (LP)
-
-// Each vertex needs two integers allocated for it, one for its left suffix
-// boundary and one for its left suffix boundary. This macro sets the left and
-// the right boundary for the two following positions in P.
-#define SET_BOUNDARIES(P, L, R)\
-    *(P) = (Uint) ((L) - suffixes);\
-    CHILD(P) = WITH_UNEVALBIT(((R) - suffixes))
-
+#define SUFFIX_INDEX(P)                 ((Uint) (*(P) - wtext))
 
 void create_root_leaf(Wchar firstchar, Wchar **left);
 
