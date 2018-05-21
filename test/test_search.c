@@ -33,7 +33,7 @@ char *test_count(char *patternfile, char *textfile, Uint count)
         Wchar *current_pattern = patterns[j];
         Uint patternlen = strlenw(current_pattern);
 
-        bool exists = search_pattern(current_pattern, patternlen);
+        bool exists = find_pattern(current_pattern, patternlen);
 
         exists ? exists_n++ : (void) 0;
     }
@@ -77,7 +77,7 @@ char *compare_vs_naive(char *patternfile, char *textfile)
 
         Wchar *end = current_pattern + patternlen;
 
-        bool exists = search_pattern(current_pattern, patternlen);
+        bool exists = find_pattern(current_pattern, patternlen);
         bool rexists = naive_search(current_pattern, end);
 
         exists ? exists_n++ : (void) 0;
@@ -174,7 +174,7 @@ void *utest_leaves()
     Wchar *patterns[14];
     init();
 
-    Uint numbers[14];
+    Sint numbers[14];
 
     patterns[0] = L"111";
     numbers[0]  = 2;
@@ -204,7 +204,8 @@ void *utest_leaves()
     for (int i = 0; i < 12; i++) {
         Wchar *current_pattern = patterns[i];
         Uint patternlen = strlenw(current_pattern);
-        search_pattern(current_pattern, patternlen);
+        Sint num = find_startindices(current_pattern, patternlen);
+        mu_assert("Should have correct number.", num == numbers[i]);
     }
 
 

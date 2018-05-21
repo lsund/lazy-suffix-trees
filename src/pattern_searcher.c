@@ -42,21 +42,19 @@ static bool copy_pattern(Wchar *pattern, Wchar *current_pattern, Uint len)
 
 
 // Search for one pattern in the tree
-bool search_pattern(Wchar *current_pattern, Uint patternlen)
+Sint find_startindices(Wchar *current_pattern, Uint patternlen)
 {
 
     Wchar pattern[MAXPATTERNLEN + 1];
     copy_pattern(pattern, current_pattern, patternlen);
 
-    Sint leafnum = search(pattern, pattern + patternlen - 1);
+    return search(pattern, pattern + patternlen - 1);
+}
 
-    if (leafnum == -1) {
-        return false;
-    } else {
-        printf("Found leafnum: %ld\n", leafnum);
-        return true;
-    }
 
+bool find_pattern(Wchar *current_pattern, Uint patternlen)
+{
+    return find_startindices(current_pattern, patternlen) > -1;
 }
 
 
@@ -72,7 +70,7 @@ void search_patterns(const char *path, int npatterns, Wchar ***patterns_ptr)
         Wchar *current_pattern = patterns[j];
         Uint patternlen = strlenw(current_pattern);
 
-        bool exists = search_pattern(current_pattern, patternlen);
+        bool exists = find_pattern(current_pattern, patternlen);
 
         if (exists) {
             fprintf(fp, "%ls\n", patterns[j]);
