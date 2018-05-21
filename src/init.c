@@ -36,7 +36,7 @@ static void init_stree()
     printf("streesize: %lu\n", streesize);
     printf("streealloc: %lu\n", sizeof(Uint) * streesize);
     ALLOC(vertices, vertices, Uint, streesize);
-    printf("suffixalloc: %lu\n ", sizeof(Wchar *) * textlen + 1);
+    printf("suffixalloc: %lu\n", sizeof(Wchar *) * textlen + 1);
     ALLOC(suffixes, NULL, Wchar *, textlen + 1);
     next_element   = vertices;
 }

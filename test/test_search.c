@@ -157,9 +157,37 @@ char *utest_search()
     return NULL;
 }
 
+void *utest_leaves()
+{
+    Uint patternslen;
+    setlocale(LC_ALL, "en_US.utf8");
+    FILE *in = fopen("data/mini/smyth.txt", "r");
+    wtext = malloc(sizeof(Wchar) * MAXTEXTLEN);
+    wint_t c;
+    textlen = 0;
+    while ((c = fgetwc(in)) != WEOF) {
+        wtext[textlen] = c;
+        textlen++;
+    }
+    wtext[textlen + 1] = '\0';
+    max_codepoint = get_max(wtext, textlen);
+    fclose(in);
+    Wchar **patterns = (Wchar **) malloc(sizeof(Wchar *) * MAX_PATTERNS);
+    file_to_strings("data/mini/smyth-patt.txt", &patternslen, MAX_PATTERNS, &patterns);
+    init();
+
+
+    Wchar *current_pattern = patterns[0];
+    Uint patternlen = strlenw(current_pattern);
+    search_pattern(current_pattern, patternlen);
+
+    return NULL;
+}
+
 char *test_search()
 {
-    mu_run_utest(utest_search);
+    /* mu_run_utest(utest_search); */
+    mu_run_utest(utest_leaves);
 
     return NULL;
 }

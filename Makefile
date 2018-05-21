@@ -21,8 +21,6 @@ mode=64bit
 
 CFLAGS+=-m64 -DSIXTYFOURBITS $(INCLUDE)
 
-# CFLAGS+=-O3 -Wall -Werror
-# CFLAGS+=-O3 -Wall -Wextra -Werror
 # CFLAGS+=-O3 -Wall
 
 CFLAGS+=-DDEBUG
@@ -61,16 +59,16 @@ test: dirs ${OBJ} ${TEST_OBJ}
 	${CC} ${CFLAGS} ${INCLUDE} ${OBJ} ${TEST_OBJ} test/test.c -o bin/test
 
 bench: clean all
-	# ./bin/wotd data/data.xml data/10000.txt bench
 	./bin/wotd data/members/diffsize/005.txt data/members/random-patterns.txt bench
 
 run: clean all
 	./bin/wotd data/doctronic/data-diffsize/small.xml data/doctronic/diffsize/12000.txt run
 
 big: clean all
-	# ./bin/wotd data/doctronic/entscheidungen.xml data/doctronic/diffsize/00400.txt run
 	./bin/wotd data/doctronic/data-diffsize/quarter.xml data/doctronic/diffsize/12000.txt run
-	# ./bin/wotd data/doctronic/data-diffsize/half.xml data/doctronic/diffsize/12000.txt run
+
+small: clean all
+	./bin/wotd data/mini/smyth.txt data/mini/smyth-patt.txt run
 
 runtest: clean test
 	./bin/test

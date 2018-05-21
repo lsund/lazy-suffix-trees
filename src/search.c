@@ -173,6 +173,7 @@ bool search(Wchar *patt_start, Wchar *patt_end)
 {
 
     Pattern patt = init_pattern(patt_start, patt_end);
+    Uint pattlen = patt_end - patt_start;
 
     VertexP cursor;
     Match rootmatch = match_rootedge(&patt, &cursor);
@@ -190,9 +191,14 @@ bool search(Wchar *patt_start, Wchar *patt_end)
 
             if (IS_LEAF(cursor)) {
 
+
                 Match match = try_match_leaf(patt, cursor);
 
                 if (match.done) {
+                    Uint left = patt.end - patt.cursor;
+                    printf("Len: %lu\n", patt.end - patt.cursor);
+                    printf("%ls\n", wtext + OFFSET(cursor) - pattlen + left);
+                    printf("Number: %lu\n", OFFSET(cursor) - pattlen + left);
                     return match.success;
                 } else {
                     cursor += LEAF_VERTEXSIZE;

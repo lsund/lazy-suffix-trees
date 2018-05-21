@@ -33,15 +33,15 @@
 // Vertices
 #define INDEX(P)         ((Uint) ((P) - ROOT))
 
-#define LEAFBIT                 MSB
+#define LEAFBIT                         MSB
 
 // Bit determining if the node is the rightmost child of its parent. This is
 // stored in the first integer, ie its left pointer.
-#define LASTCHILDBIT            SECOND_MSB
+#define LASTCHILDBIT                    SECOND_MSB
 
 // Bit determining if the inner node is unevaluated. This is stored in the
 // second integer of the vertex, ie. its first child.
-#define UNEVALUATEDBIT          MSB
+#define UNEVALUATEDBIT                  MSB
 
 #define WITH_LASTCHILDBIT(V)            ((V) | LASTCHILDBIT)
 #define WITH_LEAFBIT(V)                 ((V) | LEAFBIT)
