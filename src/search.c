@@ -203,7 +203,7 @@ Sint search(Wchar *patt_start, Wchar *patt_end)
 
                 if (match.done) {
                     Uint unmatched = patt.end - patt.cursor;
-                    return OFFSET(cursor) - pattlen + unmatched;
+                    return match.success ? OFFSET(cursor) - pattlen + unmatched : -1;
                 } else {
                     cursor += LEAF_VERTEXSIZE;
                 }
