@@ -83,16 +83,12 @@ static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
 }
 
 
-void eval_root()
+static void eval_nonroot(Wchar **leftb, Wchar **rightb)
 {
-    if (!root_evaluated) {
-        create_suffix_groups();
-        eval_edges(suffixes, suffixes + textlen - 1, true);
-        root_evaluated = true;
-    }
+    eval_edges(leftb, rightb, false);
 }
 
-void eval_vertex(Vertex vertex_val, Wchar ***leftb, Wchar ***rightb)
+static void eval_vertex(Vertex vertex_val, Wchar ***leftb, Wchar ***rightb)
 {
     VertexP vertex = vertices + vertex_val;
     *leftb   = LEFT_BOUND(vertex);
@@ -104,20 +100,32 @@ void eval_vertex(Vertex vertex_val, Wchar ***leftb, Wchar ***rightb)
     counting_sort(*leftb, *rightb);
 }
 
-
-void eval_branch(Vertex vertex_val)
+static void eval(Vertex vertex_val, void (*eval_fun)(Wchar **, Wchar **))
 {
     Wchar **leftb;
     Wchar **rightb;
     eval_vertex(vertex_val, &leftb, &rightb);
-    eval_edges(leftb, rightb, false);
+    eval_fun(leftb, rightb);
+}
+
+void eval_root()
+{
+    if (!root_evaluated) {
+        create_suffix_groups();
+        eval_edges(suffixes, suffixes + textlen - 1, true);
+        root_evaluated = true;
+    }
+}
+
+void eval_branch(Vertex vertex_val)
+{
+    eval(vertex_val, eval_nonroot);
 }
 
 
 void eval_suffixes(Vertex vertex_val)
 {
-    Wchar **leftb;
-    Wchar **rightb;
-    eval_vertex(vertex_val, &leftb, &rightb);
-    get_suffixes(leftb, rightb);
+    eval(vertex_val, get_suffixes);
 }
+
+

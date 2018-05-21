@@ -222,7 +222,7 @@ void *utest_leaves()
 
 char *test_search()
 {
-    /* mu_run_utest(utest_search); */
+    mu_run_utest(utest_search);
 
     mu_run_utest(utest_leaves);
 

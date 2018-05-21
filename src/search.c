@@ -98,23 +98,15 @@ static Uint offset(VertexP vertex)
 }
 
 
-static void eval_if_uneval(VertexP *vertex)
+static void eval_if_uneval(VertexP *vertex, void (*eval_fun)(Vertex))
 {
     if(IS_UNEVALUATED(*vertex)) {
         Uint index = INDEX(*vertex);
         *vertex = vertices + index;
-        eval_branch(index);
+        eval_fun(index);
     }
 }
 
-static void recurse_suffixes(VertexP *vertex)
-{
-    if(IS_UNEVALUATED(*vertex)) {
-        Uint index = INDEX(*vertex);
-        *vertex = vertices + index;
-        eval_suffixes(index);
-    }
-}
 
 static Uint prefixlen(Uint *vertex, Pattern patt, Uint edgelen)
 {
@@ -159,7 +151,7 @@ static Match match_rootedge(Pattern *patt, VertexP *cursor)
 
     *cursor  = vertices + rootchild;
 
-    eval_if_uneval(cursor);
+    eval_if_uneval(cursor, eval_branch);
     Uint edgelen = edge_length(*cursor);
     Uint plen    = prefixlen(*cursor, *patt, edgelen);
 
@@ -217,7 +209,7 @@ bool search(Wchar *patt_start, Wchar *patt_end)
             }
         }
 
-        eval_if_uneval(&cursor);
+        eval_if_uneval(&cursor, eval_branch);
         Uint edgelen = edge_length(cursor);
         Uint plen    = prefixlen(cursor, patt, edgelen);
 
@@ -274,8 +266,7 @@ Sint find_leafnums(Wchar *patt_start, Wchar *patt_end)
             }
         }
 
-        /* eval_if_uneval(&cursor); */
-        recurse_suffixes(&cursor);
+        eval_if_uneval(&cursor, eval_suffixes);
 
         Uint edgelen = edge_length(cursor);
         Uint plen    = prefixlen(cursor, patt, edgelen);
