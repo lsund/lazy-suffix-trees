@@ -169,7 +169,7 @@ static Match match_rootedge(Pattern *patt, VertexP *cursor)
 // Public Interface
 
 
-bool search(Wchar *patt_start, Wchar *patt_end)
+Sint search(Wchar *patt_start, Wchar *patt_end)
 {
 
     Pattern patt = init_pattern(patt_start, patt_end);
@@ -179,7 +179,8 @@ bool search(Wchar *patt_start, Wchar *patt_end)
     Match rootmatch = match_rootedge(&patt, &cursor);
 
     if (rootmatch.done) {
-        return rootmatch.success;
+        // TODO change 0 here
+        return rootmatch.success ? 0 : -1;
     }
 
     while(!is_empty(patt)) {
@@ -196,8 +197,7 @@ bool search(Wchar *patt_start, Wchar *patt_end)
 
                 if (match.done) {
                     Uint unmatched = patt.end - patt.cursor;
-                    printf("Number: %lu\n", OFFSET(cursor) - pattlen + unmatched);
-                    return match.success;
+                    return OFFSET(cursor) - pattlen + unmatched;
                 } else {
                     cursor += LEAF_VERTEXSIZE;
                 }
@@ -208,7 +208,7 @@ bool search(Wchar *patt_start, Wchar *patt_end)
                     break;
                 }
                 if(IS_LASTCHILD(cursor)) {
-                    return false;
+                    return -1;
                 } else {
                     cursor += INNER_VERTEXSIZE;
                 }
@@ -220,10 +220,12 @@ bool search(Wchar *patt_start, Wchar *patt_end)
         Uint plen    = prefixlen(cursor, patt, edgelen);
 
         if(is_prefix(plen, edgelen)) {
-            return is_matched(patt, plen);
+            // TODO change 0 here
+            return is_matched(patt, plen) ? 0 : -1;
         }
 
         patt.cursor += edgelen;
     }
-    return true;
+    // TODO change 0 here
+    return 0;
 }

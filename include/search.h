@@ -34,6 +34,6 @@ typedef struct pattern {
 } Pattern;
 
 
-bool search(Wchar *left, Wchar *patt_end);
+Sint search(Wchar *left, Wchar *patt_end);
 
 #endif

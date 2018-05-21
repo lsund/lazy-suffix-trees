@@ -38,9 +38,7 @@ typedef unsigned char  Uchar;
 typedef unsigned short Ushort;
 
 typedef unsigned long  Uint;
-
-typedef unsigned long  Ulong;
-typedef signed   long  Slong;
+typedef signed   long  Sint;
 
 typedef wchar_t Wchar;
 

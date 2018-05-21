@@ -48,7 +48,14 @@ bool search_pattern(Wchar *current_pattern, Uint patternlen)
     Wchar pattern[MAXPATTERNLEN + 1];
     copy_pattern(pattern, current_pattern, patternlen);
 
-    return search(pattern, pattern + patternlen - 1);
+    Sint leafnum = search(pattern, pattern + patternlen - 1);
+
+    if (leafnum == -1) {
+        return false;
+    } else {
+        printf("Found leafnum: %ld\n", leafnum);
+        return true;
+    }
 
 }
 
