@@ -159,7 +159,6 @@ char *utest_search()
 
 void *utest_leaves()
 {
-    Uint patternslen;
     setlocale(LC_ALL, "en_US.utf8");
     FILE *in = fopen("data/mini/smyth.txt", "r");
     wtext = malloc(sizeof(Wchar) * MAXTEXTLEN);
@@ -172,14 +171,43 @@ void *utest_leaves()
     wtext[textlen + 1] = '\0';
     max_codepoint = get_max(wtext, textlen);
     fclose(in);
-    Wchar **patterns = (Wchar **) malloc(sizeof(Wchar *) * MAX_PATTERNS);
-    file_to_strings("data/mini/smyth-patt.txt", &patternslen, MAX_PATTERNS, &patterns);
+    Wchar *patterns[14];
     init();
 
+    Uint numbers[14];
 
-    Wchar *current_pattern = patterns[0];
-    Uint patternlen = strlenw(current_pattern);
-    search_pattern(current_pattern, patternlen);
+    patterns[0] = L"111";
+    numbers[0]  = 2;
+    patterns[1] = L"112";
+    numbers[1]  = 3;
+    patterns[2] = L"121";
+    numbers[2]  = 0;
+    patterns[3] = L"1221";
+    numbers[3]  = 4;
+    patterns[4] = L"1222";
+    numbers[4]  = 7;
+    patterns[5] = L"1$";
+    numbers[5]  = 11;
+    patterns[6] = L"211";
+    numbers[6]  = 1;
+    patterns[7] = L"212";
+    numbers[7]  = 6;
+    patterns[8] = L"21$";
+    numbers[8]  = 10;
+    patterns[9] = L"2212";
+    numbers[9]  = 5;
+    patterns[10] = L"221$";
+    numbers[10]  = 9;
+    patterns[11] = L"222";
+    numbers[11]  = 8;
+
+    for (int i = 0; i < 12; i++) {
+        Wchar *current_pattern = patterns[i];
+        Uint patternlen = strlenw(current_pattern);
+        search_pattern(current_pattern, patternlen);
+    }
+
+
 
     return NULL;
 }

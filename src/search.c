@@ -195,10 +195,8 @@ bool search(Wchar *patt_start, Wchar *patt_end)
                 Match match = try_match_leaf(patt, cursor);
 
                 if (match.done) {
-                    Uint left = patt.end - patt.cursor;
-                    printf("Len: %lu\n", patt.end - patt.cursor);
-                    printf("%ls\n", wtext + OFFSET(cursor) - pattlen + left);
-                    printf("Number: %lu\n", OFFSET(cursor) - pattlen + left);
+                    Uint unmatched = patt.end - patt.cursor;
+                    printf("Number: %lu\n", OFFSET(cursor) - pattlen + unmatched);
                     return match.success;
                 } else {
                     cursor += LEAF_VERTEXSIZE;
