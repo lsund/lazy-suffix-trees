@@ -31,7 +31,8 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 // Vertices
-#define INDEX(P)         ((Uint) ((P) - ROOT))
+// Offset in the table
+#define INDEX(P)                        ((Uint) ((P) - ROOT))
 
 #define LEAFBIT                         MSB
 

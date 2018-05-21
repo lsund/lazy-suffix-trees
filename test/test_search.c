@@ -176,39 +176,46 @@ void *utest_leaves()
 
     Sint numbers[14];
 
-    patterns[0] = L"111";
-    numbers[0]  = 2;
-    patterns[1] = L"112";
-    numbers[1]  = 3;
-    patterns[2] = L"121";
-    numbers[2]  = 0;
-    patterns[3] = L"1221";
-    numbers[3]  = 4;
-    patterns[4] = L"1222";
-    numbers[4]  = 7;
-    patterns[5] = L"1$";
-    numbers[5]  = 11;
-    patterns[6] = L"211";
-    numbers[6]  = 1;
-    patterns[7] = L"212";
-    numbers[7]  = 6;
-    patterns[8] = L"21$";
-    numbers[8]  = 10;
-    patterns[9] = L"2212";
-    numbers[9]  = 5;
-    patterns[10] = L"221$";
-    numbers[10]  = 9;
-    patterns[11] = L"222";
-    numbers[11]  = 8;
+    // Leaf patterns
+    /* patterns[0] = L"111"; */
+    /* numbers[0]  = 2; */
+    /* patterns[1] = L"112"; */
+    /* numbers[1]  = 3; */
+    /* patterns[2] = L"121"; */
+    /* numbers[2]  = 0; */
+    /* patterns[3] = L"1221"; */
+    /* numbers[3]  = 4; */
+    /* patterns[4] = L"1222"; */
+    /* numbers[4]  = 7; */
+    /* patterns[5] = L"1$"; */
+    /* numbers[5]  = 11; */
+    /* patterns[6] = L"211"; */
+    /* numbers[6]  = 1; */
+    /* patterns[7] = L"212"; */
+    /* numbers[7]  = 6; */
+    /* patterns[8] = L"21$"; */
+    /* numbers[8]  = 10; */
+    /* patterns[9] = L"2212"; */
+    /* numbers[9]  = 5; */
+    /* patterns[10] = L"221$"; */
+    /* numbers[10]  = 9; */
+    /* patterns[11] = L"222"; */
+    /* numbers[11]  = 8; */
 
-    for (int i = 0; i < 12; i++) {
-        Wchar *current_pattern = patterns[i];
-        Uint patternlen = strlenw(current_pattern);
-        Sint num = find_startindices(current_pattern, patternlen);
-        mu_assert("Should have correct number.", num == numbers[i]);
-    }
+    // Inner patterns
+    patterns[12] = L"22";
+    numbers[12]  = 0;
+    Wchar *current_pattern = patterns[12];
+    Uint patternlen = strlenw(current_pattern);
+    Sint num = find_startindices(current_pattern, patternlen);
+    mu_assert("Should have correct number.", num == numbers[12]);
 
-
+    /* for (int i = 0; i < 13; i++) { */
+    /*     Wchar *current_pattern = patterns[i]; */
+    /*     Uint patternlen = strlenw(current_pattern); */
+    /*     Sint num = find_startindices(current_pattern, patternlen); */
+    /*     mu_assert("Should have correct number.", num == numbers[i]); */
+    /* } */
 
     return NULL;
 }
@@ -216,6 +223,7 @@ void *utest_leaves()
 char *test_search()
 {
     /* mu_run_utest(utest_search); */
+
     mu_run_utest(utest_leaves);
 
     return NULL;

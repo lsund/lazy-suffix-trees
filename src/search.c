@@ -98,16 +98,23 @@ static Uint offset(VertexP vertex)
 }
 
 
-static void eval_vertexp(VertexP *vertex)
+static void eval_if_uneval(VertexP *vertex)
 {
     if(IS_UNEVALUATED(*vertex)) {
-        Uint vertex_num = INDEX(*vertex);
-        eval_vertex(vertex_num);
-        *vertex = vertices + vertex_num;
+        Uint index = INDEX(*vertex);
+        eval_vertex(index);
+        *vertex = vertices + index;
     }
-
 }
 
+static void get_suffixes(VertexP *vertex)
+{
+    if(IS_UNEVALUATED(*vertex)) {
+        Uint index = INDEX(*vertex);
+        eval_suffixes(index);
+        *vertex = vertices + index;
+    }
+}
 
 static Uint prefixlen(Uint *vertex, Pattern patt, Uint edgelen)
 {
@@ -152,7 +159,7 @@ static Match match_rootedge(Pattern *patt, VertexP *cursor)
 
     *cursor  = vertices + rootchild;
 
-    eval_vertexp(cursor);
+    eval_if_uneval(cursor);
     Uint edgelen = edge_length(*cursor);
     Uint plen    = prefixlen(*cursor, *patt, edgelen);
 
@@ -192,7 +199,6 @@ Sint search(Wchar *patt_start, Wchar *patt_end)
 
             if (IS_LEAF(cursor)) {
 
-
                 Match match = try_match_leaf(patt, cursor);
 
                 if (match.done) {
@@ -215,17 +221,17 @@ Sint search(Wchar *patt_start, Wchar *patt_end)
             }
         }
 
-        eval_vertexp(&cursor);
+        get_suffixes(&cursor);
+        eval_if_uneval(&cursor);
         Uint edgelen = edge_length(cursor);
         Uint plen    = prefixlen(cursor, patt, edgelen);
 
-        if(is_prefix(plen, edgelen)) {
+        if (is_prefix(plen, edgelen)) {
             // TODO change 0 here
             return is_matched(patt, plen) ? 0 : -1;
         }
 
         patt.cursor += edgelen;
     }
-    // TODO change 0 here
     return 0;
 }
