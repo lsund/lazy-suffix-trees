@@ -30,7 +30,7 @@
 
 void eval_root();
 
-void eval_vertex(Vertex node);
+void eval_branch(Vertex node);
 
 void eval_suffixes(Vertex vertex_val);
 

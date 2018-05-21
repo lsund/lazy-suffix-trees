@@ -31,9 +31,9 @@ bool root_evaluated;
 static Pattern init_pattern(Wchar *patt_start, Wchar *patt_end)
 {
     Pattern patt;
-    patt.head  = *patt_start;
+    patt.head   = *patt_start;
     patt.cursor = patt_start;
-    patt.end   = patt_end;
+    patt.end    = patt_end;
     return patt;
 }
 
@@ -102,8 +102,8 @@ static void eval_if_uneval(VertexP *vertex)
 {
     if(IS_UNEVALUATED(*vertex)) {
         Uint index = INDEX(*vertex);
-        eval_vertex(index);
         *vertex = vertices + index;
+        eval_branch(index);
     }
 }
 
@@ -111,8 +111,8 @@ static void recurse_suffixes(VertexP *vertex)
 {
     if(IS_UNEVALUATED(*vertex)) {
         Uint index = INDEX(*vertex);
-        eval_suffixes(index);
         *vertex = vertices + index;
+        eval_suffixes(index);
     }
 }
 
@@ -175,8 +175,63 @@ static Match match_rootedge(Pattern *patt, VertexP *cursor)
 ///////////////////////////////////////////////////////////////////////////////
 // Public Interface
 
+bool search(Wchar *patt_start, Wchar *patt_end)
+{
 
-Sint search(Wchar *patt_start, Wchar *patt_end)
+    Pattern patt = init_pattern(patt_start, patt_end);
+
+    VertexP cursor;
+    Match rootmatch = match_rootedge(&patt, &cursor);
+
+    if (rootmatch.done) {
+        return rootmatch.success;
+    }
+
+    while(!is_empty(patt)) {
+
+        patt.head = *patt.cursor;
+        cursor    = vertices + CHILD(cursor);
+
+        while(true) {
+
+            if (IS_LEAF(cursor)) {
+
+                Match match = try_match_leaf(patt, cursor);
+
+                if (match.done) {
+                    return match.success;
+                } else {
+                    cursor += LEAF_VERTEXSIZE;
+                }
+
+            } else {
+                Wchar firstchar = *(wtext + offset(cursor));
+                if(firstchar == patt.head) {
+                    break;
+                }
+                if(IS_LASTCHILD(cursor)) {
+                    return false;
+                } else {
+                    cursor += INNER_VERTEXSIZE;
+                }
+            }
+        }
+
+        eval_if_uneval(&cursor);
+        Uint edgelen = edge_length(cursor);
+        Uint plen    = prefixlen(cursor, patt, edgelen);
+
+        if(is_prefix(plen, edgelen)) {
+            return is_matched(patt, plen);
+        }
+
+        patt.cursor += edgelen;
+    }
+    return true;
+}
+
+
+Sint find_leafnums(Wchar *patt_start, Wchar *patt_end)
 {
 
     Pattern patt = init_pattern(patt_start, patt_end);
@@ -186,7 +241,6 @@ Sint search(Wchar *patt_start, Wchar *patt_end)
     Match rootmatch = match_rootedge(&patt, &cursor);
 
     if (rootmatch.done) {
-        // TODO change 0 here
         return rootmatch.success ? 0 : -1;
     }
 
@@ -207,7 +261,6 @@ Sint search(Wchar *patt_start, Wchar *patt_end)
                 } else {
                     cursor += LEAF_VERTEXSIZE;
                 }
-
             } else {
                 Wchar firstchar = *(wtext + offset(cursor));
                 if(firstchar == patt.head) {
@@ -221,8 +274,9 @@ Sint search(Wchar *patt_start, Wchar *patt_end)
             }
         }
 
-        /* recurse_suffixes(&cursor); */
-        eval_if_uneval(&cursor);
+        /* eval_if_uneval(&cursor); */
+        recurse_suffixes(&cursor);
+
         Uint edgelen = edge_length(cursor);
         Uint plen    = prefixlen(cursor, patt, edgelen);
 

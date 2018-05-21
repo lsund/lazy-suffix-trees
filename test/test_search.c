@@ -84,7 +84,7 @@ char *compare_vs_naive(char *patternfile, char *textfile)
         rexists ? rexists_n++ : (void) 0;
 
         if (rexists != exists) {
-            printf("%d %d\n", rexists, exists);
+            printf("really exists %d exists %d\n", rexists, exists);
             printf("Fail on: %ls\n", patterns[j]);
         }
         mu_assert(
@@ -222,9 +222,9 @@ void *utest_leaves()
 
 char *test_search()
 {
-    mu_run_utest(utest_search);
+    /* mu_run_utest(utest_search); */
 
-    /* mu_run_utest(utest_leaves); */
+    mu_run_utest(utest_leaves);
 
     return NULL;
 }

@@ -48,13 +48,16 @@ Sint find_startindices(Wchar *current_pattern, Uint patternlen)
     Wchar pattern[MAXPATTERNLEN + 1];
     copy_pattern(pattern, current_pattern, patternlen);
 
-    return search(pattern, pattern + patternlen - 1);
+    return find_leafnums(pattern, pattern + patternlen - 1);
 }
 
 
 bool find_pattern(Wchar *current_pattern, Uint patternlen)
 {
-    return find_startindices(current_pattern, patternlen) > -1;
+    Wchar pattern[MAXPATTERNLEN + 1];
+    copy_pattern(pattern, current_pattern, patternlen);
+
+    return search(pattern, pattern + patternlen - 1);
 }
 
 

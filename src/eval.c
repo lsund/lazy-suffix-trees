@@ -92,34 +92,32 @@ void eval_root()
     }
 }
 
-
-void eval_vertex(Vertex vertex_val)
+void eval_vertex(Vertex vertex_val, Wchar ***leftb, Wchar ***rightb)
 {
     VertexP vertex = vertices + vertex_val;
+    *leftb   = LEFT_BOUND(vertex);
+    *rightb  = RIGHT_BOUND(vertex);
 
-    Wchar **leftb   = LEFT_BOUND(vertex);
-    Wchar **rightb  = RIGHT_BOUND(vertex);
-
-    SET_OFFSET(vertex, SUFFIX_INDEX(leftb));
+    SET_OFFSET(vertex, SUFFIX_INDEX(*leftb));
     CHILD(vertex) =  INDEX(next_element);
 
-    counting_sort(leftb, rightb);
+    counting_sort(*leftb, *rightb);
+}
 
+
+void eval_branch(Vertex vertex_val)
+{
+    Wchar **leftb;
+    Wchar **rightb;
+    eval_vertex(vertex_val, &leftb, &rightb);
     eval_edges(leftb, rightb, false);
 }
 
 
 void eval_suffixes(Vertex vertex_val)
 {
-    VertexP vertex = vertices + vertex_val;
-
-    Wchar **leftb   = LEFT_BOUND(vertex);
-    Wchar **rightb  = RIGHT_BOUND(vertex);
-
-    SET_OFFSET(vertex, SUFFIX_INDEX(leftb));
-    CHILD(vertex) =  INDEX(next_element);
-
-    counting_sort(leftb, rightb);
-
+    Wchar **leftb;
+    Wchar **rightb;
+    eval_vertex(vertex_val, &leftb, &rightb);
     get_suffixes(leftb, rightb);
 }
