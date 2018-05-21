@@ -52,10 +52,7 @@ void get_suffixes(Wchar **leftb, Wchar **rightb)
 
     for (curr_leftb = leftb; curr_leftb <= rightb; curr_leftb = curr_rightb + 1) {
         printf("Left b: %ls", *curr_leftb);
-        /* printf("Left b: %lu\n", SUFFIX_INDEX(curr_leftb) - 2); */
-
-        Wchar first = **curr_leftb;
-        get_rightb(&curr_rightb, curr_leftb, rightb, first);
+        get_rightb(&curr_rightb, curr_leftb, rightb, **curr_leftb);
     }
 }
 

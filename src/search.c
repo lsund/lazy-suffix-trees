@@ -107,7 +107,7 @@ static void eval_if_uneval(VertexP *vertex)
     }
 }
 
-static void get_suffixes(VertexP *vertex)
+static void recurse_suffixes(VertexP *vertex)
 {
     if(IS_UNEVALUATED(*vertex)) {
         Uint index = INDEX(*vertex);
@@ -221,7 +221,7 @@ Sint search(Wchar *patt_start, Wchar *patt_end)
             }
         }
 
-        get_suffixes(&cursor);
+        /* recurse_suffixes(&cursor); */
         eval_if_uneval(&cursor);
         Uint edgelen = edge_length(cursor);
         Uint plen    = prefixlen(cursor, patt, edgelen);
