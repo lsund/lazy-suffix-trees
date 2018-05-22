@@ -14,7 +14,8 @@ Uint        textlen,
             *next_element,
             sort_bufferwidth,
             max_sortbufferwidth,
-            suffixhead_count[MAX_CHARS + 1];
+            suffixhead_count[MAX_CHARS + 1],
+            n_recursed;
 
 
 bool    root_evaluated;
@@ -34,14 +35,15 @@ static void init_stree()
 {
     root_evaluated = false;
     streesize      = EXTENSION_SIZE;
-    printf("streesize: %lu\n", streesize);
-    printf("streealloc: %lu\n", sizeof(Uint) * streesize);
+    /* printf("streesize: %lu\n", streesize); */
+    /* printf("streealloc: %lu\n", sizeof(Uint) * streesize); */
     ALLOC(vertices, vertices, Uint, streesize);
-    printf("suffixalloc: %lu\n", sizeof(Wchar *) * textlen + 1);
+    /* printf("suffixalloc: %lu\n", sizeof(Wchar *) * textlen + 1); */
     ALLOC(suffixes, NULL, Wchar *, textlen + 1);
     next_element   = vertices;
 
-    ALLOC(recurse_suffixes, NULL, Wchar *, 100);
+    recurse_suffixes = malloc(sizeof(Wchar *) * 100);
+    n_recursed = 0;
 }
 
 

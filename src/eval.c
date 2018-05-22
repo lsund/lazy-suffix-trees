@@ -1,9 +1,9 @@
 
 #include "eval.h"
 
-Wchar   *wtext, *sentinel;
+Wchar   *wtext, *sentinel, **recurse_suffixes;
 
-Uint    *next_element, root_children[MAX_CHARS + 1];
+Uint    *next_element, root_children[MAX_CHARS + 1], n_recursed;
 
 
 static bool skip_sentinel(Wchar ***rightb)
@@ -50,10 +50,10 @@ static void create_suffixes(Wchar **leftb, Wchar **rightb, Uint **previous, bool
     Wchar **curr_leftb  = NULL;
     Wchar **curr_rightb = NULL;
 
-    Uint i = 0;
     for (curr_leftb = leftb; curr_leftb <= rightb; curr_leftb = curr_rightb + 1) {
 
-        recurse_suffixes[i] = *curr_leftb;
+        printf("Got suffix %ls", *curr_leftb);
+        recurse_suffixes[n_recursed] = *curr_leftb;
         Wchar first = **curr_leftb;
         get_rightb(&curr_rightb, curr_leftb, rightb, first);
         *previous = next_element;
@@ -63,13 +63,14 @@ static void create_suffixes(Wchar **leftb, Wchar **rightb, Uint **previous, bool
         } else {
             create_leaf_vertex(first, curr_leftb, isroot);
         }
-        i++;
+        n_recursed++;
     }
 }
 
 
 static void eval_suffixes(Wchar **leftb, Wchar **rightb, bool isroot)
 {
+    printf("NEW VERTEX---------\n");
     bool sentineledge    = skip_sentinel(&rightb);
 
     if (isroot) {
