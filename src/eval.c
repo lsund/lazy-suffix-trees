@@ -45,17 +45,53 @@ static void create_edges(Wchar **leftb, Wchar **rightb, Uint **previous, bool is
     }
 }
 
-void get_suffixes(Wchar **leftb, Wchar **rightb)
+static void create_suffixes(Wchar **leftb, Wchar **rightb, Uint **previous, bool isroot)
 {
     Wchar **curr_leftb  = NULL;
     Wchar **curr_rightb = NULL;
 
+    Uint i = 0;
     for (curr_leftb = leftb; curr_leftb <= rightb; curr_leftb = curr_rightb + 1) {
-        printf("Left b: %ls", *curr_leftb);
-        get_rightb(&curr_rightb, curr_leftb, rightb, **curr_leftb);
+
+        recurse_suffixes[i] = *curr_leftb;
+        Wchar first = **curr_leftb;
+        get_rightb(&curr_rightb, curr_leftb, rightb, first);
+        *previous = next_element;
+
+        if (curr_rightb > curr_leftb) {
+            create_inner_vertex(first, curr_leftb, curr_rightb, isroot);
+        } else {
+            create_leaf_vertex(first, curr_leftb, isroot);
+        }
+        i++;
     }
 }
 
+
+static void eval_suffixes(Wchar **leftb, Wchar **rightb, bool isroot)
+{
+    bool sentineledge    = skip_sentinel(&rightb);
+
+    if (isroot) {
+        init_root_children();
+    } else {
+        alloc_extend_stree();
+    }
+
+    Uint *previous       = NULL;
+    create_suffixes(leftb, rightb, &previous, isroot);
+
+    if (sentineledge) {
+        create_sentinel_vertex(rightb, &previous);
+    }
+
+    if (isroot) {
+        *next_element = WITH_LEAF_AND_LASTCHILDBIT(textlen);
+        next_element += LEAF_VERTEXSIZE;
+    } else {
+        *previous = WITH_LASTCHILDBIT(*previous);
+    }
+}
 
 static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
 {
@@ -88,6 +124,13 @@ static void eval_nonroot(Wchar **leftb, Wchar **rightb)
     eval_edges(leftb, rightb, false);
 }
 
+
+static void eval_nonroot_suffixes(Wchar **leftb, Wchar **rightb)
+{
+    eval_suffixes(leftb, rightb, false);
+}
+
+
 static void eval_vertex(Vertex vertex_val, Wchar ***leftb, Wchar ***rightb)
 {
     VertexP vertex = vertices + vertex_val;
@@ -100,6 +143,7 @@ static void eval_vertex(Vertex vertex_val, Wchar ***leftb, Wchar ***rightb)
     counting_sort(*leftb, *rightb);
 }
 
+
 static void eval(Vertex vertex_val, void (*eval_fun)(Wchar **, Wchar **))
 {
     Wchar **leftb;
@@ -107,6 +151,7 @@ static void eval(Vertex vertex_val, void (*eval_fun)(Wchar **, Wchar **))
     eval_vertex(vertex_val, &leftb, &rightb);
     eval_fun(leftb, rightb);
 }
+
 
 void eval_root()
 {
@@ -117,15 +162,14 @@ void eval_root()
     }
 }
 
+
 void eval_branch(Vertex vertex_val)
 {
     eval(vertex_val, eval_nonroot);
 }
 
 
-void eval_suffixes(Vertex vertex_val)
+void eval_branch_suffixes(Vertex vertex_val)
 {
-    eval(vertex_val, get_suffixes);
+    eval(vertex_val, eval_nonroot_suffixes);
 }
-
-

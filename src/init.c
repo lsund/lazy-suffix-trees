@@ -1,10 +1,11 @@
 
 #include "init.h"
 
-Wchar     *wtext,
+Wchar       *wtext,
             *sentinel,
             characters[MAX_CHARS + 1],
-            **suffixes;
+            **suffixes,
+            **recurse_suffixes;
 
 Uint        textlen,
             alphasize,
@@ -39,6 +40,8 @@ static void init_stree()
     printf("suffixalloc: %lu\n", sizeof(Wchar *) * textlen + 1);
     ALLOC(suffixes, NULL, Wchar *, textlen + 1);
     next_element   = vertices;
+
+    ALLOC(recurse_suffixes, NULL, Wchar *, 100);
 }
 
 

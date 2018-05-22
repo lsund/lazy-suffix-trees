@@ -222,9 +222,10 @@ bool search(Wchar *patt_start, Wchar *patt_end)
     return true;
 }
 
-
 Sint find_leafnums(Wchar *patt_start, Wchar *patt_end)
 {
+    recurse_suffixes[0] = NULL;
+    recurse_suffixes[1] = NULL;
 
     Pattern patt = init_pattern(patt_start, patt_end);
     Uint pattlen = patt_end - patt_start;
@@ -233,6 +234,7 @@ Sint find_leafnums(Wchar *patt_start, Wchar *patt_end)
     Match rootmatch = match_rootedge(&patt, &cursor);
 
     if (rootmatch.done) {
+        printf("Root\n");
         return rootmatch.success ? 0 : -1;
     }
 
@@ -249,6 +251,7 @@ Sint find_leafnums(Wchar *patt_start, Wchar *patt_end)
 
                 if (match.done) {
                     Uint unmatched = patt.end - patt.cursor;
+                    printf("%ld\n", OFFSET(cursor) - pattlen + unmatched);
                     return match.success ? OFFSET(cursor) - pattlen + unmatched : -1;
                 } else {
                     cursor += LEAF_VERTEXSIZE;
@@ -259,6 +262,7 @@ Sint find_leafnums(Wchar *patt_start, Wchar *patt_end)
                     break;
                 }
                 if(IS_LASTCHILD(cursor)) {
+                    printf("Last\n");
                     return -1;
                 } else {
                     cursor += INNER_VERTEXSIZE;
@@ -266,7 +270,16 @@ Sint find_leafnums(Wchar *patt_start, Wchar *patt_end)
             }
         }
 
-        eval_if_uneval(&cursor, eval_suffixes);
+        eval_if_uneval(&cursor, eval_branch_suffixes);
+
+        for (Uint i = 0; i < 2; i++) {
+            if (recurse_suffixes[i]) {
+                find_leafnums(
+                        recurse_suffixes[i],
+                        recurse_suffixes[i] + strlenw(recurse_suffixes[i]) - 1
+                        );
+            }
+        }
 
         Uint edgelen = edge_length(cursor);
         Uint plen    = prefixlen(cursor, patt, edgelen);

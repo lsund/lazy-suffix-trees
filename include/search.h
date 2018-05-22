@@ -26,6 +26,7 @@
 #include "sort.h"
 #include "eval.h"
 #include "match.h"
+#include "util.h"
 
 typedef struct pattern {
     Wchar head;
