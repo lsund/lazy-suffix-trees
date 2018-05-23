@@ -252,18 +252,11 @@ Sint find_leafnums(Wchar *patt_start, Wchar *patt_end, VertexP start, Uint match
             /* patt.cursor += edgelen; */
         /* } */
     }
-    Wchar *text_cursor = wtext + offset(cursor);
-    printf("Starting with cursor: %ls", text_cursor);
-    printf("Cursor number: %lu\n", OFFSET(cursor));
 
     while(!is_empty(patt)) {
 
         patt.head = *patt.cursor;
         cursor    = vertices + CHILD(cursor);
-        Wchar *text_cursor = wtext + offset(cursor);
-        printf("Matching pattern: %ls\n", patt.cursor);
-        printf("On cursor: %ls", text_cursor);
-        printf("Cursor number: %lu\n", OFFSET(cursor));
 
         while(true) {
 
@@ -272,26 +265,17 @@ Sint find_leafnums(Wchar *patt_start, Wchar *patt_end, VertexP start, Uint match
                 Match match = try_match_leaf(patt, cursor);
 
                 if (match.done) {
-                    /* printf("\nmatched: %ld", matched - pattlen); */
                     printf("\nFinished for: %ls", patt.start);
-                    printf("\nMatch success: %d\n", match.success);
                     printf("number: %lu\n", SUFFIX_INDEX(&patt.start) - matched);
-                    printf("depth: %lu\n", matched);
-                    /* printf("index: %lu\n", */
-                            /* SUFFIX_INDEX(&patt.start)); */
-                    /* printf("%ld\n", OFFSET(cursor) - pattlen + pattlen); */
                     return match.success ? OFFSET(cursor) - pattlen + pattlen : -1;
                 } else {
                     cursor += LEAF_VERTEXSIZE;
                 }
             } else {
-                printf("Consider inner edge ...");
                 Wchar firstchar = *(wtext + offset(cursor));
                 if(firstchar == patt.head) {
-                    printf(" ... Found matching edge with : %lc\n", patt.head);
                     break;
                 }
-                printf(" ... Nothing\n");
                 if(IS_LASTCHILD(cursor)) {
                     return -1;
                 } else {
@@ -300,15 +284,12 @@ Sint find_leafnums(Wchar *patt_start, Wchar *patt_end, VertexP start, Uint match
             }
         }
 
-        printf("Evaluating cursor\n");
         eval_if_uneval(&cursor, eval_branch_suffixes);
         Uint edgelen = edge_length(cursor);
         Uint plen    = prefixlen(cursor, patt, edgelen);
         if (is_prefix(plen, edgelen)) {
             return is_matched(patt, plen) ? 0 : -1;
         }
-        text_cursor = wtext + offset(cursor);
-        printf("Finished at cursor: %ls\n", text_cursor);
         while (n_recursed > 0) {
             n_recursed--;
             printf("Recursing with: %ls\n", recurse_suffixes[n_recursed]);
