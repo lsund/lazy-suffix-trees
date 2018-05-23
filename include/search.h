@@ -38,6 +38,6 @@ typedef struct pattern {
 
 bool search(Wchar *left, Wchar *patt_end);
 
-Sint find_leafnums(Wchar *left, Wchar *patt_end, VertexP start, Uint n);
+Sint find_leafnums(Wchar *left, Wchar *patt_end, VertexP start, Uint matched);
 
 #endif

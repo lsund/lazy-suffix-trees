@@ -70,7 +70,6 @@ static void create_suffixes(Wchar **leftb, Wchar **rightb, Uint **previous, bool
 
 static void eval_suffixes(Wchar **leftb, Wchar **rightb, bool isroot)
 {
-    printf("NEW VERTEX---------\n");
     bool sentineledge    = skip_sentinel(&rightb);
 
     if (isroot) {
