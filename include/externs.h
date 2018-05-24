@@ -91,5 +91,6 @@ extern bool root_evaluated;
 // Recurse suffixes
 
 extern Wchar **recurse_suffixes;
+extern Uint n_recursed, new_suffixes;
 
 #endif

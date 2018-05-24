@@ -3,7 +3,7 @@
 
 Wchar   *wtext, *sentinel, **recurse_suffixes;
 
-Uint    *next_element, root_children[MAX_CHARS + 1], n_recursed;
+Uint    *next_element, root_children[MAX_CHARS + 1], n_recursed, new_suffixes;
 
 
 static bool skip_sentinel(Wchar ***rightb)
@@ -49,10 +49,11 @@ static void create_suffixes(Wchar **leftb, Wchar **rightb, Uint **previous, bool
 {
     Wchar **curr_leftb  = NULL;
     Wchar **curr_rightb = NULL;
+    new_suffixes = 0;
 
     for (curr_leftb = leftb; curr_leftb <= rightb; curr_leftb = curr_rightb + 1) {
 
-        printf("Got suffix %ls", *curr_leftb);
+        printf("Got suffix %ls\n", *curr_leftb);
         recurse_suffixes[n_recursed] = *curr_leftb;
         Wchar first = **curr_leftb;
         get_rightb(&curr_rightb, curr_leftb, rightb, first);
@@ -61,9 +62,11 @@ static void create_suffixes(Wchar **leftb, Wchar **rightb, Uint **previous, bool
         if (curr_rightb > curr_leftb) {
             create_inner_vertex(first, curr_leftb, curr_rightb, isroot);
         } else {
+            /* printf("New leaf created %ls\n", *curr_leftb); */
             create_leaf_vertex(first, curr_leftb, isroot);
         }
         n_recursed++;
+        new_suffixes++;
     }
 }
 

@@ -168,7 +168,7 @@ void *utest_leaves()
         wtext[textlen] = c;
         textlen++;
     }
-    wtext[textlen + 1] = '\0';
+    wtext[textlen- 1] = '\0';
     max_codepoint = get_max(wtext, textlen);
     fclose(in);
     Wchar *patterns[14];
@@ -203,12 +203,12 @@ void *utest_leaves()
     /* numbers[11]  = 8; */
 
     // Inner patterns
-    patterns[12] = L"22";
+    // Need to backtrack as well...
+    patterns[12] = L"1";
     numbers[12]  = 0;
-    Wchar *current_pattern = patterns[12];
-    Uint patternlen = strlenw(current_pattern);
-    Sint num = find_startindices(current_pattern, patternlen);
-    mu_assert("Should have correct number.", num == numbers[12]);
+    find_startindices(patterns[12], 1);
+    /* find_startindices(patterns[13], 3); */
+    /* Sint num = find_startindices(patterns[13], patternlen); */
 
     /* for (int i = 0; i < 13; i++) { */
     /*     Wchar *current_pattern = patterns[i]; */
