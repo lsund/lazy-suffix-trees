@@ -43,3 +43,5 @@ void parse_float(char *str, float *f)
     }
 }
 
+/* void */
+

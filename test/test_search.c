@@ -174,39 +174,22 @@ void *utest_leaves()
     Wchar *patterns[14];
     init();
 
-    Sint numbers[14];
+    Uint numbers[100];
 
-    // Leaf patterns
-    /* patterns[0] = L"111"; */
-    /* numbers[0]  = 2; */
-    /* patterns[1] = L"112"; */
-    /* numbers[1]  = 3; */
-    /* patterns[2] = L"121"; */
-    /* numbers[2]  = 0; */
-    /* patterns[3] = L"1221"; */
-    /* numbers[3]  = 4; */
-    /* patterns[4] = L"1222"; */
-    /* numbers[4]  = 7; */
-    /* patterns[5] = L"1$"; */
-    /* numbers[5]  = 11; */
-    /* patterns[6] = L"211"; */
-    /* numbers[6]  = 1; */
-    /* patterns[7] = L"212"; */
-    /* numbers[7]  = 6; */
-    /* patterns[8] = L"21$"; */
-    /* numbers[8]  = 10; */
-    /* patterns[9] = L"2212"; */
-    /* numbers[9]  = 5; */
-    /* patterns[10] = L"221$"; */
-    /* numbers[10]  = 9; */
-    /* patterns[11] = L"222"; */
-    /* numbers[11]  = 8; */
+    patterns[0] = L"1";
+    numbers[0] = 2;
+    numbers[1] = 3;
+    numbers[2] = 0;
+    numbers[3] = 4;
+    numbers[4] = 7;
+    numbers[5] = 11;
+
 
     // Inner patterns
     // Need to backtrack as well...
-    patterns[12] = L"1";
+    patterns[12] = L"111";
     numbers[12]  = 0;
-    find_startindices(patterns[12], 1);
+    find_startindices(patterns[12], 3);
     /* find_startindices(patterns[13], 3); */
     /* Sint num = find_startindices(patterns[13], patternlen); */
 

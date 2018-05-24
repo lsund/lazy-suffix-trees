@@ -91,6 +91,11 @@ extern bool root_evaluated;
 // Recurse suffixes
 
 extern Wchar **recurse_suffixes;
+
 extern Uint n_recursed, new_suffixes;
+
+extern Uint *leaf_nums;
+
+extern Uint n_leafnums;
 
 #endif

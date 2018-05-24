@@ -25,7 +25,8 @@ Wchar *wtext,
         **suffixes,
         **recurse_suffixes;
 
-Uint *vertices, root_children[MAX_CHARS + 1], n_recursed, new_suffixes;
+Uint *vertices, root_children[MAX_CHARS + 1], n_recursed, new_suffixes,
+     *leaf_nums, n_leafnums;
 
 bool root_evaluated;
 
@@ -241,7 +242,12 @@ static void recurse(VertexP cursor, Uint matched, Uint edgelen, Uint number)
     }
 }
 
-Sint find_leafnums(Wchar *patt_start, Wchar *patt_end, VertexP start, Uint matched, bool recursing)
+bool find_leafnums(
+        Wchar *patt_start,
+        Wchar *patt_end,
+        VertexP start,
+        Uint matched,
+        bool recursing)
 {
     Pattern patt = init_pattern(patt_start, patt_end);
 
@@ -283,8 +289,10 @@ Sint find_leafnums(Wchar *patt_start, Wchar *patt_end, VertexP start, Uint match
 
                 /* printf("full match: %d\n", match.success); */
                 if (match.done) {
-                    printf("%lu\n", OFFSET(cursor) - matched);
-                    return match.success;
+                    leaf_nums[n_leafnums++] = OFFSET(cursor) - matched;
+                    /* n_leafnums++; */
+                    /* printf("%lu\n", OFFSET(cursor) - matched); */
+                    return true;
                 } else {
                     cursor += LEAF_VERTEXSIZE;
                 }
@@ -306,7 +314,8 @@ Sint find_leafnums(Wchar *patt_start, Wchar *patt_end, VertexP start, Uint match
         Uint plen    = prefixlen(cursor, patt, edgelen);
 
         if(is_prefix(plen, edgelen)) {
-            return is_matched(patt, plen);
+            printf("XXXXXXXXXXX\n");
+            return true;
         }
 
         patt.cursor += edgelen;
