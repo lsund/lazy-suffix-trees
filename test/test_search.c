@@ -183,10 +183,15 @@ void *utest_leaves()
     numbers[3] = 4;
     numbers[4] = 7;
     numbers[5] = 11;
+    mu_assert("Should contain", contains(numbers, 6, 2));
+    /* for (int i = 0; i < 1; i++) { */
+    /*     Wchar *current_pattern = patterns[i]; */
+    /*     Uint patternlen = strlenw(current_pattern); */
+    /*     Sint num = find_startindices(current_pattern, patternlen); */
+    /*     mu_assert("Should have correct number.", num == numbers[i]); */
+    /* } */
 
 
-    // Inner patterns
-    // Need to backtrack as well...
     patterns[12] = L"111";
     numbers[12]  = 0;
     find_startindices(patterns[12], 3);
