@@ -42,7 +42,7 @@ static void init_stree()
     ALLOC(suffixes, NULL, Wchar *, textlen + 1);
     next_element   = vertices;
 
-    recurse_suffixes = malloc(sizeof(Wchar *) * 100);
+    recurse_suffixes = malloc(sizeof(Wchar *) * 1000);
     n_recursed = 0;
 }
 

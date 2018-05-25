@@ -52,9 +52,6 @@ Sint find_startindices(Wchar *current_pattern, Uint patternlen)
     leaf_nums = malloc(sizeof(Uint) * 100);
     n_leafnums = 0;
     find_leafnums(pattern, pattern + patternlen - 1, NULL, patternlen - 1, false);
-    for (Uint i = 0; i < n_leafnums; i++) {
-        printf("%lu\n", leaf_nums[i]);
-    }
     return true;
 }
 

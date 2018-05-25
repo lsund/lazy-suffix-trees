@@ -26,5 +26,6 @@
 
 bool naive_search(Wchar *pattern, Wchar *patternright);
 
+Uint naive_find_all(Wchar *start, Wchar *end, Uint *numbers);
 
 #endif

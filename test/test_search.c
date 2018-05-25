@@ -50,7 +50,7 @@ char *test_count(char *patternfile, char *textfile, Uint count)
 
 char *compare_vs_naive(char *patternfile, char *textfile)
 {
-    int maxpatterns = 100;
+    int maxpatterns = 1000;
 
     Uint patternslen;
     setlocale(LC_ALL, "en_US.utf8");
@@ -96,6 +96,103 @@ char *compare_vs_naive(char *patternfile, char *textfile)
         free(patterns[i]);
     }
     free(patterns);
+    return NULL;
+}
+
+char *compare_vs_naive_smyth()
+{
+    setlocale(LC_ALL, "en_US.utf8");
+    FILE *in = fopen("data/mini/smyth.txt", "r");
+    wtext = malloc(sizeof(Wchar) * MAXTEXTLEN);
+    wint_t c;
+    textlen = 0;
+    while ((c = fgetwc(in)) != WEOF) {
+        wtext[textlen] = c;
+        textlen++;
+    }
+    wtext[textlen- 1] = '\0';
+    max_codepoint = get_max(wtext, textlen);
+    fclose(in);
+    Wchar *patterns[30];
+    init();
+
+    patterns[0]  = L"1";
+    patterns[1]  = L"11";
+    patterns[2]  = L"111";
+    patterns[3]  = L"112";
+    patterns[4]  = L"12";
+    patterns[5]  = L"121";
+    patterns[6]  = L"122";
+    patterns[7]  = L"1221";
+    patterns[8]  = L"1222";
+    patterns[9]  = L"2";
+    patterns[10] = L"21";
+    patterns[11] = L"211";
+    patterns[12] = L"212";
+    patterns[13] = L"21$";
+    patterns[14] = L"22";
+    patterns[15] = L"221";
+    patterns[16] = L"2212";
+    patterns[17] = L"221$";
+    patterns[18] = L"222";
+    patterns[19]  = L"1112";
+    /* patterns[19] = L"222"; */
+    /* patterns[20] = L"1"; */
+
+    Uint naive_numbers[20];
+    for (int i = 0; i < 20; i++) {
+        evaluated = false;
+        Wchar *current_pattern = patterns[i];
+        Uint patternlen = strlenw(current_pattern);
+        Uint n_found = naive_find_all(
+                current_pattern,
+                current_pattern + patternlen,
+                naive_numbers);
+        find_startindices(current_pattern, patternlen);
+        mu_assert("Should find correct number of leaves.",
+                n_found == n_leafnums);
+        mu_assert("Should contain correct number.",
+                contains(naive_numbers, n_found, leaf_nums));
+        free(leaf_nums);
+    }
+    return NULL;
+}
+
+char *compare_vs_naive_leaves(char *patternfile, char *textfile)
+{
+    setlocale(LC_ALL, "en_US.utf8");
+    FILE *in = fopen(textfile, "r");
+    wtext = malloc(sizeof(Wchar) * MAXTEXTLEN);
+    wint_t c;
+    textlen = 0;
+    while ((c = fgetwc(in)) != WEOF) {
+        wtext[textlen] = c;
+        textlen++;
+    }
+    wtext[textlen- 1] = '\0';
+    max_codepoint = get_max(wtext, textlen);
+    fclose(in);
+    init();
+
+    Uint naive_numbers[20];
+
+    Uint patternslen;
+    Wchar **patterns = (Wchar **) malloc(sizeof(Wchar *) * MAX_PATTERNS);
+    int npatterns  = file_to_strings(patternfile, &patternslen, MAX_PATTERNS, &patterns);
+    Wchar *current_pattern = patterns[0];
+    Uint patternlen = strlenw(current_pattern);
+    Uint n_found = naive_find_all(
+            current_pattern,
+            current_pattern + patternlen,
+            naive_numbers);
+    find_startindices(current_pattern, patternlen);
+    printf("N leaf nums: %lu\n", n_leafnums);
+    for (Uint i = 0; i < n_leafnums; i++) {
+        printf("Found in tree: %lu\n", leaf_nums[i]);
+    }
+    mu_assert("Should contain correct number.",
+            contains(naive_numbers, n_found, leaf_nums));
+
     return NULL;
 }
 
@@ -159,135 +256,15 @@ char *utest_search()
 
 void *utest_leaves()
 {
-    setlocale(LC_ALL, "en_US.utf8");
-    FILE *in = fopen("data/mini/smyth.txt", "r");
-    wtext = malloc(sizeof(Wchar) * MAXTEXTLEN);
-    wint_t c;
-    textlen = 0;
-    while ((c = fgetwc(in)) != WEOF) {
-        wtext[textlen] = c;
-        textlen++;
-    }
-    wtext[textlen- 1] = '\0';
-    max_codepoint = get_max(wtext, textlen);
-    fclose(in);
-    Wchar *patterns[20];
-    init();
+    char *error;
+    error = compare_vs_naive_leaves(
+                "/home/lsund/Data/testdata/members/random-patterns.txt",
+                "/home/lsund/Data/testdata/members/diffsize/005.txt"
+            );
+    if (error) return error;
 
-    Uint numbers[100][20];
-    Uint lens[20];
-
-    patterns[0] = L"1";
-    numbers[0][0] = 2;
-    numbers[0][1] = 3;
-    numbers[0][2] = 0;
-    numbers[0][3] = 4;
-    numbers[0][4] = 7;
-    numbers[0][5] = 11;
-    lens[0] = 6;
-
-    patterns[1]   = L"11";
-    numbers[1][0] = 2;
-    numbers[1][1] = 3;
-    lens[1]       = 2;
-
-    patterns[2]   = L"111";
-    numbers[2][0] = 2;
-    lens[2]       = 1;
-
-    patterns[3]   = L"112";
-    numbers[3][0] = 3;
-    lens[3]       = 1;
-
-    patterns[4]   = L"12";
-    numbers[4][0] = 0;
-    numbers[4][1] = 4;
-    numbers[4][2] = 7;
-    lens[4]       = 3;
-
-    patterns[5]   = L"121";
-    numbers[5][0] = 0;
-    lens[5]       = 1;
-
-    patterns[6]   = L"122";
-    numbers[6][0] = 4;
-    numbers[6][1] = 7;
-    lens[6]       = 2;
-
-
-    patterns[7]   = L"1221";
-    numbers[7][0] = 4;
-    lens[7]       = 1;
-
-
-    patterns[8]   = L"1222";
-    numbers[8][0] = 7;
-    lens[8]       = 1;
-
-    patterns[9]   = L"2";
-    numbers[9][0] = 1;
-    numbers[9][1] = 6;
-    numbers[9][2] = 10;
-    numbers[9][3] = 5;
-    numbers[9][4] = 9;
-    numbers[9][5] = 8;
-    lens[9]       = 6;
-
-    patterns[10]   = L"21";
-    numbers[10][0] = 1;
-    numbers[10][1] = 6;
-    numbers[10][2] = 10;
-    lens[10]       = 3;
-
-    patterns[11]   = L"211";
-    numbers[11][0] = 1;
-    lens[11]       = 1;
-
-    patterns[12]   = L"212";
-    numbers[12][0] = 6;
-    lens[12]       = 1;
-
-    patterns[13]   = L"21$";
-    numbers[13][0] = 10;
-    lens[13]       = 1;
-
-    patterns[14]   = L"22";
-    numbers[14][0] = 5;
-    numbers[14][1] = 9;
-    numbers[14][2] = 8;
-    lens[14]       = 3;
-
-    patterns[15]   = L"221";
-    numbers[15][0] = 5;
-    numbers[15][1] = 9;
-    lens[15]       = 2;
-
-    patterns[16]   = L"2212";
-    numbers[16][0] = 5;
-    lens[16]       = 1;
-
-    patterns[17]   = L"221$";
-    numbers[17][0] = 9;
-    lens[17]       = 1;
-
-    patterns[18]   = L"222";
-    numbers[18][0] = 8;
-    lens[18]       = 1;
-
-    for (int i = 0; i < 19; i++) {
-        evaluated = false;
-        Wchar *current_pattern = patterns[i];
-        Uint patternlen = strlenw(current_pattern);
-        printf("pattern: %ls\n", current_pattern);
-        find_startindices(current_pattern, patternlen);
-        mu_assert("Should contain correct number.",
-                contains(numbers[i], lens[i], leaf_nums));
-        /* printf("%d %lu %lu\n", i, lens[i], n_leafnums); */
-        mu_assert("Should find correct number of leaves.",
-                lens[i] == n_leafnums);
-        free(leaf_nums);
-    }
-
+    error = compare_vs_naive_smyth();
+    if (error) return error;
 
     return NULL;
 }

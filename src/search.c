@@ -318,10 +318,13 @@ bool find_leafnums(
 
                 Match match = try_match_leaf(patt, cursor);
 
-                /* printf("full match: %d\n", match.success); */
                 if (match.done) {
-                    leaf_nums[n_leafnums++] = OFFSET(cursor) - matched;
-                    /* printf("%lu\n", OFFSET(cursor) - matched); */
+                    Uint remaining = patt.end - patt.cursor;
+                    if (recursing) {
+                        leaf_nums[n_leafnums++] = OFFSET(cursor) - matched;
+                    } else {
+                        leaf_nums[n_leafnums++] = OFFSET(cursor) - matched + remaining;
+                    }
                     return true;
                 } else {
                     cursor += LEAF_VERTEXSIZE;
@@ -350,7 +353,6 @@ bool find_leafnums(
 
         patt.cursor += edgelen;
         if (is_empty(patt) || recursing) {
-            /* printf("New suffixes: %lu, total: %lu\n", new_suffixes, n_recursed); */
             recurse(cursor, matched, edgelen, new_suffixes);
             break;
         }
