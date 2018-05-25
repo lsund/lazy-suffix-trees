@@ -98,4 +98,6 @@ extern Uint *leaf_nums;
 
 extern Uint n_leafnums;
 
+extern bool evaluated;
+
 #endif

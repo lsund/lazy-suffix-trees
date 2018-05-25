@@ -29,6 +29,7 @@ Uint *vertices, root_children[MAX_CHARS + 1], n_recursed, new_suffixes,
      *leaf_nums, n_leafnums;
 
 bool root_evaluated;
+bool evaluated = false;
 
 static Pattern init_pattern(Wchar *patt_start, Wchar *patt_end)
 {
@@ -101,12 +102,48 @@ static Uint offset(VertexP vertex)
 }
 
 
+void traverse(VertexP cursor, Uint matchedlen)
+{
+    Wchar firstchar = *(wtext + offset(cursor));
+    printf("%lc\n",firstchar);
+
+    Uint depth = 0;
+    printf("matched: %lu\n", matchedlen);
+
+    while(true) {
+
+        if (!IS_LEAF(cursor)) {
+            Uint edgelen = edge_length(cursor);
+            depth += edgelen;
+            cursor    = vertices + CHILD(cursor);
+        }
+
+        if (IS_LEAF(cursor)) {
+            printf("Leaf\n");
+            /* printf("%lu\n", OFFSET(cursor) - depth - matchedlen); */
+            leaf_nums[n_leafnums++] = OFFSET(cursor) - depth - matchedlen;
+            if(IS_LASTCHILD(cursor)) {
+                break;
+            }
+            cursor += LEAF_VERTEXSIZE;
+        } else {
+            if(IS_LASTCHILD(cursor)) {
+                break;
+            } else {
+                cursor += INNER_VERTEXSIZE;
+            }
+        }
+    }
+}
 static void eval_if_uneval(VertexP *vertex, void (*eval_fun)(Vertex))
 {
     if(IS_UNEVALUATED(*vertex)) {
+        evaluated = true;
         Uint index = INDEX(*vertex);
         *vertex = vertices + index;
         eval_fun(index);
+    } else {
+        printf("Is evaluated\n");
     }
 }
 
@@ -242,6 +279,7 @@ static void recurse(VertexP cursor, Uint matched, Uint edgelen, Uint number)
     }
 }
 
+
 bool find_leafnums(
         Wchar *patt_start,
         Wchar *patt_end,
@@ -290,7 +328,6 @@ bool find_leafnums(
                 /* printf("full match: %d\n", match.success); */
                 if (match.done) {
                     leaf_nums[n_leafnums++] = OFFSET(cursor) - matched;
-                    /* n_leafnums++; */
                     /* printf("%lu\n", OFFSET(cursor) - matched); */
                     return true;
                 } else {
@@ -325,5 +362,10 @@ bool find_leafnums(
             break;
         }
     }
+    if (!evaluated) {
+        traverse(cursor, patt.end - patt.start);
+    }
     return true;
 }
+
+

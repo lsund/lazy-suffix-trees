@@ -1,7 +1,7 @@
 #include "test.h"
 
 Wchar *wtext;
-Uint textlen, max_codepoint;
+Uint textlen, max_codepoint, n_leafnums;
 
 static Uint min(const Uint a, const Uint b)
 {
@@ -174,36 +174,44 @@ void *utest_leaves()
     Wchar *patterns[14];
     init();
 
-    Uint numbers[100];
+    Uint numbers[100][14];
+    Uint lens[14];
 
     patterns[0] = L"1";
-    numbers[0] = 2;
-    numbers[1] = 3;
-    numbers[2] = 0;
-    numbers[3] = 4;
-    numbers[4] = 7;
-    numbers[5] = 11;
-    mu_assert("Should contain", contains(numbers, 6, 2));
-    /* for (int i = 0; i < 1; i++) { */
-    /*     Wchar *current_pattern = patterns[i]; */
-    /*     Uint patternlen = strlenw(current_pattern); */
-    /*     Sint num = find_startindices(current_pattern, patternlen); */
-    /*     mu_assert("Should have correct number.", num == numbers[i]); */
-    /* } */
+    numbers[0][0] = 2;
+    numbers[0][1] = 3;
+    numbers[0][2] = 0;
+    numbers[0][3] = 4;
+    numbers[0][4] = 7;
+    numbers[0][5] = 11;
+    lens[0] = 6;
 
+    patterns[1]   = L"11";
+    numbers[1][0] = 2;
+    numbers[1][1] = 3;
+    lens[1]       = 2;
 
-    patterns[12] = L"111";
-    numbers[12]  = 0;
-    find_startindices(patterns[12], 3);
-    /* find_startindices(patterns[13], 3); */
-    /* Sint num = find_startindices(patterns[13], patternlen); */
+    patterns[2]   = L"111";
+    numbers[2][0] = 2;
+    lens[2]       = 1;
 
-    /* for (int i = 0; i < 13; i++) { */
-    /*     Wchar *current_pattern = patterns[i]; */
-    /*     Uint patternlen = strlenw(current_pattern); */
-    /*     Sint num = find_startindices(current_pattern, patternlen); */
-    /*     mu_assert("Should have correct number.", num == numbers[i]); */
-    /* } */
+    patterns[2]   = L"111";
+    numbers[2][0] = 2;
+    lens[2]       = 1;
+
+    for (int i = 0; i < 3; i++) {
+        evaluated = false;
+        Wchar *current_pattern = patterns[i];
+        Uint patternlen = strlenw(current_pattern);
+        find_startindices(current_pattern, patternlen);
+        mu_assert("Should contain correct number.",
+                contains(numbers[i], lens[i], leaf_nums[i]));
+        printf("%d %lu %lu\n", i, lens[i], n_leafnums);
+        mu_assert("Should find correct number of leaves.",
+                lens[i] == n_leafnums);
+        free(leaf_nums);
+    }
+
 
     return NULL;
 }
