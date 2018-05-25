@@ -36,6 +36,6 @@ Uint randlen(Uint m_min, Uint m_max);
 
 size_t strlenw(Wchar *s);
 
-bool contains(Uint *arr, Uint len, Uint val);
+bool contains(Uint *arr, Uint len, Uint *vals);
 
 #endif

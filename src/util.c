@@ -43,12 +43,17 @@ void parse_float(char *str, float *f)
     }
 }
 
-bool contains(Uint *arr, Uint len, Uint val)
+bool contains(Uint *arr, Uint len, Uint *vals)
 {
     for (Uint i = 0; i < len; i++) {
-        if (arr[i] == val) {
-            return true;
+        for (Uint j = 0; j < len; j++) {
+            if (arr[i] == vals[j]) {
+                break;
+            }
+            if (j == len - 1) {
+                return false;
+            }
         }
     }
-    return false;
+    return true;
 }

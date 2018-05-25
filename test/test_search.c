@@ -195,17 +195,23 @@ void *utest_leaves()
     numbers[2][0] = 2;
     lens[2]       = 1;
 
-    patterns[2]   = L"111";
-    numbers[2][0] = 2;
-    lens[2]       = 1;
+    patterns[3]   = L"112";
+    numbers[3][0] = 3;
+    lens[3]       = 1;
 
-    for (int i = 0; i < 3; i++) {
+
+    /* patterns[1]   = L"12"; */
+    /* numbers[1][0] = 2; */
+    /* numbers[1][1] = 3; */
+    /* lens[1]       = 2; */
+
+    for (int i = 0; i < 4; i++) {
         evaluated = false;
         Wchar *current_pattern = patterns[i];
         Uint patternlen = strlenw(current_pattern);
         find_startindices(current_pattern, patternlen);
         mu_assert("Should contain correct number.",
-                contains(numbers[i], lens[i], leaf_nums[i]));
+                contains(numbers[i], lens[i], leaf_nums));
         printf("%d %lu %lu\n", i, lens[i], n_leafnums);
         mu_assert("Should find correct number of leaves.",
                 lens[i] == n_leafnums);
