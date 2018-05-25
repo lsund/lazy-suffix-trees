@@ -104,11 +104,7 @@ static Uint offset(VertexP vertex)
 
 void traverse(VertexP cursor, Uint matchedlen)
 {
-    Wchar firstchar = *(wtext + offset(cursor));
-    printf("%lc\n",firstchar);
-
     Uint depth = 0;
-    printf("matched: %lu\n", matchedlen);
 
     while(true) {
 
@@ -119,14 +115,13 @@ void traverse(VertexP cursor, Uint matchedlen)
         }
 
         if (IS_LEAF(cursor)) {
-            printf("Leaf\n");
-            /* printf("%lu\n", OFFSET(cursor) - depth - matchedlen); */
             leaf_nums[n_leafnums++] = OFFSET(cursor) - depth - matchedlen;
             if(IS_LASTCHILD(cursor)) {
                 break;
             }
             cursor += LEAF_VERTEXSIZE;
         } else {
+            traverse(cursor, matchedlen + depth);
             if(IS_LASTCHILD(cursor)) {
                 break;
             } else {
@@ -142,8 +137,6 @@ static void eval_if_uneval(VertexP *vertex, void (*eval_fun)(Vertex))
         Uint index = INDEX(*vertex);
         *vertex = vertices + index;
         eval_fun(index);
-    } else {
-        printf("Is evaluated\n");
     }
 }
 
