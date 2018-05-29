@@ -53,4 +53,10 @@ void stree_destroy()
     free(suffixes);
     free(leaf_nums);
     free(recurse_suffixes);
+    sortbuffer       = NULL;
+    wtext            = NULL;
+    vertices         = NULL;
+    leaf_nums        = NULL;
+    suffixes         = NULL;
+    recurse_suffixes = NULL;
 }

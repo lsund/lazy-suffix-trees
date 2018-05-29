@@ -276,8 +276,9 @@ void *utest_leaves()
                 "/home/lsund/Data/testdata/members/diffsize/005.txt"
             );
     if (error) return error;
+    printf("Done with leaves\n");
 
-/*     error = compare_vs_naive_smyth(); */
+    error = compare_vs_naive_smyth();
     if (error) return error;
 
     return NULL;

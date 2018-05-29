@@ -12,7 +12,7 @@ Uint        textlen,
             *vertices,
             streesize,
             *next_element,
-            sort_bufferwidth,
+            sortbufferwidth,
             max_sortbufferwidth,
             suffixhead_count[MAX_CHARS + 1],
             n_recursed;
@@ -51,7 +51,7 @@ static void init_stree()
 
 static void init_sortbuffer()
 {
-    sort_bufferwidth    = 0;
+    sortbufferwidth    = 0;
     max_sortbufferwidth = textlen >> 8;
 }
 
