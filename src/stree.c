@@ -45,3 +45,12 @@ Uint create_sentinel_vertex(Wchar **right, Uint **previousnode)
 }
 
 
+void stree_destroy()
+{
+    free(wtext);
+    free(sortbuffer);
+    free(vertices);
+    free(suffixes);
+    free(leaf_nums);
+    free(recurse_suffixes);
+}

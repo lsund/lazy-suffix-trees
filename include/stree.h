@@ -96,4 +96,6 @@ Uint create_sentinel_vertex(Wchar **right, Uint **previousnode);
 
 void init_root_children();
 
+void stree_destroy();
+
 #endif

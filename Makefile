@@ -73,6 +73,9 @@ small: clean all
 runtest: clean test
 	./bin/test
 
+memcheck: clean test
+	valgrind -v --leak-check=full --show-leak-kinds=all ./bin/test
+
 clean:
 	rm -rf obj bin
 

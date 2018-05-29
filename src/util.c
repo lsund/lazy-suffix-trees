@@ -24,6 +24,10 @@ size_t strlenw(Wchar *s)
     while (s[i]) {
         i++;
     }
+    if (i > 1000) {
+        fprintf(stderr, "Line too long: %lu\n", i);
+        exit(EXIT_FAILURE);
+    }
     return i;
 }
 

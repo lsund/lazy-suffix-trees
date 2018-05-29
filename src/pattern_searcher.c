@@ -46,11 +46,10 @@ static bool copy_pattern(Wchar *pattern, Wchar *current_pattern, Uint len)
 Sint find_startindices(Wchar *current_pattern, Uint patternlen)
 {
 
+    n_leafnums = 0;
     Wchar pattern[MAXPATTERNLEN + 1];
     copy_pattern(pattern, current_pattern, patternlen);
 
-    leaf_nums = malloc(sizeof(Uint) * 100);
-    n_leafnums = 0;
     find_leafnums(pattern, pattern + patternlen - 1, NULL, patternlen - 1, false);
     return true;
 }

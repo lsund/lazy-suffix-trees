@@ -3,6 +3,10 @@
 Wchar *wtext;
 Uint textlen, max_codepoint, n_leafnums;
 
+
+int maxpatterns = 1000;
+
+
 static Uint min(const Uint a, const Uint b)
 {
     return a < b ? a : b;
@@ -40,7 +44,6 @@ char *test_count(char *patternfile, char *textfile, Uint count)
     for (int i = npatterns - 1; i >= 0; i--) {
         free(patterns[i]);
     }
-
     free(patterns);
 
     mu_assert("Count should be correct", exists_n == count);
@@ -50,8 +53,6 @@ char *test_count(char *patternfile, char *textfile, Uint count)
 
 char *compare_vs_naive(char *patternfile, char *textfile)
 {
-    int maxpatterns = 1000;
-
     Uint patternslen;
     setlocale(LC_ALL, "en_US.utf8");
     FILE *in = fopen(textfile, "r");
@@ -102,16 +103,19 @@ char *compare_vs_naive(char *patternfile, char *textfile)
 char *compare_vs_naive_smyth()
 {
     setlocale(LC_ALL, "en_US.utf8");
-    FILE *in = fopen("data/mini/smyth.txt", "r");
+    FILE *in = fopen("./data/mini/smyth.txt", "r");
+
     wtext = malloc(sizeof(Wchar) * MAXTEXTLEN);
+
     wint_t c;
     textlen = 0;
     while ((c = fgetwc(in)) != WEOF) {
         wtext[textlen] = c;
         textlen++;
     }
-    wtext[textlen- 1] = '\0';
+    wtext[textlen - 1] = '\0';
     max_codepoint = get_max(wtext, textlen);
+
     fclose(in);
     Wchar *patterns[30];
     init();
@@ -153,8 +157,10 @@ char *compare_vs_naive_smyth()
                 n_found == n_leafnums);
         mu_assert("Should contain correct number.",
                 contains(naive_numbers, n_found, leaf_nums));
-        free(leaf_nums);
     }
+
+    stree_destroy();
+
     return NULL;
 }
 
@@ -162,36 +168,44 @@ char *compare_vs_naive_leaves(char *patternfile, char *textfile)
 {
     setlocale(LC_ALL, "en_US.utf8");
     FILE *in = fopen(textfile, "r");
+
     wtext = malloc(sizeof(Wchar) * MAXTEXTLEN);
+
     wint_t c;
     textlen = 0;
     while ((c = fgetwc(in)) != WEOF) {
         wtext[textlen] = c;
         textlen++;
     }
-    wtext[textlen- 1] = '\0';
+    wtext[textlen - 1] = '\0';
     max_codepoint = get_max(wtext, textlen);
     fclose(in);
     init();
 
-    Uint naive_numbers[20];
-
+    Uint naive_numbers[100];
+    Uint max_patterns = 25;
     Uint patternslen;
-    Wchar **patterns = (Wchar **) malloc(sizeof(Wchar *) * MAX_PATTERNS);
-    int npatterns  = file_to_strings(patternfile, &patternslen, MAX_PATTERNS, &patterns);
-    Wchar *current_pattern = patterns[0];
-    Uint patternlen = strlenw(current_pattern);
-    Uint n_found = naive_find_all(
-            current_pattern,
-            current_pattern + patternlen,
-            naive_numbers);
-    find_startindices(current_pattern, patternlen);
-    printf("N leaf nums: %lu\n", n_leafnums);
-    for (Uint i = 0; i < n_leafnums; i++) {
-        printf("Found in tree: %lu\n", leaf_nums[i]);
+
+    Wchar **patterns = (Wchar **) malloc(sizeof(Wchar *) * max_patterns);
+    int np  = file_to_strings(patternfile, &patternslen, max_patterns, &patterns);
+
+    for (int i = 0; i < np; i++) {
+
+        Wchar *current_pattern = patterns[i];
+        Uint patternlen = strlenw(current_pattern);
+        Uint n_found = naive_find_all(
+                current_pattern,
+                current_pattern + patternlen,
+                naive_numbers);
+        find_startindices(current_pattern, patternlen);
+        mu_assert("Should contain correct number.",
+                contains(naive_numbers, n_found, leaf_nums));
     }
-    mu_assert("Should contain correct number.",
-            contains(naive_numbers, n_found, leaf_nums));
+    stree_destroy();
+    for (int i = 0; i < np; i++) {
+        free(patterns[i]);
+    }
+    free(patterns);
 
     return NULL;
 }
@@ -263,7 +277,7 @@ void *utest_leaves()
             );
     if (error) return error;
 
-    error = compare_vs_naive_smyth();
+/*     error = compare_vs_naive_smyth(); */
     if (error) return error;
 
     return NULL;

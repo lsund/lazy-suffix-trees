@@ -53,8 +53,7 @@ static void create_suffixes(Wchar **leftb, Wchar **rightb, Uint **previous, bool
 
     for (curr_leftb = leftb; curr_leftb <= rightb; curr_leftb = curr_rightb + 1) {
 
-        /* printf("Got suffix: %ls\n", *curr_leftb); */
-        recurse_suffixes[n_recursed] = *curr_leftb;
+        *(recurse_suffixes + n_recursed) = *curr_leftb;
         Wchar first = **curr_leftb;
         get_rightb(&curr_rightb, curr_leftb, rightb, first);
         *previous = next_element;
@@ -62,7 +61,6 @@ static void create_suffixes(Wchar **leftb, Wchar **rightb, Uint **previous, bool
         if (curr_rightb > curr_leftb) {
             create_inner_vertex(first, curr_leftb, curr_rightb, isroot);
         } else {
-            /* printf("New leaf created %ls\n", *curr_leftb); */
             create_leaf_vertex(first, curr_leftb, isroot);
         }
         n_recursed++;

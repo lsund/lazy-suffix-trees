@@ -111,7 +111,11 @@ Uint file_to_strings(char *name, Uint *textlen, Uint nlines, Wchar ***wordsp)
             j++;
         } while (c != 10);
 
-        words[i][j - 1] = 0;
+        words[i][j - 1] = '\0';
+        if ((int) j > max_line_len) {
+            fprintf(stderr, "Line too long: %lu\n", i);
+            exit(EXIT_FAILURE);
+        }
     }
     fprintf(stderr, "Warning, not all patterns were read\n");
     *wordsp = words;
