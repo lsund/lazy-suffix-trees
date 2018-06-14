@@ -45,15 +45,17 @@
 
 
 // Evaluated vertices
-#define OFFSET(P)                       ((*(P)) & ~(LEAFBIT | SECOND_MSB)) // lp
-#define CHILD(P)                        (*((P) + 1))
-#define OFFSET_UNEVAL(V)                SUFFIX_INDEX(LEFT_BOUND(V))
+#define TEXT_OFFSET(P)           ((*(P)) & ~(LEAFBIT | SECOND_MSB)) // lp
+#define CHILD(P)                 (*((P) + 1))
 
-#define SET_OFFSET(V, O)                *(V) = (*(V) & SECOND_MSB) | (O)
+#define SET_OFFSET(V, O)         *(V) = (*(V) & SECOND_MSB) | (O)
 
 // Unevaluated vertices
-#define LEFT_BOUND(P)            (suffixes + OFFSET(P))
-#define RIGHT_BOUND(P)           (suffixes + (CHILD(P) & ~MSB))
+#define SUFFIX_OFFSET(P)            (suffixes + TEXT_OFFSET(P))
+#define SUFFIX_BOUND(P)           (suffixes + (CHILD(P) & ~MSB))
+// startposition of suffix
+#define SUFFIX_INDEX(P)          ((Uint) (*(P) - wtext))
+#define MAKE_TEXT_OFFSET(P)      SUFFIX_INDEX(SUFFIX_OFFSET(P))
 
 ///////////////////////////////////////////////////////////////////////////////
 // Queries
@@ -69,8 +71,6 @@
 // length of the path to its parent.  To retrieve the edge labels in constant
 // time, it suffices to store the left pointer for all nodes.
 
-// startposition of suffix
-#define SUFFIX_INDEX(P)                 ((Uint) (*(P) - wtext))
 
 void create_root_leaf(Wchar firstchar, Wchar **left);
 

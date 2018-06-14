@@ -30,6 +30,6 @@
 
 void eval_root();
 
-void eval_branch(Vertex node);
+void eval_branch(VertexP vertex);
 
 #endif

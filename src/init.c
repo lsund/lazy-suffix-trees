@@ -37,11 +37,6 @@ static void init_stree()
     ALLOC(vertices.first, vertices.first, Uint, vertices.size);
     ALLOC(suffixes, NULL, Wchar *, textlen + 1);
     vertices.next   = vertices.first;
-
-    recurse_suffixes = malloc(sizeof(Wchar *) * 5000);
-    leaf_nums = malloc(sizeof(Uint) * 50000);
-
-    n_recursed = 0;
 }
 
 

@@ -36,7 +36,7 @@ Uint leaf_lcp(Wchar *text_cursor, Pattern patt)
 
 Uint inner_lcp(Uint *vertex, Pattern patt, Uint edgelen)
 {
-    Wchar *text_cursor = wtext + OFFSET(vertex);
+    Wchar *text_cursor = wtext + TEXT_OFFSET(vertex);
     return lcp(patt.cursor + 1, patt.end, text_cursor + 1, text_cursor + edgelen - 1);
 }
 

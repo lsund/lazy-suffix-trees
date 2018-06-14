@@ -1,9 +1,9 @@
 
 #include "eval.h"
 
-Wchar   *wtext, *sentinel, **recurse_suffixes;
+Wchar   *wtext, *sentinel;
 
-Uint    root_children[MAX_CHARS + 1], n_recursed, new_suffixes;
+Uint    root_children[MAX_CHARS + 1];
 
 
 static bool skip_sentinel(Wchar ***rightb)
@@ -70,11 +70,10 @@ static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
 }
 
 
-static void eval_vertex(Vertex vertex_val, Wchar ***leftb, Wchar ***rightb)
+static void eval_vertex(VertexP vertex, Wchar ***leftb, Wchar ***rightb)
 {
-    VertexP vertex = vertices.first + vertex_val;
-    *leftb   = LEFT_BOUND(vertex);
-    *rightb  = RIGHT_BOUND(vertex);
+    *leftb   = SUFFIX_OFFSET(vertex);
+    *rightb  = SUFFIX_BOUND(vertex);
 
     SET_OFFSET(vertex, SUFFIX_INDEX(*leftb));
     CHILD(vertex) =  INDEX(vertices.next);
@@ -92,10 +91,10 @@ void eval_root()
     }
 }
 
-void eval_branch(Vertex vertex_val)
+void eval_branch(VertexP vertex)
 {
     Wchar **leftb;
     Wchar **rightb;
-    eval_vertex(vertex_val, &leftb, &rightb);
+    eval_vertex(vertex, &leftb, &rightb);
     eval_edges(leftb, rightb, false);
 }

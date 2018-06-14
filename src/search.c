@@ -35,9 +35,9 @@ static Vertex first_child_lp(VertexP vertex)
     VertexP child = vertices.first + CHILD(vertex);
 
     if (!IS_LEAF(child) && IS_UNEVALUATED(child)) {
-        return OFFSET_UNEVAL(child);
+        return MAKE_TEXT_OFFSET(child);
     } else {
-        return OFFSET(child);
+        return TEXT_OFFSET(child);
     }
 }
 
@@ -56,32 +56,32 @@ static bool is_empty(Pattern patt)
 static Uint offset(VertexP vertex)
 {
     if(IS_UNEVALUATED(vertex)) {
-        return OFFSET_UNEVAL(vertex);
+        return MAKE_TEXT_OFFSET(vertex);
     } else {
-        return OFFSET(vertex);
+        return TEXT_OFFSET(vertex);
     }
 }
 
 static Vertex edge_length(VertexP vertex)
 {
-    Uint lp = OFFSET(vertex);
+    Uint lp = TEXT_OFFSET(vertex);
     return first_child_lp(vertex) - lp;
 }
 
 
-static void eval_if_uneval(VertexP *vertex, void (*eval_fun)(Vertex))
+static void eval_if_uneval(VertexP *vertex, void (*eval_fun)(VertexP))
 {
     if(IS_UNEVALUATED(*vertex)) {
         Uint index = INDEX(*vertex);
         *vertex = vertices.first + index;
-        eval_fun(index);
+        eval_fun(*vertex);
     }
 }
 
 
 static Match try_match_leaf(Pattern patt, Uint *vertex)
 {
-    Wchar *text_cursor = wtext + OFFSET(vertex);
+    Wchar *text_cursor = wtext + TEXT_OFFSET(vertex);
     if (*text_cursor == patt.head) {
         return match_leaf(text_cursor, patt);
     } else if (text_cursor == sentinel || IS_LASTCHILD(vertex)) {
