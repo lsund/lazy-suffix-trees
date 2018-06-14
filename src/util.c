@@ -21,7 +21,7 @@ Uint randlen(Uint m_min, Uint m_max)
 size_t strlenw(Wchar *s)
 {
     size_t i = 0;
-    while (s[i]) {
+    while (s[i] != 0) {
         i++;
     }
     if (i > 1000) {

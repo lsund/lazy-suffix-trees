@@ -35,15 +35,12 @@ static void init_stree()
 {
     root_evaluated = false;
     streesize      = EXTENSION_SIZE;
-    /* printf("streesize: %lu\n", streesize); */
-    /* printf("streealloc: %lu\n", sizeof(Uint) * streesize); */
     ALLOC(vertices, vertices, Uint, streesize);
-    /* printf("suffixalloc: %lu\n", sizeof(Wchar *) * textlen + 1); */
     ALLOC(suffixes, NULL, Wchar *, textlen + 1);
     next_element   = vertices;
 
-    recurse_suffixes = malloc(sizeof(Wchar *) * 2000);
-    leaf_nums = malloc(sizeof(Uint) * 100);
+    recurse_suffixes = malloc(sizeof(Wchar *) * 5000);
+    leaf_nums = malloc(sizeof(Uint) * 50000);
 
     n_recursed = 0;
 }

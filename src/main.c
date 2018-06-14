@@ -59,10 +59,10 @@ int main(int argc,char *argv[])
 
     if (strcmp(mode, "bench") == 0) {
 
-        int minpat = 500;
-        int maxpat = 1000;
+        int minpat = 10;
+        int maxpat = 20;
 
-        search_samples(path, 100000, minpat, maxpat);
+        search_samples(path, 100, minpat, maxpat);
 
     } else {
         printf("npatterns: %d\n", npatterns);

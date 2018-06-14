@@ -74,12 +74,11 @@ void search_patterns(const char *path, int npatterns, Wchar ***patterns_ptr)
     for(int j = 0; j < npatterns; j++) {
 
         Wchar *current_pattern = patterns[j];
-        Uint patternlen = strlenw(current_pattern);
+        Uint patternlen = wcslen(current_pattern);
 
         bool exists = find_pattern(current_pattern, patternlen);
 
         if (exists) {
-            fprintf(fp, "%ls\n", patterns[j]);
             noccurs++;
         }
     }

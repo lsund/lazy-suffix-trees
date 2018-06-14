@@ -103,6 +103,7 @@ Uint file_to_strings(char *name, Uint *textlen, Uint nlines, Wchar ***wordsp)
             c = fgetwc(fp);
             if (c == WEOF) {
 
+                words[i][j - 1] = 0;
                 *wordsp = words;
                 fclose(fp);
                 return i;
@@ -111,9 +112,9 @@ Uint file_to_strings(char *name, Uint *textlen, Uint nlines, Wchar ***wordsp)
             j++;
         } while (c != 10);
 
-        words[i][j - 1] = '\0';
+        words[i][j - 1] = 0;
         if ((int) j > max_line_len) {
-            fprintf(stderr, "Line too long: %lu\n", i);
+            fprintf(stderr, "Line too long!: %lu\n", j);
             exit(EXIT_FAILURE);
         }
     }

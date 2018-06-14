@@ -20,7 +20,7 @@ static bool sample(Wchar *pattern, Uint patternlen)
 
 // Randomly sampling patterns from the text, reversing every second to simulate
 // the case where a pattern does not exist.
-static void sample_search(Uint trials, Uint minlen, Uint maxlen)
+static void sample_search(Uint trials, Uint minlen, Uint maxlen, FILE *fp)
 {
     Uint patternlen;
 
@@ -33,6 +33,7 @@ static void sample_search(Uint trials, Uint minlen, Uint maxlen)
         patternlen = randlen(minlen, maxlen);
 
         sample(pattern, patternlen);
+        fprintf(fp, "%ls\n", pattern);
 
         if (i & 1) {
             reverse(pattern, patternlen);
@@ -49,9 +50,10 @@ void search_samples(const char *path, Uint trials, Uint minpat, Uint maxpat)
         fprintf(stderr, "Max pattern length must be smaller than the text length");
     }
 
-    sample_search(trials, minpat, maxpat);
-
     FILE *fp = open_append(path);
+
+    sample_search(trials, minpat, maxpat, fp);
+
     printtime();
 
     fclose(fp);

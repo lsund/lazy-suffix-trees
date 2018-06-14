@@ -85,13 +85,6 @@ static bool match(Wchar *text_cursor, Pattern patt)
 }
 
 
-static Vertex edge_length(VertexP vertex)
-{
-    Uint lp = OFFSET(vertex);
-    return first_child_lp(vertex) - lp;
-}
-
-
 static Uint offset(VertexP vertex)
 {
     if(IS_UNEVALUATED(vertex)) {
@@ -100,6 +93,13 @@ static Uint offset(VertexP vertex)
         return OFFSET(vertex);
     }
 }
+
+static Vertex edge_length(VertexP vertex)
+{
+    Uint lp = OFFSET(vertex);
+    return first_child_lp(vertex) - lp;
+}
+
 
 
 void traverse(VertexP cursor, Uint matchedlen)
@@ -115,6 +115,7 @@ void traverse(VertexP cursor, Uint matchedlen)
         }
 
         if (IS_LEAF(cursor)) {
+            printf("%lu\n", n_leafnums);
             leaf_nums[n_leafnums++] = OFFSET(cursor) - depth - matchedlen;
             if(IS_LASTCHILD(cursor)) {
                 break;
@@ -264,9 +265,10 @@ static void recurse(VertexP cursor, Uint matched, Uint edgelen, Uint number)
         n_recursed--;
         number--;
         /* printf("Recursing with: %ls\n", recurse_suffixes[n_recursed]); */
+        printf("Recursed: %lu\n", n_recursed);
         find_leafnums(
                 recurse_suffixes[n_recursed],
-                recurse_suffixes[n_recursed] + strlenw(recurse_suffixes[n_recursed]) - 1,
+                recurse_suffixes[n_recursed] + wcslen(recurse_suffixes[n_recursed]) - 1,
                 cursor,
                 matched + edgelen, true);
     }
@@ -321,8 +323,10 @@ bool find_leafnums(
                 if (match.done) {
                     Uint remaining = patt.end - patt.cursor;
                     if (recursing) {
+            printf("%lu\n", n_leafnums);
                         leaf_nums[n_leafnums++] = OFFSET(cursor) - matched;
                     } else {
+            printf("%lu\n", n_leafnums);
                         leaf_nums[n_leafnums++] = OFFSET(cursor) - matched + remaining;
                     }
                     return true;
