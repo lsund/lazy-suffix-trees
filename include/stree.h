@@ -25,7 +25,7 @@
 #include "externs.h"
 
 #define LEAF_VERTEXSIZE     1
-#define INNER_VERTEXSIZE    3
+#define INNER_VERTEXSIZE    2
 
 #define ROOT                vertices.first
 
@@ -45,9 +45,8 @@
 
 
 // Evaluated vertices
-#define OFFSET(P)                       ((*(P)) & ~(LEAFBIT | SECOND_MSB))
+#define OFFSET(P)                       ((*(P)) & ~(LEAFBIT | SECOND_MSB)) // lp
 #define CHILD(P)                        (*((P) + 1))
-#define LEAF_INDEX(P)                   (*((P) + 2))
 #define OFFSET_UNEVAL(V)                SUFFIX_INDEX(LEFT_BOUND(V))
 
 #define SET_OFFSET(V, O)                *(V) = (*(V) & SECOND_MSB) | (O)

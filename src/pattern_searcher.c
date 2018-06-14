@@ -42,19 +42,6 @@ static bool copy_pattern(Wchar *pattern, Wchar *current_pattern, Uint len)
 // Public API
 
 
-// Search for one pattern in the tree
-Sint find_startindices(Wchar *current_pattern, Uint patternlen)
-{
-
-    n_leafnums = 0;
-    Wchar pattern[MAXPATTERNLEN + 1];
-    copy_pattern(pattern, current_pattern, patternlen);
-
-    find_leafnums(pattern, pattern + patternlen - 1, NULL, patternlen - 1, false);
-    return true;
-}
-
-
 bool find_pattern(Wchar *current_pattern, Uint patternlen)
 {
     Wchar pattern[MAXPATTERNLEN + 1];

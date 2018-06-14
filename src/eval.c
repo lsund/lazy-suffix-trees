@@ -44,56 +44,6 @@ static void create_edges(Wchar **leftb, Wchar **rightb, Uint **previous, bool is
         }
     }
 }
-
-static void create_suffixes(Wchar **leftb, Wchar **rightb, Uint **previous, bool isroot)
-{
-    Wchar **curr_leftb  = NULL;
-    Wchar **curr_rightb = NULL;
-    new_suffixes = 0;
-
-    for (curr_leftb = leftb; curr_leftb <= rightb; curr_leftb = curr_rightb + 1) {
-
-        *(recurse_suffixes + n_recursed) = *curr_leftb;
-        Wchar first = **curr_leftb;
-        get_rightb(&curr_rightb, curr_leftb, rightb, first);
-        *previous = vertices.next;
-
-        if (curr_rightb > curr_leftb) {
-            create_inner_vertex(first, curr_leftb, curr_rightb, isroot);
-        } else {
-            create_leaf_vertex(first, curr_leftb, isroot);
-        }
-        n_recursed++;
-        new_suffixes++;
-    }
-}
-
-
-static void eval_suffixes(Wchar **leftb, Wchar **rightb, bool isroot)
-{
-    bool sentineledge    = skip_sentinel(&rightb);
-
-    if (isroot) {
-        init_root_children();
-    } else {
-        alloc_extend_stree();
-    }
-
-    Uint *previous       = NULL;
-    create_suffixes(leftb, rightb, &previous, isroot);
-
-    if (sentineledge) {
-        create_sentinel_vertex(rightb, &previous);
-    }
-
-    if (isroot) {
-        *vertices.next = WITH_LEAF_AND_LASTCHILDBIT(textlen);
-        vertices.next += LEAF_VERTEXSIZE;
-    } else {
-        *previous = WITH_LASTCHILDBIT(*previous);
-    }
-}
-
 static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
 {
     bool sentineledge    = skip_sentinel(&rightb);
@@ -123,12 +73,6 @@ static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
 static void eval_nonroot(Wchar **leftb, Wchar **rightb)
 {
     eval_edges(leftb, rightb, false);
-}
-
-
-static void eval_nonroot_suffixes(Wchar **leftb, Wchar **rightb)
-{
-    eval_suffixes(leftb, rightb, false);
 }
 
 
@@ -167,10 +111,4 @@ void eval_root()
 void eval_branch(Vertex vertex_val)
 {
     eval(vertex_val, eval_nonroot);
-}
-
-
-void eval_branch_suffixes(Vertex vertex_val)
-{
-    eval(vertex_val, eval_nonroot_suffixes);
 }

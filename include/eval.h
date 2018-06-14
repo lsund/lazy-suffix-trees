@@ -32,8 +32,4 @@ void eval_root();
 
 void eval_branch(Vertex node);
 
-void eval_branch_suffixes(Vertex node);
-
-void get_suffixes(VertexP *vertex_p);
-
 #endif
