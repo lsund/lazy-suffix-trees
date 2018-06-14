@@ -1,9 +1,5 @@
 #include "test.h"
 
-Wchar *wtext;
-Uint textlen, max_codepoint, n_leafnums;
-
-
 int maxpatterns = 500;
 
 
@@ -17,15 +13,15 @@ char *test_count(char *patternfile, char *textfile, Uint count)
     Uint patternslen;
     setlocale(LC_ALL, "en_US.utf8");
     FILE *in = fopen(textfile, "r");
-    wtext = malloc(sizeof(Wchar) * MAXTEXTLEN);
+    text.content = malloc(sizeof(Wchar) * MAXTEXTLEN);
     wint_t c;
-    textlen = 0;
+    text.len = 0;
     while ((c = fgetwc(in)) != WEOF) {
-        wtext[textlen] = c;
-        textlen++;
+        text.content[text.len] = c;
+        text.len++;
     }
-    wtext[textlen + 1] = '\0';
-    max_codepoint = get_max(wtext, textlen);
+    text.content[text.len + 1] = '\0';
+    text.max_charval = get_max(text.content, text.len);
     fclose(in);
     Wchar **patterns = (Wchar **) malloc(sizeof(Wchar *) * MAX_PATTERNS);
     int npatterns  = file_to_strings(patternfile, &patternslen, MAX_PATTERNS, &patterns);
@@ -56,15 +52,15 @@ char *compare_vs_naive(char *patternfile, char *textfile)
     Uint patternslen;
     setlocale(LC_ALL, "en_US.utf8");
     FILE *in = fopen(textfile, "r");
-    wtext = malloc(sizeof(Wchar) * MAXTEXTLEN);
+    text.content = malloc(sizeof(Wchar) * MAXTEXTLEN);
     wint_t c;
-    textlen = 0;
+    text.len = 0;
     while ((c = fgetwc(in)) != WEOF) {
-        wtext[textlen] = c;
-        textlen++;
+        text.content[text.len] = c;
+        text.len++;
     }
-    wtext[textlen + 1] = '\0';
-    max_codepoint = get_max(wtext, textlen);
+    text.content[text.len + 1] = '\0';
+    text.max_charval = get_max(text.content, text.len);
     fclose(in);
     Wchar **patterns = (Wchar **) malloc(sizeof(Wchar *) * MAX_PATTERNS);
     int npatterns  = file_to_strings(patternfile, &patternslen, MAX_PATTERNS, &patterns);

@@ -21,10 +21,6 @@
 
 #include "get_alpha.h"
 
-Wchar *wtext;
-
-Uint textlen;
-
 // Iterate over the text and store the counts of each character. Then iterate
 // over 1->256 (all uchars) and store them in the `alpha` parameter, if the
 // occurence is greater than 0.
@@ -33,7 +29,7 @@ void get_characters(Wchar *alpha, Uint *alphasize)
     Uint counts[MAX_CHARS + 1] = {0};
     Wchar *text_probe;
 
-    for (text_probe = wtext; text_probe < wtext + textlen; text_probe++) {
+    for (text_probe = text.content; text_probe < text.content + text.len; text_probe++) {
         counts[(Uint) *text_probe]++;
     }
 

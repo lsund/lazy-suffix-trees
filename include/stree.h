@@ -34,35 +34,34 @@
 // Offset in the table
 #define INDEX(P)                        ((Uint) ((P) - ROOT))
 
-#define LEAFBIT                         MSB
-
 #define WITH_LASTCHILDBIT(V)            ((V) | SECOND_MSB)
-#define WITH_LEAFBIT(V)                 ((V) | LEAFBIT)
-#define WITH_LEAF_AND_LASTCHILDBIT(V)   ((V) | LEAFBIT | SECOND_MSB)
+#define WITH_LEAFBIT(V)                 ((V) | MSB)
+#define WITH_LEAF_AND_LASTCHILDBIT(V)   ((V) | MSB | SECOND_MSB)
 #define WITH_UNEVALBIT(V)               ((V) | MSB)
 
-#define WITHOUT_LEAFBIT(V)              ((V) & ~LEAFBIT)
+#define WITHOUT_LEAFBIT(V)              ((V) & ~MSB)
 
 
 // Evaluated vertices
-#define TEXT_OFFSET(P)           ((*(P)) & ~(LEAFBIT | SECOND_MSB)) // lp
-#define CHILD(P)                 (*((P) + 1))
-
-#define SET_OFFSET(V, O)         *(V) = (*(V) & SECOND_MSB) | (O)
+#define TEXT_LEFTBOUND(V)               ((*(V)) & ~(MSB | SECOND_MSB))
+#define TEXT_RIGHTBOUND(V)              (*((V) + 1))
+#define CHILD(V)                        TEXT_RIGHTBOUND(V)
 
 // Unevaluated vertices
-#define SUFFIX_OFFSET(P)            (suffixes + TEXT_OFFSET(P))
-#define SUFFIX_BOUND(P)           (suffixes + (CHILD(P) & ~MSB))
+#define SUFFIX_LEFTBOUND(V)             (text.suffixes + TEXT_LEFTBOUND(V))
+#define SUFFIX_RIGHTBOUND(V)            (text.suffixes + (CHILD(V) & ~MSB))
 // startposition of suffix
-#define SUFFIX_INDEX(P)          ((Uint) (*(P) - wtext))
-#define MAKE_TEXT_OFFSET(P)      SUFFIX_INDEX(SUFFIX_OFFSET(P))
+#define SUFFIX_INDEX(V)                 ((Uint) (*(V) - text.content))
+#define MAKE_TEXT_LEFTBOUND(V)          SUFFIX_INDEX(SUFFIX_LEFTBOUND(V))
+
+#define SET_TEXT_LEFTBOUND(V, O)        *(V) = (*(V) & SECOND_MSB) | (O)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Queries
 
-#define IS_LEAF(V)              ((*(V)) & LEAFBIT)
-#define IS_LASTCHILD(V)         ((*(V)) & SECOND_MSB)
-#define IS_UNEVALUATED(V)       (CHILD(V) & MSB)
+#define IS_LEAF(V)                      ((*(V)) & MSB)
+#define IS_LASTCHILD(V)                 ((*(V)) & SECOND_MSB)
+#define IS_UNEVALUATED(V)               (CHILD(V) & MSB)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Getters

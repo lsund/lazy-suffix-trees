@@ -1,12 +1,10 @@
 
 #include "naive_search.h"
 
-Uint textlen;
-
-Wchar *wtext;
+Text text;
 
 
-// Naively search `wtext` for the pattern beginning at address `start`, ending
+// Naively search `text.content` for the pattern beginning at address `start`, ending
 // at address `end`.
 bool naive_search(Wchar *start, Wchar *end)
 {
@@ -15,10 +13,10 @@ bool naive_search(Wchar *start, Wchar *end)
     Uint j = 0;
     Uint k;
 
-    for (Uint i = 0; i < textlen; i++) {
+    for (Uint i = 0; i < text.len; i++) {
         k = i;
         for (j = 0; j < m; j++) {
-            if (pattern[j] == wtext[k]) {
+            if (pattern[j] == text.content[k]) {
                 k++;
             } else {
                 break;
@@ -40,10 +38,10 @@ Uint naive_find_all(Wchar *start, Wchar *end, Uint *numbers)
     Uint k;
     Uint n_found = 0;
 
-    for (Uint i = 0; i < textlen; i++) {
+    for (Uint i = 0; i < text.len; i++) {
         k = i;
         for (j = 0; j < m; j++) {
-            if (pattern[j] == wtext[k]) {
+            if (pattern[j] == text.content[k]) {
                 k++;
             } else {
                 break;

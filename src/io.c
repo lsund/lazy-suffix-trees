@@ -19,28 +19,25 @@
 
 #include "io.h"
 
-Wchar *wtext;
-Uint textlen;
-
 void file_to_string(const char *filename)
 {
     FILE *in = fopen(filename, "r");
-    wtext = malloc(sizeof(wchar_t) * MAXTEXTLEN);
+    text.content = malloc(sizeof(wchar_t) * MAXTEXTLEN);
 
-    if(wtext == NULL) {
+    if(text.content == NULL) {
         fprintf(stderr,"Cannot open file %s\n", filename);
         exit(EXIT_FAILURE);
     }
 
     Uint c;
-    textlen = 0;
+    text.len = 0;
     while ((c = fgetwc(in)) != WEOF) {
-        wtext[textlen] = c;
-        textlen++;
+        text.content[text.len] = c;
+        text.len++;
     }
-    wtext[textlen + 1] = '\0';
+    text.content[text.len + 1] = '\0';
 
-    if(textlen == 0) {
+    if(text.len == 0) {
         fprintf(stderr,"file \"%s\" is empty\n", filename);
         exit(EXIT_FAILURE);
     }
@@ -136,7 +133,7 @@ FILE *open_append(const char *path)
 // Frees the text specified
 void freetextspace()
 {
-  (void) munmap((caddr_t) wtext, (size_t) textlen);
+  (void) munmap((caddr_t) text.content, (size_t) text.len);
 }
 
 

@@ -2,15 +2,15 @@
 
 static bool sample(Wchar *pattern, Uint patternlen)
 {
-    Uint start = (Uint) (drand48() * (double) (textlen - patternlen));
+    Uint start = (Uint) (drand48() * (double) (text.len - patternlen));
 
-    if(start > textlen - patternlen) {
+    if(start > text.len - patternlen) {
         fprintf(stderr,"Not enough characters left\n");
         exit(EXIT_FAILURE);
     }
 
     for(Uint j = 0; j < patternlen; j++) {
-        pattern[j] = wtext[start + j];
+        pattern[j] = text.content[start + j];
     }
 
     pattern[patternlen] = '\0';
@@ -48,7 +48,7 @@ static void sample_search(Uint trials, Uint minlen, Uint maxlen, FILE *fp)
 // Sample random patterns and serch for them
 void search_samples(const char *path, Uint trials, Uint minpat, Uint maxpat)
 {
-    if (maxpat > textlen) {
+    if (maxpat > text.len) {
         fprintf(stderr, "Max pattern length must be smaller than the text length");
     }
 

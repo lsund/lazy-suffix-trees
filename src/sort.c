@@ -6,16 +6,10 @@
 // Globals
 
 
-Wchar     *wtext,
-            *sentinel,
-            **suffixes,
-            characters[MAX_CHARS + 1],
-            **current_sortbuffer;
+Wchar       **current_sortbuffer;
 
-Uint        textlen,
-            alphasize,
-            occurrence[MAX_CHARS + 1],
-            suffixhead_count[MAX_CHARS + 1];
+Uint        occurrence[MAX_CHARS + 1];
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // Private functions
@@ -26,7 +20,7 @@ static void increase_count(Uint codepoint)
 {
     /* int i = get_index(codepoint); */
     Uint i = codepoint;
-    suffixhead_count[i]++;
+    sortbuffer.suffixhead_count[i]++;
 }
 
 
@@ -58,14 +52,14 @@ static void set_group_bounds(Wchar **left, Wchar **right, Wchar ***upper_bounds)
     for (suffix_probe = left; suffix_probe <= right; suffix_probe++) {
 
         Uint head = **suffix_probe;
-        if (suffixhead_count[head] > 0) {
+        if (sortbuffer.suffixhead_count[head] > 0) {
 
             // 'allocate' the upper bound for the current character.
             // upper_bounds[head] now points to a allocated memory address,
             // enough space in distance from the last group
-            upper_bounds[head] = lower_bound + suffixhead_count[head] - 1;
+            upper_bounds[head] = lower_bound + sortbuffer.suffixhead_count[head] - 1;
             lower_bound        = upper_bounds[head] + 1;
-            suffixhead_count[head]   = 0;
+            sortbuffer.suffixhead_count[head]   = 0;
         }
     }
 }
@@ -98,7 +92,7 @@ void counting_sort(Wchar **left, Wchar **right)
     Uint prefixlen = grouplcp(left, right);
 
     // Shortest suffix is sentinel, skip
-    if (*right + prefixlen == sentinel) {
+    if (*right + prefixlen == text.sentinel) {
         *right += prefixlen;
         right--;
     }
@@ -128,32 +122,32 @@ void counting_sort(Wchar **left, Wchar **right)
 
 // Determines the groups for all suffixes of the input string
 //
-// Scan all suffixes, determining the size of each group and then sorts the all
+// Scan all uffixes, determining the size of each group and then sorts the all
 // suffixes into the array suffixes.
 void create_suffix_groups(void)
 {
-    Wchar *c, **nextFree = suffixes;
+    Wchar *c, **nextFree = text.suffixes;
     Uint a;
 
     Wchar **upper_bounds[MAX_CHARS + 1];
 
     // determine size for each group
-    for (c = wtext; c < wtext + textlen; c++) {
-        suffixhead_count[(Uint) *c]++;
+    for (c = text.content; c < text.content + text.len; c++) {
+        sortbuffer.suffixhead_count[(Uint) *c]++;
     }
 
-    for (c = characters; c < characters + alphasize; c++) {
+    for (c = text.characters; c < text.characters + text.alphasize; c++) {
         a                        = (Uint) *c;
-        upper_bounds[a]          = nextFree + suffixhead_count[a] - 1;
+        upper_bounds[a]          = nextFree + sortbuffer.suffixhead_count[a] - 1;
         nextFree                 = upper_bounds[a] + 1;
-        suffixhead_count[a] = 0;
+        sortbuffer.suffixhead_count[a] = 0;
     }
 
     // insert suffixes into array
-    for (c = wtext + textlen - 1; c >= wtext; c--) {
+    for (c = text.content + text.len - 1; c >= text.content; c--) {
         *(upper_bounds[(Uint) *c]--) = c;
     }
 
     // suffix \$ is the largest suffix
-    suffixes[textlen] = sentinel;
+    text.suffixes[text.len] = text.sentinel;
 }

@@ -39,8 +39,6 @@
 #include "pattern.h"
 
 
-Sint find_startindices(Wchar *current_pattern, Uint patternlen);
-
 bool find_pattern(Wchar *current_pattern, Uint patternlen);
 
 void search_patterns(const char *path, int npatterns, Wchar ***o_patterns);

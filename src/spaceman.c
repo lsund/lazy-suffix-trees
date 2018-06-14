@@ -1,33 +1,28 @@
 
 #include "spaceman.h"
 
-Wchar **suffixes, **sortbuffer;
-
-Uint    sortbufferwidth,
-        max_sortbufferwidth,
-        textlen;
+Sortbuffer sortbuffer;
 
 Table vertices;
-
 
 Wchar **alloc_sortbuffer(Wchar **left, Wchar **right) {
 
     Uint width = (Uint) (right - left + 1);
 
-    if(sortbufferwidth > max_sortbufferwidth && max_sortbufferwidth > width) {
+    if(sortbuffer.size > sortbuffer.maxsize && sortbuffer.maxsize > width) {
 
-        sortbufferwidth = max_sortbufferwidth;
-        ALLOC(sortbuffer, sortbuffer, Wchar *, sortbufferwidth);
+        sortbuffer.size = sortbuffer.maxsize;
+        ALLOC(sortbuffer.content, sortbuffer.content, Wchar *, sortbuffer.size);
 
     } else {
 
-        if(width > sortbufferwidth) {
-            sortbufferwidth = width;
-            ALLOC(sortbuffer, sortbuffer, Wchar *, sortbufferwidth);
+        if(width > sortbuffer.size) {
+            sortbuffer.size = width;
+            ALLOC(sortbuffer.content, sortbuffer.content, Wchar *, sortbuffer.size);
         }
 
     }
-    return sortbuffer;
+    return sortbuffer.content;
 }
 
 
@@ -37,7 +32,7 @@ void alloc_extend_stree(void)
 
     if(next_free_index >= vertices.size) {
 
-        vertices.size += (textlen / 10);
+        vertices.size += (text.len / 10);
         ALLOC(vertices.first, vertices.first, Uint, vertices.size + EXTENSION_SIZE);
         vertices.next = vertices.first + next_free_index;
 

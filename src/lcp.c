@@ -20,8 +20,7 @@
 
 #include "lcp.h"
 
-Wchar *sentinel;
-
+Text text;
 
 // Let x be the string that starts at address `start1` and ends at `end1`
 // Let y be the string that starts at address `start2` and ends at `end2`
@@ -48,7 +47,7 @@ Uint grouplcp(Wchar **left, Wchar **right) {
 
     while (true) {
 
-        if(*right + j == sentinel) {
+        if(*right + j == text.sentinel) {
             return j;
         }
 

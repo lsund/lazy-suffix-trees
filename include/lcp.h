@@ -22,6 +22,7 @@
 #define LCP_H
 
 #include "types.h"
+#include "externs.h"
 
 
 Uint lcp(Wchar *start1, Wchar *end1, Wchar *start2, Wchar *end2);

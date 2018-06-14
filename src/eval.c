@@ -1,14 +1,12 @@
 
 #include "eval.h"
 
-Wchar   *wtext, *sentinel;
-
 Uint    root_children[MAX_CHARS + 1];
 
 
 static bool skip_sentinel(Wchar ***rightb)
 {
-    if(**rightb == sentinel) {
+    if(**rightb == text.sentinel) {
         rightb--;
         return true;
     }
@@ -62,7 +60,7 @@ static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
     }
 
     if (isroot) {
-        *vertices.next = WITH_LEAF_AND_LASTCHILDBIT(textlen);
+        *vertices.next = WITH_LEAF_AND_LASTCHILDBIT(text.len);
         vertices.next += LEAF_VERTEXSIZE;
     } else {
         *previous = WITH_LASTCHILDBIT(*previous);
@@ -72,11 +70,11 @@ static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
 
 static void eval_vertex(VertexP vertex, Wchar ***leftb, Wchar ***rightb)
 {
-    *leftb   = SUFFIX_OFFSET(vertex);
-    *rightb  = SUFFIX_BOUND(vertex);
+    *leftb   = SUFFIX_LEFTBOUND(vertex);
+    *rightb  = SUFFIX_RIGHTBOUND(vertex);
 
-    SET_OFFSET(vertex, SUFFIX_INDEX(*leftb));
-    CHILD(vertex) =  INDEX(vertices.next);
+    SET_TEXT_LEFTBOUND(vertex, SUFFIX_INDEX(*leftb));
+    CHILD(vertex) = INDEX(vertices.next);
 
     counting_sort(*leftb, *rightb);
 }
@@ -86,7 +84,7 @@ void eval_root()
 {
     if (!root_evaluated) {
         create_suffix_groups();
-        eval_edges(suffixes, suffixes + textlen - 1, true);
+        eval_edges(text.suffixes, text.suffixes + text.len - 1, true);
         root_evaluated = true;
     }
 }

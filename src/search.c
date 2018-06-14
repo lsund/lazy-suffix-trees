@@ -20,24 +20,18 @@
 
 #include "search.h"
 
-Wchar *wtext,
-        *sentinel,
-        **suffixes,
-        **recurse_suffixes;
-
-Uint root_children[MAX_CHARS + 1], n_recursed, new_suffixes,
-     *leaf_nums, n_leafnums;
+Uint root_children[MAX_CHARS + 1];
 
 Table vertices;
 
-static Vertex first_child_lp(VertexP vertex)
+static Vertex leftmost_child_textbound(VertexP vertex)
 {
     VertexP child = vertices.first + CHILD(vertex);
 
     if (!IS_LEAF(child) && IS_UNEVALUATED(child)) {
-        return MAKE_TEXT_OFFSET(child);
+        return MAKE_TEXT_LEFTBOUND(child);
     } else {
-        return TEXT_OFFSET(child);
+        return TEXT_LEFTBOUND(child);
     }
 }
 
@@ -53,19 +47,18 @@ static bool is_empty(Pattern patt)
     return patt.cursor > patt.end;
 }
 
-static Uint offset(VertexP vertex)
+static Uint text_leftbound(VertexP vertex)
 {
     if(IS_UNEVALUATED(vertex)) {
-        return MAKE_TEXT_OFFSET(vertex);
+        return MAKE_TEXT_LEFTBOUND(vertex);
     } else {
-        return TEXT_OFFSET(vertex);
+        return TEXT_LEFTBOUND(vertex);
     }
 }
 
 static Vertex edge_length(VertexP vertex)
 {
-    Uint lp = TEXT_OFFSET(vertex);
-    return first_child_lp(vertex) - lp;
+    return leftmost_child_textbound(vertex) - TEXT_LEFTBOUND(vertex);
 }
 
 
@@ -81,10 +74,10 @@ static void eval_if_uneval(VertexP *vertex, void (*eval_fun)(VertexP))
 
 static Match try_match_leaf(Pattern patt, Uint *vertex)
 {
-    Wchar *text_cursor = wtext + TEXT_OFFSET(vertex);
+    Wchar *text_cursor = text.content + TEXT_LEFTBOUND(vertex);
     if (*text_cursor == patt.head) {
         return match_leaf(text_cursor, patt);
-    } else if (text_cursor == sentinel || IS_LASTCHILD(vertex)) {
+    } else if (text_cursor == text.sentinel || IS_LASTCHILD(vertex)) {
         return exhausted_match();
     } else {
         return failed_match();
@@ -110,7 +103,7 @@ static Match match_rootedge(Pattern *patt, VertexP *cursor)
     }
 
     Vertex rootchild  = root_children[patt->head];
-    Wchar *text_start = wtext + WITHOUT_LEAFBIT(rootchild);
+    Wchar *text_start = text.content + WITHOUT_LEAFBIT(rootchild);
     if (IS_LEAF(&rootchild)) {
         return match_leaf(text_start, *patt);
     }
@@ -167,7 +160,7 @@ bool search(Pattern patt)
                 }
 
             } else {
-                Wchar firstchar = *(wtext + offset(current_vertex));
+                Wchar firstchar = *(text.content + text_leftbound(current_vertex));
                 if(firstchar == patt.head) {
                     break;
                 }

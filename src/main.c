@@ -1,8 +1,6 @@
 #include "pattern_searcher.h"
 #include "sampler.h"
 
-Uint textlen, max_codepoint;
-
 int main(int argc,char *argv[])
 {
     char *filename, *patternfile, *mode;
@@ -28,27 +26,27 @@ int main(int argc,char *argv[])
 
     setlocale(LC_ALL, "en_US.utf8");
     FILE *in = fopen(filename, "r");
-    wtext = malloc(sizeof(Wchar) * MAXTEXTLEN);
+    text.content = malloc(sizeof(Wchar) * MAXTEXTLEN);
     wint_t c;
     while ((c = fgetwc(in)) != WEOF) {
-        wtext[textlen] = c;
-        textlen++;
+        text.content[text.len] = c;
+        text.len++;
     }
-    wtext[textlen + 1] = '\0';
-    sentinel  = wtext + textlen;
+    text.content[text.len + 1] = '\0';
+    text.sentinel  = text.content + text.len;
 
-    max_codepoint = get_max(wtext, textlen);
-    printf("max character value: %lu\n", max_codepoint);
+    text.max_charval = get_max(text.content, text.len);
+    printf("max character value: %lu\n", text.max_charval);
     fclose(in);
 
-    if(wtext == NULL) {
+    if(text.content == NULL) {
         fprintf(stderr, "Cannot open file");
     }
 
     Wchar **patterns = (Wchar **) malloc(sizeof(char *) * MAX_PATTERNS);
     int npatterns  = file_to_strings(patternfile, &patternslen, MAX_PATTERNS, &patterns);
 
-    if(textlen > MAXTEXTLEN) {
+    if(text.len > MAXTEXTLEN) {
         fprintf(stderr, "Text too large, see MAXTEXTLEN");
     }
 

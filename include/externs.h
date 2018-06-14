@@ -30,48 +30,40 @@
 ///////////////////////////////////////////////////////////////////////////////
 // The text
 
+typedef struct text {
+    Wchar *content;
+    Wchar **suffixes;
+    Wchar *sentinel;    // Last character, points to UNDEF
+    // number of occurences for the first character of the current suffixes
+    Uint len;
+    Uint alphasize;
+    Wchar characters[MAX_CHARS + 1]; // characters in alphabetical order
+    Uint max_charval;
+} Text;
+
 // points to input string `t` of length `n`
-extern Wchar *wtext;
-
-// Maximal codepoint value of `t`
-extern Uint max_codepoint;
-
-// length of `t`
-extern Uint  textlen;
-
-// array of pointers to suffixes of `t`
-extern Wchar **suffixes;
-
-// size of the alphabet `A`
-extern Uint alphasize;
-
-// points to `t[n] = undefined`
-extern Wchar *sentinel;
-
-// characters in `t` in alphabetical order
-extern Wchar characters[MAX_CHARS + 1];
-
-extern Uint indices[MAX_CHARS + 1];
-
-// number of occurrences for the first character of the current suffixes
-extern Uint suffixhead_count[MAX_CHARS + 1];
-
+extern Text text;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Buffer for sorting
 
-// space to be used by `sort_buffer`
-extern Wchar **sortbuffer;
 
-// number of elements in `sbufferspace`
-extern Uint sortbufferwidth;
+typedef struct sortbuffer {
+    // space to be used by `sort_buffer`
+    Wchar **content;
+    Uint suffixhead_count[MAX_CHARS + 1];
+    // number of elements
+    Uint size;
+    Uint maxsize;
+} Sortbuffer;
+
+extern Sortbuffer sortbuffer;
 
 // maximal number of elements in `sbufferspace`
 extern Uint max_sortbufferwidth;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Suffix Tree
-
 
 typedef struct table {
     Uint *first;

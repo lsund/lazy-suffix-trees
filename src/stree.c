@@ -17,7 +17,7 @@ Uint create_leaf_vertex(Wchar first, Wchar **left, bool root)
     Uint leafnum = SUFFIX_INDEX(left);
     *vertices.next = WITH_LEAFBIT(leafnum);
     if (root) {
-        root_children[first] = leafnum | LEAFBIT;
+        root_children[first] = WITH_LEAFBIT(leafnum);
     }
     vertices.next += LEAF_VERTEXSIZE;
     return leafnum;
@@ -27,8 +27,8 @@ Uint create_leaf_vertex(Wchar first, Wchar **left, bool root)
 
 void create_inner_vertex(Wchar first, Wchar **leftb, Wchar **rightb, bool root)
 {
-    *vertices.next = leftb - suffixes;
-    CHILD(vertices.next) = WITH_UNEVALBIT(rightb - suffixes);
+    *vertices.next = leftb - text.suffixes;
+    CHILD(vertices.next) = WITH_UNEVALBIT(rightb - text.suffixes);
 
     if (root) {
         root_children[first] = INDEX(vertices.next);
@@ -47,16 +47,14 @@ Uint create_sentinel_vertex(Wchar **right, Uint **previousnode)
 
 void stree_destroy()
 {
-    free(wtext);
-    free(sortbuffer);
+    free(text.content);
+    free(sortbuffer.content);
     free(vertices.first);
-    free(suffixes);
+    free(text.suffixes);
     free(leaf_nums);
-    free(recurse_suffixes);
-    sortbuffer       = NULL;
-    wtext            = NULL;
+    sortbuffer.content       = NULL;
+    text.content            = NULL;
     vertices.first    = NULL;
     leaf_nums        = NULL;
-    suffixes         = NULL;
-    recurse_suffixes = NULL;
+    text.suffixes         = NULL;
 }
