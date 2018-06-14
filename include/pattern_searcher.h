@@ -36,6 +36,7 @@
 #include "search.h"
 #include "clock.h"
 #include "reverse.h"
+#include "pattern.h"
 
 
 Sint find_startindices(Wchar *current_pattern, Uint patternlen);

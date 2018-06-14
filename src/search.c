@@ -30,17 +30,6 @@ Uint root_children[MAX_CHARS + 1], n_recursed, new_suffixes,
 
 Table vertices;
 
-static Pattern init_pattern(Wchar *patt_start, Wchar *patt_end)
-{
-    Pattern patt;
-    patt.head   = *patt_start;
-    patt.cursor = patt_start;
-    patt.start = patt_start;
-    patt.end    = patt_end;
-    return patt;
-}
-
-
 static Vertex first_child_lp(VertexP vertex)
 {
     VertexP child = vertices.first + CHILD(vertex);
@@ -100,36 +89,6 @@ static Vertex edge_length(VertexP vertex)
 }
 
 
-
-void traverse(VertexP cursor, Uint matchedlen)
-{
-    Uint depth = 0;
-
-    while(true) {
-
-        if (!IS_LEAF(cursor)) {
-            Uint edgelen = edge_length(cursor);
-            depth += edgelen;
-            cursor    = vertices.first + CHILD(cursor);
-        }
-
-        if (IS_LEAF(cursor)) {
-            printf("%lu\n", n_leafnums);
-            leaf_nums[n_leafnums++] = OFFSET(cursor) - depth - matchedlen;
-            if(IS_LASTCHILD(cursor)) {
-                break;
-            }
-            cursor += LEAF_VERTEXSIZE;
-        } else {
-            traverse(cursor, matchedlen + depth);
-            if(IS_LASTCHILD(cursor)) {
-                break;
-            } else {
-                cursor += INNER_VERTEXSIZE;
-            }
-        }
-    }
-}
 static void eval_if_uneval(VertexP *vertex, void (*eval_fun)(Vertex))
 {
     if(IS_UNEVALUATED(*vertex)) {
@@ -200,10 +159,8 @@ static Match match_rootedge(Pattern *patt, VertexP *cursor)
 ///////////////////////////////////////////////////////////////////////////////
 // Public Interface
 
-bool search(Wchar *patt_start, Wchar *patt_end)
+bool search(Pattern patt)
 {
-
-    Pattern patt = init_pattern(patt_start, patt_end);
 
     VertexP cursor;
     Match rootmatch = match_rootedge(&patt, &cursor);

@@ -27,15 +27,8 @@
 #include "eval.h"
 #include "match.h"
 #include "util.h"
+#include "pattern.h"
 
-typedef struct pattern {
-    Wchar head;
-    Wchar *cursor;
-    Wchar *start;
-    Wchar *end;
-} Pattern;
-
-
-bool search(Wchar *left, Wchar *patt_end);
+bool search(Pattern patt);
 
 #endif

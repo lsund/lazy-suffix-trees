@@ -35,6 +35,7 @@ OBJ= obj/naive_search.o\
      obj/get_alpha.o \
 	 obj/match.o\
      obj/spaceman.o\
+	 obj/pattern.o\
 	 obj/util.o\
      obj/sort.o\
      obj/lcp.o\

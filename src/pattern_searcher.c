@@ -46,8 +46,9 @@ bool find_pattern(Wchar *current_pattern, Uint patternlen)
 {
     Wchar pattern[MAXPATTERNLEN + 1];
     copy_pattern(pattern, current_pattern, patternlen);
+    Pattern patt = init_pattern(pattern, pattern + patternlen - 1);
 
-    return search(pattern, pattern + patternlen - 1);
+    return search(patt);
 }
 
 

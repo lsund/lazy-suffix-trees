@@ -23,6 +23,8 @@
 #include "types.h"
 #include "util.h"
 #include "externs.h"
+#include "search.h"
+#include "pattern.h"
 
 void search_samples(const char *path, Uint trials, Uint minpat, Uint maxpat);
 
