@@ -12,4 +12,6 @@ typedef struct pattern {
 
 Pattern init_pattern(Wchar *patt_start, Wchar *patt_end);
 
+bool pattern_has_length(Pattern patt, Uint len);
+
 #endif

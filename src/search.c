@@ -53,26 +53,6 @@ static bool is_empty(Pattern patt)
     return patt.cursor > patt.end;
 }
 
-static bool is_prefix(Uint prefixlen, Uint edgelen)
-{
-    return prefixlen != edgelen - 1;
-}
-
-
-static bool is_matched(Pattern patt, Uint len)
-{
-    return (Uint) (patt.end - patt.cursor) == len;
-}
-
-
-static bool match(Wchar *text_cursor, Pattern patt)
-{
-    // Changed below to plus 1
-    Uint len = lcp(patt.cursor + 1, patt.end, text_cursor + 1, sentinel - 1);
-    return is_matched(patt, len);
-}
-
-
 static Uint offset(VertexP vertex)
 {
     if(IS_UNEVALUATED(vertex)) {
@@ -99,60 +79,61 @@ static void eval_if_uneval(VertexP *vertex, void (*eval_fun)(Vertex))
 }
 
 
-static Uint prefixlen(Uint *vertex, Pattern patt, Uint edgelen)
-{
-    Wchar *text_cursor = wtext + OFFSET(vertex);
-    return lcp(patt.cursor + 1, patt.end, text_cursor + 1, text_cursor + edgelen - 1);
-}
-
-
 static Match try_match_leaf(Pattern patt, Uint *vertex)
 {
     Wchar *text_cursor = wtext + OFFSET(vertex);
-    /* printf("Matching leaf: %ls with %ls\n", text_cursor, patt.cursor); */
     if (*text_cursor == patt.head) {
-        return make_match(match(text_cursor, patt));
+        return match_leaf(text_cursor, patt);
+    } else if (text_cursor == sentinel || IS_LASTCHILD(vertex)) {
+        return exhausted_match();
+    } else {
+        return failed_match();
     }
-    if (text_cursor == sentinel || IS_LASTCHILD(vertex)) {
-        return unsuccessful_match();
-    }
-    return incomplete_match();
 }
 
 static Match match_rootedge(Pattern *patt, VertexP *cursor)
 {
-    Match res;
-    res.done     = false;
-    res.success  = false;
+    Match match;
+    match.done     = false;
+    match.success  = false;
 
     if(is_empty(*patt)) {
-        return successful_match();
+        match.done = true;
+        match.success = true;
+        return match;
     }
 
     eval_root();
 
     if (no_root_edge(*patt)) {
-        return unsuccessful_match();
+        return exhausted_match();
     }
 
     Vertex rootchild  = root_children[patt->head];
     Wchar *text_start = wtext + WITHOUT_LEAFBIT(rootchild);
     if (IS_LEAF(&rootchild)) {
-        return make_match(match(text_start, *patt));
+        return match_leaf(text_start, *patt);
     }
 
     *cursor  = vertices.first + rootchild;
 
     eval_if_uneval(cursor, eval_branch);
     Uint edgelen = edge_length(*cursor);
-    Uint plen    = prefixlen(*cursor, *patt, edgelen);
+    Uint plen    = inner_lcp(*cursor, *patt, edgelen);
 
-    if(is_prefix(plen, edgelen)) {
-        return make_match(is_matched(*patt, plen));
+    if(plen != edgelen - 1) {
+        match.done = true;
+        match.success = pattern_has_length(*patt, plen);
+        return match;
     } else {
         patt->cursor += edgelen;
     }
-    return res;
+    return match;
+}
+
+
+static void find_next_child()
+{
 }
 
 
@@ -162,8 +143,8 @@ static Match match_rootedge(Pattern *patt, VertexP *cursor)
 bool search(Pattern patt)
 {
 
-    VertexP cursor;
-    Match rootmatch = match_rootedge(&patt, &cursor);
+    VertexP current_vertex;
+    Match rootmatch = match_rootedge(&patt, &current_vertex);
 
     if (rootmatch.done) {
         return rootmatch.success;
@@ -172,39 +153,38 @@ bool search(Pattern patt)
     while(!is_empty(patt)) {
 
         patt.head = *patt.cursor;
-        cursor    = vertices.first + CHILD(cursor);
+        current_vertex    = vertices.first + CHILD(current_vertex);
 
         while(true) {
 
-            if (IS_LEAF(cursor)) {
+            if (IS_LEAF(current_vertex)) {
 
-                Match match = try_match_leaf(patt, cursor);
-
+                Match match = try_match_leaf(patt, current_vertex);
                 if (match.done) {
                     return match.success;
                 } else {
-                    cursor += LEAF_VERTEXSIZE;
+                    current_vertex += LEAF_VERTEXSIZE;
                 }
 
             } else {
-                Wchar firstchar = *(wtext + offset(cursor));
+                Wchar firstchar = *(wtext + offset(current_vertex));
                 if(firstchar == patt.head) {
                     break;
                 }
-                if(IS_LASTCHILD(cursor)) {
+                if(IS_LASTCHILD(current_vertex)) {
                     return false;
                 } else {
-                    cursor += INNER_VERTEXSIZE;
+                    current_vertex += INNER_VERTEXSIZE;
                 }
             }
         }
 
-        eval_if_uneval(&cursor, eval_branch);
-        Uint edgelen = edge_length(cursor);
-        Uint plen    = prefixlen(cursor, patt, edgelen);
+        eval_if_uneval(&current_vertex, eval_branch);
+        Uint edgelen = edge_length(current_vertex);
+        Uint plen    = inner_lcp(current_vertex, patt, edgelen);
 
-        if(is_prefix(plen, edgelen)) {
-            return is_matched(patt, plen);
+        if(plen !=  edgelen - 1) {
+            return pattern_has_length(patt, plen);
         }
 
         patt.cursor += edgelen;

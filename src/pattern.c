@@ -9,3 +9,10 @@ Pattern init_pattern(Wchar *patt_start, Wchar *patt_end)
     patt.end    = patt_end;
     return patt;
 }
+
+bool pattern_has_length(Pattern patt, Uint len)
+{
+    return (Uint) (patt.end - patt.cursor) == len;
+}
+
+

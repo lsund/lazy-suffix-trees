@@ -70,12 +70,6 @@ static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
 }
 
 
-static void eval_nonroot(Wchar **leftb, Wchar **rightb)
-{
-    eval_edges(leftb, rightb, false);
-}
-
-
 static void eval_vertex(Vertex vertex_val, Wchar ***leftb, Wchar ***rightb)
 {
     VertexP vertex = vertices.first + vertex_val;
@@ -89,15 +83,6 @@ static void eval_vertex(Vertex vertex_val, Wchar ***leftb, Wchar ***rightb)
 }
 
 
-static void eval(Vertex vertex_val, void (*eval_fun)(Wchar **, Wchar **))
-{
-    Wchar **leftb;
-    Wchar **rightb;
-    eval_vertex(vertex_val, &leftb, &rightb);
-    eval_fun(leftb, rightb);
-}
-
-
 void eval_root()
 {
     if (!root_evaluated) {
@@ -107,8 +92,10 @@ void eval_root()
     }
 }
 
-
 void eval_branch(Vertex vertex_val)
 {
-    eval(vertex_val, eval_nonroot);
+    Wchar **leftb;
+    Wchar **rightb;
+    eval_vertex(vertex_val, &leftb, &rightb);
+    eval_edges(leftb, rightb, false);
 }

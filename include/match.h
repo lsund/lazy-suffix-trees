@@ -2,18 +2,25 @@
 #define MATCH_H
 
 #include "types.h"
+#include "pattern.h"
+#include "lcp.h"
+#include "stree.h"
+
+typedef enum { SUCCESS, FAIL, EXHAUSTED } Matchtype;
 
 typedef struct match {
     bool done;
     bool success;
 } Match;
 
-Match incomplete_match();
+Match failed_match();
 
 Match successful_match();
 
-Match unsuccessful_match();
+Match exhausted_match();
 
-Match make_match(bool success);
+Match match_leaf(Wchar *text_cursor, Pattern patt);
+
+Uint inner_lcp(Uint *vertex, Pattern patt, Uint edgelen);
 
 #endif

@@ -1,6 +1,8 @@
 #include "match.h"
 
-Match incomplete_match()
+Wchar *sentinel;
+
+Match failed_match()
 {
     Match res;
     res.done = false;
@@ -18,7 +20,7 @@ Match successful_match()
 }
 
 
-Match unsuccessful_match()
+Match exhausted_match()
 {
     Match res;
     res.done = true;
@@ -26,12 +28,27 @@ Match unsuccessful_match()
     return res;
 }
 
+Uint leaf_lcp(Wchar *text_cursor, Pattern patt)
+{
+    return lcp(patt.cursor + 1, patt.end, text_cursor + 1, sentinel - 1);
+}
 
-Match make_match(bool success)
+
+Uint inner_lcp(Uint *vertex, Pattern patt, Uint edgelen)
+{
+    Wchar *text_cursor = wtext + OFFSET(vertex);
+    return lcp(patt.cursor + 1, patt.end, text_cursor + 1, text_cursor + edgelen - 1);
+}
+
+
+Match match_leaf(Wchar *text_cursor, Pattern patt)
 {
     Match res;
     res.done = true;
-    res.success = success;
+    // Changed below to plus 1
+    Uint len = lcp(patt.cursor + 1, patt.end, text_cursor + 1, sentinel - 1);
+    res.success = pattern_has_length(patt, len);
     return res;
 }
+
 
