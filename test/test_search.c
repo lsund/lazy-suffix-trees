@@ -4,7 +4,7 @@ Wchar *wtext;
 Uint textlen, max_codepoint, n_leafnums;
 
 
-int maxpatterns = 1000;
+int maxpatterns = 500;
 
 
 static Uint min(const Uint a, const Uint b)
@@ -292,9 +292,9 @@ void *utest_leaves()
 
 char *test_search()
 {
-    /* mu_run_utest(utest_search); */
+    mu_run_utest(utest_search);
 
-    mu_run_utest(utest_leaves);
+    /* mu_run_utest(utest_leaves); */
 
     return NULL;
 }

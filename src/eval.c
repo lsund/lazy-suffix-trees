@@ -3,7 +3,7 @@
 
 Wchar   *wtext, *sentinel, **recurse_suffixes;
 
-Uint    *next_element, root_children[MAX_CHARS + 1], n_recursed, new_suffixes;
+Uint    root_children[MAX_CHARS + 1], n_recursed, new_suffixes;
 
 
 static bool skip_sentinel(Wchar ***rightb)
@@ -35,7 +35,7 @@ static void create_edges(Wchar **leftb, Wchar **rightb, Uint **previous, bool is
 
         Wchar first = **curr_leftb;
         get_rightb(&curr_rightb, curr_leftb, rightb, first);
-        *previous = next_element;
+        *previous = vertices.next;
 
         if (curr_rightb > curr_leftb) {
             create_inner_vertex(first, curr_leftb, curr_rightb, isroot);
@@ -56,7 +56,7 @@ static void create_suffixes(Wchar **leftb, Wchar **rightb, Uint **previous, bool
         *(recurse_suffixes + n_recursed) = *curr_leftb;
         Wchar first = **curr_leftb;
         get_rightb(&curr_rightb, curr_leftb, rightb, first);
-        *previous = next_element;
+        *previous = vertices.next;
 
         if (curr_rightb > curr_leftb) {
             create_inner_vertex(first, curr_leftb, curr_rightb, isroot);
@@ -87,8 +87,8 @@ static void eval_suffixes(Wchar **leftb, Wchar **rightb, bool isroot)
     }
 
     if (isroot) {
-        *next_element = WITH_LEAF_AND_LASTCHILDBIT(textlen);
-        next_element += LEAF_VERTEXSIZE;
+        *vertices.next = WITH_LEAF_AND_LASTCHILDBIT(textlen);
+        vertices.next += LEAF_VERTEXSIZE;
     } else {
         *previous = WITH_LASTCHILDBIT(*previous);
     }
@@ -112,8 +112,8 @@ static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
     }
 
     if (isroot) {
-        *next_element = WITH_LEAF_AND_LASTCHILDBIT(textlen);
-        next_element += LEAF_VERTEXSIZE;
+        *vertices.next = WITH_LEAF_AND_LASTCHILDBIT(textlen);
+        vertices.next += LEAF_VERTEXSIZE;
     } else {
         *previous = WITH_LASTCHILDBIT(*previous);
     }
@@ -134,12 +134,12 @@ static void eval_nonroot_suffixes(Wchar **leftb, Wchar **rightb)
 
 static void eval_vertex(Vertex vertex_val, Wchar ***leftb, Wchar ***rightb)
 {
-    VertexP vertex = vertices + vertex_val;
+    VertexP vertex = vertices.first + vertex_val;
     *leftb   = LEFT_BOUND(vertex);
     *rightb  = RIGHT_BOUND(vertex);
 
     SET_OFFSET(vertex, SUFFIX_INDEX(*leftb));
-    CHILD(vertex) =  INDEX(next_element);
+    CHILD(vertex) =  INDEX(vertices.next);
 
     counting_sort(*leftb, *rightb);
 }

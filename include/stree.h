@@ -27,7 +27,7 @@
 #define LEAF_VERTEXSIZE     1
 #define INNER_VERTEXSIZE    3
 
-#define ROOT                vertices
+#define ROOT                vertices.first
 
 ///////////////////////////////////////////////////////////////////////////////
 // Vertices
@@ -36,40 +36,32 @@
 
 #define LEAFBIT                         MSB
 
-// Bit determining if the node is the rightmost child of its parent. This is
-// stored in the first integer, ie its left pointer.
-#define LASTCHILDBIT                    SECOND_MSB
-
-// Bit determining if the inner node is unevaluated. This is stored in the
-// second integer of the vertex, ie. its first child.
-#define UNEVALUATEDBIT                  MSB
-
-#define WITH_LASTCHILDBIT(V)            ((V) | LASTCHILDBIT)
+#define WITH_LASTCHILDBIT(V)            ((V) | SECOND_MSB)
 #define WITH_LEAFBIT(V)                 ((V) | LEAFBIT)
-#define WITH_LEAF_AND_LASTCHILDBIT(V)   ((V) | LEAFBIT | LASTCHILDBIT)
-#define WITH_UNEVALBIT(V)               ((V) | UNEVALUATEDBIT)
+#define WITH_LEAF_AND_LASTCHILDBIT(V)   ((V) | LEAFBIT | SECOND_MSB)
+#define WITH_UNEVALBIT(V)               ((V) | MSB)
 
 #define WITHOUT_LEAFBIT(V)              ((V) & ~LEAFBIT)
 
 
 // Evaluated vertices
-#define OFFSET(P)                       ((*(P)) & ~(LEAFBIT | LASTCHILDBIT))
+#define OFFSET(P)                       ((*(P)) & ~(LEAFBIT | SECOND_MSB))
 #define CHILD(P)                        (*((P) + 1))
 #define LEAF_INDEX(P)                   (*((P) + 2))
 #define OFFSET_UNEVAL(V)                SUFFIX_INDEX(LEFT_BOUND(V))
 
-#define SET_OFFSET(V, O)                *(V) = (*(V) & LASTCHILDBIT) | (O)
+#define SET_OFFSET(V, O)                *(V) = (*(V) & SECOND_MSB) | (O)
 
 // Unevaluated vertices
 #define LEFT_BOUND(P)            (suffixes + OFFSET(P))
-#define RIGHT_BOUND(P)           (suffixes + (CHILD(P) & ~UNEVALUATEDBIT))
+#define RIGHT_BOUND(P)           (suffixes + (CHILD(P) & ~MSB))
 
 ///////////////////////////////////////////////////////////////////////////////
 // Queries
 
 #define IS_LEAF(V)              ((*(V)) & LEAFBIT)
-#define IS_LASTCHILD(V)         ((*(V)) & LASTCHILDBIT)
-#define IS_UNEVALUATED(V)       (CHILD(V) & UNEVALUATEDBIT)
+#define IS_LASTCHILD(V)         ((*(V)) & SECOND_MSB)
+#define IS_UNEVALUATED(V)       (CHILD(V) & MSB)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Getters

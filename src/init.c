@@ -9,13 +9,12 @@ Wchar       *wtext,
 
 Uint        textlen,
             alphasize,
-            *vertices,
-            streesize,
-            *next_element,
             sortbufferwidth,
             max_sortbufferwidth,
             suffixhead_count[MAX_CHARS + 1],
             n_recursed;
+
+Table vertices;
 
 
 bool    root_evaluated;
@@ -34,10 +33,10 @@ static void init_alphabet()
 static void init_stree()
 {
     root_evaluated = false;
-    streesize      = EXTENSION_SIZE;
-    ALLOC(vertices, vertices, Uint, streesize);
+    vertices.size      = EXTENSION_SIZE;
+    ALLOC(vertices.first, vertices.first, Uint, vertices.size);
     ALLOC(suffixes, NULL, Wchar *, textlen + 1);
-    next_element   = vertices;
+    vertices.next   = vertices.first;
 
     recurse_suffixes = malloc(sizeof(Wchar *) * 5000);
     leaf_nums = malloc(sizeof(Uint) * 50000);

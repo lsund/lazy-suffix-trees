@@ -25,8 +25,10 @@ Wchar *wtext,
         **suffixes,
         **recurse_suffixes;
 
-Uint *vertices, root_children[MAX_CHARS + 1], n_recursed, new_suffixes,
+Uint root_children[MAX_CHARS + 1], n_recursed, new_suffixes,
      *leaf_nums, n_leafnums;
+
+Table vertices;
 
 bool root_evaluated;
 bool evaluated = false;
@@ -44,7 +46,7 @@ static Pattern init_pattern(Wchar *patt_start, Wchar *patt_end)
 
 static Vertex first_child_lp(VertexP vertex)
 {
-    VertexP child = vertices + CHILD(vertex);
+    VertexP child = vertices.first + CHILD(vertex);
 
     if (!IS_LEAF(child) && IS_UNEVALUATED(child)) {
         return OFFSET_UNEVAL(child);
@@ -111,7 +113,7 @@ void traverse(VertexP cursor, Uint matchedlen)
         if (!IS_LEAF(cursor)) {
             Uint edgelen = edge_length(cursor);
             depth += edgelen;
-            cursor    = vertices + CHILD(cursor);
+            cursor    = vertices.first + CHILD(cursor);
         }
 
         if (IS_LEAF(cursor)) {
@@ -136,7 +138,7 @@ static void eval_if_uneval(VertexP *vertex, void (*eval_fun)(Vertex))
     if(IS_UNEVALUATED(*vertex)) {
         evaluated = true;
         Uint index = INDEX(*vertex);
-        *vertex = vertices + index;
+        *vertex = vertices.first + index;
         eval_fun(index);
     }
 }
@@ -184,7 +186,7 @@ static Match match_rootedge(Pattern *patt, VertexP *cursor)
         return make_match(match(text_start, *patt));
     }
 
-    *cursor  = vertices + rootchild;
+    *cursor  = vertices.first + rootchild;
 
     eval_if_uneval(cursor, eval_branch);
     Uint edgelen = edge_length(*cursor);
@@ -217,7 +219,7 @@ bool search(Wchar *patt_start, Wchar *patt_end)
     while(!is_empty(patt)) {
 
         patt.head = *patt.cursor;
-        cursor    = vertices + CHILD(cursor);
+        cursor    = vertices.first + CHILD(cursor);
 
         while(true) {
 
@@ -289,7 +291,7 @@ bool find_leafnums(
     if (!start) {
         eval_root();
         Vertex rootchild  = root_children[patt.head];
-        cursor  = vertices + rootchild;
+        cursor  = vertices.first + rootchild;
 
         eval_if_uneval(&cursor, eval_branch_suffixes);
         Uint edgelen = edge_length(cursor);
@@ -312,7 +314,7 @@ bool find_leafnums(
     while(!is_empty(patt)) {
 
         patt.head = *patt.cursor;
-        cursor    = vertices + CHILD(cursor);
+        cursor    = vertices.first + CHILD(cursor);
 
         while(true) {
 
