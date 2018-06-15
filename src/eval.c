@@ -46,9 +46,7 @@ static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
 {
     bool sentineledge    = skip_sentinel(&rightb);
 
-    if (isroot) {
-        init_root_children();
-    } else {
+    if (!isroot) {
         alloc_extend_stree();
     }
 

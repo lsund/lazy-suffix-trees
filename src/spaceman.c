@@ -12,13 +12,13 @@ Wchar **alloc_sortbuffer(Wchar **left, Wchar **right) {
     if(sortbuffer.size > sortbuffer.maxsize && sortbuffer.maxsize > width) {
 
         sortbuffer.size = sortbuffer.maxsize;
-        ALLOC(sortbuffer.content, sortbuffer.content, Wchar *, sortbuffer.size);
+        ALLOC(sortbuffer.content, Wchar *, sortbuffer.size);
 
     } else {
 
         if(width > sortbuffer.size) {
             sortbuffer.size = width;
-            ALLOC(sortbuffer.content, sortbuffer.content, Wchar *, sortbuffer.size);
+            ALLOC(sortbuffer.content, Wchar *, sortbuffer.size);
         }
 
     }
@@ -33,7 +33,7 @@ void alloc_extend_stree(void)
     if(next_free_index >= vertices.size) {
 
         vertices.size += (text.len / 10);
-        ALLOC(vertices.first, vertices.first, Uint, vertices.size + EXTENSION_SIZE);
+        ALLOC(vertices.first, Uint, vertices.size + EXTENSION_SIZE);
         vertices.next = vertices.first + next_free_index;
 
     }

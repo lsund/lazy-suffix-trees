@@ -27,6 +27,7 @@
 #include "lcp.h"
 #include "sort.h"
 #include "stree.h"
+#include "insert.h"
 
 void eval_root();
 

@@ -29,9 +29,10 @@ static void init_alphabet()
 static void init_stree()
 {
     root_evaluated = false;
+    init_root_children();
     vertices.size      = EXTENSION_SIZE;
-    ALLOC(vertices.first, vertices.first, Uint, vertices.size);
-    ALLOC(text.suffixes, NULL, Wchar *, text.len + 1);
+    ALLOC(vertices.first, Uint, vertices.size);
+    ALLOC(text.suffixes, Wchar *, text.len + 1);
     vertices.next   = vertices.first;
 }
 

@@ -70,19 +70,4 @@
 // length of the path to its parent.  To retrieve the edge labels in constant
 // time, it suffices to store the left pointer for all nodes.
 
-void create_root_leaf(Wchar firstchar, Wchar **left);
-
-void insert_inner_vertex(
-        Wchar firstchar,
-        Wchar **left,
-        Wchar **right,
-        bool root
-    );
-
-Uint insert_leaf_vertex(Wchar firstchar, Wchar **left, bool root);
-
-Uint insert_sentinel_vertex(Wchar **right, Uint **previousnode);
-
-void init_root_children();
-
 #endif

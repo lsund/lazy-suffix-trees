@@ -35,8 +35,8 @@
 #define EXTENSION_SIZE            (INNER_VERTEXSIZE * (MAX_CHARS + 1) + 1)
 
 
-#define ALLOC(V,S,T,N)\
-        V = (T *) realloc(S, sizeof(T) * (size_t) (N));\
+#define ALLOC(V,T,N)\
+        V = (T *) realloc(V, sizeof(T) * (size_t) (N));\
         if((V) == NULL)\
         {\
             fprintf(stderr, "Could not allocate enough space\n");\
