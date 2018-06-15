@@ -7,6 +7,15 @@ Table vertices;
 bool    root_evaluated;
 
 
+void init_root_children()
+{
+    Uint *cursor;
+    for(cursor = root_children; cursor <= root_children + MAX_CHARS; cursor++) {
+        *cursor = UNDEFINEDSUCC;
+    }
+}
+
+
 static void init_alphabet()
 {
     Uint i;
@@ -41,3 +50,15 @@ void init()
     init_stree();
 }
 
+
+void destroy()
+{
+    free(text.content);
+    free(sortbuffer.content);
+    free(vertices.first);
+    free(text.suffixes);
+    sortbuffer.content = NULL;
+    text.content       = NULL;
+    vertices.first     = NULL;
+    text.suffixes      = NULL;
+}

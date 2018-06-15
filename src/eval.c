@@ -36,9 +36,9 @@ static void create_edges(Wchar **leftb, Wchar **rightb, Uint **previous, bool is
         *previous = vertices.next;
 
         if (curr_rightb > curr_leftb) {
-            create_inner_vertex(first, curr_leftb, curr_rightb, isroot);
+            insert_inner_vertex(first, curr_leftb, curr_rightb, isroot);
         } else {
-            create_leaf_vertex(first, curr_leftb, isroot);
+            insert_leaf_vertex(first, curr_leftb, isroot);
         }
     }
 }
@@ -56,7 +56,7 @@ static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
     create_edges(leftb, rightb, &previous, isroot);
 
     if (sentineledge) {
-        create_sentinel_vertex(rightb, &previous);
+        insert_sentinel_vertex(rightb, &previous);
     }
 
     if (isroot) {

@@ -27,6 +27,10 @@
 #include "get_alpha.h"
 #include "pattern_searcher.h"
 
+void init_root_children();
+
 void init();
+
+void destroy();
 
 #endif

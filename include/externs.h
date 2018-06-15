@@ -81,17 +81,4 @@ extern Uint root_children[MAX_CHARS + 1];
 // flag indicating that the root has been evaluated
 extern bool root_evaluated;
 
-///////////////////////////////////////////////////////////////////////////////
-// Recurse suffixes
-
-extern Wchar **recurse_suffixes;
-
-extern Uint n_recursed, new_suffixes;
-
-extern Uint *leaf_nums;
-
-extern Uint n_leafnums;
-
-extern bool evaluated;
-
 #endif
