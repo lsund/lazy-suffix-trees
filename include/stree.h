@@ -35,8 +35,8 @@
 #define INDEX(P)                        ((Uint) ((P) - ROOT))
 
 #define WITH_LASTCHILDBIT(V)            ((V) | SECOND_MSB)
-#define WITH_LEAFBIT(V)                 ((V) | MSB)
-#define WITH_LEAF_AND_LASTCHILDBIT(V)   ((V) | MSB | SECOND_MSB)
+#define MAKE_LEAF(V)                 ((V) | MSB)
+#define MAKE_LEAF_LASTCHILD(V)   ((V) | MSB | SECOND_MSB)
 #define WITH_UNEVALBIT(V)               ((V) | MSB)
 
 #define WITHOUT_LEAFBIT(V)              ((V) & ~MSB)

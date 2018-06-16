@@ -3,9 +3,9 @@
 Uint insert_leaf_vertex(Wchar first, Wchar **left, bool root)
 {
     Uint leafnum = SUFFIX_INDEX(left);
-    *vertices.next = WITH_LEAFBIT(leafnum);
+    *vertices.next = MAKE_LEAF(leafnum);
     if (root) {
-        root_children[first] = WITH_LEAFBIT(leafnum);
+        root_children[first] = MAKE_LEAF(leafnum);
     }
     vertices.next += LEAF_VERTEXSIZE;
     return leafnum;

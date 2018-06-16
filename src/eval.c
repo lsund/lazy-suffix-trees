@@ -58,7 +58,7 @@ static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
     }
 
     if (isroot) {
-        *vertices.next = WITH_LEAF_AND_LASTCHILDBIT(text.len);
+        *vertices.next = MAKE_LEAF_LASTCHILD(text.len);
         vertices.next += LEAF_VERTEXSIZE;
     } else {
         *previous = WITH_LASTCHILDBIT(*previous);
