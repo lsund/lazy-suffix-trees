@@ -38,7 +38,7 @@ static Vertex leftmost_child_textbound(VertexP vertex)
 
 static bool no_root_edge(Pattern patt)
 {
-    return (root_children[patt.head]) == UNDEFINEDSUCC;
+    return (root_children[patt.head]) == UNDEF;
 }
 
 

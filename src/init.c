@@ -9,9 +9,9 @@ bool    root_evaluated;
 
 void init_root_children()
 {
-    Uint *cursor;
-    for(cursor = root_children; cursor <= root_children + MAX_CHARS; cursor++) {
-        *cursor = UNDEFINEDSUCC;
+    Uint *v;
+    for(v = root_children; v <= root_children + MAX_CHARS; v++) {
+        *v = UNDEF;
     }
 }
 
