@@ -58,7 +58,7 @@ static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
         *st.vs.nxt = MAKE_LEAF_LASTCHILD(text.len);
         st.vs.nxt += LEAF_VERTEXSIZE;
     } else {
-        *previous = WITH_LASTCHILDBIT(*previous);
+        *previous = MAKE_LASTCHILD(*previous);
     }
 }
 
@@ -68,7 +68,7 @@ static void eval_vertex(VertexP vertex, Wchar ***leftb, Wchar ***rightb)
     *leftb   = SUFFIX_LEFTBOUND(vertex);
     *rightb  = SUFFIX_RIGHTBOUND(vertex);
 
-    SET_TEXT_LEFTBOUND(vertex, SUFFIX_INDEX(*leftb));
+    SET_LEFTBOUND(vertex, SUFFIX_INDEX(*leftb));
     CHILD(vertex) = INDEX(st.vs.nxt);
 
     counting_sort(*leftb, *rightb);

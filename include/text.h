@@ -34,7 +34,6 @@ typedef struct text {
     Wchar *content;
     Wchar **suffixes;
     Wchar *sentinel;    // Last character, points to UNDEF
-    // number of occurences for the first character of the current suffixes
     Uint len;
     Uint alphasize;
     Wchar characters[MAX_CHARS + 1]; // characters in alphabetical order

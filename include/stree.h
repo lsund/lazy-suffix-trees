@@ -35,27 +35,27 @@
 // Offset in the table
 #define INDEX(P)                        ((Uint) ((P) - ROOT))
 
-#define WITH_LASTCHILDBIT(V)            ((V) | SECOND_MSB)
+#define MAKE_LASTCHILD(V)               ((V) | SECOND_MSB)
 #define MAKE_LEAF(V)                    ((V) | MSB)
 #define MAKE_LEAF_LASTCHILD(V)          ((V) | MSB | SECOND_MSB)
-#define WITH_UNEVALBIT(V)               ((V) | MSB)
+#define MAKE_UNEVAL_VERTEX(V)           ((V) | MSB)
 
 #define WITHOUT_LEAFBIT(V)              ((V) & ~MSB)
 
 
 // Evaluated vertices
-#define TEXT_LEFTBOUND(V)               ((*(V)) & ~(MSB | SECOND_MSB))
-#define TEXT_RIGHTBOUND(V)              (*((V) + 1))
-#define CHILD(V)                        TEXT_RIGHTBOUND(V)
+#define LEFTBOUND(V)               ((*(V)) & ~(MSB | SECOND_MSB))
+#define RIGHTBOUND(V)              (*((V) + 1))
+#define CHILD(V)                        RIGHTBOUND(V)
 
 // Unevaluated vertices
-#define SUFFIX_LEFTBOUND(V)             (text.suffixes + TEXT_LEFTBOUND(V))
+#define SUFFIX_LEFTBOUND(V)             (text.suffixes + LEFTBOUND(V))
 #define SUFFIX_RIGHTBOUND(V)            (text.suffixes + (CHILD(V) & ~MSB))
 // startposition of suffix
 #define SUFFIX_INDEX(V)                 ((Uint) (*(V) - text.content))
-#define MAKE_TEXT_LEFTBOUND(V)          SUFFIX_INDEX(SUFFIX_LEFTBOUND(V))
+#define MAKE_LEFTBOUND(V)          SUFFIX_INDEX(SUFFIX_LEFTBOUND(V))
 
-#define SET_TEXT_LEFTBOUND(V, O)        *(V) = (*(V) & SECOND_MSB) | (O)
+#define SET_LEFTBOUND(V, O)        *(V) = (*(V) & SECOND_MSB) | (O)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Queries

@@ -5,8 +5,8 @@
 #include "basedef.h"
 
 typedef struct sortbuffer {
-    // space to be used by `sort_buffer`
     Wchar **content;
+    // number of occurences for the first character of the current suffixes
     Uint suffixhead_count[MAX_CHARS + 1];
     // number of elements
     Uint size;
@@ -14,8 +14,5 @@ typedef struct sortbuffer {
 } Sortbuffer;
 
 extern Sortbuffer sortbuffer;
-
-// maximal number of elements in `sbufferspace`
-extern Uint max_sortbufferwidth;
 
 #endif

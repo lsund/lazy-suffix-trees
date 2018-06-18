@@ -27,9 +27,9 @@ static Vertex leftmost_child_textbound(VertexP vertex)
     VertexP child = st.vs.fst + CHILD(vertex);
 
     if (!IS_LEAF(child) && IS_UNEVALUATED(child)) {
-        return MAKE_TEXT_LEFTBOUND(child);
+        return MAKE_LEFTBOUND(child);
     } else {
-        return TEXT_LEFTBOUND(child);
+        return LEFTBOUND(child);
     }
 }
 
@@ -48,15 +48,15 @@ static bool is_empty(Pattern patt)
 static Uint text_leftbound(VertexP vertex)
 {
     if(IS_UNEVALUATED(vertex)) {
-        return MAKE_TEXT_LEFTBOUND(vertex);
+        return MAKE_LEFTBOUND(vertex);
     } else {
-        return TEXT_LEFTBOUND(vertex);
+        return LEFTBOUND(vertex);
     }
 }
 
 static Vertex edge_length(VertexP vertex)
 {
-    return leftmost_child_textbound(vertex) - TEXT_LEFTBOUND(vertex);
+    return leftmost_child_textbound(vertex) - LEFTBOUND(vertex);
 }
 
 
@@ -72,7 +72,7 @@ static void eval_if_uneval(VertexP *vertex, void (*eval_fun)(VertexP))
 
 static Match try_match_leaf(Pattern patt, Uint *vertex)
 {
-    Wchar *text_cursor = text.content + TEXT_LEFTBOUND(vertex);
+    Wchar *text_cursor = text.content + LEFTBOUND(vertex);
     if (*text_cursor == patt.head) {
         return match_leaf(text_cursor, patt);
     } else if (text_cursor == text.sentinel || IS_LASTCHILD(vertex)) {

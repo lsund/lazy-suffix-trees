@@ -15,7 +15,7 @@ Uint insert_leaf_vertex(Wchar fst, Wchar **left, bool root)
 void insert_inner_vertex(Wchar fst, Wchar **leftb, Wchar **rightb, bool root)
 {
     *st.vs.nxt = leftb - text.suffixes;
-    CHILD(st.vs.nxt) = WITH_UNEVALBIT(rightb - text.suffixes);
+    CHILD(st.vs.nxt) = MAKE_UNEVAL_VERTEX(rightb - text.suffixes);
 
     if (root) {
         st.rs[fst] = INDEX(st.vs.nxt);
