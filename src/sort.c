@@ -20,7 +20,7 @@ static void increase_count(Uint codepoint)
 {
     /* int i = get_index(codepoint); */
     Uint i = codepoint;
-    sortbuffer.suffixhead_count[i]++;
+    sb.groupsize[i]++;
 }
 
 
@@ -52,14 +52,14 @@ static void set_group_bounds(Wchar **left, Wchar **right, Wchar ***upper_bounds)
     for (suffix_probe = left; suffix_probe <= right; suffix_probe++) {
 
         Uint head = **suffix_probe;
-        if (sortbuffer.suffixhead_count[head] > 0) {
+        if (sb.groupsize[head] > 0) {
 
             // 'allocate' the upper bound for the current character.
             // upper_bounds[head] now points to a allocated memory address,
             // enough space in distance from the last group
-            upper_bounds[head] = lower_bound + sortbuffer.suffixhead_count[head] - 1;
+            upper_bounds[head] = lower_bound + sb.groupsize[head] - 1;
             lower_bound        = upper_bounds[head] + 1;
-            sortbuffer.suffixhead_count[head]   = 0;
+            sb.groupsize[head]   = 0;
         }
     }
 }
@@ -133,14 +133,14 @@ void create_suffix_groups(void)
 
     // determine size for each group
     for (c = text.fst; c < text.fst + text.len; c++) {
-        sortbuffer.suffixhead_count[(Uint) *c]++;
+        sb.groupsize[(Uint) *c]++;
     }
 
     for (c = text.cs; c < text.cs + text.asize; c++) {
         a                        = (Uint) *c;
-        upper_bounds[a]          = nextFree + sortbuffer.suffixhead_count[a] - 1;
+        upper_bounds[a]          = nextFree + sb.groupsize[a] - 1;
         nextFree                 = upper_bounds[a] + 1;
-        sortbuffer.suffixhead_count[a] = 0;
+        sb.groupsize[a] = 0;
     }
 
     // insert suffixes into array

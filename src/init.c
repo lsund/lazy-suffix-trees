@@ -18,7 +18,7 @@ static void init_alphabet()
     Uint i;
     get_characters(text.cs, &text.asize);
     for (i = 0; i <= MAX_CHARS; i++) {
-        sortbuffer.suffixhead_count[i] = 0;
+        sb.groupsize[i] = 0;
     }
 }
 
@@ -36,8 +36,8 @@ static void init_stree()
 
 static void init_sortbuffer()
 {
-    sortbuffer.size    = 0;
-    sortbuffer.maxsize = text.len >> 8;
+    sb.size    = 0;
+    sb.allocsize = text.len >> 8;
 }
 
 
@@ -52,10 +52,10 @@ void init()
 void destroy()
 {
     free(text.fst);
-    free(sortbuffer.content);
+    free(sb.fst);
     free(st.vs.fst);
     free(text.ss);
-    sortbuffer.content = NULL;
+    sb.fst = NULL;
     text.fst       = NULL;
     st.vs.fst     = NULL;
     text.ss      = NULL;

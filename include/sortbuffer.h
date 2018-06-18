@@ -5,14 +5,12 @@
 #include "basedef.h"
 
 typedef struct sortbuffer {
-    Wchar **content;
-    // number of occurences for the first character of the current suffixes
-    Uint suffixhead_count[MAX_CHARS + 1];
-    // number of elements
-    Uint size;
-    Uint maxsize;
+    Wchar **fst;                    // First element
+    Uint groupsize[MAX_CHARS + 1];  // Groupsizes in the current vertex
+    Uint size;                      // Number of elements in the buffer
+    Uint allocsize;                 // Size allocated
 } Sortbuffer;
 
-extern Sortbuffer sortbuffer;
+extern Sortbuffer sb;
 
 #endif

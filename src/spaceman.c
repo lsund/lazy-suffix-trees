@@ -1,7 +1,7 @@
 
 #include "spaceman.h"
 
-Sortbuffer sortbuffer;
+Sortbuffer sb;
 
 STree st;
 
@@ -9,20 +9,20 @@ Wchar **alloc_sortbuffer(Wchar **left, Wchar **right) {
 
     Uint width = (Uint) (right - left + 1);
 
-    if(sortbuffer.size > sortbuffer.maxsize && sortbuffer.maxsize > width) {
+    if(sb.size > sb.allocsize && sb.allocsize > width) {
 
-        sortbuffer.size = sortbuffer.maxsize;
-        ALLOC(sortbuffer.content, Wchar *, sortbuffer.size);
+        sb.size = sb.allocsize;
+        ALLOC(sb.fst, Wchar *, sb.size);
 
     } else {
 
-        if(width > sortbuffer.size) {
-            sortbuffer.size = width;
-            ALLOC(sortbuffer.content, Wchar *, sortbuffer.size);
+        if(width > sb.size) {
+            sb.size = width;
+            ALLOC(sb.fst, Wchar *, sb.size);
         }
 
     }
-    return sortbuffer.content;
+    return sb.fst;
 }
 
 
