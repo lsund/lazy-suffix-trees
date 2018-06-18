@@ -20,13 +20,11 @@
 
 #include "search.h"
 
-Uint root_children[MAX_CHARS + 1];
-
-Table vertices;
+STree st;
 
 static Vertex leftmost_child_textbound(VertexP vertex)
 {
-    VertexP child = vertices.first + CHILD(vertex);
+    VertexP child = st.vs.fst + CHILD(vertex);
 
     if (!IS_LEAF(child) && IS_UNEVALUATED(child)) {
         return MAKE_TEXT_LEFTBOUND(child);
@@ -38,7 +36,7 @@ static Vertex leftmost_child_textbound(VertexP vertex)
 
 static bool no_root_edge(Pattern patt)
 {
-    return (root_children[patt.head]) == UNDEF;
+    return (st.rs[patt.head]) == UNDEF;
 }
 
 
@@ -66,7 +64,7 @@ static void eval_if_uneval(VertexP *vertex, void (*eval_fun)(VertexP))
 {
     if(IS_UNEVALUATED(*vertex)) {
         Uint index = INDEX(*vertex);
-        *vertex = vertices.first + index;
+        *vertex = st.vs.fst + index;
         eval_fun(*vertex);
     }
 }
@@ -102,13 +100,13 @@ static Match match_rootedge(Pattern *patt, VertexP *cursor)
         return exhausted_match();
     }
 
-    Vertex rootchild  = root_children[patt->head];
+    Vertex rootchild  = st.rs[patt->head];
     Wchar *text_start = text.content + WITHOUT_LEAFBIT(rootchild);
     if (IS_LEAF(&rootchild)) {
         return match_leaf(text_start, *patt);
     }
 
-    *cursor  = vertices.first + rootchild;
+    *cursor  = st.vs.fst + rootchild;
 
     eval_if_uneval(cursor, eval_branch);
     Uint edgelen = edge_length(*cursor);
@@ -146,7 +144,7 @@ bool search(Pattern patt)
     while(!is_empty(patt)) {
 
         patt.head = *patt.cursor;
-        current_vertex    = vertices.first + CHILD(current_vertex);
+        current_vertex    = st.vs.fst + CHILD(current_vertex);
 
         while(true) {
 

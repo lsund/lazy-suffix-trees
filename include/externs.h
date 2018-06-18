@@ -65,20 +65,20 @@ extern Uint max_sortbufferwidth;
 ///////////////////////////////////////////////////////////////////////////////
 // Suffix Tree
 
+
 typedef struct table {
-    Uint *first;
-    Uint *next;
+    Uint *fst;
+    Uint *nxt;
     Uint size;
 } Table;
 
 
-//  Tree representation
-extern Table vertices;
+typedef struct stree {
+    Table vs;
+    Uint rs[MAX_CHARS + 1];
+    bool root_eval;
+} STree;
 
-// constant time access to successors of `root`
-extern Uint root_children[MAX_CHARS + 1];
-
-// flag indicating that the root has been evaluated
-extern bool root_evaluated;
+extern STree st;
 
 #endif

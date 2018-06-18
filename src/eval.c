@@ -1,9 +1,6 @@
 
 #include "eval.h"
 
-Uint    root_children[MAX_CHARS + 1];
-
-
 static bool skip_sentinel(Wchar ***rightb)
 {
     if(**rightb == text.sentinel) {
@@ -14,10 +11,10 @@ static bool skip_sentinel(Wchar ***rightb)
 }
 
 
-static void get_rightb(Wchar ***ret, Wchar **curr, Wchar **rightb, Wchar first)
+static void get_rightb(Wchar ***ret, Wchar **curr, Wchar **rightb, Wchar fst)
 {
     Wchar **probe = curr;
-    while (probe < rightb && **(probe + 1) == first) {
+    while (probe < rightb && **(probe + 1) == fst) {
         probe++;
     }
     *ret = probe;
@@ -31,14 +28,14 @@ static void create_edges(Wchar **leftb, Wchar **rightb, Uint **previous, bool is
 
     for (curr_leftb = leftb; curr_leftb <= rightb; curr_leftb = curr_rightb + 1) {
 
-        Wchar first = **curr_leftb;
-        get_rightb(&curr_rightb, curr_leftb, rightb, first);
-        *previous = vertices.next;
+        Wchar fst = **curr_leftb;
+        get_rightb(&curr_rightb, curr_leftb, rightb, fst);
+        *previous = st.vs.nxt;
 
         if (curr_rightb > curr_leftb) {
-            insert_inner_vertex(first, curr_leftb, curr_rightb, isroot);
+            insert_inner_vertex(fst, curr_leftb, curr_rightb, isroot);
         } else {
-            insert_leaf_vertex(first, curr_leftb, isroot);
+            insert_leaf_vertex(fst, curr_leftb, isroot);
         }
     }
 }
@@ -58,8 +55,8 @@ static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
     }
 
     if (isroot) {
-        *vertices.next = MAKE_LEAF_LASTCHILD(text.len);
-        vertices.next += LEAF_VERTEXSIZE;
+        *st.vs.nxt = MAKE_LEAF_LASTCHILD(text.len);
+        st.vs.nxt += LEAF_VERTEXSIZE;
     } else {
         *previous = WITH_LASTCHILDBIT(*previous);
     }
@@ -72,7 +69,7 @@ static void eval_vertex(VertexP vertex, Wchar ***leftb, Wchar ***rightb)
     *rightb  = SUFFIX_RIGHTBOUND(vertex);
 
     SET_TEXT_LEFTBOUND(vertex, SUFFIX_INDEX(*leftb));
-    CHILD(vertex) = INDEX(vertices.next);
+    CHILD(vertex) = INDEX(st.vs.nxt);
 
     counting_sort(*leftb, *rightb);
 }
@@ -80,10 +77,10 @@ static void eval_vertex(VertexP vertex, Wchar ***leftb, Wchar ***rightb)
 
 void eval_root()
 {
-    if (!root_evaluated) {
+    if (!st.root_eval) {
         create_suffix_groups();
         eval_edges(text.suffixes, text.suffixes + text.len - 1, true);
-        root_evaluated = true;
+        st.root_eval = true;
     }
 }
 

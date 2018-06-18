@@ -27,7 +27,7 @@
 #define LEAF_VERTEXSIZE     1
 #define INNER_VERTEXSIZE    2
 
-#define ROOT                vertices.first
+#define ROOT                st.vs.fst
 
 ///////////////////////////////////////////////////////////////////////////////
 // Vertices
@@ -35,8 +35,8 @@
 #define INDEX(P)                        ((Uint) ((P) - ROOT))
 
 #define WITH_LASTCHILDBIT(V)            ((V) | SECOND_MSB)
-#define MAKE_LEAF(V)                 ((V) | MSB)
-#define MAKE_LEAF_LASTCHILD(V)   ((V) | MSB | SECOND_MSB)
+#define MAKE_LEAF(V)                    ((V) | MSB)
+#define MAKE_LEAF_LASTCHILD(V)          ((V) | MSB | SECOND_MSB)
 #define WITH_UNEVALBIT(V)               ((V) | MSB)
 
 #define WITHOUT_LEAFBIT(V)              ((V) & ~MSB)

@@ -3,7 +3,7 @@
 
 Sortbuffer sortbuffer;
 
-Table vertices;
+STree st;
 
 Wchar **alloc_sortbuffer(Wchar **left, Wchar **right) {
 
@@ -28,13 +28,13 @@ Wchar **alloc_sortbuffer(Wchar **left, Wchar **right) {
 
 void alloc_extend_stree(void)
 {
-    Uint next_free_index = INDEX(vertices.next);
+    Uint next_free_index = INDEX(st.vs.nxt);
 
-    if(next_free_index >= vertices.size) {
+    if(next_free_index >= st.vs.size) {
 
-        vertices.size += (text.len / 10);
-        ALLOC(vertices.first, Uint, vertices.size + EXTENSION_SIZE);
-        vertices.next = vertices.first + next_free_index;
+        st.vs.size += (text.len / 10);
+        ALLOC(st.vs.fst, Uint, st.vs.size + EXTENSION_SIZE);
+        st.vs.nxt = st.vs.fst + next_free_index;
 
     }
 }

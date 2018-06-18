@@ -1,16 +1,13 @@
 
 #include "init.h"
 
-Table vertices;
-
-
-bool    root_evaluated;
+STree st;
 
 
 void init_root_children()
 {
     Uint *v;
-    for(v = root_children; v <= root_children + MAX_CHARS; v++) {
+    for(v = st.rs; v <= st.rs + MAX_CHARS; v++) {
         *v = UNDEF;
     }
 }
@@ -28,12 +25,12 @@ static void init_alphabet()
 
 static void init_stree()
 {
-    root_evaluated = false;
+    st.root_eval = false;
     init_root_children();
-    vertices.size      = EXTENSION_SIZE;
-    ALLOC(vertices.first, Uint, vertices.size);
+    st.vs.size      = EXTENSION_SIZE;
+    ALLOC(st.vs.fst, Uint, st.vs.size);
     ALLOC(text.suffixes, Wchar *, text.len + 1);
-    vertices.next   = vertices.first;
+    st.vs.nxt   = st.vs.fst;
 }
 
 
@@ -56,10 +53,10 @@ void destroy()
 {
     free(text.content);
     free(sortbuffer.content);
-    free(vertices.first);
+    free(st.vs.fst);
     free(text.suffixes);
     sortbuffer.content = NULL;
     text.content       = NULL;
-    vertices.first     = NULL;
+    st.vs.fst     = NULL;
     text.suffixes      = NULL;
 }
