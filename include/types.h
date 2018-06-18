@@ -45,6 +45,8 @@ typedef wchar_t Wchar;
 typedef Uint Vertex;
 typedef Uint *VertexP;
 
+typedef Wchar *Suffix;
+
 #define LOGWORDSIZE    6
 
 #define UINT(N)   (N##UL)

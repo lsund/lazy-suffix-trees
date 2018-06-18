@@ -14,12 +14,10 @@ Wchar **alloc_sortbuffer(Wchar **left, Wchar **right) {
         sb.size = sb.allocsize;
         ALLOC(sb.fst, Wchar *, sb.size);
 
-    } else {
+    } else if (width > sb.size) {
 
-        if(width > sb.size) {
-            sb.size = width;
-            ALLOC(sb.fst, Wchar *, sb.size);
-        }
+        sb.size = width;
+        ALLOC(sb.fst, Wchar *, sb.size);
 
     }
     return sb.fst;

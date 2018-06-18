@@ -5,7 +5,7 @@
 #include "basedef.h"
 
 typedef struct sortbuffer {
-    Wchar **fst;                    // First element
+    Suffix *fst;                    // First element
     Uint groupsize[MAX_CHARS + 1];  // Groupsizes in the current vertex
     Uint size;                      // Number of elements in the buffer
     Uint allocsize;                 // Size allocated

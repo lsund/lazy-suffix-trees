@@ -65,12 +65,14 @@ static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
 
 static void eval_vertex(VertexP vertex, Wchar ***leftb, Wchar ***rightb)
 {
+    // Find out what subsequence of suffixes this vertex corresponds to
     *leftb   = SUFFIX_LEFTBOUND(vertex);
     *rightb  = SUFFIX_RIGHTBOUND(vertex);
 
     SET_LEFTBOUND(vertex, SUFFIX_INDEX(*leftb));
     CHILD(vertex) = INDEX(st.vs.nxt);
 
+    // Sort the suffixes according to first character
     counting_sort(*leftb, *rightb);
 }
 

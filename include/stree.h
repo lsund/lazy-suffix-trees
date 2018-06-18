@@ -44,25 +44,24 @@
 
 
 // Evaluated vertices
-#define LEFTBOUND(V)               ((*(V)) & ~(MSB | SECOND_MSB))
-#define RIGHTBOUND(V)              (*((V) + 1))
-#define CHILD(V)                        RIGHTBOUND(V)
+#define LEFTBOUND(R)               ((*(R)) & ~(MSB | SECOND_MSB))
+#define RIGHTBOUND(R)              (*((R) + 1))
+#define CHILD(R)                        RIGHTBOUND(R)
 
-// Unevaluated vertices
-#define SUFFIX_LEFTBOUND(V)             (text.ss + LEFTBOUND(V))
-#define SUFFIX_RIGHTBOUND(V)            (text.ss + (CHILD(V) & ~MSB))
-// startposition of suffix
-#define SUFFIX_INDEX(V)                 ((Uint) (*(V) - text.fst))
-#define MAKE_LEFTBOUND(V)          SUFFIX_INDEX(SUFFIX_LEFTBOUND(V))
+#define SUFFIX_LEFTBOUND(R)         (text.ss + LEFTBOUND(R))
+#define SUFFIX_RIGHTBOUND(R)        (text.ss + (CHILD(R) & ~MSB))
 
-#define SET_LEFTBOUND(V, O)        *(V) = (*(V) & SECOND_MSB) | (O)
+#define SUFFIX_INDEX(R)             ((Uint) (*(R) - text.fst))
+#define MAKE_LEFTBOUND(R)           SUFFIX_INDEX(SUFFIX_LEFTBOUND(R))
+
+#define SET_LEFTBOUND(R, O)        *(R) = (*(R) & SECOND_MSB) | (O)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Queries
 
-#define IS_LEAF(V)                      ((*(V)) & MSB)
-#define IS_LASTCHILD(V)                 ((*(V)) & SECOND_MSB)
-#define IS_UNEVALUATED(V)               (CHILD(V) & MSB)
+#define IS_LEAF(R)                      ((*(R)) & MSB)
+#define IS_LASTCHILD(R)                 ((*(R)) & SECOND_MSB)
+#define IS_UNEVALUATED(R)               (CHILD(R) & MSB)
 
 ///////////////////////////////////////////////////////////////////////////////
 // Getters
