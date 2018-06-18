@@ -43,12 +43,13 @@
 // Appending binary mode
 #define APPENDMODE "ab"
 
-Uint file_to_strings(char *name, Uint *textlen, Uint nlines, Wchar ***words);
+Uint file_to_strings(char *name, Uint nlines, Wchar ***words);
+
+void file_to_string(const char *filename);
 
 FILE *open_append(const char *path);
 
 void freetextspace();
-
 
 #endif
 

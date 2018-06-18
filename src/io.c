@@ -65,10 +65,11 @@ static int open_file(char *name, Uint *textlen, bool writefile)
 }
 
 
-Uint file_to_strings(char *name, Uint *textlen, Uint nlines, Wchar ***wordsp)
+Uint file_to_strings(char *name, Uint nlines, Wchar ***wordsp)
 {
     Wchar **words = *wordsp;
-    int fd = open_file(name, textlen, false);
+    Uint len;
+    int fd = open_file(name, &len, false);
 
     if (fd < 0) {
         return -1;

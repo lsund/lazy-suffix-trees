@@ -10,7 +10,6 @@ static Uint min(const Uint a, const Uint b)
 
 char *test_count(char *patternfile, char *textfile, Uint count)
 {
-    Uint patternslen;
     setlocale(LC_ALL, "en_US.utf8");
     FILE *in = fopen(textfile, "r");
     text.fst = malloc(sizeof(Wchar) * MAXTEXTLEN);
@@ -24,7 +23,7 @@ char *test_count(char *patternfile, char *textfile, Uint count)
     text.maxc = get_max(text.fst, text.len);
     fclose(in);
     Wchar **patterns = (Wchar **) malloc(sizeof(Wchar *) * MAX_PATTERNS);
-    int npatterns  = file_to_strings(patternfile, &patternslen, MAX_PATTERNS, &patterns);
+    int npatterns  = file_to_strings(patternfile, MAX_PATTERNS, &patterns);
     init();
 
     Uint exists_n = 0;
@@ -49,7 +48,6 @@ char *test_count(char *patternfile, char *textfile, Uint count)
 
 char *compare_vs_naive(char *patternfile, char *textfile)
 {
-    Uint patternslen;
     setlocale(LC_ALL, "en_US.utf8");
     FILE *in = fopen(textfile, "r");
     text.fst = malloc(sizeof(Wchar) * MAXTEXTLEN);
@@ -63,7 +61,7 @@ char *compare_vs_naive(char *patternfile, char *textfile)
     text.maxc = get_max(text.fst, text.len);
     fclose(in);
     Wchar **patterns = (Wchar **) malloc(sizeof(Wchar *) * MAX_PATTERNS);
-    int npatterns  = file_to_strings(patternfile, &patternslen, MAX_PATTERNS, &patterns);
+    int npatterns  = file_to_strings(patternfile, MAX_PATTERNS, &patterns);
     init();
 
     int exists_n = 0, rexists_n = 0;

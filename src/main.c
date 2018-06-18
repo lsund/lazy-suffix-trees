@@ -1,79 +1,67 @@
 #include "pattern_searcher.h"
 #include "sampler.h"
+#include "io.h"
 
-int main(int argc,char *argv[])
+const char *outpath = "data/out.txt";
+const char *locale = "en_US.utf8";
+
+static void usage()
 {
-    char *filename, *patternfile, *mode;
-    Uint patternslen;
+    fprintf(stdout, "\nusage: gk TEXTFILE PATTERNFILE MODE\n\n");
+    fprintf(stdout, "TEXTFILE: the path to a file containing the text\n");
+    fprintf(stdout, "PATTERNFILE: path to a file containing set of patterns\n\n");
+    fprintf(stdout, "MODE: either 'run' or 'bench'\n\n");
+}
 
-    if (argc == 1) {
 
-        filename = "data/small.txt";
-        patternfile = "data/small-patt.txt";
-        mode = "run";
-
-    } else if (argc == 4) {
-
-        filename = argv[1];
-        patternfile     = argv[2];
-        mode = argv[3];
-    } else {
-
-        fprintf(stderr, "Wrong amount of arguments supplied");
-        exit(EXIT_FAILURE);
-
-    }
-
-    setlocale(LC_ALL, "en_US.utf8");
-    FILE *in = fopen(filename, "r");
-    text.fst = malloc(sizeof(Wchar) * MAXTEXTLEN);
-    wint_t c;
-    while ((c = fgetwc(in)) != WEOF) {
-        text.fst[text.len] = c;
-        text.len++;
-    }
-    text.fst[text.len + 1] = '\0';
-    text.lst  = text.fst + text.len;
-
-    text.maxc = get_max(text.fst, text.len);
-    printf("max character value: %lu\n", text.maxc);
-    fclose(in);
-
-    if(text.fst == NULL) {
-        fprintf(stderr, "Cannot open file");
-    }
-
-    Wchar **patterns = (Wchar **) malloc(sizeof(char *) * MAX_PATTERNS);
-    int npatterns  = file_to_strings(patternfile, &patternslen, MAX_PATTERNS, &patterns);
-
-    if(text.len > MAXTEXTLEN) {
-        fprintf(stderr, "Text too large, see MAXTEXTLEN");
-    }
-
-    const char *path = "data/out.txt";
-
-    init();
-    initclock();
-
-    if (strcmp(mode, "bench") == 0) {
-
-        int minpat = 10;
-        int maxpat = 20;
-
-        search_samples(path, 100, minpat, maxpat);
-
-    } else {
-        printf("npatterns: %d\n", npatterns);
-        search_patterns(path, npatterns, &patterns);
-
-    }
-
+static void freespace(Wchar **patterns, int npatterns)
+{
     freetextspace();
-
     for (int i = npatterns - 1; i >= 0; i--) {
         free(patterns[i]);
     }
     free(patterns);
+}
+
+int main(int argc, char *argv[])
+{
+    if (argc != 4) {
+        usage();
+        exit(EXIT_FAILURE);
+    }
+
+    char *textfile, *patternfile, *mode;
+
+    textfile    = argv[1];
+    patternfile = argv[2];
+    mode        = argv[3];
+
+    setlocale(LC_ALL, locale);
+    printf("Loading a text file based on the locale: %s\n", locale);
+    file_to_string(textfile);
+
+    Wchar **patterns = (Wchar **) malloc(sizeof(char *) * MAX_PATTERNS);
+    Uint npatterns  = file_to_strings(patternfile, MAX_PATTERNS, &patterns);
+
+    if(text.len > MAXTEXTLEN) {
+        fprintf(stderr, "Text is too large\n");
+    }
+
+    init();
+    initclock();
+
+    if (strcmp(mode, "sample") == 0) {
+
+        int minpat = 10;
+        int maxpat = 20;
+        search_samples(outpath, 100, minpat, maxpat);
+
+    } else {
+        printf("npatterns: %lu\n", npatterns);
+        search_patterns(outpath, npatterns, &patterns);
+    }
+
+    freespace(patterns, npatterns);
 
     return EXIT_SUCCESS;
 }
