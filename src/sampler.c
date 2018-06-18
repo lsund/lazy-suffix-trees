@@ -10,7 +10,7 @@ static bool sample(Wchar *pattern, Uint patternlen)
     }
 
     for(Uint j = 0; j < patternlen; j++) {
-        pattern[j] = text.content[start + j];
+        pattern[j] = text.fst[start + j];
     }
 
     pattern[patternlen] = '\0';

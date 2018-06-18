@@ -30,13 +30,13 @@ Match exhausted_match()
 
 Uint leaf_lcp(Wchar *text_cursor, Pattern patt)
 {
-    return lcp(patt.cursor + 1, patt.end, text_cursor + 1, text.sentinel - 1);
+    return lcp(patt.cursor + 1, patt.end, text_cursor + 1, text.lst - 1);
 }
 
 
 Uint inner_lcp(Uint *vertex, Pattern patt, Uint edgelen)
 {
-    Wchar *text_cursor = text.content + LEFTBOUND(vertex);
+    Wchar *text_cursor = text.fst + LEFTBOUND(vertex);
     return lcp(patt.cursor + 1, patt.end, text_cursor + 1, text_cursor + edgelen - 1);
 }
 
@@ -46,7 +46,7 @@ Match match_leaf(Wchar *text_cursor, Pattern patt)
     Match res;
     res.done = true;
     // Changed below to plus 1
-    Uint len = lcp(patt.cursor + 1, patt.end, text_cursor + 1, text.sentinel - 1);
+    Uint len = lcp(patt.cursor + 1, patt.end, text_cursor + 1, text.lst - 1);
     res.success = pattern_has_length(patt, len);
     return res;
 }

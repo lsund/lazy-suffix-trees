@@ -92,7 +92,7 @@ void counting_sort(Wchar **left, Wchar **right)
     Uint prefixlen = grouplcp(left, right);
 
     // Shortest suffix is sentinel, skip
-    if (*right + prefixlen == text.sentinel) {
+    if (*right + prefixlen == text.lst) {
         *right += prefixlen;
         right--;
     }
@@ -126,17 +126,17 @@ void counting_sort(Wchar **left, Wchar **right)
 // suffixes into the array suffixes.
 void create_suffix_groups(void)
 {
-    Wchar *c, **nextFree = text.suffixes;
+    Wchar *c, **nextFree = text.ss;
     Uint a;
 
     Wchar **upper_bounds[MAX_CHARS + 1];
 
     // determine size for each group
-    for (c = text.content; c < text.content + text.len; c++) {
+    for (c = text.fst; c < text.fst + text.len; c++) {
         sortbuffer.suffixhead_count[(Uint) *c]++;
     }
 
-    for (c = text.characters; c < text.characters + text.alphasize; c++) {
+    for (c = text.cs; c < text.cs + text.asize; c++) {
         a                        = (Uint) *c;
         upper_bounds[a]          = nextFree + sortbuffer.suffixhead_count[a] - 1;
         nextFree                 = upper_bounds[a] + 1;
@@ -144,10 +144,10 @@ void create_suffix_groups(void)
     }
 
     // insert suffixes into array
-    for (c = text.content + text.len - 1; c >= text.content; c--) {
+    for (c = text.fst + text.len - 1; c >= text.fst; c--) {
         *(upper_bounds[(Uint) *c]--) = c;
     }
 
     // suffix \$ is the largest suffix
-    text.suffixes[text.len] = text.sentinel;
+    text.ss[text.len] = text.lst;
 }

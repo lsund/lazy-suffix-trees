@@ -4,7 +4,7 @@
 Text text;
 
 
-// Naively search `text.content` for the pattern beginning at address `start`, ending
+// Naively search `text.fst` for the pattern beginning at address `start`, ending
 // at address `end`.
 bool naive_search(Wchar *start, Wchar *end)
 {
@@ -16,7 +16,7 @@ bool naive_search(Wchar *start, Wchar *end)
     for (Uint i = 0; i < text.len; i++) {
         k = i;
         for (j = 0; j < m; j++) {
-            if (pattern[j] == text.content[k]) {
+            if (pattern[j] == text.fst[k]) {
                 k++;
             } else {
                 break;
@@ -41,7 +41,7 @@ Uint naive_find_all(Wchar *start, Wchar *end, Uint *numbers)
     for (Uint i = 0; i < text.len; i++) {
         k = i;
         for (j = 0; j < m; j++) {
-            if (pattern[j] == text.content[k]) {
+            if (pattern[j] == text.fst[k]) {
                 k++;
             } else {
                 break;

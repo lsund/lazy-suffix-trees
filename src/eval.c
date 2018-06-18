@@ -3,7 +3,7 @@
 
 static bool skip_sentinel(Wchar ***rightb)
 {
-    if(**rightb == text.sentinel) {
+    if(**rightb == text.lst) {
         rightb--;
         return true;
     }
@@ -79,7 +79,7 @@ void eval_root()
 {
     if (!st.root_eval) {
         create_suffix_groups();
-        eval_edges(text.suffixes, text.suffixes + text.len - 1, true);
+        eval_edges(text.ss, text.ss + text.len - 1, true);
         st.root_eval = true;
     }
 }

@@ -29,7 +29,7 @@ void get_characters(Wchar *alpha, Uint *alphasize)
     Uint counts[MAX_CHARS + 1] = {0};
     Wchar *text_probe;
 
-    for (text_probe = text.content; text_probe < text.content + text.len; text_probe++) {
+    for (text_probe = text.fst; text_probe < text.fst + text.len; text_probe++) {
         counts[(Uint) *text_probe]++;
     }
 

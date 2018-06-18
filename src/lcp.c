@@ -47,7 +47,7 @@ Uint grouplcp(Wchar **left, Wchar **right) {
 
     while (true) {
 
-        if(*right + j == text.sentinel) {
+        if(*right + j == text.lst) {
             return j;
         }
 

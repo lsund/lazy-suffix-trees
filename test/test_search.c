@@ -13,15 +13,15 @@ char *test_count(char *patternfile, char *textfile, Uint count)
     Uint patternslen;
     setlocale(LC_ALL, "en_US.utf8");
     FILE *in = fopen(textfile, "r");
-    text.content = malloc(sizeof(Wchar) * MAXTEXTLEN);
+    text.fst = malloc(sizeof(Wchar) * MAXTEXTLEN);
     wint_t c;
     text.len = 0;
     while ((c = fgetwc(in)) != WEOF) {
-        text.content[text.len] = c;
+        text.fst[text.len] = c;
         text.len++;
     }
-    text.content[text.len + 1] = '\0';
-    text.max_charval = get_max(text.content, text.len);
+    text.fst[text.len + 1] = '\0';
+    text.maxc = get_max(text.fst, text.len);
     fclose(in);
     Wchar **patterns = (Wchar **) malloc(sizeof(Wchar *) * MAX_PATTERNS);
     int npatterns  = file_to_strings(patternfile, &patternslen, MAX_PATTERNS, &patterns);
@@ -52,15 +52,15 @@ char *compare_vs_naive(char *patternfile, char *textfile)
     Uint patternslen;
     setlocale(LC_ALL, "en_US.utf8");
     FILE *in = fopen(textfile, "r");
-    text.content = malloc(sizeof(Wchar) * MAXTEXTLEN);
+    text.fst = malloc(sizeof(Wchar) * MAXTEXTLEN);
     wint_t c;
     text.len = 0;
     while ((c = fgetwc(in)) != WEOF) {
-        text.content[text.len] = c;
+        text.fst[text.len] = c;
         text.len++;
     }
-    text.content[text.len + 1] = '\0';
-    text.max_charval = get_max(text.content, text.len);
+    text.fst[text.len + 1] = '\0';
+    text.maxc = get_max(text.fst, text.len);
     fclose(in);
     Wchar **patterns = (Wchar **) malloc(sizeof(Wchar *) * MAX_PATTERNS);
     int npatterns  = file_to_strings(patternfile, &patternslen, MAX_PATTERNS, &patterns);

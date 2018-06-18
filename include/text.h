@@ -31,16 +31,15 @@
 // The text
 
 typedef struct text {
-    Wchar *content;
-    Wchar **suffixes;
-    Wchar *sentinel;    // Last character, points to UNDEF
+    Wchar *fst;
+    Wchar **ss;
+    Wchar *lst;
     Uint len;
-    Uint alphasize;
-    Wchar characters[MAX_CHARS + 1]; // characters in alphabetical order
-    Uint max_charval;
+    Uint asize;
+    Wchar cs[MAX_CHARS + 1]; // characters in alphabetical order
+    Uint maxc;
 } Text;
 
-// points to input string `t` of length `n`
 extern Text text;
 
 #endif

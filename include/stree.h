@@ -49,10 +49,10 @@
 #define CHILD(V)                        RIGHTBOUND(V)
 
 // Unevaluated vertices
-#define SUFFIX_LEFTBOUND(V)             (text.suffixes + LEFTBOUND(V))
-#define SUFFIX_RIGHTBOUND(V)            (text.suffixes + (CHILD(V) & ~MSB))
+#define SUFFIX_LEFTBOUND(V)             (text.ss + LEFTBOUND(V))
+#define SUFFIX_RIGHTBOUND(V)            (text.ss + (CHILD(V) & ~MSB))
 // startposition of suffix
-#define SUFFIX_INDEX(V)                 ((Uint) (*(V) - text.content))
+#define SUFFIX_INDEX(V)                 ((Uint) (*(V) - text.fst))
 #define MAKE_LEFTBOUND(V)          SUFFIX_INDEX(SUFFIX_LEFTBOUND(V))
 
 #define SET_LEFTBOUND(V, O)        *(V) = (*(V) & SECOND_MSB) | (O)

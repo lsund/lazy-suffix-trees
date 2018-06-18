@@ -16,7 +16,7 @@ void init_root_children()
 static void init_alphabet()
 {
     Uint i;
-    get_characters(text.characters, &text.alphasize);
+    get_characters(text.cs, &text.asize);
     for (i = 0; i <= MAX_CHARS; i++) {
         sortbuffer.suffixhead_count[i] = 0;
     }
@@ -29,7 +29,7 @@ static void init_stree()
     init_root_children();
     st.vs.size      = EXTENSION_SIZE;
     ALLOC(st.vs.fst, Uint, st.vs.size);
-    ALLOC(text.suffixes, Wchar *, text.len + 1);
+    ALLOC(text.ss, Wchar *, text.len + 1);
     st.vs.nxt   = st.vs.fst;
 }
 
@@ -51,12 +51,12 @@ void init()
 
 void destroy()
 {
-    free(text.content);
+    free(text.fst);
     free(sortbuffer.content);
     free(st.vs.fst);
-    free(text.suffixes);
+    free(text.ss);
     sortbuffer.content = NULL;
-    text.content       = NULL;
+    text.fst       = NULL;
     st.vs.fst     = NULL;
-    text.suffixes      = NULL;
+    text.ss      = NULL;
 }

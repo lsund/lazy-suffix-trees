@@ -72,10 +72,10 @@ static void eval_if_uneval(VertexP *vertex, void (*eval_fun)(VertexP))
 
 static Match try_match_leaf(Pattern patt, Uint *vertex)
 {
-    Wchar *text_cursor = text.content + LEFTBOUND(vertex);
+    Wchar *text_cursor = text.fst + LEFTBOUND(vertex);
     if (*text_cursor == patt.head) {
         return match_leaf(text_cursor, patt);
-    } else if (text_cursor == text.sentinel || IS_LASTCHILD(vertex)) {
+    } else if (text_cursor == text.lst || IS_LASTCHILD(vertex)) {
         return exhausted_match();
     } else {
         return failed_match();
@@ -101,7 +101,7 @@ static Match match_rootedge(Pattern *patt, VertexP *cursor)
     }
 
     Vertex rootchild  = st.rs[patt->head];
-    Wchar *text_start = text.content + WITHOUT_LEAFBIT(rootchild);
+    Wchar *text_start = text.fst + WITHOUT_LEAFBIT(rootchild);
     if (IS_LEAF(&rootchild)) {
         return match_leaf(text_start, *patt);
     }
@@ -158,7 +158,7 @@ bool search(Pattern patt)
                 }
 
             } else {
-                Wchar firstchar = *(text.content + text_leftbound(current_vertex));
+                Wchar firstchar = *(text.fst + text_leftbound(current_vertex));
                 if(firstchar == patt.head) {
                     break;
                 }

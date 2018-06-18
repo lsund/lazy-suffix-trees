@@ -22,9 +22,9 @@
 void file_to_string(const char *filename)
 {
     FILE *in = fopen(filename, "r");
-    text.content = malloc(sizeof(wchar_t) * MAXTEXTLEN);
+    text.fst = malloc(sizeof(wchar_t) * MAXTEXTLEN);
 
-    if(text.content == NULL) {
+    if(text.fst == NULL) {
         fprintf(stderr,"Cannot open file %s\n", filename);
         exit(EXIT_FAILURE);
     }
@@ -32,10 +32,10 @@ void file_to_string(const char *filename)
     Uint c;
     text.len = 0;
     while ((c = fgetwc(in)) != WEOF) {
-        text.content[text.len] = c;
+        text.fst[text.len] = c;
         text.len++;
     }
-    text.content[text.len + 1] = '\0';
+    text.fst[text.len + 1] = '\0';
 
     if(text.len == 0) {
         fprintf(stderr,"file \"%s\" is empty\n", filename);
@@ -133,7 +133,7 @@ FILE *open_append(const char *path)
 // Frees the text specified
 void freetextspace()
 {
-  (void) munmap((caddr_t) text.content, (size_t) text.len);
+  (void) munmap((caddr_t) text.fst, (size_t) text.len);
 }
 
 

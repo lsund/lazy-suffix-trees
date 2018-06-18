@@ -26,20 +26,20 @@ int main(int argc,char *argv[])
 
     setlocale(LC_ALL, "en_US.utf8");
     FILE *in = fopen(filename, "r");
-    text.content = malloc(sizeof(Wchar) * MAXTEXTLEN);
+    text.fst = malloc(sizeof(Wchar) * MAXTEXTLEN);
     wint_t c;
     while ((c = fgetwc(in)) != WEOF) {
-        text.content[text.len] = c;
+        text.fst[text.len] = c;
         text.len++;
     }
-    text.content[text.len + 1] = '\0';
-    text.sentinel  = text.content + text.len;
+    text.fst[text.len + 1] = '\0';
+    text.lst  = text.fst + text.len;
 
-    text.max_charval = get_max(text.content, text.len);
-    printf("max character value: %lu\n", text.max_charval);
+    text.maxc = get_max(text.fst, text.len);
+    printf("max character value: %lu\n", text.maxc);
     fclose(in);
 
-    if(text.content == NULL) {
+    if(text.fst == NULL) {
         fprintf(stderr, "Cannot open file");
     }
 
