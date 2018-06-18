@@ -26,6 +26,8 @@
 #include "io.h"
 #include "get_alpha.h"
 #include "pattern_searcher.h"
+#include "streedef.h"
+#include "sortbuffer.h"
 
 void init_root_children();
 

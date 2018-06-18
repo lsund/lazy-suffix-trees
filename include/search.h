@@ -28,6 +28,7 @@
 #include "match.h"
 #include "util.h"
 #include "pattern.h"
+#include "streedef.h"
 
 bool search(Pattern patt);
 

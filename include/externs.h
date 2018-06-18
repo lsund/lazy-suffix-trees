@@ -44,41 +44,4 @@ typedef struct text {
 // points to input string `t` of length `n`
 extern Text text;
 
-///////////////////////////////////////////////////////////////////////////////
-// Buffer for sorting
-
-
-typedef struct sortbuffer {
-    // space to be used by `sort_buffer`
-    Wchar **content;
-    Uint suffixhead_count[MAX_CHARS + 1];
-    // number of elements
-    Uint size;
-    Uint maxsize;
-} Sortbuffer;
-
-extern Sortbuffer sortbuffer;
-
-// maximal number of elements in `sbufferspace`
-extern Uint max_sortbufferwidth;
-
-///////////////////////////////////////////////////////////////////////////////
-// Suffix Tree
-
-
-typedef struct table {
-    Uint *fst;
-    Uint *nxt;
-    Uint size;
-} Table;
-
-
-typedef struct stree {
-    Table vs;
-    Uint rs[MAX_CHARS + 1];
-    bool root_eval;
-} STree;
-
-extern STree st;
-
 #endif

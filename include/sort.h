@@ -23,6 +23,7 @@
 #include "types.h"
 #include "spaceman.h"
 #include "lcp.h"
+#include "sortbuffer.h"
 
 
 void counting_sort(Wchar **left, Wchar **right);

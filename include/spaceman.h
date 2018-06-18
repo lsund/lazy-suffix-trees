@@ -24,6 +24,8 @@
 #include "types.h"
 #include "basedef.h"
 #include "stree.h"
+#include "streedef.h"
+#include "sortbuffer.h"
 
 
 ///////////////////////////////////////////////////////////////////////////////
