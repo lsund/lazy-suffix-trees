@@ -22,7 +22,7 @@
 
 #include "types.h"
 #include "basedef.h"
-#include "externs.h"
+#include "text.h"
 #include "streedef.h"
 
 #define LEAF_VERTEXSIZE     1

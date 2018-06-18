@@ -20,7 +20,7 @@
 #ifndef EVAL_H
 #define EVAL_H
 
-#include "externs.h"
+#include "text.h"
 #include "types.h"
 #include "basedef.h"
 #include "spaceman.h"

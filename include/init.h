@@ -20,7 +20,7 @@
 #ifndef INIT_H
 #define INIT_H
 
-#include "externs.h"
+#include "text.h"
 #include "types.h"
 #include "spaceman.h"
 #include "io.h"

@@ -21,7 +21,7 @@
 #ifndef NAIVE_SEARCH_H
 #define NAIVE_SEARCH_H
 
-#include "externs.h"
+#include "text.h"
 #include "types.h"
 #include <stdbool.h>
 

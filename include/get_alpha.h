@@ -30,7 +30,7 @@
 
 #include "types.h"
 #include "basedef.h"
-#include "externs.h"
+#include "text.h"
 
 
 void get_characters(Wchar *alpha, Uint *alphasize);

@@ -22,7 +22,7 @@
 
 #include "types.h"
 #include "util.h"
-#include "externs.h"
+#include "text.h"
 #include "search.h"
 #include "pattern.h"
 
