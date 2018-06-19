@@ -23,17 +23,17 @@ Wchar **alloc_sortbuffer(Wchar **left, Wchar **right) {
     return sb.fst;
 }
 
+// TODO fix this
+/* void alloc_extend_stree(void) */
+/* { */
+/*     Uint next_free_index = INDEX(st.vs.nxt); */
 
-void alloc_extend_stree(void)
-{
-    Uint next_free_index = INDEX(st.vs.nxt);
+/*     printf("%lu %lu\n", next_free_index, st.vs.size); */
+/*     if (next_free_index >= st.vs.size) { */
 
-    if(next_free_index >= st.vs.size) {
-
-        st.vs.size += (text.len / 10);
-        ALLOC(st.vs.fst, Uint, st.vs.size + EXTENSION_SIZE);
-        st.vs.nxt = st.vs.fst + next_free_index;
-
-    }
-}
+/*         st.vs.size += (text.len / 10); */
+/*         ALLOC(st.vs.fst, Uint, st.vs.size + EXTENSION_SIZE); */
+/*         st.vs.nxt = st.vs.fst + next_free_index; */
+/*     } */
+/* } */
 

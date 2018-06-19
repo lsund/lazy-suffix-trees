@@ -54,7 +54,8 @@ static void insert_edges_aux(
 static void insert_edges(Wchar **leftb, Wchar **rightb, bool isroot)
 {
     if (!isroot) {
-        alloc_extend_stree();
+        // TODO
+        /* alloc_extend_stree(); */
     }
 
     Uint *lchild;

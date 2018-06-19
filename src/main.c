@@ -25,43 +25,48 @@ static void freespace(Wchar **patterns, int npatterns)
 
 int main(int argc, char *argv[])
 {
-    if (argc != 4) {
+    char *textfile, *patternfile;
+    bool sample_patterns = false;
+
+    setlocale(LC_ALL, locale);
+    if (argc < 2) {
+        usage();
+        exit(EXIT_FAILURE);
+    } else if (argc == 2) {
+        textfile        = argv[1];
+        sample_patterns = true;
+    } else if (argc == 3) {
+        textfile    = argv[1];
+        patternfile = argv[2];
+    } else {
         usage();
         exit(EXIT_FAILURE);
     }
-
-    char *textfile, *patternfile, *mode;
-
-    textfile    = argv[1];
-    patternfile = argv[2];
-    mode        = argv[3];
-
-    setlocale(LC_ALL, locale);
     printf("Loading a text file based on the locale: %s\n", locale);
     file_to_string(textfile);
-
-    Wchar **patterns = (Wchar **) malloc(sizeof(char *) * MAX_PATTERNS);
-    Uint npatterns  = file_to_strings(patternfile, MAX_PATTERNS, &patterns);
 
     if(text.len > MAXTEXTLEN) {
         fprintf(stderr, "Text is too large\n");
     }
-
     init();
     initclock();
 
-    if (strcmp(mode, "sample") == 0) {
+    if (sample_patterns) {
 
         int minpat = 10;
         int maxpat = 20;
-        search_samples(outpath, 100, minpat, maxpat);
+        search_samples(outpath, 13000, minpat, maxpat);
 
     } else {
+        Wchar **patterns = (Wchar **) malloc(sizeof(char *) * MAX_PATTERNS);
+        Uint npatterns  = file_to_strings(patternfile, MAX_PATTERNS, &patterns);
         printf("npatterns: %lu\n", npatterns);
         search_patterns(outpath, npatterns, &patterns);
+        freespace(patterns, npatterns);
     }
 
-    freespace(patterns, npatterns);
+    free(text.fst);
+
 
     return EXIT_SUCCESS;
 }

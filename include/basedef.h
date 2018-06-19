@@ -22,7 +22,7 @@
 
 #define MAXTEXTLEN              UINT(715827882)
 
-#define MAXPATTERNLEN           1024
+#define MAXPATTERNLEN           2000
 
 #define MAX_PATTERNS            15000
 
