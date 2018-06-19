@@ -1,9 +1,15 @@
 #include "insert.h"
 
+static void init_next_vertex()
+{
+    *st.vs.nxt = 0;
+}
+
 Uint insert_leaf_vertex(Wchar fst, Wchar **left, bool root)
 {
+    init_next_vertex();
     Uint leafnum = SUFFIX_INDEX(left);
-    *st.vs.nxt = MAKE_LEAF(leafnum);
+    SET_LEFTBOUND(st.vs.nxt, MAKE_LEAF(leafnum));
     if (root) {
         st.rs[fst] = MAKE_LEAF(leafnum);
     }
@@ -14,7 +20,8 @@ Uint insert_leaf_vertex(Wchar fst, Wchar **left, bool root)
 
 void insert_inner_vertex(Wchar fst, Wchar **leftb, Wchar **rightb, bool root)
 {
-    *st.vs.nxt = leftb - text.ss;
+    init_next_vertex();
+    SET_LEFTBOUND(st.vs.nxt, leftb - text.ss);
     CHILD(st.vs.nxt) = MAKE_UNEVAL_VERTEX(rightb - text.ss);
 
     if (root) {

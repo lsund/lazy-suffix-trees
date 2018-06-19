@@ -26,7 +26,12 @@ static void get_groupbound(
 }
 
 
-static void create_edges(Wchar **leftb, Wchar **rightb, Uint **lchild, bool isroot)
+static void insert_edges_aux(
+        Wchar **leftb,
+        Wchar **rightb,
+        Uint **lchild,
+        bool isroot
+    )
 {
     Wchar **curr_suffix  = NULL;
     Wchar **group_rightb = NULL;
@@ -46,14 +51,14 @@ static void create_edges(Wchar **leftb, Wchar **rightb, Uint **lchild, bool isro
 }
 
 
-static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
+static void insert_edges(Wchar **leftb, Wchar **rightb, bool isroot)
 {
     if (!isroot) {
         alloc_extend_stree();
     }
 
     Uint *lchild;
-    create_edges(leftb, rightb, &lchild, isroot);
+    insert_edges_aux(leftb, rightb, &lchild, isroot);
 
     if (is_last_suffix(&rightb)) {
         insert_sentinel_vertex(rightb, &lchild);
@@ -68,7 +73,11 @@ static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
 }
 
 
-static void eval_vertex(VertexP vertex, Wchar ***leftb, Wchar ***rightb)
+static void get_remaining_suffixes(
+        VertexP vertex,
+        Wchar ***leftb,
+        Wchar ***rightb
+    )
 {
     // Find out what subsequence of suffixes this vertex corresponds to
     *leftb   = SUFFIX_LEFTBOUND(vertex);
@@ -86,7 +95,7 @@ void eval_root()
 {
     if (!st.root_eval) {
         create_suffix_groups();
-        eval_edges(text.ss, text.ss + text.len - 1, true);
+        insert_edges(text.ss, text.ss + text.len - 1, true);
         st.root_eval = true;
     }
 }
@@ -95,6 +104,6 @@ void eval_branch(VertexP vertex)
 {
     Wchar **leftb;
     Wchar **rightb;
-    eval_vertex(vertex, &leftb, &rightb);
-    eval_edges(leftb, rightb, false);
+    get_remaining_suffixes(vertex, &leftb, &rightb);
+    insert_edges(leftb, rightb, false);
 }

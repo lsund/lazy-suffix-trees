@@ -46,7 +46,7 @@
 // Evaluated vertices
 #define LEFTBOUND(R)               ((*(R)) & ~(MSB | SECOND_MSB))
 #define RIGHTBOUND(R)              (*((R) + 1))
-#define CHILD(R)                        RIGHTBOUND(R)
+#define CHILD(R)                    RIGHTBOUND(R)
 
 #define SUFFIX_LEFTBOUND(R)         (text.ss + LEFTBOUND(R))
 #define SUFFIX_RIGHTBOUND(R)        (text.ss + (CHILD(R) & ~MSB))
