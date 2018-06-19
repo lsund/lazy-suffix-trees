@@ -1,7 +1,7 @@
 
 #include "eval.h"
 
-static bool skip_sentinel(Wchar ***rightb)
+static bool is_last_suffix(Wchar ***rightb)
 {
     if(**rightb == text.lst) {
         rightb--;
@@ -11,54 +11,59 @@ static bool skip_sentinel(Wchar ***rightb)
 }
 
 
-static void get_rightb(Wchar ***ret, Wchar **curr, Wchar **rightb, Wchar fst)
+static void get_groupbound(
+        Wchar ***group_rightb,
+        Wchar **group_leftb,
+        Wchar **rightb,
+        Wchar fst
+    )
 {
-    Wchar **probe = curr;
-    while (probe < rightb && **(probe + 1) == fst) {
-        probe++;
+    Wchar **curr_suffix = group_leftb;
+    while (curr_suffix < rightb && **(curr_suffix + 1) == fst) {
+        curr_suffix++;
     }
-    *ret = probe;
+    *group_rightb = curr_suffix;
 }
 
 
-static void create_edges(Wchar **leftb, Wchar **rightb, Uint **previous, bool isroot)
+static void create_edges(Wchar **leftb, Wchar **rightb, Uint **lchild, bool isroot)
 {
-    Wchar **curr_leftb  = NULL;
-    Wchar **curr_rightb = NULL;
+    Wchar **curr_suffix  = NULL;
+    Wchar **group_rightb = NULL;
 
-    for (curr_leftb = leftb; curr_leftb <= rightb; curr_leftb = curr_rightb + 1) {
+    for (curr_suffix = leftb; curr_suffix <= rightb; curr_suffix = group_rightb + 1) {
 
-        Wchar fst = **curr_leftb;
-        get_rightb(&curr_rightb, curr_leftb, rightb, fst);
-        *previous = st.vs.nxt;
+        Wchar fst = **curr_suffix;
+        get_groupbound(&group_rightb, curr_suffix, rightb, fst);
 
-        if (curr_rightb > curr_leftb) {
-            insert_inner_vertex(fst, curr_leftb, curr_rightb, isroot);
+        *lchild = st.vs.nxt;
+        if (group_rightb > curr_suffix) {
+            insert_inner_vertex(fst, curr_suffix, group_rightb, isroot);
         } else {
-            insert_leaf_vertex(fst, curr_leftb, isroot);
+            insert_leaf_vertex(fst, curr_suffix, isroot);
         }
     }
 }
+
+
 static void eval_edges(Wchar **leftb, Wchar **rightb, bool isroot)
 {
-    bool sentineledge    = skip_sentinel(&rightb);
-
     if (!isroot) {
         alloc_extend_stree();
     }
 
-    Uint *previous       = NULL;
-    create_edges(leftb, rightb, &previous, isroot);
+    Uint *lchild;
+    create_edges(leftb, rightb, &lchild, isroot);
 
-    if (sentineledge) {
-        insert_sentinel_vertex(rightb, &previous);
+    if (is_last_suffix(&rightb)) {
+        insert_sentinel_vertex(rightb, &lchild);
     }
 
     if (isroot) {
         *st.vs.nxt = MAKE_LEAF_LASTCHILD(text.len);
         st.vs.nxt += LEAF_VERTEXSIZE;
     } else {
-        *previous = MAKE_LASTCHILD(*previous);
+        *lchild = MAKE_LASTCHILD(*lchild);
     }
 }
 
