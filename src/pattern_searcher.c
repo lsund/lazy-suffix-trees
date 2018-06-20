@@ -70,9 +70,5 @@ void search_patterns(const char *path, int npatterns, Wchar ***patterns_ptr)
             noccurs++;
         }
     }
-
-    printf("noccurs: %d\n", noccurs);
-    printtime();
-
     fclose(fp);
 }

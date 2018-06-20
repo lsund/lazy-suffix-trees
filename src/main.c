@@ -53,9 +53,12 @@ int main(int argc, char *argv[])
 
     if (sample_patterns) {
 
-        int minpat = 10;
-        int maxpat = 20;
-        search_samples(outpath, 13000, minpat, maxpat);
+        int minpat = 100;
+        int maxpat = 200;
+        search_samples(outpath, 10000, minpat, maxpat);
+
+        printf("%lu\n", text.asize);
+        printtime();
 
     } else {
         Wchar **patterns = (Wchar **) malloc(sizeof(char *) * MAX_PATTERNS);

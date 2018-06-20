@@ -20,6 +20,8 @@
 #ifndef PREPROCDEF_H
 #define PREPROCDEF_H
 
+#define STREEALLOC              1000000
+
 #define MAXTEXTLEN              UINT(715827882)
 
 #define MAXPATTERNLEN           2000

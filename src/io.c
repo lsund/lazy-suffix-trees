@@ -19,32 +19,7 @@
 
 #include "io.h"
 
-void file_to_string(const char *filename)
-{
-    FILE *in = fopen(filename, "r");
-    text.fst = malloc(sizeof(wchar_t) * MAXTEXTLEN);
-
-    if(text.fst == NULL) {
-        fprintf(stderr,"Cannot open file %s\n", filename);
-        exit(EXIT_FAILURE);
-    }
-
-    Uint c;
-    text.len = 0;
-    while ((c = fgetwc(in)) != WEOF) {
-        text.fst[text.len] = c;
-        text.len++;
-    }
-    text.fst[text.len + 1] = '\0';
-
-    if(text.len == 0) {
-        fprintf(stderr,"file \"%s\" is empty\n", filename);
-        exit(EXIT_FAILURE);
-    }
-}
-
-
-static int open_file(char *name, Uint *textlen, bool writefile)
+static int open_file(const char *name, Uint *textlen, bool writefile)
 {
     struct stat buf;
     int fd = open(name,(writefile) ? O_RDWR : O_RDONLY);
@@ -62,6 +37,32 @@ static int open_file(char *name, Uint *textlen, bool writefile)
 
     *textlen = (Uint) buf.st_size;
     return fd;
+}
+
+
+void file_to_string(const char *filename)
+{
+    open_file(filename, &text.len, true);
+    text.fst = malloc(sizeof(wchar_t) * text.len);
+
+    FILE *in = fopen(filename, "r");
+    if(text.fst == NULL) {
+        fprintf(stderr,"Cannot open file %s\n", filename);
+        exit(EXIT_FAILURE);
+    }
+
+    Uint c;
+    text.len = 0;
+    while ((c = fgetwc(in)) != WEOF) {
+        text.fst[text.len] = c;
+        text.len++;
+    }
+    text.fst[text.len + 1] = '\0';
+
+    if(text.len == 0) {
+        fprintf(stderr,"file \"%s\" is empty\n", filename);
+        exit(EXIT_FAILURE);
+    }
 }
 
 

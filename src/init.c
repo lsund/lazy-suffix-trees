@@ -28,7 +28,7 @@ static void init_stree()
     st.root_eval = false;
     init_root_children();
     // TODO change this
-    st.vs.size      = 1000000;
+    st.vs.size      = STREEALLOC;
     ALLOC(st.vs.fst, Uint, st.vs.size);
     ALLOC(text.ss, Wchar *, text.len + 1);
     st.vs.nxt   = st.vs.fst;

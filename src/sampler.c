@@ -56,7 +56,5 @@ void search_samples(const char *path, Uint trials, Uint minpat, Uint maxpat)
 
     sample_search(trials, minpat, maxpat, fp);
 
-    printtime();
-
     fclose(fp);
 }
