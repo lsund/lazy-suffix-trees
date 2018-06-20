@@ -42,10 +42,13 @@ static int open_file(const char *name, Uint *textlen, bool writefile)
 
 void file_to_string(const char *filename)
 {
-    open_file(filename, &text.len, true);
-    text.fst = malloc(sizeof(wchar_t) * text.len);
-
     FILE *in = fopen(filename, "r");
+    struct stat buf;
+    int fd = fileno(in);
+    fstat(fd, &buf);
+    text.len = (Uint) buf.st_size;
+    text.fst = malloc(sizeof(Wchar) * (text.len + 1));
+
     if(text.fst == NULL) {
         fprintf(stderr,"Cannot open file %s\n", filename);
         exit(EXIT_FAILURE);
@@ -57,7 +60,8 @@ void file_to_string(const char *filename)
         text.fst[text.len] = c;
         text.len++;
     }
-    text.fst[text.len + 1] = '\0';
+    text.fst[text.len] = '\0';
+    fclose(in);
 
     if(text.len == 0) {
         fprintf(stderr,"file \"%s\" is empty\n", filename);
@@ -84,8 +88,7 @@ Uint file_to_strings(char *name, Uint nlines, Wchar ***wordsp)
     }
 
     Uint i;
-    for (i = 0; i < nlines; i++)
-    {
+    for (i = 0; i < nlines; i++) {
         Uint j;
 
         /* Allocate space for the next line */
@@ -101,8 +104,6 @@ Uint file_to_strings(char *name, Uint nlines, Wchar ***wordsp)
         do  {
             c = fgetwc(fp);
             if (c == WEOF) {
-
-                words[i][j - 1] = 0;
                 *wordsp = words;
                 fclose(fp);
                 return i;
@@ -127,8 +128,8 @@ Uint file_to_strings(char *name, Uint nlines, Wchar ***wordsp)
 // Opens the path for appending, erasing any prior content of the same file
 FILE *open_append(const char *path)
 {
-    fclose(fopen(path, WRITEMODE));
-    return fopen(path, APPENDMODE);
+    fclose(fopen(path, "w"));
+    return fopen(path, "a");
 }
 
 

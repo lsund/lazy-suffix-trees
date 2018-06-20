@@ -30,7 +30,7 @@ void showstring(Uchar *left, Uchar *right);
 
 void showpattern(Uchar *w, Uint wlen);
 
-void printtime();
+void printtime(FILE *file);
 
 Uint randlen(Uint m_min, Uint m_max);
 

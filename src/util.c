@@ -6,9 +6,9 @@ void showpattern(Uchar *w, Uint wlen)
   (void) fwrite(w,sizeof(Uchar),(size_t) wlen,stderr);
 }
 
-void printtime()
+void printtime(FILE *file)
 {
-    fprintf(stdout, "time: %.2f\n", getruntime());
+    fprintf(file, "time: %.2f\n", getruntime());
 }
 
 

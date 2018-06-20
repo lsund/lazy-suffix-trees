@@ -45,7 +45,7 @@ OBJ= obj/naive_search.o\
 	 obj/init.o
 
 
-TEST_OBJ = obj/test_search.o
+TEST_OBJ = obj/test_search.o obj/test_experiments.o
 
 
 all: dirs wotd

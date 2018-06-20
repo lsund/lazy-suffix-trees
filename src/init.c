@@ -28,10 +28,10 @@ static void init_stree()
     st.root_eval = false;
     init_root_children();
     // TODO change this
-    st.vs.size      = STREEALLOC;
+    st.vs.size = STREEALLOC;
     ALLOC(st.vs.fst, Uint, st.vs.size);
     ALLOC(text.ss, Wchar *, text.len + 1);
-    st.vs.nxt   = st.vs.fst;
+    st.vs.nxt = st.vs.fst;
 }
 
 
@@ -56,8 +56,8 @@ void destroy()
     free(sb.fst);
     free(st.vs.fst);
     free(text.ss);
-    sb.fst           = NULL;
-    text.fst         = NULL;
-    st.vs.fst        = NULL;
-    text.ss          = NULL;
+    sb.fst    = NULL;
+    text.fst  = NULL;
+    st.vs.fst = NULL;
+    text.ss   = NULL;
 }
