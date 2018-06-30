@@ -25,7 +25,7 @@
 #include <stdlib.h>
 
 #include "minunit.h"
-#include "pattern_searcher.h"
+#include "search.h"
 #include "io.h"
 #include "naive_search.h"
 #include "util.h"

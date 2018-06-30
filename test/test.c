@@ -17,10 +17,10 @@ int tests_run, utests_run;
 
 static char *test()
 {
-    /* mu_message(MODULE, "search\n"); */
-    /* mu_run_test(test_search); */
-    mu_message(MODULE, "experiments\n");
-    mu_run_test(test_experiments);
+    mu_message(MODULE, "search\n");
+    mu_run_test(test_search);
+    /* mu_message(MODULE, "experiments\n"); */
+    /* mu_run_test(test_experiments); */
     return 0;
 }
 

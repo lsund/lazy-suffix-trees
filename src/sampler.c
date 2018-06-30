@@ -39,8 +39,7 @@ static void sample_search(Uint trials, Uint minlen, Uint maxlen, FILE *fp)
             reverse(pattern, patternlen);
         }
 
-        Pattern patt = init_pattern(pattern, pattern + patternlen - 1);
-        search(patt);
+        search(pattern, patternlen);
     }
 }
 

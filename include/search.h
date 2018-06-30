@@ -20,16 +20,28 @@
 #ifndef SEARCH_H
 #define SEARCH_H
 
-#include "stree.h"
-#include "types.h"
-#include "basedef.h"
-#include "sort.h"
-#include "eval.h"
-#include "match.h"
-#include "util.h"
-#include "pattern.h"
-#include "streedef.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+#include <string.h>
+#include <sys/types.h>
 
-bool search(Pattern patt);
+#include "basedef.h"
+#include "types.h"
+#include "spaceman.h"
+#include "io.h"
+#include "util.h"
+#include "spaceman.h"
+#include "lcp.h"
+#include "search.h"
+#include "clock.h"
+#include "reverse.h"
+#include "pattern.h"
+#include "match.h"
+
+bool search(Wchar *current_pattern, Uint patternlen);
+
+void search_many(const char *path, int npatterns, Wchar ***o_patterns);
+
 
 #endif

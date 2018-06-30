@@ -189,7 +189,7 @@ char *log_runtime(FILE *out, char *textfile, char *patternfile)
     for (Uint j = 0; j < npatterns; j++) {
 
         Wchar *current_pattern = patterns[j];
-        find_pattern(current_pattern, wcslen(current_pattern));
+        search(current_pattern, wcslen(current_pattern));
 
     }
     print_staticstics(out, textfile, patternfile);

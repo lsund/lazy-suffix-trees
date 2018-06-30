@@ -25,7 +25,7 @@
 #include "spaceman.h"
 #include "io.h"
 #include "get_alpha.h"
-#include "pattern_searcher.h"
+#include "search.h"
 #include "streedef.h"
 #include "sortbuffer.h"
 

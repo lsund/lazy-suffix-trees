@@ -1,4 +1,4 @@
-#include "pattern_searcher.h"
+#include "search.h"
 #include "sampler.h"
 #include "io.h"
 
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
         Wchar **patterns = (Wchar **) malloc(sizeof(char *) * MAX_PATTERNS);
         Uint npatterns  = file_to_strings(patternfile, MAX_PATTERNS, &patterns);
         printf("npatterns: %lu\n", npatterns);
-        search_patterns(outpath, npatterns, &patterns);
+        search_many(outpath, npatterns, &patterns);
         freespace(patterns, npatterns);
     }
 

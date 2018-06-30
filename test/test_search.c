@@ -32,7 +32,7 @@ char *test_count(char *patternfile, char *textfile, Uint count)
         Wchar *current_pattern = patterns[j];
         Uint patternlen = wcslen(current_pattern);
 
-        bool exists = find_pattern(current_pattern, patternlen);
+        bool exists = search(current_pattern, patternlen);
 
         exists ? exists_n++ : (void) 0;
     }
@@ -72,7 +72,7 @@ char *compare_vs_naive(char *patternfile, char *textfile)
 
         Wchar *end = current_pattern + patternlen;
 
-        bool exists = find_pattern(current_pattern, patternlen);
+        bool exists = search(current_pattern, patternlen);
         bool rexists = naive_search(current_pattern, end);
 
         exists ? exists_n++ : (void) 0;

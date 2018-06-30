@@ -34,7 +34,7 @@
 #include <stdbool.h>
 #include "spaceman.h"
 #include "types.h"
-#include "pattern_searcher.h"
+#include "search.h"
 
 // Writing binary mode
 #define WRITEMODE  "wb"

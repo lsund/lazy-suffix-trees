@@ -1,24 +1,26 @@
 /*
- * Copyright by Stefan Kurtz (C) 1999-2003
- * =====================================
- * You may use, copy and distribute this file freely as long as you
- * - do not change the file,
- * - leave this copyright notice in the file,
- * - do not make any profit with the distribution of this file
- * - give credit where credit is due
- * You are not allowed to copy or distribute this file otherwise
- * The commercial usage and distribution of this file is prohibited
- * Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
- *
- */
+  Copyright by Stefan Kurtz (C) 1999-2003
+  =====================================
+  You may use, copy and distribute this file freely as long as you
+   - do not change the file,
+   - leave this copyright notice in the file,
+   - do not make any profit with the distribution of this file
+   - give credit where credit is due
+  You are not allowed to copy or distribute this file otherwise
+  The commercial usage and distribution of this file is prohibited
+  Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
+*/
 
 /*
- * Modified by Ludvig Sundström 2018 with permission from Stefan Kurtz
+ * Modified by Ludvig Sundström 2018 with permission from Stefan Kurtz.
  * For full source control tree, see https://github.com/lsund/wotd
- *
  */
 
+
 #include "search.h"
+
+///////////////////////////////////////////////////////////////////////////////
+// Functions
 
 STree st;
 
@@ -127,11 +129,7 @@ static void find_next_child()
 {
 }
 
-
-///////////////////////////////////////////////////////////////////////////////
-// Public Interface
-
-bool search(Pattern patt)
+bool search_aux(Pattern patt)
 {
 
     VertexP current_vertex;
@@ -181,4 +179,48 @@ bool search(Pattern patt)
         patt.cursor += edgelen;
     }
     return true;
+}
+
+static bool copy_pattern(Wchar *pattern, Wchar *current_pattern, Uint len)
+{
+    *(pattern + len) = '\0';
+    for(Uint i = 0; i < len; i++) {
+
+        pattern[i] = current_pattern[i];
+
+    }
+
+    return false;
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Public API
+
+
+bool search(Wchar *current_pattern, Uint patternlen)
+{
+    Wchar pattern[MAXPATTERNLEN + 1];
+    copy_pattern(pattern, current_pattern, patternlen);
+    Pattern patt = init_pattern(pattern, pattern + patternlen - 1);
+
+    return search_aux(patt);
+}
+
+
+// Search for many patterns in the tree
+void search_many(const char *path, int npatterns, Wchar ***patterns_ptr)
+{
+    Wchar **patterns = *patterns_ptr;
+    FILE *fp        = open_append(path);
+
+    for(int j = 0; j < npatterns; j++) {
+
+        Wchar *current_pattern = patterns[j];
+        Uint patternlen = wcslen(current_pattern);
+
+        search(current_pattern, patternlen);
+
+    }
+    fclose(fp);
 }
