@@ -38,6 +38,7 @@
 #include "reverse.h"
 #include "pattern.h"
 #include "match.h"
+#include "stree.h"
 
 bool search(Wchar *current_pattern, Uint patternlen);
 

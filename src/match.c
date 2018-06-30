@@ -1,6 +1,8 @@
 #include "match.h"
 
+
 Text text;
+
 
 Match failed_match()
 {
@@ -28,6 +30,7 @@ Match exhausted_match()
     return res;
 }
 
+
 Uint leaf_lcp(Wchar *text_cursor, Pattern patt)
 {
     return lcp(patt.cursor + 1, patt.end, text_cursor + 1, text.lst - 1);
@@ -50,5 +53,3 @@ Match match_leaf(Wchar *text_cursor, Pattern patt)
     res.success = pattern_has_length(patt, len);
     return res;
 }
-
-

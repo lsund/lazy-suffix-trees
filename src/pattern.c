@@ -1,6 +1,6 @@
 #include "pattern.h"
 
-Pattern init_pattern(Wchar *patt_start, Wchar *patt_end)
+Pattern pattern_init(Wchar *patt_start, Wchar *patt_end)
 {
     Pattern patt;
     patt.head   = *patt_start;
@@ -15,4 +15,9 @@ bool pattern_has_length(Pattern patt, Uint len)
     return (Uint) (patt.end - patt.cursor) == len;
 }
 
+
+bool pattern_is_empty(Pattern patt)
+{
+    return patt.cursor > patt.end;
+}
 

@@ -33,4 +33,6 @@ void eval_root();
 
 void eval_branch(VertexP vertex);
 
+void eval_if_uneval(VertexP *vertex, void (*eval_fun)(VertexP));
+
 #endif

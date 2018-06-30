@@ -11,14 +11,19 @@ static void usage()
 }
 
 
-static void freespace(Wchar **patterns, int npatterns)
+static void free_text_and_patterns(Wchar **patterns, int npatterns)
 {
-    freetextspace();
+    free_text();
     for (int i = npatterns - 1; i >= 0; i--) {
         free(patterns[i]);
     }
     free(patterns);
 }
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Public API
+
 
 int main(int argc, char *argv[])
 {
@@ -65,11 +70,8 @@ int main(int argc, char *argv[])
         Uint npatterns  = file_to_strings(patternfile, MAX_PATTERNS, &patterns);
         printf("npatterns: %lu\n", npatterns);
         search_many(outpath, npatterns, &patterns);
-        freespace(patterns, npatterns);
+        free_text_and_patterns(patterns, npatterns);
     }
-
-    free(text.fst);
-
 
     return EXIT_SUCCESS;
 }

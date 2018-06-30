@@ -10,8 +10,10 @@ typedef struct pattern {
     Wchar *end;
 } Pattern;
 
-Pattern init_pattern(Wchar *patt_start, Wchar *patt_end);
+Pattern pattern_init(Wchar *patt_start, Wchar *patt_end);
 
 bool pattern_has_length(Pattern patt, Uint len);
+
+bool pattern_is_empty(Pattern patt);
 
 #endif

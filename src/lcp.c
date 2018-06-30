@@ -41,7 +41,7 @@ Uint lcp(Wchar *start1, Wchar *end1, Wchar *start2, Wchar *end2) {
 
 // The longest common prefix for the group of suffixes, laying between adresses
 // `left` and `right`
-Uint grouplcp(Wchar **left, Wchar **right) {
+Uint grouplcp(Suffix *left, Suffix *right) {
 
     Uint j = UINT(1);
 

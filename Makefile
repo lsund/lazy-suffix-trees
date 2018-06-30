@@ -41,6 +41,7 @@ OBJ= obj/naive_search.o\
      obj/lcp.o\
 	 obj/eval.o\
 	 obj/search.o\
+	 obj/stree.o\
 	 obj/init.o
 
 

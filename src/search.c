@@ -1,75 +1,7 @@
-/*
-  Copyright by Stefan Kurtz (C) 1999-2003
-  =====================================
-  You may use, copy and distribute this file freely as long as you
-   - do not change the file,
-   - leave this copyright notice in the file,
-   - do not make any profit with the distribution of this file
-   - give credit where credit is due
-  You are not allowed to copy or distribute this file otherwise
-  The commercial usage and distribution of this file is prohibited
-  Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
-*/
-
-/*
- * Modified by Ludvig Sundström 2018 with permission from Stefan Kurtz.
- * For full source control tree, see https://github.com/lsund/wotd
- */
-
-
 #include "search.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // Functions
-
-STree st;
-
-static Vertex leftmost_child_textbound(VertexP vertex)
-{
-    VertexP child = st.vs.fst + CHILD(vertex);
-
-    if (!IS_LEAF(child) && IS_UNEVALUATED(child)) {
-        return MAKE_LEFTBOUND(child);
-    } else {
-        return LEFTBOUND(child);
-    }
-}
-
-
-static bool no_root_edge(Pattern patt)
-{
-    return (st.rs[patt.head]) == UNDEF;
-}
-
-
-static bool is_empty(Pattern patt)
-{
-    return patt.cursor > patt.end;
-}
-
-static Uint text_leftbound(VertexP vertex)
-{
-    if(IS_UNEVALUATED(vertex)) {
-        return MAKE_LEFTBOUND(vertex);
-    } else {
-        return LEFTBOUND(vertex);
-    }
-}
-
-static Vertex edge_length(VertexP vertex)
-{
-    return leftmost_child_textbound(vertex) - LEFTBOUND(vertex);
-}
-
-
-static void eval_if_uneval(VertexP *vertex, void (*eval_fun)(VertexP))
-{
-    if(IS_UNEVALUATED(*vertex)) {
-        Uint index = INDEX(*vertex);
-        *vertex = st.vs.fst + index;
-        eval_fun(*vertex);
-    }
-}
 
 
 static Match try_match_leaf(Pattern patt, Uint *vertex)
@@ -90,7 +22,7 @@ static Match match_rootedge(Pattern *patt, VertexP *cursor)
     match.done     = false;
     match.success  = false;
 
-    if(is_empty(*patt)) {
+    if(pattern_is_empty(*patt)) {
         match.done = true;
         match.success = true;
         return match;
@@ -98,7 +30,7 @@ static Match match_rootedge(Pattern *patt, VertexP *cursor)
 
     eval_root();
 
-    if (no_root_edge(*patt)) {
+    if (!has_root_edge(patt->head)) {
         return exhausted_match();
     }
 
@@ -139,7 +71,7 @@ bool search_aux(Pattern patt)
         return rootmatch.success;
     }
 
-    while(!is_empty(patt)) {
+    while(!pattern_is_empty(patt)) {
 
         patt.head = *patt.cursor;
         current_vertex    = st.vs.fst + CHILD(current_vertex);
@@ -202,7 +134,7 @@ bool search(Wchar *current_pattern, Uint patternlen)
 {
     Wchar pattern[MAXPATTERNLEN + 1];
     copy_pattern(pattern, current_pattern, patternlen);
-    Pattern patt = init_pattern(pattern, pattern + patternlen - 1);
+    Pattern patt = pattern_init(pattern, pattern + patternlen - 1);
 
     return search_aux(patt);
 }

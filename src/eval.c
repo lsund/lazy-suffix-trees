@@ -108,3 +108,13 @@ void eval_branch(VertexP vertex)
     get_remaining_suffixes(vertex, &leftb, &rightb);
     insert_edges(leftb, rightb, false);
 }
+
+
+void eval_if_uneval(VertexP *vertex, void (*eval_fun)(VertexP))
+{
+    if(IS_UNEVALUATED(*vertex)) {
+        Uint index = INDEX(*vertex);
+        *vertex = st.vs.fst + index;
+        eval_fun(*vertex);
+    }
+}

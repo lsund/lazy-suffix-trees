@@ -1,22 +1,3 @@
-/*
- * Copyright by Stefan Kurtz (C) 1999-2003
- * =====================================
- * You may use, copy and distribute this file freely as long as you
- * - do not change the file,
- * - leave this copyright notice in the file,
- * - do not make any profit with the distribution of this file
- * - give credit where credit is due
- * You are not allowed to copy or distribute this file otherwise
- * The commercial usage and distribution of this file is prohibited
- * Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
- *
- * ======================================
- *
- * Modified by Ludvig Sundström 2018 with permission from Stefan Kurtz
- * For full source control tree, see https://github.com/lsund/wotd
- *
- */
-
 #include "io.h"
 
 static int open_file(const char *name, Uint *textlen, bool writefile)
@@ -38,6 +19,10 @@ static int open_file(const char *name, Uint *textlen, bool writefile)
     *textlen = (Uint) buf.st_size;
     return fd;
 }
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Public API
 
 
 void file_to_string(const char *filename)
@@ -90,7 +75,7 @@ Uint file_to_strings(char *name, Uint nlines, Wchar ***wordsp)
     for (i = 0; i < nlines; i++) {
         Uint j;
 
-        /* Allocate space for the next line */
+        // Allocate space for the next line
         words[i] = (Wchar *) malloc(MAXPATTERNLEN * sizeof(Wchar));
 
         if (words[i] == NULL) {
@@ -124,7 +109,6 @@ Uint file_to_strings(char *name, Uint nlines, Wchar ***wordsp)
 }
 
 
-// Opens the path for appending, erasing any prior content of the same file
 FILE *open_append(const char *path)
 {
     fclose(fopen(path, "w"));
@@ -132,10 +116,8 @@ FILE *open_append(const char *path)
 }
 
 
-// Frees the text specified
-void freetextspace()
+void free_text()
 {
   (void) munmap((caddr_t) text.fst, (size_t) text.len);
+  free(text.fst);
 }
-
-

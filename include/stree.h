@@ -70,4 +70,12 @@
 // length of the path to its parent.  To retrieve the edge labels in constant
 // time, it suffices to store the left pointer for all nodes.
 
+Vertex leftmost_child_textbound(VertexP vertex);
+
+bool has_root_edge(Wchar c);
+
+Uint text_leftbound(VertexP vertex);
+
+Vertex edge_length(VertexP vertex);
+
 #endif
