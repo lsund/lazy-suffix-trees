@@ -79,7 +79,6 @@ Uint file_to_strings(char *name, Uint nlines, Wchar ***wordsp)
     if (fd < 0) {
         return -1;
     }
-    int max_line_len = 1001;
 
     FILE *fp = fopen(name, "r");
     if (fp == NULL) {
@@ -92,7 +91,7 @@ Uint file_to_strings(char *name, Uint nlines, Wchar ***wordsp)
         Uint j;
 
         /* Allocate space for the next line */
-        words[i] = (Wchar *) malloc(max_line_len * sizeof(Wchar));
+        words[i] = (Wchar *) malloc(MAXPATTERNLEN * sizeof(Wchar));
 
         if (words[i] == NULL) {
             fprintf(stderr,"Out of memory (3).\n");
@@ -113,7 +112,7 @@ Uint file_to_strings(char *name, Uint nlines, Wchar ***wordsp)
         } while (c != 10);
 
         words[i][j - 1] = 0;
-        if ((int) j > max_line_len) {
+        if ((int) j > MAXPATTERNLEN) {
             fprintf(stderr, "Line too long!: %lu\n", j);
             exit(EXIT_FAILURE);
         }

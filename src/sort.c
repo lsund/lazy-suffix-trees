@@ -75,6 +75,7 @@ void counting_sort(Suffix *left, Suffix *right)
     Suffix *upper_bounds[MAX_CHARS + 1];
     curr_sb = alloc_sortbuffer(left, right);
 
+
     // These suffixes belong to the same group, so the common prefix length
     // first has to be calculated.
     Uint plen = grouplcp(left, right);

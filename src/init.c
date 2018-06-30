@@ -37,7 +37,7 @@ static void init_stree()
 
 static void init_sortbuffer()
 {
-    sb.size    = 0;
+    sb.size      = 0;
     sb.allocsize = text.len >> 8;
 }
 

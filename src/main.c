@@ -2,9 +2,6 @@
 #include "sampler.h"
 #include "io.h"
 
-const char *outpath = "data/out.txt";
-const char *locale = "en_US.utf8";
-
 static void usage()
 {
     fprintf(stdout, "\nusage: gk TEXTFILE PATTERNFILE MODE\n\n");
@@ -27,6 +24,8 @@ int main(int argc, char *argv[])
 {
     char *textfile, *patternfile;
     bool sample_patterns = false;
+
+    const char *locale = "en_US.utf8";
 
     setlocale(LC_ALL, locale);
     if (argc < 2) {
@@ -51,14 +50,15 @@ int main(int argc, char *argv[])
     init();
     initclock();
 
+    const char *outpath = "/home/lsund/Data/testdata/members/10kpatterns/diffalpha/136" ;
+
     if (sample_patterns) {
 
-        int minpat = 100;
-        int maxpat = 200;
+        int minpat = 10;
+        int maxpat = 20;
         search_samples(outpath, 10000, minpat, maxpat);
 
         printf("%lu\n", text.asize);
-        printtime();
 
     } else {
         Wchar **patterns = (Wchar **) malloc(sizeof(char *) * MAX_PATTERNS);

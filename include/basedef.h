@@ -20,13 +20,13 @@
 #ifndef PREPROCDEF_H
 #define PREPROCDEF_H
 
-#define STREEALLOC              1000000
+#define STREEALLOC              100000000
 
 #define MAXTEXTLEN              UINT(715827882)
 
-#define MAXPATTERNLEN           2000
+#define MAXPATTERNLEN           100000
 
-#define MAX_PATTERNS            15000
+#define MAX_PATTERNS            350000
 
 // undefined reference
 #define UNDEFREFERENCE          UINT_MAX
@@ -39,7 +39,7 @@
 
 // The maximum number of distinct characters allowed in the text. Arrays of
 // this size will be repeatedly allocated.
-#define MAX_CHARS               70000
+#define MAX_CHARS               330
 /* #define MAX_CHARS               10000 */
 
 // Is a character larger than 255
