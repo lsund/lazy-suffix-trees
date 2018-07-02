@@ -27,7 +27,6 @@ CFLAGS+=-DDEBUG
 CFLAGS+=-g
 
 OBJ= obj/naive_search.o\
-     obj/reverse.o\
 	 obj/sampler.o\
      obj/clock.o\
      obj/io.o\

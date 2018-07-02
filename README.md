@@ -1,6 +1,7 @@
 # WOTD
 
-This implements lazy suffix tree construction, inspired by the following:
+This repository contains a program that implements lazy suffix tree
+construction, inspired by the following:
 
 ```
 Giegerich, R. and Kurtz, S. and Stoye, J.
@@ -9,13 +10,9 @@ Software-Practice and Experience
 33(11):1035-1049, 2003
 ```
 
-In contrast to the implementations of Kurtz. et. al, this algorithm works for
-UTF-8 encoded documents.
+# Acknowledgements
 
-# Credits
-
-The repository is based on a program by [Stefan
-Kurtz](https://www.biologie.uni-hamburg.de/service/wissenschaftsservice/mitarbeiter/professoren-promotionsverfahren/skurtz.html).
-This is exactly `fd3d0c8769696459a0957dc62604ab974f097866 "Initial Commit"`.
-
-All Later modifications were made under permission by by Stefan Kurz.
+The initial commit `fd3d0c8769696459a0957dc62604ab974f097866 "Initial Commit"`
+is a clone of the `wotd` lazy suffix tree algorithm program as initially
+developed by [Stefan Kurtz et. al](https://www.biologie.uni-hamburg.de/service/wissenschaftsservice/mitarbeiter/professoren-promotionsverfahren/skurtz.html).
+This is exactly. Changes and modifications were permitted by Stefan Kurtz.

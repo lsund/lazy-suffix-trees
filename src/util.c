@@ -61,3 +61,15 @@ bool contains(Uint *arr, Uint len, Uint *vals)
     }
     return true;
 }
+
+
+void reverse(Wchar *s,Uint len)
+{
+  Wchar *front, *back, tmp;
+
+  for(front = s, back = s + len - 1; front < back; front++, back--) {
+    tmp = *front;
+    *front = *back;
+    *back = tmp;
+  }
+}
