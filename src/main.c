@@ -1,5 +1,4 @@
 #include "search.h"
-#include "sampler.h"
 #include "io.h"
 
 static void usage()

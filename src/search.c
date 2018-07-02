@@ -126,6 +126,24 @@ static bool copy_pattern(Wchar *pattern, Wchar *current_pattern, Uint len)
 }
 
 
+static bool sample_random(Wchar *pattern, Uint patternlen)
+{
+    Uint start = (Uint) (drand48() * (double) (text.len - patternlen));
+
+    if(start > text.len - patternlen) {
+        fprintf(stderr,"Not enough characters left\n");
+        exit(EXIT_FAILURE);
+    }
+
+    for(Uint j = 0; j < patternlen; j++) {
+        pattern[j] = text.fst[start + j];
+    }
+
+    pattern[patternlen] = '\0';
+    return false;
+}
+
+
 ///////////////////////////////////////////////////////////////////////////////
 // Public API
 
@@ -153,6 +171,36 @@ void search_many(const char *path, int npatterns, Wchar ***patterns_ptr)
 
         search(current_pattern, patternlen);
 
+    }
+    fclose(fp);
+}
+
+
+void search_random(const char *path, Uint trials, Uint minlen, Uint maxlen)
+{
+    if (maxlen > text.len) {
+        fprintf(stderr, "Max pattern length must be smaller than the text length");
+    }
+
+    FILE *fp = open_append(path);
+    Uint patternlen;
+
+    // Magic number seed
+    srand48(42349421);
+
+    for(Uint i = 0; i < trials; i++) {
+
+        Wchar pattern[MAXPATTERNLEN + 1];
+        patternlen = randlen(minlen, maxlen);
+
+        sample_random(pattern, patternlen);
+        fprintf(fp, "%ls\n", pattern);
+
+        if (i & 1) {
+            reverse(pattern, patternlen);
+        }
+
+        search(pattern, patternlen);
     }
     fclose(fp);
 }

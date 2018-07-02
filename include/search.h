@@ -24,5 +24,8 @@ bool search(Wchar *current_pattern, Uint patternlen);
 
 void search_many(const char *path, int npatterns, Wchar ***o_patterns);
 
+// Randomly sampling patterns from the text, reversing every second to simulate
+// the case where a pattern does not exist.
+void search_random(const char *path, Uint trials, Uint minlen, Uint maxlen);
 
 #endif
