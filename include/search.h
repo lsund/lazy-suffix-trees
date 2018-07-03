@@ -7,7 +7,7 @@
 #include <string.h>
 #include <sys/types.h>
 
-#include "basedef.h"
+#include "config.h"
 #include "types.h"
 #include "spaceman.h"
 #include "io.h"

@@ -22,7 +22,7 @@
 
 #include "text.h"
 #include "types.h"
-#include "basedef.h"
+#include "config.h"
 #include "spaceman.h"
 #include "lcp.h"
 #include "sort.h"

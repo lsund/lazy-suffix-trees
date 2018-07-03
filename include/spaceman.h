@@ -22,7 +22,7 @@
 
 #include <string.h>
 #include "types.h"
-#include "basedef.h"
+#include "config.h"
 #include "stree.h"
 #include "streedef.h"
 #include "sortbuffer.h"

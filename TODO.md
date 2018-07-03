@@ -1,4 +1,40 @@
-# Suffix numbers
+[ ] config.h
+[ ] dynarray.h
+[ ] eval.h
+[ ] get_alpha.h
+[ ] init.h
+[ ] insert.h
+[ ] io.h
+[ ] lcp.h
+[ ] match.h
+[ ] minunit.h
+[ ] naive_search.h
+[ ] pattern.h
+[ ] search.h
+[ ] sortbuffer.h
+[ ] sort.h
+[ ] spaceman.h
+[ ] streedef.h
+[ ] stree.h
+[ ] test.h
+[ ] text.h
+[ ] types.h
+[ ] util.h
 
-# Memory usage
-
+[x] clock.c
+[x] clock.h
+[ ] eval.c
+[ ] get_alpha.c
+[ ] init.c
+[ ] insert.c
+[ ] io.c
+[ ] lcp.c
+[ ] main.c
+[ ] match.c
+[ ] naive_search.c
+[ ] pattern.c
+[ ] search.c
+[ ] sort.c
+[ ] spaceman.c
+[ ] stree.c
+[ ] util.c

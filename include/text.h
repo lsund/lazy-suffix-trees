@@ -21,7 +21,7 @@
 #define EXTERNS_H
 
 #include "types.h"
-#include "basedef.h"
+#include "config.h"
 
 
 // This module contains global variables that span more than one source file.

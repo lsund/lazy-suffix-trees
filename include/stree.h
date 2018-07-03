@@ -2,7 +2,7 @@
 #define STREE_H
 
 #include "types.h"
-#include "basedef.h"
+#include "config.h"
 #include "text.h"
 #include "streedef.h"
 

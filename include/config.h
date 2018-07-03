@@ -32,7 +32,7 @@
 #define UNDEFREFERENCE          UINT_MAX
 
 // undefined successor
-#define UNDEF           UINT_MAX
+#define UNDEF                   UINT_MAX
 
 // Transform bytes into megabytes
 #define MEGABYTES(V)            ((double) (V)/((UINT(1) << 20) - 1))

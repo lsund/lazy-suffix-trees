@@ -2,7 +2,7 @@
 #define STREEDEF_H
 
 #include "types.h"
-#include "basedef.h"
+#include "config.h"
 
 typedef struct table {
     Uint *fst;

@@ -2,7 +2,7 @@
 #define SORTBUFFER_H
 
 #include "types.h"
-#include "basedef.h"
+#include "config.h"
 
 typedef struct sortbuffer {
     Suffix *fst;                    // First element
