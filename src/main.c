@@ -48,9 +48,6 @@ int main(int argc, char *argv[])
     printf("Loading a text file based on the locale: %s\n", locale);
     file_to_string(textfile);
 
-    if(text.len > MAXTEXTLEN) {
-        fprintf(stderr, "Text is too large\n");
-    }
     init();
     initclock();
 

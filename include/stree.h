@@ -6,6 +6,9 @@
 #include "text.h"
 #include "streedef.h"
 
+// undefined
+#define UNDEF                   UINT_MAX
+
 // The number of integers required to represent a leaf.
 #define LEAF_VERTEXSIZE                 1
 // The number of integers required to represent an inner vertex.

@@ -11,17 +11,7 @@ static Uint min(const Uint a, const Uint b)
 char *test_count(char *patternfile, char *textfile, Uint count)
 {
     setlocale(LC_ALL, "en_US.utf8");
-    FILE *in = fopen(textfile, "r");
-    text.fst = malloc(sizeof(Wchar) * MAXTEXTLEN);
-    wint_t c;
-    text.len = 0;
-    while ((c = fgetwc(in)) != WEOF) {
-        text.fst[text.len] = c;
-        text.len++;
-    }
-    text.fst[text.len + 1] = '\0';
-    text.maxc = get_max(text.fst, text.len);
-    fclose(in);
+    file_to_string(textfile);
     Wchar **patterns = (Wchar **) malloc(sizeof(Wchar *) * MAX_PATTERNS);
     int npatterns  = file_to_strings(patternfile, MAX_PATTERNS, &patterns);
     init();
@@ -49,17 +39,7 @@ char *test_count(char *patternfile, char *textfile, Uint count)
 char *compare_vs_naive(char *patternfile, char *textfile)
 {
     setlocale(LC_ALL, "en_US.utf8");
-    FILE *in = fopen(textfile, "r");
-    text.fst = malloc(sizeof(Wchar) * MAXTEXTLEN);
-    wint_t c;
-    text.len = 0;
-    while ((c = fgetwc(in)) != WEOF) {
-        text.fst[text.len] = c;
-        text.len++;
-    }
-    text.fst[text.len + 1] = '\0';
-    text.maxc = get_max(text.fst, text.len);
-    fclose(in);
+    file_to_string(textfile);
     Wchar **patterns = (Wchar **) malloc(sizeof(Wchar *) * MAX_PATTERNS);
     int npatterns  = file_to_strings(patternfile, MAX_PATTERNS, &patterns);
     init();

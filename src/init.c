@@ -28,7 +28,7 @@ static void init_stree()
     st.root_eval = false;
     init_root_children();
     // TODO change this
-    st.vs.size = STREEALLOC;
+    st.vs.size = VERTEX_ALLOC;
     ALLOC(st.vs.fst, Uint, st.vs.size);
     ALLOC(text.ss, Wchar *, text.len + 1);
     st.vs.nxt = st.vs.fst;

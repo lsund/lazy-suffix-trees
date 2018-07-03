@@ -76,7 +76,7 @@ Uint file_to_strings(char *name, Uint nlines, Wchar ***wordsp)
         Uint j;
 
         // Allocate space for the next line
-        words[i] = (Wchar *) malloc(MAXPATTERNLEN * sizeof(Wchar));
+        words[i] = (Wchar *) malloc(MAX_PATTERNLEN * sizeof(Wchar));
 
         if (words[i] == NULL) {
             fprintf(stderr,"Out of memory (3).\n");
@@ -94,13 +94,13 @@ Uint file_to_strings(char *name, Uint nlines, Wchar ***wordsp)
             }
             words[i][j] = c;
             j++;
+            if ((int) j > MAX_PATTERNLEN) {
+                fprintf(stderr, "Line too long!: %lu\n", j);
+                exit(EXIT_FAILURE);
+            }
         } while (c != 10);
 
         words[i][j - 1] = 0;
-        if ((int) j > MAXPATTERNLEN) {
-            fprintf(stderr, "Line too long!: %lu\n", j);
-            exit(EXIT_FAILURE);
-        }
     }
     fprintf(stderr, "Warning, not all patterns were read\n");
     *wordsp = words;
