@@ -5,7 +5,7 @@
 
 typedef struct pattern {
     Wchar head;
-    Wchar *cursor;
+    Wchar *current;
     Wchar *start;
     Wchar *end;
 } Pattern;

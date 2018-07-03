@@ -19,8 +19,12 @@ Match successful_match();
 
 Match exhausted_match();
 
-Match match_leaf(Wchar *text_cursor, Pattern patt);
+Match make_match(Wchar *text_cursor, Pattern patt);
 
-Uint inner_lcp(Uint *vertex, Pattern patt, Uint edgelen);
+Uint inner_lcp(VertexP vertex, Pattern patt, Uint edgelen);
+
+Match match_leafedge(VertexP vertex, Pattern patt);
+
+Match match_edge(VertexP vertex, Pattern patt);
 
 #endif
