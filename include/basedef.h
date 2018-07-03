@@ -42,21 +42,4 @@
 /* #define MAX_CHARS               330 */
 #define MAX_CHARS               10000
 
-// Is a character larger than 255
-#define ISSPECIAL(C)    ((C) >= (Uchar) UCHAR_MAX)
-
-///////////////////////////////////////////////////////////////////////////////
-// Bitvector
-
-// Number of bits in in integer
-#define INT_WORDSIZE (UINT(1) << LOGWORDSIZE)
-
-// The value represented by the most significant bit in the INT_WORDSIZE
-// binary number, for example, INT_WORDSIZE = 64 on a 64 bit architecture.
-// Since it is only the first bit, the value is 2 ^ (64 - 1)
-#define MSB (UINT(1) << (INT_WORDSIZE - 1))
-
-// The value represented by the second most significant bit.
-#define SECOND_MSB (MSB >> 1)
-
 #endif

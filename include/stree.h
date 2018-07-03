@@ -1,22 +1,3 @@
-/*
- * Copyright by Stefan Kurtz (C) 1999-2003
- * =====================================
- * You may use, copy and distribute this file freely as long as you
- * - do not change the file,
- * - leave this copyright notice in the file,
- * - do not make any profit with the distribution of this file
- * - give credit where credit is due
- * You are not allowed to copy or distribute this file otherwise
- * The commercial usage and distribution of this file is prohibited
- * Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
- *
- * ======================================
- *
- * Modified by Ludvig Sundström 2018 with permission from Stefan Kurtz
- * For full source control tree, see https://github.com/lsund/wotd
- *
- */
-
 #ifndef STREE_H
 #define STREE_H
 
@@ -25,57 +6,63 @@
 #include "text.h"
 #include "streedef.h"
 
-#define LEAF_VERTEXSIZE     1
-#define INNER_VERTEXSIZE    2
+// The number of integers required to represent a leaf.
+#define LEAF_VERTEXSIZE                 1
+// The number of integers required to represent an inner vertex.
+#define INNER_VERTEXSIZE                2
 
-#define ROOT                st.vs.fst
+// Number of bits in an unsigned integer, 64 on an 64-bit architecture.
+#define INT_SIZE                        (UINT(1) << LOGWORDSIZE)
+
+// The value represented by the most significant bit of an unsigned integer.
+#define MSB                             (UINT(1) << (INT_SIZE - 1))
+
+// The value represented by the second most significant bit of an unsigned
+// integer.
+#define SECOND_MSB (MSB >> 1)
+
 
 ///////////////////////////////////////////////////////////////////////////////
-// Vertices
-// Offset in the table
-#define INDEX(P)                        ((Uint) ((P) - ROOT))
+// Query and modify vertices
 
+// Mark a vertex to be the last child
 #define MAKE_LASTCHILD(V)               ((V) | SECOND_MSB)
+// Mark a vertex to be a leaf
 #define MAKE_LEAF(V)                    ((V) | MSB)
-#define MAKE_LEAF_LASTCHILD(V)          ((V) | MSB | SECOND_MSB)
+// Mark a vertex to be unevaluated
 #define MAKE_UNEVAL_VERTEX(V)           ((V) | MSB)
+// Mark a vertex to be an inner vertex
+#define MAKE_INNER(V)                   ((V) & ~MSB)
 
-#define WITHOUT_LEAFBIT(V)              ((V) & ~MSB)
-
-
-// Evaluated vertices
-#define LEFTBOUND(R)               ((*(R)) & ~(MSB | SECOND_MSB))
-#define RIGHTBOUND(R)              (*((R) + 1))
-#define CHILD(R)                    RIGHTBOUND(R)
-
-#define SUFFIX_LEFTBOUND(R)         (text.ss + LEFTBOUND(R))
-#define SUFFIX_RIGHTBOUND(R)        (text.ss + (CHILD(R) & ~MSB))
-
-#define SUFFIX_INDEX(R)             ((Uint) (*(R) - text.fst))
-#define MAKE_LEFTBOUND(R)           SUFFIX_INDEX(SUFFIX_LEFTBOUND(R))
-
-#define SET_LEFTBOUND(R, O)        *(R) = (*(R) & SECOND_MSB) | (O)
-
-///////////////////////////////////////////////////////////////////////////////
-// Queries
-
+// Is this vertex a leaf?
 #define IS_LEAF(R)                      ((*(R)) & MSB)
+// Is this vertex the last child?
 #define IS_LASTCHILD(R)                 ((*(R)) & SECOND_MSB)
-#define IS_UNEVALUATED(R)               (CHILD(R) & MSB)
+// Is this vertex unevaluated?
+#define IS_UNEVALUATED(R)               (FIRSTCHILD(R) & MSB)
+
+// Get the pointer to the leftbound.
+// If the label of (VP -> FIRSTCHILD(VP)) is x, then this is the smallest index
+// i such that i is an occurence of x in the text.
+#define LEFTBOUND(VP)                    ((*(VP)) & ~(MSB | SECOND_MSB))
+// Get the ponter to the rightbound, defined as LEFTBOUND(VP) + |x| where x is
+// as above.
+#define RIGHTBOUND(VP)                   (*((VP) + 1))
+// The first child of a vertex is equal to its rightbound
+#define FIRSTCHILD(VP)                   RIGHTBOUND(VP)
+// Set the leftbound of a vertex
+#define SET_LEFTBOUND(R, O)             *(R) = IS_LASTCHILD(R) | (O)
 
 ///////////////////////////////////////////////////////////////////////////////
-// Getters
+// Utilities
 
-// This is the left pointer, defined as the minimum leaf under P, plus the
-// length of the path to its parent.  To retrieve the edge labels in constant
-// time, it suffices to store the left pointer for all nodes.
-
-Vertex leftmost_child_textbound(VertexP vertex);
-
+// Does the suffix tree have a a root edge starting with c?
 bool has_root_edge(Wchar c);
 
-Uint text_leftbound(VertexP vertex);
+// The leftbound of a vertex.
+Uint leftbound(VertexP vertex);
 
+// The length of the edge leading to its first child.
 Vertex edge_length(VertexP vertex);
 
 #endif

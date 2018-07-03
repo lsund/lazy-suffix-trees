@@ -42,4 +42,12 @@ typedef struct text {
 
 extern Text text;
 
+// Get the right leftbound in the sufix buffer
+#define SUFFIX_LEFTBOUND(R)             (text.ss + LEFTBOUND(R))
+// Get the right rightbound in the suffix buffer
+#define SUFFIX_RIGHTBOUND(R)            (text.ss + (FIRSTCHILD(R) & ~MSB))
+
+#define SUFFIX_INDEX(R)                 ((Uint) (*(R) - text.fst))
+#define MAKE_LEFTBOUND(R)               SUFFIX_INDEX(SUFFIX_LEFTBOUND(R))
+
 #endif

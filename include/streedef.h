@@ -10,6 +10,12 @@ typedef struct table {
     Uint size;
 } Table;
 
+// The root is at the first address in the vertex table
+#define ROOT            st.vs.fst
+
+// To retrieve an index in the table, subtract the root
+#define INDEX(P)        ((Uint) ((P) - ROOT))
+
 typedef struct stree {
     Table vs;
     Uint rs[MAX_CHARS + 1];

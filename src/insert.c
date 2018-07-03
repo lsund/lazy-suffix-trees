@@ -5,6 +5,11 @@ static void init_next_vertex()
     *st.vs.nxt = 0;
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+// Public API
+
+
 Uint insert_leaf_vertex(Wchar fst, Wchar **left, bool root)
 {
     init_next_vertex();
@@ -22,7 +27,7 @@ void insert_inner_vertex(Wchar fst, Wchar **leftb, Wchar **rightb, bool root)
 {
     init_next_vertex();
     SET_LEFTBOUND(st.vs.nxt, leftb - text.ss);
-    CHILD(st.vs.nxt) = MAKE_UNEVAL_VERTEX(rightb - text.ss);
+    FIRSTCHILD(st.vs.nxt) = MAKE_UNEVAL_VERTEX(rightb - text.ss);
 
     if (root) {
         st.rs[fst] = INDEX(st.vs.nxt);
@@ -37,4 +42,3 @@ Uint insert_sentinel_vertex(Wchar **right, Uint **previousnode)
     *previousnode = st.vs.nxt;
     return leafnum;
 }
-

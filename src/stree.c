@@ -2,9 +2,9 @@
 
 STree st;
 
-Vertex leftmost_child_textbound(VertexP vertex)
+Vertex firstchild(VertexP vertex)
 {
-    VertexP child = st.vs.fst + CHILD(vertex);
+    VertexP child = st.vs.fst + FIRSTCHILD(vertex);
 
     if (!IS_LEAF(child) && IS_UNEVALUATED(child)) {
         return MAKE_LEFTBOUND(child);
@@ -14,7 +14,7 @@ Vertex leftmost_child_textbound(VertexP vertex)
 }
 
 
-Uint text_leftbound(VertexP vertex)
+Uint leftbound(VertexP vertex)
 {
     if(IS_UNEVALUATED(vertex)) {
         return MAKE_LEFTBOUND(vertex);
@@ -32,7 +32,7 @@ bool has_root_edge(Wchar c)
 
 Vertex edge_length(VertexP vertex)
 {
-    return leftmost_child_textbound(vertex) - LEFTBOUND(vertex);
+    return firstchild(vertex) - leftbound(vertex);
 }
 
 

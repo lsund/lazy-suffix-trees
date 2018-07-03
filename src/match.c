@@ -56,10 +56,10 @@ Match make_match(Wchar *textp, Pattern patt)
 
 Match match_leafedge(VertexP vertex, Pattern patt)
 {
-    Wchar *leftbound = text.fst + LEFTBOUND(vertex);
-    if (*leftbound == patt.head) {
-        return make_match(leftbound, patt);
-    } else if (leftbound == text.lst || IS_LASTCHILD(vertex)) {
+    Wchar *leftb = text.fst + LEFTBOUND(vertex);
+    if (*leftb == patt.head) {
+        return make_match(leftb, patt);
+    } else if (leftb == text.lst || IS_LASTCHILD(vertex)) {
         return exhausted_match();
     } else {
         return failed_match();

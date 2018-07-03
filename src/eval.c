@@ -66,7 +66,7 @@ static void insert_edges(Wchar **leftb, Wchar **rightb, bool isroot)
     }
 
     if (isroot) {
-        *st.vs.nxt = MAKE_LEAF_LASTCHILD(text.len);
+        *st.vs.nxt = MAKE_LASTCHILD(MAKE_LEAF(text.len));
         st.vs.nxt += LEAF_VERTEXSIZE;
     } else {
         *lchild = MAKE_LASTCHILD(*lchild);
@@ -85,7 +85,7 @@ static void get_remaining_suffixes(
     *rightb  = SUFFIX_RIGHTBOUND(vertex);
 
     SET_LEFTBOUND(vertex, SUFFIX_INDEX(*leftb));
-    CHILD(vertex) = INDEX(st.vs.nxt);
+    FIRSTCHILD(vertex) = INDEX(st.vs.nxt);
 
     // Sort the suffixes according to first character
     counting_sort(*leftb, *rightb);
