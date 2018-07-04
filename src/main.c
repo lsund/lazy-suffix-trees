@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
         Wchar **patterns = (Wchar **) malloc(sizeof(char *) * MAX_PATTERNS);
         Uint npatterns  = patterns_initialize(patternfile, MAX_PATTERNS, &patterns);
         printf("npatterns: %lu\n", npatterns);
-        search_many(pattern_out, npatterns, &patterns);
+        search_many(npatterns, &patterns);
         free_text_and_patterns(patterns, npatterns);
 
     }

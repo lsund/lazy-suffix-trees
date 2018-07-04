@@ -43,20 +43,20 @@ static Match match_rootedge(VertexP *current_vertex, Pattern *patt)
 }
 
 
-static bool sample_random(Wchar *pattern, Uint patternlen)
+static bool sample_random(Wchar *pattern, Uint len)
 {
-    Uint start = (Uint) (drand48() * (double) (text.len - patternlen));
+    Uint start = (Uint) (drand48() * (double) (text.len - len));
 
-    if(start > text.len - patternlen) {
+    if(start > text.len - len) {
         fprintf(stderr,"Not enough characters left\n");
         exit(EXIT_FAILURE);
     }
 
-    for(Uint j = 0; j < patternlen; j++) {
+    for(Uint j = 0; j < len; j++) {
         pattern[j] = text.fst[start + j];
     }
 
-    pattern[patternlen] = '\0';
+    pattern[len] = '\0';
     return false;
 }
 
@@ -65,9 +65,9 @@ static bool sample_random(Wchar *pattern, Uint patternlen)
 // Public API
 
 
-bool search(Wchar *current_pattern, Uint patternlen)
+bool search(Wchar *pattern, Uint len)
 {
-    Pattern patt = pattern_init(current_pattern, current_pattern + patternlen - 1);
+    Pattern patt = pattern_init(pattern, pattern + len - 1);
 
     VertexP current_vertex;
     Match rootmatch = match_rootedge(&current_vertex, &patt);
@@ -119,48 +119,46 @@ bool search(Wchar *current_pattern, Uint patternlen)
 
 
 // Search for many patterns in the tree
-void search_many(const char *path, int npatterns, Wchar ***patterns_ptr)
+void search_many(int npatterns, Wchar ***patternsp)
 {
-    Wchar **patterns = *patterns_ptr;
-    FILE *fp        = truncate_open_append(path);
+    Wchar **patterns = *patternsp;
 
     for(int j = 0; j < npatterns; j++) {
 
-        Wchar *current_pattern = patterns[j];
-        Uint patternlen = wcslen(current_pattern);
+        Wchar *patt = patterns[j];
+        Uint len = wcslen(patt);
 
-        search(current_pattern, patternlen);
+        search(patt, len);
 
     }
-    fclose(fp);
 }
 
 
-void search_random(const char *path, Uint trials, Uint minlen, Uint maxlen)
+void search_random(const char *path, Uint n, Uint minlen, Uint maxlen)
 {
     if (maxlen > text.len) {
         fprintf(stderr, "Max pattern length must be smaller than the text length");
     }
 
     FILE *fp = truncate_open_append(path);
-    Uint patternlen;
+    Uint len;
 
     // Magic number seed
     srand48(42349421);
 
-    for(Uint i = 0; i < trials; i++) {
+    for(Uint i = 0; i < n; i++) {
 
         Wchar pattern[maxlen + 1];
-        patternlen = randlen(minlen, maxlen);
+        len = randlen(minlen, maxlen);
 
-        sample_random(pattern, patternlen);
+        sample_random(pattern, len);
         fprintf(fp, "%ls\n", pattern);
 
         if (i & 1) {
-            reverse(pattern, patternlen);
+            reverse(pattern, len);
         }
 
-        search(pattern, patternlen);
+        search(pattern, len);
     }
     fclose(fp);
 }
