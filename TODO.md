@@ -2,8 +2,9 @@
 [x] clock.c
 [x] clock.h
 [x] dynarray.h
+[x] eval.c
+[x] eval.h
 
-[ ] eval.h
 [ ] get_alpha.h
 [ ] init.h
 [ ] insert.h
@@ -24,7 +25,6 @@
 [ ] types.h
 [ ] util.h
 
-[ ] eval.c
 [ ] get_alpha.c
 [ ] init.c
 [ ] insert.c

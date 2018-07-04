@@ -1,22 +1,3 @@
-/*
- * Copyright by Stefan Kurtz (C) 1999-2003
- * =====================================
- * You may use, copy and distribute this file freely as long as you
- * - do not change the file,
- * - leave this copyright notice in the file,
- * - do not make any profit with the distribution of this file
- * - give credit where credit is due
- * You are not allowed to copy or distribute this file otherwise
- * The commercial usage and distribution of this file is prohibited
- * Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
- *
- * ======================================
- *
- * Modified by Ludvig Sundström 2018 with permission from Stefan Kurtz
- * For full source control tree, see https://github.com/lsund/wotd
- *
- */
-
 #ifndef GET_ALPHA_H
 #define GET_ALPHA_H
 
@@ -27,14 +8,18 @@
 #include <stdlib.h>
 #include <locale.h>
 
-
 #include "types.h"
 #include "config.h"
 #include "text.h"
 
 
+// Iterate over the text and store the counts of each character. Then iterate
+// over all possible characters and store their occurences in the `alpha`
+// variable..
 void get_characters(Wchar *alpha, Uint *alphasize);
 
+// Get the character with the maximum value in the entire text. In the case of
+// UTF-8, this value is the decimal value of the symbols code-point.
 Uint get_max(Wchar *text, Uint textlen);
 
 
