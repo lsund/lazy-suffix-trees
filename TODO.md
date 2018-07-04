@@ -4,9 +4,11 @@
 [x] dynarray.h
 [x] eval.c
 [x] eval.h
+[x] get_alpha.c
+[x] get_alpha.h
+[x] init.c
+[x] init.h
 
-[ ] get_alpha.h
-[ ] init.h
 [ ] insert.h
 [ ] io.h
 [ ] lcp.h
@@ -25,8 +27,6 @@
 [ ] types.h
 [ ] util.h
 
-[ ] get_alpha.c
-[ ] init.c
 [ ] insert.c
 [ ] io.c
 [ ] lcp.c

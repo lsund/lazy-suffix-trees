@@ -1,11 +1,13 @@
 
 #include "init.h"
 
+
 STree st;
 
 
-void init_root_children()
+static void init_root()
 {
+    st.root_eval = false;
     Uint *v;
     for(v = st.rs; v <= st.rs + MAX_CHARS; v++) {
         *v = UNDEF;
@@ -23,22 +25,23 @@ static void init_alphabet()
 }
 
 
-static void init_stree()
-{
-    st.root_eval = false;
-    init_root_children();
-    // TODO change this
-    st.vs.size = VERTEX_ALLOC;
-    ALLOC(st.vs.fst, Uint, st.vs.size);
-    ALLOC(text.ss, Wchar *, text.len + 1);
-    st.vs.nxt = st.vs.fst;
-}
-
-
 static void init_sortbuffer()
 {
     sb.size      = 0;
     sb.allocsize = text.len >> 8;
+}
+
+static void init_stree()
+{
+    init_root();
+
+    // This is a static allocation, which should be used whenever dynamic
+    // allocation is used.
+    st.vs.size = VERTEX_ALLOC;
+
+    ALLOC(st.vs.fst, Uint, st.vs.size);
+    ALLOC(text.ss, Wchar *, text.len + 1);
+    st.vs.nxt = st.vs.fst;
 }
 
 

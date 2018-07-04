@@ -1,22 +1,3 @@
-/*
- * Copyright by Stefan Kurtz (C) 1999-2003
- * =====================================
- * You may use, copy and distribute this file freely as long as you
- * - do not change the file,
- * - leave this copyright notice in the file,
- * - do not make any profit with the distribution of this file
- * - give credit where credit is due
- * You are not allowed to copy or distribute this file otherwise
- * The commercial usage and distribution of this file is prohibited
- * Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
- *
- * ======================================
- *
- * Modified by Ludvig Sundström 2018 with permission from Stefan Kurtz
- * For full source control tree, see https://github.com/lsund/wotd
- *
- */
-
 #ifndef INIT_H
 #define INIT_H
 
@@ -29,10 +10,14 @@
 #include "streedef.h"
 #include "sortbuffer.h"
 
-void init_root_children();
-
+// Initializes the global variable `st` which represents the suffix tree. It
+// does so by initializing the alphabet, root children, sortbuffer by
+// allocating enough space to start computation and setting the static fields
+// to sound initial values.
 void init();
 
+// 'Destroy' the global variable `st` by freeing all memory allocated to it and
+// unsetting its fields.
 void destroy();
 
 #endif
