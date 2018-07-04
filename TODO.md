@@ -1,5 +1,8 @@
-[ ] config.h
-[ ] dynarray.h
+[x] config.h
+[x] clock.c
+[x] clock.h
+
+[x] dynarray.h
 [ ] eval.h
 [ ] get_alpha.h
 [ ] init.h
@@ -21,8 +24,6 @@
 [ ] types.h
 [ ] util.h
 
-[x] clock.c
-[x] clock.h
 [ ] eval.c
 [ ] get_alpha.c
 [ ] init.c
