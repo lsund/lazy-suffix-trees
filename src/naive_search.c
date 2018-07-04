@@ -1,11 +1,8 @@
-
 #include "naive_search.h"
 
 Text text;
 
 
-// Naively search `text.fst` for the pattern beginning at address `start`, ending
-// at address `end`.
 bool naive_search(Wchar *start, Wchar *end)
 {
     Uint m = (Uint) (end - start);

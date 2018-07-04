@@ -14,9 +14,11 @@
 [x] io.h
 [x] lcp.c
 [x] lcp.h
+[x] match.c
+[x] match.h
+[x] main.c
+[x] minunit.h
 
-[ ] match.h
-[ ] minunit.h
 [ ] naive_search.h
 [ ] pattern.h
 [ ] search.h
@@ -30,8 +32,6 @@
 [ ] types.h
 [ ] util.h
 
-[ ] main.c
-[ ] match.c
 [ ] naive_search.c
 [ ] pattern.c
 [ ] search.c

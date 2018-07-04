@@ -1,6 +1,10 @@
 #include "search.h"
 #include "io.h"
 
+// The matching patterns will be logged to this file
+const char *pattern_out = "patterns-found.txt";
+
+
 static void usage()
 {
     fprintf(stdout, "\nusage: gk TEXTFILE PATTERNFILE MODE\n\n");
@@ -51,22 +55,20 @@ int main(int argc, char *argv[])
     stree_init();
     clock_init();
 
-    const char *outpath = "/home/lsund/Data/testdata/members/10kpatterns/diffalpha/136" ;
-
     if (sample_patterns) {
 
         int minpat = 10;
         int maxpat = 20;
-        search_random(outpath, 10000, minpat, maxpat);
-
-        printf("%lu\n", text.asize);
+        search_random(pattern_out, 10000, minpat, maxpat);
 
     } else {
+
         Wchar **patterns = (Wchar **) malloc(sizeof(char *) * MAX_PATTERNS);
         Uint npatterns  = patterns_initialize(patternfile, MAX_PATTERNS, &patterns);
         printf("npatterns: %lu\n", npatterns);
-        search_many(outpath, npatterns, &patterns);
+        search_many(pattern_out, npatterns, &patterns);
         free_text_and_patterns(patterns, npatterns);
+
     }
 
     return EXIT_SUCCESS;
