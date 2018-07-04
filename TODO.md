@@ -12,8 +12,9 @@
 [x] insert.h
 [x] io.c
 [x] io.h
+[x] lcp.c
+[x] lcp.h
 
-[ ] lcp.h
 [ ] match.h
 [ ] minunit.h
 [ ] naive_search.h
@@ -29,7 +30,6 @@
 [ ] types.h
 [ ] util.h
 
-[ ] lcp.c
 [ ] main.c
 [ ] match.c
 [ ] naive_search.c

@@ -78,7 +78,7 @@ void counting_sort(Suffix *left, Suffix *right)
 
     // These suffixes belong to the same group, so the common prefix length
     // first has to be calculated.
-    Uint plen = grouplcp(left, right);
+    Uint plen = suffixgroup_lcp(left, right);
 
     // Shortest suffix is sentinel, skip
     if (*right + plen == text.lst) {
