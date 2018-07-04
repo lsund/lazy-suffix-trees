@@ -68,4 +68,7 @@ Uint leftbound(VertexP vertex);
 // The length of the edge leading to its first child.
 Vertex edge_length(VertexP vertex);
 
+// Does this suffix point to the sentinel, i.e. the last suffix?
+bool is_sentinel(Suffix **s);
+
 #endif

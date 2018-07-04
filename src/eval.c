@@ -1,19 +1,8 @@
-
 #include "eval.h"
 
-static bool is_last_suffix(Wchar ***rightb)
-{
-    if(**rightb == text.lst) {
-        rightb--;
-        return true;
-    }
-    return false;
-}
-
-
-static void get_groupbound(
-        Wchar ***group_rightb,
-        Wchar **group_leftb,
+static void get_group_rightbound(
+        Suffix **group_rightb,
+        Suffix *group_leftb,
         Wchar **rightb,
         Wchar fst
     )
@@ -33,13 +22,13 @@ static void insert_edges_aux(
         bool isroot
     )
 {
-    Wchar **curr_suffix  = NULL;
-    Wchar **group_rightb = NULL;
+    Wchar **curr_suffix;
+    Wchar **group_rightb;
 
     for (curr_suffix = leftb; curr_suffix <= rightb; curr_suffix = group_rightb + 1) {
 
         Wchar fst = **curr_suffix;
-        get_groupbound(&group_rightb, curr_suffix, rightb, fst);
+        get_group_rightbound(&group_rightb, curr_suffix, rightb, fst);
 
         *lchild = st.vs.nxt;
         if (group_rightb > curr_suffix) {
@@ -54,14 +43,14 @@ static void insert_edges_aux(
 static void insert_edges(Wchar **leftb, Wchar **rightb, bool isroot)
 {
     if (!isroot) {
-        // TODO
+        // Possibly dynamically extend tree here
         /* alloc_extend_stree(); */
     }
 
     Uint *lchild;
     insert_edges_aux(leftb, rightb, &lchild, isroot);
 
-    if (is_last_suffix(&rightb)) {
+    if (is_sentinel(&rightb)) {
         insert_sentinel_vertex(rightb, &lchild);
     }
 
@@ -74,21 +63,26 @@ static void insert_edges(Wchar **leftb, Wchar **rightb, bool isroot)
 }
 
 
-static void get_remaining_suffixes(
-        VertexP vertex,
-        Wchar ***leftb,
-        Wchar ***rightb
-    )
+static void get_unevaluated_suffixes(VertexP v, Suffix **leftb, Suffix **rightb)
 {
     // Find out what subsequence of suffixes this vertex corresponds to
-    *leftb   = SUFFIX_LEFTBOUND(vertex);
-    *rightb  = SUFFIX_RIGHTBOUND(vertex);
+    *leftb   = SUFFIX_LEFTBOUND(v);
+    *rightb  = SUFFIX_RIGHTBOUND(v);
 
-    SET_LEFTBOUND(vertex, SUFFIX_INDEX(*leftb));
-    FIRSTCHILD(vertex) = INDEX(st.vs.nxt);
+    SET_LEFTBOUND(v, SUFFIX_INDEX(*leftb));
+    FIRSTCHILD(v) = INDEX(st.vs.nxt);
 
     // Sort the suffixes according to first character
     counting_sort(*leftb, *rightb);
+}
+
+
+static void eval_inner(VertexP v)
+{
+    Wchar **leftb;
+    Wchar **rightb;
+    get_unevaluated_suffixes(v, &leftb, &rightb);
+    insert_edges(leftb, rightb, false);
 }
 
 
@@ -101,20 +95,11 @@ void eval_root()
     }
 }
 
-void eval_branch(VertexP vertex)
+void eval_if_uneval(VertexP *v)
 {
-    Wchar **leftb;
-    Wchar **rightb;
-    get_remaining_suffixes(vertex, &leftb, &rightb);
-    insert_edges(leftb, rightb, false);
-}
-
-
-void eval_if_uneval(VertexP *vertex, void (*eval_fun)(VertexP))
-{
-    if(IS_UNEVALUATED(*vertex)) {
-        Uint index = INDEX(*vertex);
-        *vertex = st.vs.fst + index;
-        eval_fun(*vertex);
+    if(IS_UNEVALUATED(*v)) {
+        Uint index = INDEX(*v);
+        *v = st.vs.fst + index;
+        eval_inner(*v);
     }
 }

@@ -36,3 +36,12 @@ Vertex edge_length(VertexP vertex)
 }
 
 
+bool is_sentinel(Suffix **s)
+{
+    if(**s == text.lst) {
+        s--;
+        return true;
+    }
+    return false;
+}
+

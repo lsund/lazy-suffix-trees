@@ -29,7 +29,7 @@ static Match match_rootedge(VertexP *current_vertex, Pattern *patt)
     }
 
     *current_vertex  = st.vs.fst + root_child;
-    eval_if_uneval(current_vertex, eval_branch);
+    eval_if_uneval(current_vertex);
 
     Match root_match = match_edge(*current_vertex, *patt);
 
@@ -105,7 +105,7 @@ bool search(Wchar *current_pattern, Uint patternlen)
             }
         }
 
-        eval_if_uneval(&current_vertex, eval_branch);
+        eval_if_uneval(&current_vertex);
 
         Match match = match_edge(current_vertex, patt);
         if (match.done) {
