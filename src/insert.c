@@ -1,5 +1,6 @@
 #include "insert.h"
 
+
 static void init_next_vertex()
 {
     *st.vs.nxt = 0;
@@ -10,10 +11,10 @@ static void init_next_vertex()
 // Public API
 
 
-Uint insert_leaf_vertex(Wchar fst, Wchar **left, bool root)
+Uint insert_leaf_vertex(Wchar fst, Wchar **leftb, bool root)
 {
     init_next_vertex();
-    Uint leafnum = SUFFIX_INDEX(left);
+    Uint leafnum = SUFFIX_INDEX(leftb);
     SET_LEFTBOUND(st.vs.nxt, MAKE_LEAF(leafnum));
     if (root) {
         st.rs[fst] = MAKE_LEAF(leafnum);
@@ -36,9 +37,9 @@ void insert_inner_vertex(Wchar fst, Wchar **leftb, Wchar **rightb, bool root)
 }
 
 
-Uint insert_sentinel_vertex(Wchar **right, Uint **previousnode)
+Uint insert_sentinel_vertex(Wchar **right, Uint **prev)
 {
     Uint leafnum = insert_leaf_vertex('\0', right + 1, false);
-    *previousnode = st.vs.nxt;
+    *prev = st.vs.nxt;
     return leafnum;
 }

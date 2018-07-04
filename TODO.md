@@ -8,8 +8,9 @@
 [x] get_alpha.h
 [x] init.c
 [x] init.h
+[x] insert.c
+[x] insert.h
 
-[ ] insert.h
 [ ] io.h
 [ ] lcp.h
 [ ] match.h
@@ -27,7 +28,6 @@
 [ ] types.h
 [ ] util.h
 
-[ ] insert.c
 [ ] io.c
 [ ] lcp.c
 [ ] main.c

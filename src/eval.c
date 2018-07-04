@@ -40,7 +40,7 @@ static void insert_edges_aux(
 }
 
 
-static void insert_edges(Wchar **leftb, Wchar **rightb, bool isroot)
+static void insert_edges(Suffix *leftb, Suffix *rightb, bool isroot)
 {
     if (!isroot) {
         // Possibly dynamically extend tree here
