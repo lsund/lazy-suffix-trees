@@ -25,7 +25,7 @@ static Match match_rootedge(VertexP *current_vertex, Pattern *patt)
     Vertex root_child  = st.rs[patt->head];
     Wchar *leftb = text.fst + MAKE_INNER(root_child);
     if (IS_LEAF(&root_child)) {
-        return make_match(leftb, *patt);
+        return make_done_match(leftb, *patt);
     }
 
     *current_vertex  = st.vs.fst + root_child;
