@@ -4,7 +4,7 @@
 #include "types.h"
 
 // Initialize the clock
-void initclock(void);
+void clock_init(void);
 
 // The integer number of clock ticks
 Uint getclockticks(void);

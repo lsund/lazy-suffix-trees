@@ -122,7 +122,7 @@ bool search(Wchar *current_pattern, Uint patternlen)
 void search_many(const char *path, int npatterns, Wchar ***patterns_ptr)
 {
     Wchar **patterns = *patterns_ptr;
-    FILE *fp        = open_append(path);
+    FILE *fp        = truncate_open_append(path);
 
     for(int j = 0; j < npatterns; j++) {
 
@@ -142,7 +142,7 @@ void search_random(const char *path, Uint trials, Uint minlen, Uint maxlen)
         fprintf(stderr, "Max pattern length must be smaller than the text length");
     }
 
-    FILE *fp = open_append(path);
+    FILE *fp = truncate_open_append(path);
     Uint patternlen;
 
     // Magic number seed

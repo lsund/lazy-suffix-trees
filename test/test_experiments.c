@@ -30,13 +30,13 @@ static void print_staticstics(FILE *out, const char *textfile, const char *patte
 
 char *log_runtime(FILE *out, char *textfile, char *patternfile)
 {
-    file_to_string(textfile);
+    text_initialize(textfile);
     Wchar **patterns = (Wchar **) malloc(sizeof(Wchar *) * MAX_PATTERNS);
-    Uint npatterns  = file_to_strings(patternfile, MAX_PATTERNS, &patterns);
+    Uint npatterns  = patterns_initialize(patternfile, MAX_PATTERNS, &patterns);
     STree st;
 
-    initclock();
-    init();
+    clock_init();
+    stree_init();
 
     pfiles[ 0] = "/home/lsund/Data/testdata/members/10kpatterns/diffalpha/116";
     pfiles[ 1] = "/home/lsund/Data/testdata/members/10kpatterns/diffalpha/117";
@@ -199,7 +199,7 @@ char *log_runtime(FILE *out, char *textfile, char *patternfile)
     }
 
     free(patterns);
-    destroy(&st);
+    stree_destroy(&st);
     free(text.fst);
     return NULL;
 }

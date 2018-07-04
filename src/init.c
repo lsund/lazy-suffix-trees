@@ -45,7 +45,7 @@ static void init_stree()
 }
 
 
-void init()
+void stree_init()
 {
     init_alphabet();
     init_sortbuffer();
@@ -53,7 +53,7 @@ void init()
 }
 
 
-void destroy()
+void stree_destroy()
 {
     free(text.fst);
     free(sb.fst);

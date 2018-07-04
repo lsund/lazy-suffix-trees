@@ -11,10 +11,10 @@ static Uint min(const Uint a, const Uint b)
 char *test_count(char *patternfile, char *textfile, Uint count)
 {
     setlocale(LC_ALL, "en_US.utf8");
-    file_to_string(textfile);
+    text_initialize(textfile);
     Wchar **patterns = (Wchar **) malloc(sizeof(Wchar *) * MAX_PATTERNS);
-    int npatterns  = file_to_strings(patternfile, MAX_PATTERNS, &patterns);
-    init();
+    int npatterns  = patterns_initialize(patternfile, MAX_PATTERNS, &patterns);
+    stree_init();
 
     Uint exists_n = 0;
     for (Uint j = 0; j < (Uint) npatterns; j++) {
@@ -39,10 +39,10 @@ char *test_count(char *patternfile, char *textfile, Uint count)
 char *compare_vs_naive(char *patternfile, char *textfile)
 {
     setlocale(LC_ALL, "en_US.utf8");
-    file_to_string(textfile);
+    text_initialize(textfile);
     Wchar **patterns = (Wchar **) malloc(sizeof(Wchar *) * MAX_PATTERNS);
-    int npatterns  = file_to_strings(patternfile, MAX_PATTERNS, &patterns);
-    init();
+    int npatterns  = patterns_initialize(patternfile, MAX_PATTERNS, &patterns);
+    stree_init();
 
     int exists_n = 0, rexists_n = 0;
     for (Uint j = 0; j < min(npatterns, maxpatterns); j++) {

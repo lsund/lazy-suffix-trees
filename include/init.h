@@ -14,10 +14,10 @@
 // does so by initializing the alphabet, root children, sortbuffer by
 // allocating enough space to start computation and setting the static fields
 // to sound initial values.
-void init();
+void stree_init();
 
 // 'Destroy' the global variable `st` by freeing all memory allocated to it and
 // unsetting its fields.
-void destroy();
+void stree_destroy();
 
 #endif

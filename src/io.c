@@ -25,12 +25,14 @@ static int open_file(const char *name, Uint *textlen, bool writefile)
 // Public API
 
 
-void file_to_string(const char *filename)
+void text_initialize(const char *filename)
 {
     FILE *in = fopen(filename, "r");
-    struct stat buf;
     int fd = fileno(in);
+
+    struct stat buf;
     fstat(fd, &buf);
+
     text.len = (Uint) buf.st_size;
     text.fst = malloc(sizeof(Wchar) * (text.len + 1));
 
@@ -46,18 +48,20 @@ void file_to_string(const char *filename)
         text.len++;
     }
     text.fst[text.len] = '\0';
+    text.lst = text.fst + text.len - 1;
     fclose(in);
 
     if(text.len == 0) {
         fprintf(stderr,"file \"%s\" is empty\n", filename);
         exit(EXIT_FAILURE);
     }
+
 }
 
 
-Uint file_to_strings(char *name, Uint nlines, Wchar ***wordsp)
+Uint patterns_initialize(char *name, Uint nlines, Wchar ***patterns)
 {
-    Wchar **words = *wordsp;
+    Wchar **words = *patterns;
     Uint len;
     int fd = open_file(name, &len, false);
 
@@ -88,7 +92,7 @@ Uint file_to_strings(char *name, Uint nlines, Wchar ***wordsp)
         do  {
             c = fgetwc(fp);
             if (c == WEOF) {
-                *wordsp = words;
+                *patterns = words;
                 fclose(fp);
                 return i;
             }
@@ -103,20 +107,20 @@ Uint file_to_strings(char *name, Uint nlines, Wchar ***wordsp)
         words[i][j - 1] = 0;
     }
     fprintf(stderr, "Warning, not all patterns were read\n");
-    *wordsp = words;
+    *patterns = words;
     fclose(fp);
     return i;
 }
 
 
-FILE *open_append(const char *path)
+FILE *truncate_open_append(const char *path)
 {
     fclose(fopen(path, "w"));
     return fopen(path, "a");
 }
 
 
-void free_text()
+void text_destroy()
 {
   (void) munmap((caddr_t) text.fst, (size_t) text.len);
   free(text.fst);

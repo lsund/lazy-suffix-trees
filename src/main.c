@@ -12,7 +12,7 @@ static void usage()
 
 static void free_text_and_patterns(Wchar **patterns, int npatterns)
 {
-    free_text();
+    text_destroy();
     for (int i = npatterns - 1; i >= 0; i--) {
         free(patterns[i]);
     }
@@ -46,10 +46,10 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
     printf("Loading a text file based on the locale: %s\n", locale);
-    file_to_string(textfile);
+    text_initialize(textfile);
 
-    init();
-    initclock();
+    stree_init();
+    clock_init();
 
     const char *outpath = "/home/lsund/Data/testdata/members/10kpatterns/diffalpha/136" ;
 
@@ -57,13 +57,13 @@ int main(int argc, char *argv[])
 
         int minpat = 10;
         int maxpat = 20;
-        search_samples(outpath, 10000, minpat, maxpat);
+        search_random(outpath, 10000, minpat, maxpat);
 
         printf("%lu\n", text.asize);
 
     } else {
         Wchar **patterns = (Wchar **) malloc(sizeof(char *) * MAX_PATTERNS);
-        Uint npatterns  = file_to_strings(patternfile, MAX_PATTERNS, &patterns);
+        Uint npatterns  = patterns_initialize(patternfile, MAX_PATTERNS, &patterns);
         printf("npatterns: %lu\n", npatterns);
         search_many(outpath, npatterns, &patterns);
         free_text_and_patterns(patterns, npatterns);

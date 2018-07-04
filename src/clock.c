@@ -6,7 +6,7 @@
 static clock_t startclock, stopclock;
 
 
-void initclock(void)
+void clock_init(void)
 {
   startclock = clock();
 }

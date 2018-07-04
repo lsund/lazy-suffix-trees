@@ -10,8 +10,9 @@
 [x] init.h
 [x] insert.c
 [x] insert.h
+[x] io.c
+[x] io.h
 
-[ ] io.h
 [ ] lcp.h
 [ ] match.h
 [ ] minunit.h
@@ -28,7 +29,6 @@
 [ ] types.h
 [ ] util.h
 
-[ ] io.c
 [ ] lcp.c
 [ ] main.c
 [ ] match.c
