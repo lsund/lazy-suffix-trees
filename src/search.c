@@ -18,11 +18,11 @@ static Match match_rootedge(VertexP *current_vertex, Pattern *patt)
 
     eval_root();
 
-    if (!has_root_edge(patt->head)) {
+    if (!has_root_edge(patt->fst)) {
         return exhausted_match();
     }
 
-    Vertex root_child  = st.rs[patt->head];
+    Vertex root_child  = st.rs[patt->fst];
     Wchar *leftb = text.fst + MAKE_INNER(root_child);
     if (IS_LEAF(&root_child)) {
         return make_done_match(leftb, *patt);
@@ -78,7 +78,7 @@ bool search(Wchar *current_pattern, Uint patternlen)
 
     while(!pattern_is_empty(patt)) {
 
-        patt.head = *patt.current;
+        patt.fst = *patt.current;
         current_vertex    = st.vs.fst + FIRSTCHILD(current_vertex);
 
         while(true) {
@@ -94,7 +94,7 @@ bool search(Wchar *current_pattern, Uint patternlen)
 
             } else {
                 Wchar firstchar = *(text.fst + leftbound(current_vertex));
-                if(firstchar == patt.head) {
+                if(firstchar == patt.fst) {
                     break;
                 }
                 if(IS_LASTCHILD(current_vertex)) {

@@ -18,9 +18,11 @@
 [x] match.h
 [x] main.c
 [x] minunit.h
+[x] naive_search.h
+[x] naive_search.c
+[x] pattern.c
+[x] pattern.h
 
-[ ] naive_search.h
-[ ] pattern.h
 [ ] search.h
 [ ] sortbuffer.h
 [ ] sort.h
@@ -32,8 +34,6 @@
 [ ] types.h
 [ ] util.h
 
-[ ] naive_search.c
-[ ] pattern.c
 [ ] search.c
 [ ] sort.c
 [ ] spaceman.c

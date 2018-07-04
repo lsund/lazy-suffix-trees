@@ -35,7 +35,7 @@ Match make_done_match(Wchar *label, Pattern patt)
 Match match_leafedge(VertexP v, Pattern patt)
 {
     Wchar *leftb = text.fst + LEFTBOUND(v);
-    if (*leftb == patt.head) {
+    if (*leftb == patt.fst) {
         return make_done_match(leftb, patt);
     } else if (leftb == text.lst || IS_LASTCHILD(v)) {
         return exhausted_match();

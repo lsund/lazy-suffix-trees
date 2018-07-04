@@ -39,15 +39,15 @@ static void set_group_bounds(Suffix *left, Suffix *right, Wchar ***upper_bounds)
 
     for (curr_suffix = left; curr_suffix <= right; curr_suffix++) {
 
-        Uint head = **curr_suffix;
-        if (sb.groupsize[head] > 0) {
+        Uint fst = **curr_suffix;
+        if (sb.groupsize[fst] > 0) {
 
             // 'allocate' the upper bound for the current character.
-            // upper_bounds[head] now points to a allocated memory address,
+            // upper_bounds[fst] now points to a allocated memory address,
             // enough space in distance from the last group
-            upper_bounds[head] = lower_bound + sb.groupsize[head] - 1;
-            lower_bound        = upper_bounds[head] + 1;
-            sb.groupsize[head]   = 0;
+            upper_bounds[fst] = lower_bound + sb.groupsize[fst] - 1;
+            lower_bound        = upper_bounds[fst] + 1;
+            sb.groupsize[fst]   = 0;
         }
     }
 }
@@ -63,8 +63,8 @@ static void insert_suffixes(Suffix *left, Suffix *right, Wchar ***upper_bounds)
         //
         // This fills up the slot allocated for this group with suffix tree
         // addresses, end to start.
-        Uint head               = **curr_suffix;
-        *(upper_bounds[head]--) = *curr_suffix;
+        Uint fst               = **curr_suffix;
+        *(upper_bounds[fst]--) = *curr_suffix;
     }
 }
 
