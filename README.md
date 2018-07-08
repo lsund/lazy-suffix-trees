@@ -33,7 +33,7 @@ is invoked in the following way.
     ./bin/wotd TEXTFILE PATTERNFILE
 ```
 
-# Acknowledgements
+## Acknowledgements
 
 The initial commit `fd3d0c8769696459a0957dc62604ab974f097866 "Initial Commit"`
 is a clone of the `wotd` lazy suffix tree algorithm program as initially
