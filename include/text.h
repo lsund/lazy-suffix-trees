@@ -1,43 +1,27 @@
-/*
- * Copyright by Stefan Kurtz (C) 1999-2003
- * =====================================
- * You may use, copy and distribute this file freely as long as you
- * - do not change the file,
- * - leave this copyright notice in the file,
- * - do not make any profit with the distribution of this file
- * - give credit where credit is due
- * You are not allowed to copy or distribute this file otherwise
- * The commercial usage and distribution of this file is prohibited
- * Please report bugs and suggestions to <kurtz@zbh.uni-hamburg.de>
- *
- * ======================================
- *
- * Modified by Ludvig Sundström 2018 with permission from Stefan Kurtz
- * For full source control tree, see https://github.com/lsund/wotd
- *
- */
-
 #ifndef EXTERNS_H
 #define EXTERNS_H
 
 #include "types.h"
 #include "config.h"
 
-
-// This module contains global variables that span more than one source file.
-
-
-///////////////////////////////////////////////////////////////////////////////
-// The text
-
+// A Text represents the text, or the string to build a suffix tree from.
 typedef struct text {
+    // Points to the start of the allocated block, the first character in the
+    // text..
     Wchar *fst;
-    Wchar **ss;
+    // Points to the last of the allocated black, the last character in the
+    // text.
     Wchar *lst;
+    // The number of characters in the text.
     Uint len;
+    // The number of distinct characters in the text, the alphabet size.
     Uint asize;
-    Wchar cs[MAX_CHARS + 1]; // characters in alphabetical order
+    // The distinct characters in alphabetical order.
+    Wchar cs[MAX_CHARS + 1];
+    // The maximum integer value of all characters.
     Uint maxc;
+    // Points to the first suffix of the text
+    Suffix *ss;
 } Text;
 
 extern Text text;
@@ -47,7 +31,11 @@ extern Text text;
 // Get the right rightbound in the suffix buffer
 #define SUFFIX_RIGHTBOUND(R)            (text.ss + (FIRSTCHILD(R) & ~MSB))
 
+// The suffix number of a given suffix
 #define SUFFIX_INDEX(R)                 ((Uint) (*(R) - text.fst))
+
+// If the leftbound is not set for a suffix, then it is just the suffix index
+// for that suffix.
 #define MAKE_LEFTBOUND(R)               SUFFIX_INDEX(SUFFIX_LEFTBOUND(R))
 
 #endif

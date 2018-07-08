@@ -2,17 +2,9 @@
 #include "sort.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Globals
-
-
 Suffix      *curr_sb;
 
 Uint        occurrence[MAX_CHARS + 1];
-
-
-///////////////////////////////////////////////////////////////////////////////
-// Private functions
 
 
 // Determine size for each group
@@ -46,8 +38,8 @@ static void set_group_bounds(Suffix *left, Suffix *right, Wchar ***upper_bounds)
             // upper_bounds[fst] now points to a allocated memory address,
             // enough space in distance from the last group
             upper_bounds[fst] = lower_bound + sb.groupsize[fst] - 1;
-            lower_bound        = upper_bounds[fst] + 1;
-            sb.groupsize[fst]   = 0;
+            lower_bound       = upper_bounds[fst] + 1;
+            sb.groupsize[fst] = 0;
         }
     }
 }
@@ -69,12 +61,14 @@ static void insert_suffixes(Suffix *left, Suffix *right, Wchar ***upper_bounds)
 }
 
 
-// Sorts the suffixes of a group, bounded between left and right.
+///////////////////////////////////////////////////////////////////////////////
+// Public API
+
+
 void counting_sort(Suffix *left, Suffix *right)
 {
     Suffix *upper_bounds[MAX_CHARS + 1];
     curr_sb = alloc_sortbuffer(left, right);
-
 
     // These suffixes belong to the same group, so the common prefix length
     // first has to be calculated.
@@ -92,7 +86,7 @@ void counting_sort(Suffix *left, Suffix *right)
     // determine right bound for each group
     set_group_bounds(left, right, upper_bounds);
 
-    // Create buffer
+    // insert sorted
     insert_suffixes(left, right, upper_bounds);
 
     Suffix *curr_suffix = left;
@@ -109,34 +103,32 @@ void counting_sort(Suffix *left, Suffix *right)
 }
 
 
-// Determines the groups for all suffixes of the input string
-//
-// Scan all uffixes, determining the size of each group and then sorts the all
-// suffixes into the array suffixes.
-void create_suffix_groups(void)
+void initialize_suffixes(void)
 {
-    Wchar *c, **nextFree = text.ss;
-    Uint a;
-
     Wchar **upper_bounds[MAX_CHARS + 1];
 
-    // determine size for each group
-    for (c = text.fst; c < text.fst + text.len; c++) {
-        sb.groupsize[(Uint) *c]++;
+    // Compute number of suffixes starting with each character.
+    Suffix s;
+    for (s = text.fst; s < text.fst + text.len; s++) {
+        sb.groupsize[(Uint) *s]++;
     }
 
-    for (c = text.cs; c < text.cs + text.asize; c++) {
-        a                        = (Uint) *c;
-        upper_bounds[a]          = nextFree + sb.groupsize[a] - 1;
-        nextFree                 = upper_bounds[a] + 1;
+    // For each character a, store the suffix which is at offset groupsize[a]
+    // in upper_bounds.
+    Uint a;
+    Suffix *next = text.ss;
+    for (Wchar *c = text.cs; c < text.cs + text.asize; c++) {
+        a               = (Uint) *c;
+        upper_bounds[a] = next + sb.groupsize[a] - 1;
+        next            = upper_bounds[a] + 1;
         sb.groupsize[a] = 0;
     }
 
-    // insert suffixes into array
-    for (c = text.fst + text.len - 1; c >= text.fst; c--) {
-        *(upper_bounds[*c]--) = c;
+    // Fill the suffix array with the suffix groups
+    for (s = text.fst + text.len - 1; s >= text.fst; s--) {
+        *(upper_bounds[*s]--) = s;
     }
 
-    // suffix \$ is the largest suffix
+    // set the longest suffix
     text.ss[text.len] = text.lst;
 }

@@ -22,20 +22,19 @@
 [x] naive_search.c
 [x] pattern.c
 [x] pattern.h
+[x] search.h
+[x] search.c
+[x] sortbuffer.h
+[x] sort.c
+[x] sort.h
+[x] spaceman.c
+[x] spaceman.h
+[x] streedef.h
+[x] stree.h
+[x] text.h
 
-[ ] search.h
-[ ] sortbuffer.h
-[ ] sort.h
-[ ] spaceman.h
-[ ] streedef.h
-[ ] stree.h
-[ ] test.h
-[ ] text.h
 [ ] types.h
 [ ] util.h
 
-[ ] search.c
-[ ] sort.c
-[ ] spaceman.c
 [ ] stree.c
 [ ] util.c

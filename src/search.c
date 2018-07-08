@@ -1,9 +1,5 @@
 #include "search.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// Functions
-
-
 static Match match_rootedge(VertexP *current_vertex, Pattern *patt)
 {
     Match match;

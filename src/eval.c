@@ -89,7 +89,7 @@ static void eval_inner(VertexP v)
 void eval_root()
 {
     if (!st.root_eval) {
-        create_suffix_groups();
+        initialize_suffixes();
         insert_edges(text.ss, text.ss + text.len - 1, true);
         st.root_eval = true;
     }

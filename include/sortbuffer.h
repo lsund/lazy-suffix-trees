@@ -4,11 +4,18 @@
 #include "types.h"
 #include "config.h"
 
+// The sortbuffer represents the allocated memory for when sorting a set of
+// unevaluated suffixes.
 typedef struct sortbuffer {
-    Suffix *fst;                    // First element
-    Uint groupsize[MAX_CHARS + 1];  // Groupsizes in the current vertex
-    Uint size;                      // Number of elements in the buffer
-    Uint allocsize;                 // Size allocated
+    // Points to the first element.
+    Suffix *fst;
+    // The suffixes are grouped according to their first character. This array
+    // holds, for each character the number of elements in that group.
+    Uint groupsize[MAX_CHARS + 1];
+    // The total number of suffixes.
+    Uint size;
+    // The total size of allocated memory.
+    Uint allocsize;
 } Sortbuffer;
 
 extern Sortbuffer sb;
