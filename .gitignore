@@ -12,3 +12,5 @@ treerun
 greprun
 rungrep
 vgcore.*
+patterns-found.txt
+patterns.txt

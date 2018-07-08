@@ -124,4 +124,5 @@ void text_destroy()
 {
   (void) munmap((caddr_t) text.fst, (size_t) text.len);
   free(text.fst);
+  free(text.ss);
 }

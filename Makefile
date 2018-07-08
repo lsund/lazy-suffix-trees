@@ -57,23 +57,11 @@ wotd: dirs ${OBJ}
 test: dirs ${OBJ} ${TEST_OBJ}
 	${CC} ${CFLAGS} ${INCLUDE} ${OBJ} ${TEST_OBJ} test/test.c -o bin/test
 
-bench: clean all
-	./bin/wotd ~/Data/testdata/members/diffsize/005.txt ~/Data/testdata/members/random-patterns.txt bench
-
-run: clean all
-	./bin/wotd ~/Data/testdata/doctronic/data-diffsize/small.xml ~/Data/testdata/doctronic/diffsize/12000.txt run
-
-big: clean all
-	./bin/wotd ~/Data/testdata/doctronic/data-diffsize/quarter.xml ~/Data/testdata/doctronic/diffsize/12000.txt run
-
-small: clean all
-	./bin/wotd data/mini/smyth.txt data/mini/smyth-patt.txt run
-
 runtest: clean test
 	./bin/test
 
-memcheck: clean test
-	valgrind -v --leak-check=full --show-leak-kinds=all ./bin/test
+memcheck: clean all
+	valgrind -v --leak-check=full --show-leak-kinds=all ./bin/wotd ~/Data/testdata/members/diffsize/005.txt /home/lsund/Data/testdata/members/10kpatterns/p5.txt
 
 clean:
 	rm -rf obj bin

@@ -55,12 +55,8 @@ void stree_init()
 
 void stree_destroy()
 {
-    free(text.fst);
     free(sb.fst);
     free(st.vs.fst);
-    free(text.ss);
     sb.fst    = NULL;
-    text.fst  = NULL;
     st.vs.fst = NULL;
-    text.ss   = NULL;
 }

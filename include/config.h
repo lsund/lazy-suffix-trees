@@ -16,4 +16,11 @@
 // The maximum number of distinct characters allowed in the text.
 #define MAX_CHARS               10000
 
+#define N_RAND_PATTERNS         10000
+#define RAND_MINLEN             10
+#define RAND_MAXLEN             20
+
+// The matching patterns will be logged to this file
+#define PATTERN_OUT             "patterns.txt"
+
 #endif
