@@ -1,6 +1,8 @@
 #include "stree.h"
 
+
 STree st;
+
 
 Vertex firstchild(VertexP vertex)
 {

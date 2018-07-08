@@ -1,51 +1,11 @@
-
 #include "util.h"
 
-void showpattern(Uchar *w, Uint wlen)
+
+Uint rand_range(Uint a, Uint b)
 {
-  (void) fwrite(w,sizeof(Uchar),(size_t) wlen,stderr);
+    return a == b ? a : (a + (drand48() * (double) (b - a + 1)));
 }
 
-void printtime(FILE *file)
-{
-    fprintf(file, "time: %.2f\n", getruntime());
-}
-
-
-Uint randlen(Uint m_min, Uint m_max)
-{
-    return m_min == m_max ? m_min : (m_min + (drand48() * (double) (m_max-m_min+1)));
-}
-
-
-size_t strlenw(Wchar *s)
-{
-    size_t i = 0;
-    while (s[i] != 0) {
-        i++;
-    }
-    if (i > 1000) {
-        fprintf(stderr, "Line too long: %lu\n", i);
-        exit(EXIT_FAILURE);
-    }
-    return i;
-}
-
-void parse_Uint(char *str, Uint *d)
-{
-    if(sscanf(str,"%ld", d) != 1 || d < 0) {
-        fprintf(stderr, "Could not read int\n");
-        exit(EXIT_FAILURE);
-    }
-}
-
-void parse_float(char *str, float *f)
-{
-    if(sscanf(str,"%f", f) != 1 || f < 0) {
-        fprintf(stderr, "Could not read float\n");
-        exit(EXIT_FAILURE);
-    }
-}
 
 bool contains(Uint *arr, Uint len, Uint *vals)
 {
@@ -63,13 +23,30 @@ bool contains(Uint *arr, Uint len, Uint *vals)
 }
 
 
-void reverse(Wchar *s,Uint len)
+void reverse(Wchar *s, Uint len)
 {
-  Wchar *front, *back, tmp;
+    Wchar *fst, *back, tmp;
 
-  for(front = s, back = s + len - 1; front < back; front++, back--) {
-    tmp = *front;
-    *front = *back;
-    *back = tmp;
-  }
+    for(fst = s, back = s + len - 1; fst < back; fst++, back--) {
+        tmp   = *fst;
+        *fst  = *back;
+        *back = tmp;
+    }
+}
+
+
+void parse_Uint(char *str, Uint *d)
+{
+    if(sscanf(str,"%ld", d) != 1 || d < 0) {
+        fprintf(stderr, "Could not read int\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
+void parse_float(char *str, float *f)
+{
+    if(sscanf(str,"%f", f) != 1 || f < 0) {
+        fprintf(stderr, "Could not read float\n");
+        exit(EXIT_FAILURE);
+    }
 }

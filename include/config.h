@@ -1,6 +1,9 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+// Number of bits in an unsigned integer, depending on architecture
+#define INT_SIZE                 64
+
 // The amount of memory allocated for the vertex table
 #define VERTEX_ALLOC            100000000 // 100 MB
 

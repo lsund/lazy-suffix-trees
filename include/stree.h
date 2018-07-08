@@ -14,9 +14,6 @@
 // The number of integers required to represent an inner vertex.
 #define INNER_VERTEXSIZE                2
 
-// Number of bits in an unsigned integer, 64 on an 64-bit architecture.
-#define INT_SIZE                        (UINT(1) << LOGWORDSIZE)
-
 // The value represented by the most significant bit of an unsigned integer.
 #define MSB                             (UINT(1) << (INT_SIZE - 1))
 

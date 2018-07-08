@@ -32,9 +32,7 @@
 [x] streedef.h
 [x] stree.h
 [x] text.h
-
-[ ] types.h
-[ ] util.h
-
-[ ] stree.c
-[ ] util.c
+[x] types.h
+[x] stree.c
+[x] util.h
+[x] util.c

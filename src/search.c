@@ -145,7 +145,7 @@ void search_random(const char *path, Uint n, Uint minlen, Uint maxlen)
     for(Uint i = 0; i < n; i++) {
 
         Wchar pattern[maxlen + 1];
-        len = randlen(minlen, maxlen);
+        len = rand_range(minlen, maxlen);
 
         sample_random(pattern, len);
         fprintf(fp, "%ls\n", pattern);
