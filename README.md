@@ -12,9 +12,26 @@ Software-Practice and Experience
 
 ## Usage
 
-The program is
+The program is compiled via `make`. This generates the binary `bin/wotd` which
+is invoked in the following way.
 
-##
+```
+    # If one argument is given, this is assumed to be the absolute path to a
+    # file, whose content is used to build a suffix tree. The program first
+    # randomly generates patterns which is printed to a a pattern file
+    # depending on `include/config.h`. These patterns are then queried on the
+    # suffix tree. The random patterns are logged to a file specified in
+    # `config.h`.
+
+    ./bin/wotd TEXTFILE
+
+    # If two arguments are given, the first is again assumed to be the absolute
+    # path to a file, whose content is used to build a suffix tree. The second
+    # argument is assumed to be a patternfile, that is, a file whose lines
+    # specify the patterns that will be used to query the suffix tree.
+
+    ./bin/wotd TEXTFILE PATTERNFILE
+```
 
 # Acknowledgements
 
