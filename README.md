@@ -40,6 +40,10 @@ In general, program is compiled via `make`. This generates the binary
 
     ./bin/wotd TEXTFILE PATTERNFILE
 ```
+## Documentation
+
+The purpose of every public function is explained in its corresponding
+headerfile in `include`.
 
 ## Acknowledgements
 

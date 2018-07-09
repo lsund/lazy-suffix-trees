@@ -1,16 +1,15 @@
-
 #include "sort.h"
 
 
+// The current sortbuffer
 Suffix      *curr_sb;
 
-Uint        occurrence[MAX_CHARS + 1];
 
-
-// Determine size for each group
+// Determine the group sizes for the suffixes between left and right
 static void set_groupsize(Suffix *left, Suffix *right, Uint plen)
 {
     Suffix *curr_suffix;
+    // Iterate the interval
     for (curr_suffix = left; curr_suffix <= right; curr_suffix++) {
         // drop the common prefix
         *curr_suffix += plen;
@@ -29,6 +28,7 @@ static void set_group_bounds(Suffix *left, Suffix *right, Wchar ***upper_bounds)
     Suffix *lower_bound = curr_sb;
     Suffix *curr_suffix;
 
+    // Iterate the interval
     for (curr_suffix = left; curr_suffix <= right; curr_suffix++) {
 
         Uint fst = **curr_suffix;
@@ -36,7 +36,7 @@ static void set_group_bounds(Suffix *left, Suffix *right, Wchar ***upper_bounds)
 
             // 'allocate' the upper bound for the current character.
             // upper_bounds[fst] now points to a allocated memory address,
-            // enough space in distance from the last group
+            // enough space in distance from the last group.
             upper_bounds[fst] = lower_bound + sb.groupsize[fst] - 1;
             lower_bound       = upper_bounds[fst] + 1;
             sb.groupsize[fst] = 0;
