@@ -6,7 +6,7 @@
 #include "text.h"
 #include "streedef.h"
 
-// undefined constant
+// Constant representing an undefined value
 #define UNDEF                   UINT_MAX
 
 // The number of integers required to represent a leaf.
@@ -16,11 +16,9 @@
 
 // The value represented by the most significant bit of an unsigned integer.
 #define MSB                             (UINT(1) << (INT_SIZE - 1))
-
 // The value represented by the second most significant bit of an unsigned
 // integer.
 #define SECOND_MSB (MSB >> 1)
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // Query and modify vertices

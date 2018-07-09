@@ -19,9 +19,7 @@ int main(int argc, char *argv[])
     char *textfile, *patternfile;
     bool sample_patterns = false;
 
-    const char *locale = "en_US.utf8";
-
-    setlocale(LC_ALL, locale);
+    setlocale(LC_ALL, LOCALE);
     if (argc < 2) {
         usage();
         exit(EXIT_FAILURE);
@@ -35,7 +33,7 @@ int main(int argc, char *argv[])
         usage();
         exit(EXIT_FAILURE);
     }
-    printf("Loading a text file based on the locale: %s\n", locale);
+    printf("Loading a text file based on the locale: %s\n", LOCALE);
     text_initialize(textfile);
 
     stree_init();

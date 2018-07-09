@@ -36,6 +36,9 @@ all: dirs wotd
 dirs:
 	mkdir -p obj bin
 
+testrun: clean all
+	./bin/wotd ./test-data/members.xml ./test-data/rand-patterns.txt
+
 wotd: dirs ${OBJ}
 	${CC} ${CFLAGS} ${INCLUDE} ${OBJ} src/main.c -o bin/$@
 

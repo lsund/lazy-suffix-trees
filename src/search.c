@@ -124,8 +124,12 @@ void search_many(int npatterns, Wchar ***patternsp)
         Wchar *patt = patterns[j];
         Uint len = wcslen(patt);
 
-        search(patt, len);
+        bool exists = search(patt, len);
 
+        if (VERBOSE) {
+            char *s_exists = exists ? "true" : "false";
+            fprintf(stdout, "'%ls': %s\n", patt, s_exists);
+        }
     }
 }
 
@@ -148,7 +152,6 @@ void search_random(const char *path, Uint n, Uint minlen, Uint maxlen)
         len = rand_range(minlen, maxlen);
 
         sample_random(pattern, len);
-        fprintf(fp, "%ls\n", pattern);
 
         if (i & 1) {
             reverse(pattern, len);

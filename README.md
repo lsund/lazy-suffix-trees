@@ -10,10 +10,18 @@ Software-Practice and Experience
 33(11):1035-1049, 2003
 ```
 
+## Configuration
+
+It is important to consider the configuration file `include/config.h`
+before running the program. An incorrect situation may cause undefined
+behavior.
+
 ## Usage
 
-The program is compiled via `make`. This generates the binary `bin/wotd` which
-is invoked in the following way.
+Using `make testrun` builds and queries patterns from two standard files.
+
+In general, program is compiled via `make`. This generates the binary
+`bin/wotd` which is invoked in the following way.
 
 ```
     # If one argument is given, this is assumed to be the absolute path to a

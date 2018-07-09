@@ -14,3 +14,4 @@ rungrep
 vgcore.*
 patterns-found.txt
 patterns.txt
+test-data

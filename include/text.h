@@ -4,10 +4,10 @@
 #include "types.h"
 #include "config.h"
 
-// A Text represents the text, or the string to build a suffix tree from.
+// A Text represents the text or string used to build a suffix tree.
 typedef struct text {
     // Points to the start of the allocated block, the first character in the
-    // text..
+    // text.
     Wchar *fst;
     // Points to the last of the allocated black, the last character in the
     // text.

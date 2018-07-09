@@ -1,6 +1,9 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+// If true, then some program information is printed during runtime
+#define VERBOSE                 true
+
 // Number of bits in an unsigned integer, depending on architecture
 #define INT_SIZE                 64
 
@@ -22,5 +25,8 @@
 
 // The matching patterns will be logged to this file
 #define PATTERN_OUT             "patterns.txt"
+
+// The current locale, used for determining the text encoding of the file.
+#define LOCALE                  "en_US.utf8"
 
 #endif
