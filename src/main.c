@@ -66,6 +66,7 @@ int main(int argc, char *argv[])
 
     }
 
+    fprintf(stdout, "Done in %.2f seconds\n", getruntime());
     stree_destroy(&st);
 
     return EXIT_SUCCESS;

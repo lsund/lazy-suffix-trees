@@ -1,4 +1,4 @@
-# WOTD
+# Lazy, Top-Down Suffix Tree Algorithm
 
 This repository contains a program that implements lazy suffix tree
 construction, inspired by the following:
@@ -44,6 +44,8 @@ In general, program is compiled via `make`. This generates the binary
 ## Acknowledgements
 
 The initial commit `fd3d0c8769696459a0957dc62604ab974f097866 "Initial Commit"`
-is a clone of the `wotd` lazy suffix tree algorithm program as initially
-developed by [Stefan Kurtz et. al](https://www.biologie.uni-hamburg.de/service/wissenschaftsservice/mitarbeiter/professoren-promotionsverfahren/skurtz.html).
-This is exactly. Changes and modifications were permitted by Stefan Kurtz.
+is a clone of the `wotd` program, originally developed by [Stefan Kurtz et.
+al](https://www.biologie.uni-hamburg.de/service/wissenschaftsservice/mitarbeiter/professoren-promotionsverfahren/skurtz.html).
+All changes and modifications were under permission of the original
+authors.
+
